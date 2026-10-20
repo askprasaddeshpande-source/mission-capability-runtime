@@ -1,0 +1,4 @@
+id: 0c75712a-a975-42cd-bf48-4bd9fc0a89fb
+event: message
+data: {"jsonrpc":"2.0","id":4,"result":{"content":[{"type":"text","text":"Class validation failed: Unable to initialize the ADT Discovery. Check the availability of the back-end system or restart the IDE."}],"isError":true}}
+

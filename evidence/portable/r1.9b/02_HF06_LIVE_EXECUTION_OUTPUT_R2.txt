@@ -1,0 +1,5 @@
+Exception: D:\MCP\Run-MCR-R1.9B-Live-Governed-Mutation-And-Outcome-R1-HF06.ps1:195
+Line |
+ 195 |  . ]::IsNullOrWhiteSpace($createdPath)){throw "CREATE_FILEPATH_MISSING"}
+     |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | CREATE_FILEPATH_MISSING

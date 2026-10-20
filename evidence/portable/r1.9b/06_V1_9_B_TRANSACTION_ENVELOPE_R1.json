@@ -1,0 +1,21 @@
+﻿{
+  "transaction_id": "MCR19B_TX_CREATE_ACTIVATE_VALIDATE",
+  "mission_id": "MCR_R1_9_B_LIVE_GOVERNED_MUTATION_AND_OUTCOME_R1",
+  "transaction_type": "BOUNDED_DISPOSABLE_ABAP_CLASS_CREATE_ACTIVATE",
+  "provider": "ADT",
+  "ordered_operations": [
+    "CREATE",
+    "ACTIVATE",
+    "VALIDATE_ATC_READBACK"
+  ],
+  "target_scope": [
+    "TRL_EN/ZCLINE/ZCL_MCR19B_9533C4D8"
+  ],
+  "started_at": null,
+  "expires_at": "2026-09-07T12:24:37.8880018Z",
+  "commit_semantics": "EXECUTION_RECEIPTS_PLUS_VALID_OUTCOME_REQUIRED",
+  "validation_policy": "LEVEL_2_STATE_VALIDATION_WITH_ATC_READBACK",
+  "rollback_or_compensation_policy": "COMPENSATION_GRANT_REQUIRED_SEPARATE",
+  "transaction_state": "PREPARED",
+  "transaction_hash": "4437081F5DE2D1B1E2137E9CA3D6D82F7CB33759050D5CAEAD49BA16D47FF807"
+}
