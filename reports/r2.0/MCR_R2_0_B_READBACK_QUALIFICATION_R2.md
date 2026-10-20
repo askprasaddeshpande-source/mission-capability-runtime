@@ -36,3 +36,11 @@ Supply the name of **one existing DDLS in package ZCLINE on TRL_EN** (Project Ex
 
 ## Blockers
 None for read-only work. BLOCKER_A (fresh live write) is not yet reached; the packet cannot be frozen before the DDLS control above and a decision on the mutation tool and outcome contract.
+
+## Update: DDLS positive and negative controls (live, read-only, 0 writes)
+Owner supplied an existing CDS view, `ZC_KS01STUDENT` (ZCLINE, TRL_EN). `capella_adt_repository_read_metadata`:
+- existing object: `found:true`, HTTP 200, `sourceType` DDLS, 6 elements; SHA-256 of the returned source recomputed locally **equals** the tool's `sourceHash` (OBSERVED);
+- random DDLS-style name: `found:false`, HTTP 404, `ExceptionResourceNotFound` from the DDLS endpoint (a valid ABSENT for the DDLS endpoint) (OBSERVED);
+- active and inactive reads of the existing object returned identical source: the object has no pending inactive version, so **active/inactive discrimination is not shown**; package is not returned by the tool.
+
+Resulting classification for DDLS scope: existence EXISTS/ABSENT/UNKNOWN **OBSERVED** (one positive and two negative controls); source hash **OBSERVED**; activation state **NOT_ESTABLISHED**; package **NOT_ESTABLISHED**. R2.0B stays **PARTIAL** overall but is sufficient for a bounded DDLS study limited to existence, type and source integrity. Creation details for `DDLS/DF` (fields packageName, name <= 30, description, referencedObject) were read via the read-only `abap_creation-get_object_type_details`. R2.0C is frozen on that basis: `research-package/r2.0/r2_0c/MCR_R2_0_C_AUTHORIZATION_PACKET_R1.md`.

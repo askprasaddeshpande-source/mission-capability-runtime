@@ -27,7 +27,9 @@ import urllib.request
 ALLOWED_METHODS = {"initialize", "notifications/initialized", "tools/list"}
 ALLOWED_TOOLS = {"abap_list_destinations", "abap_atc_run", "abap_atc_get_result",
                  # read-only repository tools exposed by the provider since the R1.8 contract (tool count 29 vs 20)
-                 "capella_adt_repository_read_metadata", "capella_adt_class_read_source"}
+                 "capella_adt_repository_read_metadata", "capella_adt_class_read_source",
+                 # read-only creation metadata (no creation)
+                 "abap_creation-get_all_creatable_objects", "abap_creation-get_object_type_details"}
 EXPECTED_ADT_TOOL_COUNT = 20      # R1.8 retained contract (SAP_ADT_MCP, 20 tools)
 KEYS = {"name": "name", "objectname": "name", "type": "type", "objecttype": "type", "package": "package",
         "packagename": "package", "findings": "findings", "worklistid": "worklistId"}
@@ -38,9 +40,9 @@ class ReadOnlyViolation(Exception):
     pass
 
 
-def guard(method, tool=None):
+def guard(method, tool=None, extra=()):
     if method == "tools/call":
-        if tool not in ALLOWED_TOOLS:
+        if tool not in ALLOWED_TOOLS and tool not in extra:
             raise ReadOnlyViolation("tool %r is not on the read-only allowlist" % tool)
     elif method not in ALLOWED_METHODS:
         raise ReadOnlyViolation("method %r is not on the read-only allowlist" % method)
@@ -74,9 +76,10 @@ class Client:
     def __init__(self, endpoint, token, evdir, timeout=45):
         self.endpoint, self.token, self.evdir, self.timeout = endpoint, token, evdir, timeout
         self.session, self.n, self.log = None, 0, []
+        self.extra_tools = ()                                # empty: read-only; R2.0C sets exactly one tool
 
     def call(self, method, params=None, tool=None, notify=False):
-        guard(method, tool)                                  # BEFORE any I/O
+        guard(method, tool, self.extra_tools)                # BEFORE any I/O
         self.n += 1
         body = {"jsonrpc": "2.0", "method": method, "params": params or {}}
         if not notify:

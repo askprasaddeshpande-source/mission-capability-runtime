@@ -22,6 +22,7 @@ SUMS = "evidence/r2.0/SHA256SUMS_R2_0.txt"
 ROOTS = ["tools/r2.0", "architecture/r2.0", "evidence/r2.0", "reports/r2.0", "research-package/r2.0"]
 SKIP = {SUMS, "__pycache__"}
 TEXT = (".py", ".md", ".json", ".txt")
+LOCAL_EXEC_DOCS = {"research-package/r2.0/r2_0c/MCR_R2_0_C_AUTHORIZATION_PACKET_R1.md"}   # owner-workspace commands by design
 ABS = re.compile(r"[A-Za-z]:\\|/Users/|/home/[a-z]")
 SECRET = re.compile(r"Bearer\s+[A-Za-z0-9._-]{20,}|protected_token_b64\"\s*:\s*\"[A-Za-z0-9+/=]{20,}|BEGIN (RSA |EC )?PRIVATE KEY")
 
@@ -84,7 +85,7 @@ def main(argv):
     for p in cur:
         if p.endswith(TEXT):
             txt = open(os.path.join(root, p), encoding="utf-8", errors="replace").read()
-            if p.startswith("tools/") is False and ABS.search(txt):
+            if p.startswith("tools/") is False and p not in LOCAL_EXEC_DOCS and ABS.search(txt):
                 bad_abs.append(p)
             if SECRET.search(txt):
                 bad_sec.append(p)

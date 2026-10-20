@@ -1,0 +1,151 @@
+{
+  "activation": "NOT_PERFORMED",
+  "cleanup": "NOT_AUTHORIZED",
+  "compensation": "NOT_AUTHORIZED",
+  "create_arguments": {
+    "destination": "TRL_EN",
+    "objectContent": "{\"description\":\"MCR R2.0C disposable outcome study\",\"name\":\"ZC_MCR20C_7A3F91D2\",\"packageName\":\"ZCLINE\"}",
+    "objectType": "DDLS/DF",
+    "transportRequestNumber": ""
+  },
+  "destination": "TRL_EN",
+  "expected_tool_count": 29,
+  "freeze_sha256": "8CCC5B949245638BF518776E3694BB8A6FC85A289B7B93BEBCC4D97591DAE951",
+  "max_mutations": 1,
+  "mission": "MCR_R2_0_C_LIVE_OUTCOME_STUDY_R1",
+  "object_name": "ZC_MCR20C_7A3F91D2",
+  "object_type": "DDLS/DF",
+  "objects": {
+    "authority": {
+      "authority_id": "R2_0C_AUTHORITY",
+      "delegation_hash": "F5EAD2AF0BA1B7709A372034AC823493ACA9CFFA72D6C6C06B8E92630070AA1C",
+      "kind": "ExecutionAuthority",
+      "max_mutations": 1,
+      "mission_id": "MCR_R2_0_C_LIVE_OUTCOME_STUDY_R1",
+      "object_hash": "A06F8DDF8079081A67B840A57C558B12D0A84AC260F55E520FC6B88DF16D0042",
+      "scope": [
+        "abap_creation-create_object"
+      ],
+      "single_use": true
+    },
+    "budget": {
+      "authority_hash": "A06F8DDF8079081A67B840A57C558B12D0A84AC260F55E520FC6B88DF16D0042",
+      "budget_id": "R2_0C_BUDGET",
+      "expansion_allowed": false,
+      "kind": "MutationBudget",
+      "max_mutations": 1,
+      "object_hash": "183C1554D2BF20038C2651352712ECC7F64D281DE2FF7D12C0AE96DEA2EA6A6E",
+      "retries": 0
+    },
+    "capability": {
+      "authority_hash": "A06F8DDF8079081A67B840A57C558B12D0A84AC260F55E520FC6B88DF16D0042",
+      "binding_id": "R2_0C_CAP",
+      "capability": "abap_creation-create_object",
+      "kind": "CapabilityBinding",
+      "object_hash": "1E88B4A393E4A693674F0B354C70B40BAB7EEE465D045582C5420722DF9B83F6",
+      "provider_ref": "SAP_ADT_MCP::abap_creation-create_object"
+    },
+    "checkpoint": {
+      "budget_hash": "183C1554D2BF20038C2651352712ECC7F64D281DE2FF7D12C0AE96DEA2EA6A6E",
+      "checkpoint_id": "R2_0C_PREWRITE",
+      "kind": "PreMutationCheckpoint",
+      "object_hash": "D4C3415F650957ECAFEBC315CF236DE925C1F93247846CAC6829F63EE9477E79",
+      "outcome_contract_hash": "7E32CA9CF01720E8E6178B00FE5DDF9BA721B8D5437377EBE3FEBF1D109C743D",
+      "readback_contract_hash": "57715BFED1A182F64A7298DEB75E0759ECB3EABBDFA629E09615FD5B9C5F42B3",
+      "remaining_budget": 1,
+      "transaction_hash": "46F1D16D8B9B2CDA8AE4A576A4069C5B08F1E93E9BDC79A1359465E750AD624E"
+    },
+    "delegation": {
+      "delegation_id": "R2_0C_DELEGATION",
+      "expires_at": "SINGLE_RUN",
+      "kind": "DelegationEnvelope",
+      "max_mutations": 1,
+      "object_hash": "F5EAD2AF0BA1B7709A372034AC823493ACA9CFFA72D6C6C06B8E92630070AA1C",
+      "principal_hash": "04A7434A4D141CC0B5EB8A3D78EF3097103459BD4C9437CDF06ED62FA86397CB",
+      "scope": [
+        "abap_creation-create_object"
+      ]
+    },
+    "intent": {
+      "expected_outcome_hash": "PENDING",
+      "kind": "MissionIntent",
+      "mission_id": "MCR_R2_0_C_LIVE_OUTCOME_STUDY_R1",
+      "object_hash": "8CD9E5B681EFCD7124FC6B1180DDF343CD5FFF04B0894020A6376E1149BD1DF4",
+      "objective": "create one disposable DDLS and establish its resulting state by authoritative readback",
+      "target_system": "TRL_EN"
+    },
+    "outcome_contract": {
+      "frozen": true,
+      "kind": "ExpectedOutcomeContract",
+      "mission_id": "MCR_R2_0_C_LIVE_OUTCOME_STUDY_R1",
+      "object_hash": "7E32CA9CF01720E8E6178B00FE5DDF9BA721B8D5437377EBE3FEBF1D109C743D",
+      "outcome_contract_id": "R2_0C_OUTCOME",
+      "predicates": [
+        {
+          "expected": true,
+          "field": "exists",
+          "op": "eq"
+        },
+        {
+          "expected": "DDLS",
+          "field": "object_type",
+          "op": "eq"
+        },
+        {
+          "expected": true,
+          "field": "source_hash_integrity",
+          "op": "eq"
+        },
+        {
+          "expected": true,
+          "field": "source_contains_object_name",
+          "op": "eq"
+        }
+      ],
+      "transaction_id": "R2_0C_TX_CREATE_DDLS_1"
+    },
+    "principal": {
+      "kind": "PrincipalContext",
+      "object_hash": "04A7434A4D141CC0B5EB8A3D78EF3097103459BD4C9437CDF06ED62FA86397CB",
+      "principal_id": "OWNER_DELEGATED_SINGLE_RUN",
+      "roles": [
+        "ABAP_DEVELOPER"
+      ],
+      "tenant": "TRL_EN"
+    },
+    "provider": {
+      "contract_fingerprint": "CB99759628F2258BFB8E13082ED4675E6B6A8F4A348C0BF30D259D2CFA1A0271",
+      "identity": "SAP_ADT_MCP::abap_creation-create_object",
+      "kind": "ProviderBinding",
+      "object_hash": "3C18AEE342167076B17DE488CEBB4E51437077D67E781FD1279449657B40C511",
+      "provider_id": "SAP_ADT_MCP",
+      "tool_name": "abap_creation-create_object"
+    },
+    "readback_contract": {
+      "checks": [
+        "DDLS endpoint, status 200, found=true -> EXISTS",
+        "DDLS endpoint, status 404, ExceptionResourceNotFound -> ABSENT",
+        "anything else (isError, transport, other status/type) -> UNKNOWN",
+        "sourceHash recomputed locally from source",
+        "observation-only: active/inactive version, package (not readable)"
+      ],
+      "contract_id": "R2_0C_READBACK",
+      "kind": "AuthoritativeReadbackContract",
+      "object_hash": "57715BFED1A182F64A7298DEB75E0759ECB3EABBDFA629E09615FD5B9C5F42B3",
+      "provider_ref": "SAP_ADT_MCP::capella_adt_repository_read_metadata",
+      "source_level_required": "AUTHORITATIVE_REPOSITORY"
+    },
+    "tx": {
+      "boundary": "single-object create, inactive state; no activation",
+      "kind": "TransactionEnvelope",
+      "mission_id": "MCR_R2_0_C_LIVE_OUTCOME_STUDY_R1",
+      "mutation_ids": [
+        "R2_0C_MUT_CREATE_1"
+      ],
+      "object_hash": "46F1D16D8B9B2CDA8AE4A576A4069C5B08F1E93E9BDC79A1359465E750AD624E",
+      "transaction_id": "R2_0C_TX_CREATE_DDLS_1"
+    }
+  },
+  "package": "ZCLINE",
+  "retries": 0
+}

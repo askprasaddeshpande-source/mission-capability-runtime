@@ -1,0 +1,49 @@
+{
+  "evidence_class": "SYNTHETIC",
+  "freeze_sha256": "8CCC5B949245638BF518776E3694BB8A6FC85A289B7B93BEBCC4D97591DAE951",
+  "note": "in-process mock provider; scripted answers",
+  "scenarios": {
+    "error_not_persisted": {
+      "RESULT": "NOT_COMMITTED",
+      "execution_call_class": "PROVIDER_ERROR",
+      "final_state": "FAILED_AFTER_POSSIBLE_MUTATION",
+      "mutations_sent": 1,
+      "readback_existence": "ABSENT"
+    },
+    "outcome_fail": {
+      "RESULT": "COMMITTED_BUT_OUTCOME_FAILED",
+      "execution_call_class": "PROVIDER_RESPONSE_SUCCESS",
+      "final_state": "COMPENSATION_REQUIRED",
+      "mutations_sent": 1,
+      "readback_existence": "EXISTS"
+    },
+    "persisted_error_response": {
+      "RESULT": "COMMITTED_AND_OUTCOME_VALIDATED",
+      "execution_call_class": "PROVIDER_ERROR",
+      "final_state": "COMPLETE",
+      "mutations_sent": 1,
+      "readback_existence": "EXISTS"
+    },
+    "readback_error": {
+      "RESULT": "COMMIT_STATE_UNKNOWN",
+      "execution_call_class": "PROVIDER_RESPONSE_SUCCESS",
+      "final_state": "COMMIT_STATE_UNKNOWN",
+      "mutations_sent": 1,
+      "readback_existence": "UNKNOWN"
+    },
+    "success": {
+      "RESULT": "COMMITTED_AND_OUTCOME_VALIDATED",
+      "execution_call_class": "PROVIDER_RESPONSE_SUCCESS",
+      "final_state": "COMPLETE",
+      "mutations_sent": 1,
+      "readback_existence": "EXISTS"
+    },
+    "timeout_persisted": {
+      "RESULT": "COMMITTED_AND_OUTCOME_VALIDATED",
+      "execution_call_class": "CALL_SENT_NO_RESPONSE",
+      "final_state": "COMPLETE",
+      "mutations_sent": 1,
+      "readback_existence": "EXISTS"
+    }
+  }
+}

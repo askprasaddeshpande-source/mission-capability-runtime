@@ -1,0 +1,56 @@
+{
+  "ZC_KS01STUDENT:active": {
+    "elementCount": 6,
+    "exception_type": null,
+    "found": true,
+    "is_error": false,
+    "local_sha256_of_source": "AF48B270EB1B255837CC78440C3B58DF5201190ED63BDFE9A4F29FF6AD1A8770",
+    "repositoryMutation": false,
+    "sapWrites": 0,
+    "sourceType": "DDLS",
+    "source_bytes": 559,
+    "status": 200,
+    "tool_sourceHash": "AF48B270EB1B255837CC78440C3B58DF5201190ED63BDFE9A4F29FF6AD1A8770"
+  },
+  "ZC_KS01STUDENT:inactive": {
+    "elementCount": 6,
+    "exception_type": null,
+    "found": true,
+    "is_error": false,
+    "local_sha256_of_source": "AF48B270EB1B255837CC78440C3B58DF5201190ED63BDFE9A4F29FF6AD1A8770",
+    "repositoryMutation": false,
+    "sapWrites": 0,
+    "sourceType": "DDLS",
+    "source_bytes": 559,
+    "status": 200,
+    "tool_sourceHash": "AF48B270EB1B255837CC78440C3B58DF5201190ED63BDFE9A4F29FF6AD1A8770"
+  },
+  "ZC_MCR20B_NEG_F188915C:active": {
+    "elementCount": 0,
+    "exception_type": "ExceptionResourceNotFound",
+    "found": false,
+    "is_error": false,
+    "local_sha256_of_source": "AA0FFFA2159EDE98F3E4EF2A0F06C1E0AB663E27EDCC797A4828849CAB54D68C",
+    "repositoryMutation": false,
+    "sapWrites": 0,
+    "sourceType": "NOT_FOUND_VIA_DDLS_ENDPOINT",
+    "source_bytes": 570,
+    "status": 404,
+    "tool_sourceHash": "AA0FFFA2159EDE98F3E4EF2A0F06C1E0AB663E27EDCC797A4828849CAB54D68C"
+  },
+  "ZC_MCR20B_NEG_F188915C:inactive": {
+    "elementCount": 0,
+    "exception_type": "ExceptionResourceNotFound",
+    "found": false,
+    "is_error": false,
+    "local_sha256_of_source": "AA0FFFA2159EDE98F3E4EF2A0F06C1E0AB663E27EDCC797A4828849CAB54D68C",
+    "repositoryMutation": false,
+    "sapWrites": 0,
+    "sourceType": "NOT_FOUND_VIA_DDLS_ENDPOINT",
+    "source_bytes": 570,
+    "status": 404,
+    "tool_sourceHash": "AA0FFFA2159EDE98F3E4EF2A0F06C1E0AB663E27EDCC797A4828849CAB54D68C"
+  },
+  "evidence_class": "OBSERVED",
+  "sap_writes": 0
+}
