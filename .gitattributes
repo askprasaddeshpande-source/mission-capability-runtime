@@ -5,3 +5,6 @@
 *.jpg binary
 *.jpeg binary
 *.zip binary
+
+# Evidence bytes are hash-bound: never normalize line endings or BOMs (R2 portability fix)
+evidence/portable/** -text

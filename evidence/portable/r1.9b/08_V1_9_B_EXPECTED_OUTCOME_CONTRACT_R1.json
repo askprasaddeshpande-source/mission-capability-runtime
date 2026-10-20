@@ -1,0 +1,30 @@
+﻿{
+  "outcome_contract_id": "MCR19B_EXPECTED_OUTCOME_R1",
+  "predefined_before_mutation": true,
+  "mission_id": "MCR_R1_9_B_LIVE_GOVERNED_MUTATION_AND_OUTCOME_R1",
+  "transaction_id": "MCR19B_TX_CREATE_ACTIVATE_VALIDATE",
+  "expected_object": {
+    "destination": "TRL_EN",
+    "package": "ZCLINE",
+    "name": "ZCL_MCR19B_9533C4D8",
+    "create_type": "CLAS/OC",
+    "observed_type": "CLAS",
+    "description": "MCR R1.9B bounded governed disposable class"
+  },
+  "required_execution_receipts": [
+    "CREATE",
+    "ACTIVATE"
+  ],
+  "required_outcome_receipt": {
+    "validation_level": "LEVEL_2_STATE_VALIDATION",
+    "validator_tools": [
+      "abap_atc_run",
+      "abap_atc_get_result"
+    ],
+    "expected_state": "ATC_OBJECT_IDENTITY_AND_PACKAGE_MATCH",
+    "valid_must_equal": true
+  },
+  "completion_rule": "CREATE_SUCCESS_AND_ACTIVATION_SUCCESS_AND_ATC_AUTHORITATIVE_OBSERVATION_MATCH",
+  "executed_equals_complete": false,
+  "outcome_contract_hash": "F4031644FBD621647282EDC4051667808F86A1CEF60FE3D84AF082665BF3EB4F"
+}
