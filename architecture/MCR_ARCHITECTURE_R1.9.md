@@ -15,7 +15,7 @@ Mission State
 Capability Requirement
    |
    v
-Mission-Capability Working Set (MCWS)
+Minimum Capability Working Set (MCWS)
    |
    v
 LLM semantic proposal

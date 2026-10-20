@@ -44,3 +44,12 @@ If no authoritative readback becomes available:
 If authoritative readback confirms persistent CREATE but ACTIVATE remained unexecuted:
 
 `MCR_R1_9=BOUNDED_CLOSURE_WITH_PARTIAL_LIVE_MUTATION_RESULT`
+
+## R2 erratum (appended; the R1 table above is unchanged)
+
+The R2 audit (`reports/MCR_R1_9_FINAL_CLAIM_EVIDENCE_AUDIT_R2.md`) narrows these R1 rows:
+
+- **C11** (exact count/capability bound, `PROVEN as control`): now PARTIAL. The budget was frozen; live enforcement to exhaustion is shown only by the historical P6-D1 write (a different object) and by synthetic tests, not by R1.9B.
+- **C12** (`PROVEN`, single-use authorization prevents replay): now PARTIAL. The lock was created before CREATE (observed), but no replay was ever attempted, so refusal behavior is untested.
+- **C13/C14** (`PROVEN`, session semantics): now OBSERVED with an evidence gap. HF06 completed the sequence, but no HF05 failure transcript is retained to show that omitting a step causes failure.
+- **C16, C17, C18** remain valid and are tightened: CREATE reach and ACTIVATE non-reach are inferred from the runner's output and code path; the raw CREATE response was not preserved; the cause of the missing file path is undetermined.

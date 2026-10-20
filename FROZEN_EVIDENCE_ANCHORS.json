@@ -4,104 +4,148 @@
     "sha256": "E589393C6EEA0BA92E4EC521D1577A6F561F9ADFA38FF9EEE97A94695C666D90",
     "required": true,
     "role": "Original frozen MCWS scientific manuscript",
-    "status": "REFERENCE_ANCHOR"
+    "status": "REFERENCE_ANCHOR",
+    "bytes_in_git": false,
+    "note": "Hash cited by the verified R1.6.1 PDF and RC1 manifest; bytes not recovered"
   },
   {
     "id": "MCR_R1_7_PUBLICATION_FREEZE",
     "sha256": "48FA1C707002314752245434F5BDC09F96C5DEAB6CC27BC05F0483908457F1F3",
     "required": true,
     "role": "R1.7 publication freeze ZIP",
-    "status": "LOCAL_FROZEN"
+    "status": "LOCAL_FROZEN",
+    "bytes_in_git": true
   },
   {
     "id": "MCR_P6D_BOUNDED_WRITE_CLOSURE",
     "sha256": "D6ECA3A411DC1E224DCE677C404575A530C04BFB625852734802D61848AE953C",
     "required": true,
     "role": "Bounded SAP CREATE+ACTIVATE closure",
-    "status": "LOCAL_FROZEN"
+    "status": "LOCAL_FROZEN",
+    "bytes_in_git": true
   },
   {
     "id": "MCR_R1_8_EXTERNAL_REVIEW_REFRESH",
     "sha256": "28DA3688FCECA431B5272659B4C4C09F83D851AF598604CC3E83AD3215434DDC",
     "required": true,
     "role": "R1.8 external review refresh package",
-    "status": "LOCAL_FROZEN"
+    "status": "LOCAL_FROZEN",
+    "bytes_in_git": true
   },
   {
     "id": "MCR_R1_8_REVIEWER_PDF_PACKAGE",
     "sha256": "A6685F627636A0DFB7C5E824FA430642D0280BFA0E4D691AFA4BAA9AD78B2BCB",
     "required": false,
     "role": "R1.8 reviewer PDF package ZIP",
-    "status": "LOCAL_FROZEN"
+    "status": "LOCAL_FROZEN",
+    "bytes_in_git": false
   },
   {
     "id": "MCR_R1_8_C1D_CLOSURE",
     "sha256": "296961C6CB47C876B35CB107DC6EDB3D8A4803A5611105A78102C440A2731B14",
     "required": true,
     "role": "Four-provider scientific closure",
-    "status": "LOCAL_FROZEN"
+    "status": "LOCAL_FROZEN",
+    "bytes_in_git": true
   },
   {
     "id": "MCR_R1_8_C2C_CLOSURE",
     "sha256": "F347FC825D9E444E9E0FAE61D806304C8B2CA540A4D6EA037AB5412D8AEEA61D",
     "required": true,
     "role": "Multi-mission scientific closure",
-    "status": "LOCAL_FROZEN"
+    "status": "LOCAL_FROZEN",
+    "bytes_in_git": true
   },
   {
     "id": "MCR_R1_9_A_FOUNDATION",
     "sha256": "4F018E2F1EBE86AEF78E94989685B02A2E41BFFB73238A21F63AC12C8190E1F2",
     "required": true,
     "role": "R1.9A governed execution foundation",
-    "status": "LOCAL_FROZEN"
+    "status": "LOCAL_FROZEN",
+    "bytes_in_git": true
   },
   {
     "id": "MCR_R1_9_B_PREWRITE_FREEZE",
     "sha256": "3DFE6756695A67EF28BBF54F5C7B61746A819B4161923B0319FEC26683C3ECF9",
     "required": true,
     "role": "R1.9B prospective live contract freeze",
-    "status": "LOCAL_FROZEN"
+    "status": "LOCAL_FROZEN",
+    "bytes_in_git": true
   },
   {
     "id": "HF06_SIGNED_SOURCE",
     "sha256": "DE183ABC47B8F025ED60CFE5CFEA4527585FB20154C949628BDE95E42A0D3C88",
     "required": true,
     "role": "Final qualified HF06 runner source",
-    "status": "DO_NOT_RERUN"
+    "status": "DO_NOT_RERUN",
+    "bytes_in_git": false,
+    "note": "Original signed bytes not in Git; repository holds a normalized reading copy that does not match this hash; do not execute"
   },
   {
     "id": "HF06_ATTEMPT2_AUTHORIZATION",
     "sha256": "CC06B59F341E9B70844F7BEE48F6917303C094206431C228575F91E4500B9E09",
     "required": true,
     "role": "Historical live attempt-2 authorization",
-    "status": "NOT_REUSABLE"
+    "status": "NOT_REUSABLE",
+    "bytes_in_git": false,
+    "note": "Hash-only by design; corroborated by lock authorization_sha256"
   },
   {
     "id": "HF06_ATTEMPT2_SINGLE_USE_LOCK",
     "sha256": "DFE129A6D66656B4477B1693D5073CD17B40918516DCF725A6193C019B7BB275",
     "required": true,
     "role": "Replay barrier created before CREATE",
-    "status": "PRESENT"
+    "status": "PRESENT",
+    "bytes_in_git": true
   },
   {
     "id": "HF06_VALIDATION_RAW",
     "sha256": "79E493808385BCAB300B757882FACF8B3BCDC6B04117F926DC1736FC3DE50182",
     "required": true,
     "role": "Captured bounded reconciliation validation response",
-    "status": "LOCAL_EVIDENCE"
+    "status": "LOCAL_EVIDENCE",
+    "bytes_in_git": true
   },
   {
     "id": "HF06_DETAILS_RAW",
     "sha256": "09F2E8AA655844DBF72C279465C7DB3C3B60B61EB9C786B16CBB1933F26DCB72",
     "required": true,
     "role": "Captured object type details response",
-    "status": "LOCAL_EVIDENCE"
+    "status": "LOCAL_EVIDENCE",
+    "bytes_in_git": true
   },
   {
     "id": "HF06_ADJUDICATION_R2_SIGNED_SCRIPT",
     "sha256": "2A463A785F383B88ABFE2FFF331CAE854C9F2FBB7353247D7433BC4E8B7D4C03",
     "required": false,
     "role": "Local raw-response adjudication executable",
-    "status": "LOCAL_ONLY"
+    "status": "LOCAL_ONLY",
+    "bytes_in_git": false,
+    "note": "Original signed bytes not in Git; normalized reading copy only"
+  },
+  {
+    "id": "MCR_R1_6_1_ORIGINAL_PDF",
+    "sha256": "AD45F74150D9FEB188C7CA78E427DB960443069EE4A3C1B2B65AF3C53DE0140A",
+    "required": true,
+    "role": "Original R1.6.1 whitepaper PDF (31 August 2026)",
+    "status": "REFERENCE_ANCHOR",
+    "bytes_in_git": true,
+    "note": "Equals canonical_pdf_sha256 in the RC1 package manifest"
+  },
+  {
+    "id": "MCR_R1_6_ADVERSARIAL_REVIEW_MD",
+    "sha256": "14EE73D372D9D0A1EA52E664A2326E6F5D72DCF740395BD49B37C0E191C09B1B",
+    "required": false,
+    "role": "R1.6 independent adversarial review",
+    "status": "SOURCE_RECOVERED_HASH_NEWLY_RECORDED",
+    "bytes_in_git": true
+  },
+  {
+    "id": "MCR_R1_6_1_TARGETED_REVIEW_RC1",
+    "sha256": "F54F677A17372342B2D0AA82E35EE37E6A1D6F96BADBC57BAC853D8C5212E1B6",
+    "required": false,
+    "role": "R1.6.1 targeted review package",
+    "status": "SOURCE_RECOVERED_HASH_NEWLY_RECORDED",
+    "bytes_in_git": true
   }
 ]
