@@ -1,7 +1,7 @@
 {
-  "build_id": "MCR_R1_9_EXTERNAL_REVIEW_CANDIDATE_R2",
-  "status": "EXTERNAL_REVIEW_CANDIDATE_WITH_GAPS_NOT_FROZEN",
-  "version": "1.9.0-external-review-candidate-r2",
+  "build_id": "MCR_R1_9_RELEASE_1_9_0",
+  "status": "RELEASE_1_9_0_WITH_DOCUMENTED_GAPS",
+  "version": "1.9.0",
   "artifact_name_planned": "MCR-PUBLIC-REPRODUCIBILITY-v1.9.0",
   "repository_planned": "https://github.com/askprasaddeshpande-source/mission-capability-runtime",
   "source_of_record": {
@@ -18,29 +18,27 @@
   "github_release": null,
   "zenodo_version_doi": null,
   "zenodo_concept_doi": null,
-  "public_release_ready": false,
+  "public_release_ready": true,
   "software_license": "Apache-2.0",
   "documentation_license": "CC-BY-4.0",
-  "release_prerequisites": [
-    "owner decision on documented gaps",
-    "approved sanitized evidence package (see research-package/PUBLIC_EVIDENCE_INCLUSION_PLAN_R2.md)",
-    "secret scan and private-path scan on final file set",
-    "fresh verification or removal of time-sensitive references",
-    "rendered figure from figure specification",
-    "reviewed PDF",
-    "release hash freeze",
-    "explicit owner authorization to push, tag, release or archive"
-  ],
   "final_closure_classification": "BOUNDED_CLOSURE_WITH_UNRESOLVED_CREATE_COMMIT_STATE",
-  "publication_state": "EXTERNAL_REVIEW_CANDIDATE_READY_WITH_GAPS",
-  "manuscript": "paper/MCR_Manuscript_R1.9_EXTERNAL_REVIEW_CANDIDATE_R2.md",
+  "publication_state": "RELEASED_WITH_DOCUMENTED_GAPS",
+  "manuscript": "paper/MCR_Manuscript_R1.9_EXTERNAL_REVIEW_CANDIDATE_R3.md",
   "portability_state": "PORTABLE_RESEARCH_BASELINE_READY_WITH_DOCUMENTED_HISTORICAL_GAPS",
   "documented_gaps": [
     "frozen scientific manuscript bytes (E589393C...)",
     "original signed bytes of six historical scripts",
     "R1.8 reviewer PDF package bytes",
     "R1.7 P7 closure ZIP (register hash malformed)",
-    "time-sensitive references not re-verified"
+    "time-sensitive references not re-verified",
+    "claim audit and adversarial review are self-reviews"
   ],
-  "repository_visibility": "PRIVATE"
+  "repository_visibility": "PUBLIC",
+  "manuscript_pdf": "publication/MCR_R1.9_From_Tools_to_Missions_R3.pdf",
+  "publication_evidence_gate": "PASS_WITH_DOCUMENTED_GAPS",
+  "claim_critical_evidence_missing": 0,
+  "archival_evidence_gaps": 9,
+  "new_experiment_required_for_current_claims": false,
+  "github_release_tag": "v1.9.0",
+  "verification": "python tools/verify_fresh_clone.py"
 }

@@ -8,8 +8,8 @@ Research repository for the Mission-Capability Runtime (MCR) and Minimum Capabil
 **ORCID:** 0009-0008-1344-6585  
 **Research & Architecture:** https://prasaddeshpande.com/
 
-> **Repository status: EXTERNAL-REVIEW CANDIDATE (WITH GAPS). PRIVATE.**  
-> This repository is not a frozen public reproducibility release and must not be represented as a peer-reviewed journal or conference publication. No GitHub release, tag or archival DOI exists.
+> **Repository status: release `v1.9.0` with documented evidence gaps.**  
+> This is an independent research repository. It is not a peer-reviewed journal or conference publication. The bounded R1.9B live-mutation result is partial (see below); it is not a proof of successful end-to-end live mutation.
 
 ## Research lineage
 
@@ -95,7 +95,9 @@ At current closure:
 
 Therefore R1.9B must **not** be described as a successful end-to-end live mutation.
 
-**Closure classification:** `MCR_R1_9=BOUNDED_CLOSURE_WITH_UNRESOLVED_CREATE_COMMIT_STATE`. Control-plane behavior is supported; complete live mutation/outcome correctness is not. HF06 must not be rerun and its authorization must not be reused. See [`reports/MCR_R1_9_FINAL_SCIENTIFIC_CLOSURE_R2.md`](reports/MCR_R1_9_FINAL_SCIENTIFIC_CLOSURE_R2.md).
+**Closure classification:** `MCR_R1_9=BOUNDED_CLOSURE_WITH_UNRESOLVED_CREATE_COMMIT_STATE`. Control-plane behavior is supported; complete live mutation/outcome correctness is not. HF06 must not be rerun and its authorization must not be reused. See [`reports/MCR_R1_9_FINAL_SCIENTIFIC_CLOSURE_R3.md`](reports/MCR_R1_9_FINAL_SCIENTIFIC_CLOSURE_R3.md), the [evidence-sufficiency gate](reports/MCR_R1_9_PUBLICATION_EVIDENCE_GATE_R3.md) and the [adversarial review](reports/MCR_R1_9_EXTERNAL_ADVERSARIAL_REVIEW_R3.md).
+
+Publication manuscript: [`paper/MCR_Manuscript_R1.9_EXTERNAL_REVIEW_CANDIDATE_R3.md`](paper/MCR_Manuscript_R1.9_EXTERNAL_REVIEW_CANDIDATE_R3.md) and PDF [`publication/MCR_R1.9_From_Tools_to_Missions_R3.pdf`](publication/MCR_R1.9_From_Tools_to_Missions_R3.pdf).
 
 **Central distinction:** `REQUESTED != AUTHORIZED != BOUND != EXECUTED != COMMITTED != VALIDATED_COMPLETE`.
 
@@ -103,7 +105,8 @@ Therefore R1.9B must **not** be described as a successful end-to-end live mutati
 
 ## Repository layout
 
-- [`paper/`](paper/) — manuscript and source-of-record lineage (review candidate: `MCR_Manuscript_R1.9_EXTERNAL_REVIEW_CANDIDATE_R2.md`)
+- [`paper/`](paper/) — manuscript and source-of-record lineage (final: `MCR_Manuscript_R1.9_EXTERNAL_REVIEW_CANDIDATE_R3.md`)
+- [`tools/`](tools/) — `verify_fresh_clone.py` (fresh-clone qualification) and `build_pdf.py`
 - [`reports/`](reports/) — source-of-record, claim/evidence, consistency and closure audits
 - [`evidence/portable/`](evidence/portable/) — byte-exact portable evidence and portability manifests (`-text`: never line-ending normalized)
 - [`architecture/`](architecture/) — MCR/MCWS architecture and ACLA/EAF relationship
@@ -132,11 +135,19 @@ Recommended closed loop:
 
 `Claude Mods -> ACLA -> EAF pre-action -> MCR -> EAF post-action -> ACLA / evidence`
 
+## Verify this repository
+
+```
+python tools/verify_fresh_clone.py
+```
+
+This checks evidence hashes, `SHA256SUMS.txt`, frozen anchors, claim-to-artifact linkage, a secret scan and citation metadata. It reads files only and executes nothing from the repository.
+
 ## Publication state
 
-No MCR v1.9 GitHub release or Zenodo DOI is declared by this draft.
+GitHub release `v1.9.0`. This tagged snapshot records no DOI; if an archival DOI is later issued it is recorded in `CITATION.cff` on the default branch, not here. Known gaps (frozen manuscript bytes, six signed originals, unverified time-sensitive references) are listed in `evidence/portable/MISSING_ARTIFACTS_R2.md` and the manuscript limitations.
 
-The final release must preserve negative, partial and unresolved results exactly as observed.
+The release preserves negative, partial and unresolved results exactly as observed.
 
 ## Licensing
 

@@ -21,7 +21,8 @@ See [`ORIGINAL_R1.6.1_SOURCE_OF_RECORD.md`](ORIGINAL_R1.6.1_SOURCE_OF_RECORD.md)
 
 ## Current manuscript
 
-- [`MCR_Manuscript_R1.9_EXTERNAL_REVIEW_CANDIDATE_R2.md`](MCR_Manuscript_R1.9_EXTERNAL_REVIEW_CANDIDATE_R2.md) — current external-review candidate (original title, subtitle and section progression preserved)
+- [`MCR_Manuscript_R1.9_EXTERNAL_REVIEW_CANDIDATE_R3.md`](MCR_Manuscript_R1.9_EXTERNAL_REVIEW_CANDIDATE_R3.md) — final manuscript for release 1.9.0 (original title, subtitle and section progression preserved)
+- [`MCR_Manuscript_R1.9_EXTERNAL_REVIEW_CANDIDATE_R2.md`](MCR_Manuscript_R1.9_EXTERNAL_REVIEW_CANDIDATE_R2.md) — earlier candidate, retained
 - [`MCR_Manuscript_R1.9_CLOSURE_DRAFT_R1.md`](MCR_Manuscript_R1.9_CLOSURE_DRAFT_R1.md) — earlier closure draft, retained unchanged
 
 The original R1.6.1 PDF is held byte-exact at `../evidence/portable/r1.6/`.

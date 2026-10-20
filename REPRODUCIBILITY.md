@@ -62,6 +62,18 @@ Before a public reproducibility ZIP is built:
 9. generate the reviewed PDF from the final manuscript;
 10. build the release ZIP without rerunning experiments or enterprise mutations.
 
+## One-command verification
+
+```
+python tools/verify_fresh_clone.py
+```
+
+Expected: `OVERALL=PASS_WITH_DOCUMENTED_GAPS` (no FAIL). The documented gaps are listed in `evidence/portable/MISSING_ARTIFACTS_R2.md` (`MISSING_ARTIFACTS_R2`).
+
+## Rebuilding the PDF
+
+`python tools/build_pdf.py paper/MCR_Manuscript_R1.9_EXTERNAL_REVIEW_CANDIDATE_R3.md out.pdf` (needs the `markdown` package, optionally `pypdf`, and Chrome or Edge). A rebuilt PDF is not byte-identical (timestamps); the release PDF hash is recorded in the release notes.
+
 ## Verifying evidence bytes
 
 1. Check out the candidate branch on any machine.
