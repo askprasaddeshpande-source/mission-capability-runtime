@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "kind": {
+      "const": "TransactionEnvelope"
+    },
+    "object_hash": {
+      "pattern": "^[0-9A-F]{64}$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "kind",
+    "object_hash",
+    "transaction_id",
+    "mission_id",
+    "mutation_ids",
+    "boundary"
+  ],
+  "title": "TransactionEnvelope",
+  "type": "object"
+}

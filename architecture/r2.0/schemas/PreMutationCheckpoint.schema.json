@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "kind": {
+      "const": "PreMutationCheckpoint"
+    },
+    "object_hash": {
+      "pattern": "^[0-9A-F]{64}$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "kind",
+    "object_hash",
+    "checkpoint_id",
+    "transaction_hash",
+    "budget_hash",
+    "outcome_contract_hash",
+    "readback_contract_hash",
+    "remaining_budget"
+  ],
+  "title": "PreMutationCheckpoint",
+  "type": "object"
+}

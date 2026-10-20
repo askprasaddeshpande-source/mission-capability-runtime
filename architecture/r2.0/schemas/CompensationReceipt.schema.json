@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "kind": {
+      "const": "CompensationReceipt"
+    },
+    "object_hash": {
+      "pattern": "^[0-9A-F]{64}$",
+      "type": "string"
+    },
+    "result": {
+      "enum": [
+        "PASS",
+        "FAIL",
+        "UNKNOWN"
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "object_hash",
+    "receipt_id",
+    "grant_hash",
+    "readback_receipt_hash",
+    "result"
+  ],
+  "title": "CompensationReceipt",
+  "type": "object"
+}

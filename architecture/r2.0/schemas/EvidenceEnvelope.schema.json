@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "evidence_class": {
+      "enum": [
+        "PROVEN",
+        "OBSERVED",
+        "PARTIAL",
+        "SYNTHETIC",
+        "LOCAL",
+        "NOT_ESTABLISHED",
+        "DEFERRED",
+        "REJECTED"
+      ]
+    },
+    "kind": {
+      "const": "EvidenceEnvelope"
+    },
+    "object_hash": {
+      "pattern": "^[0-9A-F]{64}$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "kind",
+    "object_hash",
+    "envelope_id",
+    "mission_id",
+    "transaction_id",
+    "chain",
+    "evidence_class"
+  ],
+  "title": "EvidenceEnvelope",
+  "type": "object"
+}

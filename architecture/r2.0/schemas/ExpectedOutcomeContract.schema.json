@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "kind": {
+      "const": "ExpectedOutcomeContract"
+    },
+    "object_hash": {
+      "pattern": "^[0-9A-F]{64}$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "kind",
+    "object_hash",
+    "outcome_contract_id",
+    "mission_id",
+    "transaction_id",
+    "predicates",
+    "frozen"
+  ],
+  "title": "ExpectedOutcomeContract",
+  "type": "object"
+}

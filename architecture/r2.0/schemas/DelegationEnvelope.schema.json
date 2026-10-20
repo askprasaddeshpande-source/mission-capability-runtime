@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "kind": {
+      "const": "DelegationEnvelope"
+    },
+    "object_hash": {
+      "pattern": "^[0-9A-F]{64}$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "kind",
+    "object_hash",
+    "delegation_id",
+    "principal_hash",
+    "scope",
+    "max_mutations",
+    "expires_at"
+  ],
+  "title": "DelegationEnvelope",
+  "type": "object"
+}

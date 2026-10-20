@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "kind": {
+      "const": "OutcomePredicate"
+    },
+    "object_hash": {
+      "pattern": "^[0-9A-F]{64}$",
+      "type": "string"
+    },
+    "op": {
+      "enum": [
+        "eq",
+        "ne",
+        "in"
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "object_hash",
+    "field",
+    "op",
+    "expected"
+  ],
+  "title": "OutcomePredicate",
+  "type": "object"
+}

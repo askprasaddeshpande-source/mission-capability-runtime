@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "activation": {
+      "enum": [
+        "ACTIVE",
+        "INACTIVE",
+        "UNKNOWN"
+      ]
+    },
+    "existence": {
+      "enum": [
+        "EXISTS",
+        "ABSENT",
+        "UNKNOWN"
+      ]
+    },
+    "kind": {
+      "const": "AuthoritativeReadbackReceipt"
+    },
+    "object_hash": {
+      "pattern": "^[0-9A-F]{64}$",
+      "type": "string"
+    },
+    "source_level": {
+      "enum": [
+        "AUTHORITATIVE_REPOSITORY",
+        "PROVIDER_VALIDATION",
+        "PROVIDER_LOG",
+        "TRANSPORT_SUCCESS",
+        "CACHED_OUTPUT",
+        "LOCAL_RUNNER_STATE",
+        "INFERRED_OR_REGEX"
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "object_hash",
+    "receipt_id",
+    "transaction_id",
+    "mutation_id",
+    "contract_hash",
+    "source_level",
+    "existence",
+    "activation",
+    "observed"
+  ],
+  "title": "AuthoritativeReadbackReceipt",
+  "type": "object"
+}

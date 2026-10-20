@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "kind": {
+      "const": "MissionIntent"
+    },
+    "object_hash": {
+      "pattern": "^[0-9A-F]{64}$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "kind",
+    "object_hash",
+    "mission_id",
+    "objective",
+    "target_system",
+    "expected_outcome_hash"
+  ],
+  "title": "MissionIntent",
+  "type": "object"
+}

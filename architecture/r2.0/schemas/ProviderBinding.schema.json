@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "kind": {
+      "const": "ProviderBinding"
+    },
+    "object_hash": {
+      "pattern": "^[0-9A-F]{64}$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "kind",
+    "object_hash",
+    "provider_id",
+    "tool_name",
+    "contract_fingerprint",
+    "identity"
+  ],
+  "title": "ProviderBinding",
+  "type": "object"
+}

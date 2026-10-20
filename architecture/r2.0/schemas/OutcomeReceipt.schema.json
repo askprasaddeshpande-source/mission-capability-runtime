@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "kind": {
+      "const": "OutcomeReceipt"
+    },
+    "object_hash": {
+      "pattern": "^[0-9A-F]{64}$",
+      "type": "string"
+    },
+    "result": {
+      "enum": [
+        "PASS",
+        "FAIL",
+        "UNKNOWN"
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "object_hash",
+    "receipt_id",
+    "transaction_id",
+    "readback_receipt_hash",
+    "outcome_contract_hash",
+    "result"
+  ],
+  "title": "OutcomeReceipt",
+  "type": "object"
+}

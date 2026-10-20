@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "kind": {
+      "const": "CompensationGrant"
+    },
+    "object_hash": {
+      "pattern": "^[0-9A-F]{64}$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "kind",
+    "object_hash",
+    "grant_id",
+    "target",
+    "capability",
+    "max_mutations",
+    "preconditions",
+    "outcome_predicates",
+    "inherits_forward_authority",
+    "issued_by"
+  ],
+  "title": "CompensationGrant",
+  "type": "object"
+}

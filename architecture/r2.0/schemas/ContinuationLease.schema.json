@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "kind": {
+      "const": "ContinuationLease"
+    },
+    "object_hash": {
+      "pattern": "^[0-9A-F]{64}$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "kind",
+    "object_hash",
+    "lease_id",
+    "checkpoint_hash",
+    "transaction_id",
+    "remaining_budget",
+    "consumed_authority_ids"
+  ],
+  "title": "ContinuationLease",
+  "type": "object"
+}
