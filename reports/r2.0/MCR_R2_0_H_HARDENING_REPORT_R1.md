@@ -1,0 +1,38 @@
+# MCR R2.0H Hardening Report R1 (response to the independent review)
+
+Baseline for this work: `8a383b6` (reviewed commit). Inputs: `reports/r2.0/MCR_R2_0_INDEPENDENT_QUALIFICATION_R1_FINDINGS.md` (verdict HOLD). Scope: bounded offline model, test and verifier changes. SAP writes 0, live executions 0, no credential touched, no PR. Every reviewer finding was first confirmed by reading the code at the cited lines, then fixed or explicitly deferred below.
+
+**This report does not claim the HOLD is lifted.** The reviewer must re-run independently on the resulting commit.
+
+## Finding-by-finding response
+| # | Finding | Status | What changed | Evidence |
+|---|---|---|---|---|
+| 1 | `resume()` trusts the lease, copies its state, accepts any slot | FIXED (integrity) | lease and checkpoint must be hash-valid and of the right kind; lease state must agree with the consumed set; consumed ids must belong to the re-presented authority; evidence limited to pre-observation slots (no readback/commit/outcome/completion); budget bound `remaining + consumed <= checkpoint`; every post-send resume restarts in COMMIT_STATE_UNKNOWN and must obtain a fresh readback | 8 new tests; mutants `lease_hash_unchecked`, `resume_inherits_lease_state`, `resume_accepts_downstream_evidence`, `resume_lease_state_consistency_unchecked`, `resume_consumed_authority_unchecked` detected. **Not fixed:** lease authenticity. A hash proves integrity, not origin; a signature scheme needs key management (an owner decision) |
+| 2 | Failed calls change evidence/budget | FIXED | all guard methods are atomic: any exception restores state, history, evidence, budget, consumed set and counters; execution receipts must correlate to the mutation and have a post-send call class; outcome binding is checked before entering PENDING | 10 tests; mutants `atomic_rollback_removed`, `execution_receipt_mutation_binding_unchecked`, `outcome_binding_unchecked` detected |
+| 3 | `complete()` lacks relational checks; `_go` callable | FIXED within an in-process trust boundary | `_verify_chain` checks all 15 required slots for kind and hash and 18 cross-object relations (principal to delegation to authority to budget/capability, transaction and mutation identity, replay-set entry, checkpoint pins, execution call class, readback under contract with authoritative EXISTS, commit bound to readback and COMMITTED, outcome PASS recomputed from predicates); malformed objects give GuardError; `_go` refuses calls without the internal token | 12 forgery tests including fully self-consistent forged chains (non-authoritative or non-EXISTS readback, recomputed hashes); mutants `chain_*`, `direct_state_change_allowed` detected. **Boundary:** hostile code in the same process can still mutate objects or reuse the token; the model protects against malformed or forged evidence and logic errors |
+| 4 | Empty predicates pass; unknown op treated as `in` | FIXED | `check_predicates` rejects empty, malformed, unknown-op and non-collection `in`; prewrite and compensation grants validate predicates | 4 tests; mutants `empty_predicates_allowed`, `unknown_predicate_op_allowed`, `prewrite_predicates_unchecked` detected |
+| 5 | Runner "authoritative" label, `read_state` either-version, ABSENT without object identity, intra-response integrity, substring predicate, third-party race | **DEFERRED, documented** | the R2.0C runner is frozen and the live result already exists; nothing was changed. These limits qualify how H41/H42 are worded (status R4). Requirements for the next frozen study: ABSENT must verify the exception names the requested object; per-version readback semantics proven on an object with a pending inactive version; a second independent readback source or a rename of the "authoritative" level; predicate over structured fields not substrings; bind to a create-time token or re-check absence immediately before the call | none (design requirement) |
+| 6 | Authorization not marked consumed; model hash unbound | PARTIAL | `research-package/r2.0/r2_0c/MCR_R2_0_C_AUTHORIZATION_CONSUMED_R1.md` records consumption (the frozen packet is untouched). **Requirement for the next freeze:** the authorization phrase must bind the model hash too | document only |
+| 7 | Verifier pinned 12 of 53 files; missing tag passes; tools skipped | FIXED | 48 baseline files and the 7 R2.0G result/report files are pinned by SHA-256 (the five intentionally revised files are excluded and listed); a missing `v1.9.0` tag now fails unless `--no-git`; `tools/` is scanned for drive and user-profile paths except the two frozen live tools; mutation result reproduction added | verifier PASS; negative test: a one-byte change to a pinned file made it FAIL |
+| 8 | Dead consumed check; stuck PENDING; `decide_commit` ignores `commit_state` | FIXED | consumed check handles the real tuple keys; a bad outcome receipt can no longer leave PENDING (atomic plus ordering); an authoritative EXISTS readback with a non-COMMITTED observation is rejected (an over-claiming observation still degrades to COMMIT_STATE_UNKNOWN) | tests and mutants `authority_consumed_check_disabled`, `commit_understatement_allowed` detected |
+| 9 | Four crash-only mutants | FIXED | tests no longer depend on prior guard outcomes; `complete()` turns malformed evidence into GuardError; the harness records `assertion` vs `crash` per mutant | 35/35 mutants detected by assertion; one mutant (`chain_readback_authority_unchecked`) initially survived and exposed a real test gap, closed by a self-consistent forged-chain test |
+| 10 | Erratum wording, stale R1 registers | PARTIAL | HYPOTHESIS_STATUS R4 marks R1/R2/R3 as superseded for status; frozen files are not edited. The erratum's "hash-linked" is read narrowly: each emitted entry is the object hash; the reviewer rebuilt links 1-13 from the freeze and published readback | status R4 |
+
+## Results (actual, `evidence/r2.0/MCR_R2_0_H_TEST_MATRIX_R1.json`)
+- Model validator: 133 checks in 13 groups, 0 failed (74 in R1, 96 after R2.0G, +37 now; the new HARDENING_R2_0H group has 36).
+- Local D/E scenarios: 12 checks PASS (two new: forged lease state not inherited; every post-send resume restarts in UNKNOWN). The R1 result is kept as history because resumed states legitimately changed.
+- Mutation check: 35 mutants, all applied, all detected, all by assertion (R2.0G had 15, 4 crash-only).
+- Frozen R2.0C runner vs mock provider: 6/6 scenarios reproduce the frozen outcomes, so the stricter relational checks do not reject the runner's legitimate chains; the runner file is byte-identical to baseline.
+- Frozen evidence: unchanged (verifier pins).
+
+## Remaining gaps (not closed by this work)
+1. Receipt provenance: the model verifies consistency, not authorship. A fully self-consistent forged chain that labels its readback AUTHORITATIVE_REPOSITORY is accepted; only a signing/attestation scheme (owner key decision) or an independent source closes that.
+2. Lease authenticity (same cause).
+3. Finding 5 limits on the live study; no independent second readback source; activation and package unproven.
+4. Link 14 never observed live; only one live run; raw live evidence outside Git.
+5. Python-in-process trust boundary; `CompletionReceipt` has no `mission_id` field.
+6. The verifier and the sums live in the same repository (self-attestation); nothing is signed.
+7. The bearer token pasted in chat still needs owner-controlled rotation. A full-history pattern search (all refs) found no token prefix, bearer string or private key.
+
+## Recommendation
+Request an independent re-review of the resulting commit (a fresh reviewer, same brief). Until it returns, treat the verdict as HOLD. Do not open the consolidated PR yet.

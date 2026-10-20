@@ -5,6 +5,7 @@ Evidence class of everything produced by this module: SYNTHETIC/LOCAL.
 Design rule: a state is entered only through a guard that demands the specific
 evidence object for that state. No state is inferred from an earlier one.
 """
+import functools
 import hashlib
 import json
 
@@ -132,8 +133,29 @@ def verify_hash(obj):
 
 
 # ---------------------------------------------------------------- outcome predicates
+class GuardError(Exception):
+    pass
+
+
+PRED_OPS = ("eq", "ne", "in")
+
+
+def check_predicates(predicates):
+    """A usable predicate list is non-empty and well-formed. Empty lists are vacuous and refused."""
+    if not isinstance(predicates, (list, tuple)) or not predicates:
+        raise GuardError("empty predicate list is vacuous")
+    for p in predicates:
+        if not isinstance(p, dict) or not {"field", "op", "expected"} <= set(p):
+            raise GuardError("malformed predicate")
+        if p["op"] not in PRED_OPS:
+            raise GuardError("unknown predicate op %r" % (p["op"],))
+        if p["op"] == "in" and not isinstance(p["expected"], (list, tuple, set, frozenset)):
+            raise GuardError("op 'in' needs a collection")
+
+
 def eval_predicates(predicates, observed):
-    """Tri-state. A missing observed field is UNKNOWN, never FAIL or PASS."""
+    """Tri-state. A missing observed field is UNKNOWN, never FAIL or PASS. Empty/unknown-op predicates raise."""
+    check_predicates(predicates)
     result = "PASS"
     for p in predicates:
         if p["field"] not in observed or observed[p["field"]] in (None, "UNKNOWN"):
@@ -151,8 +173,36 @@ def attenuated(child_scope, parent_scope):
     return set(child_scope) <= set(parent_scope)
 
 
-class GuardError(Exception):
-    pass
+# Library trust boundary: guards protect against logic errors and malformed/forged EVIDENCE presented to a
+# Mission. They do not defend against hostile code running in the same process (which can mutate objects).
+# Direct state changes are refused unless they come through a guard method (token below).
+_TOKEN = object()
+
+SLOT_KINDS = {"intent": "MissionIntent", "principal": "PrincipalContext", "delegation": "DelegationEnvelope",
+              "authority": "ExecutionAuthority", "capability": "CapabilityBinding", "provider": "ProviderBinding",
+              "budget": "MutationBudget", "tx": "TransactionEnvelope", "checkpoint": "PreMutationCheckpoint",
+              "execution_receipt": "ExecutionReceipt", "commit": "CommitObservation",
+              "readback": "AuthoritativeReadbackReceipt", "outcome": "OutcomeReceipt",
+              "outcome_contract": "ExpectedOutcomeContract", "readback_contract": "AuthoritativeReadbackContract",
+              "completion": "CompletionReceipt"}
+POST_SEND_CLASSES = ("PROVIDER_RESPONSE_SUCCESS", "CALL_SENT_NO_RESPONSE", "PROVIDER_ERROR", "COMMIT_UNKNOWN")
+# Evidence a resumed mission may be given: pre-observation only. Readback, commit, outcome and completion must
+# be produced fresh by the guard methods after resume.
+RESUME_SLOTS = ("intent", "principal", "delegation", "capability", "provider", "tx", "budget", "outcome_contract",
+                "readback_contract", "authority", "execution_receipt")
+
+
+def atomic(fn):
+    """A guard method either fully succeeds or changes nothing (state, evidence, budget, replay set)."""
+    @functools.wraps(fn)
+    def wrapper(self, *a, **k):
+        snap = (self.state, list(self.history), dict(self.ev), self.remaining, set(self.consumed), self.mutations_sent)
+        try:
+            return fn(self, *a, **k)
+        except BaseException:
+            self.state, self.history, self.ev, self.remaining, self.consumed, self.mutations_sent = snap
+            raise
+    return wrapper
 
 
 class Mission:
@@ -165,13 +215,15 @@ class Mission:
         self.history = [("PLANNED", None)]
         self.ev = {}                     # evidence slot -> object
         self.remaining = max_mutations
-        self.consumed = set()            # ReplayGuard: authority/mutation ids already consumed
+        self.consumed = set()            # ReplayGuard: (authority hash, mutation id) already consumed
         self.mutations_sent = 0
         self.max_mutations = max_mutations
         self.sap_writes_by_model = 0
 
     # -- helpers
-    def _go(self, to, ref=None):
+    def _go(self, to, ref=None, _tok=None):
+        if _tok is not _TOKEN:
+            raise GuardError("direct state change refused: %s must be entered through its guard method" % to)
         if to not in TRANSITIONS[self.state]:
             raise GuardError("illegal transition %s -> %s" % (self.state, to))
         self.state = to
@@ -184,13 +236,15 @@ class Mission:
 
     def _corr(self, obj):
         if obj.get("transaction_id") != self.transaction_id:
-            raise GuardError("transaction correlation mismatch on %s" % obj["kind"])
+            raise GuardError("transaction correlation mismatch on %s" % obj.get("kind"))
 
     # -- forward path
+    @atomic
     def context_ready(self, intent, principal):
         self.ev["intent"], self.ev["principal"] = intent, principal
-        self._go("CONTEXT_READY", intent["object_hash"])
+        self._go("CONTEXT_READY", intent["object_hash"], _tok=_TOKEN)
 
+    @atomic
     def authorize(self, delegation, authority, budget):
         if authority["delegation_hash"] != delegation["object_hash"]:
             raise GuardError("authority not derived from delegation")
@@ -204,11 +258,12 @@ class Mission:
             raise GuardError("budget not bounded by authority")
         if budget["expansion_allowed"] or budget["retries"] != 0:
             raise GuardError("budget must forbid expansion and retries")
-        if authority["object_hash"] in self.consumed:
+        if any((k[0] if isinstance(k, tuple) else k) == authority["object_hash"] for k in self.consumed):
             raise GuardError("authority already consumed")
         self.ev.update(delegation=delegation, authority=authority, budget=budget)
-        self._go("AUTHORIZED", authority["object_hash"])
+        self._go("AUTHORIZED", authority["object_hash"], _tok=_TOKEN)
 
+    @atomic
     def bind(self, capability_binding, provider_binding):
         a = self._need("authority")
         if capability_binding["authority_hash"] != a["object_hash"]:
@@ -216,27 +271,32 @@ class Mission:
         if capability_binding["capability"] not in a["scope"]:
             raise GuardError("capability outside authority scope")
         self.ev.update(capability=capability_binding, provider=provider_binding)
-        self._go("BOUND", provider_binding["contract_fingerprint"])
+        self._go("BOUND", provider_binding["contract_fingerprint"], _tok=_TOKEN)
 
+    @atomic
     def prewrite_validate(self, tx, outcome_contract, readback_contract, checkpoint):
         self._corr(tx)
         self._corr(outcome_contract)
         if not outcome_contract["frozen"]:
             raise GuardError("outcome contract not frozen before mutation")
+        check_predicates(outcome_contract["predicates"])
         if checkpoint["outcome_contract_hash"] != outcome_contract["object_hash"]:
             raise GuardError("checkpoint does not pin outcome contract")
         if checkpoint["readback_contract_hash"] != readback_contract["object_hash"]:
             raise GuardError("checkpoint does not pin readback contract")
         if checkpoint["budget_hash"] != self._need("budget")["object_hash"]:
             raise GuardError("checkpoint does not pin budget")
+        if checkpoint["transaction_hash"] != tx["object_hash"]:
+            raise GuardError("checkpoint does not pin transaction")
         if readback_contract["source_level_required"] != "AUTHORITATIVE_REPOSITORY":
             raise GuardError("readback contract is not authoritative")
         self.ev.update(tx=tx, outcome_contract=outcome_contract,
                        readback_contract=readback_contract, checkpoint=checkpoint)
-        self._go("PREWRITE_VALIDATED", checkpoint["object_hash"])
+        self._go("PREWRITE_VALIDATED", checkpoint["object_hash"], _tok=_TOKEN)
 
+    @atomic
     def begin_execution(self, mutation_id, contract_fingerprint_now):
-        """Budget + replay guard are consumed BEFORE the call leaves the client."""
+        """Budget + replay guard are consumed BEFORE the call leaves the client (and only if the step is legal)."""
         if contract_fingerprint_now != self._need("provider")["contract_fingerprint"]:
             raise GuardError("contract drift at point of use: revalidate (fail closed)")
         if mutation_id not in self._need("tx")["mutation_ids"]:
@@ -246,27 +306,34 @@ class Mission:
             raise GuardError("replay: mutation authority already consumed")
         if self.remaining <= 0:
             raise GuardError("mutation budget exhausted")
+        if "EXECUTION_STARTED" not in TRANSITIONS[self.state]:
+            raise GuardError("illegal transition %s -> EXECUTION_STARTED" % self.state)
         self.consumed.add(key)
         self.remaining -= 1
         self.mutations_sent += 1
         self.ev["mutation_id"] = mutation_id
-        self._go("EXECUTION_STARTED", mutation_id)
+        self._go("EXECUTION_STARTED", mutation_id, _tok=_TOKEN)
 
+    @atomic
     def record_execution(self, receipt):
         """Execution receipt classifies the call; it never implies commit."""
         self._corr(receipt)
+        if receipt.get("mutation_id") != self.ev.get("mutation_id"):
+            raise GuardError("execution receipt not correlated to mutation")
         c = receipt["call_class"]
+        if c not in POST_SEND_CLASSES:
+            raise GuardError("call_class %s not valid after execution started" % c)
         self.ev["execution_receipt"] = receipt
         if c == "PROVIDER_RESPONSE_SUCCESS":
-            self._go("EXECUTED", receipt["object_hash"])
-        elif c in ("CALL_SENT_NO_RESPONSE", "PROVIDER_ERROR", "COMMIT_UNKNOWN"):
-            self._go("COMMIT_STATE_UNKNOWN", receipt["object_hash"])
+            self._go("EXECUTED", receipt["object_hash"], _tok=_TOKEN)
         else:
-            raise GuardError("call_class %s not valid after execution started" % c)
+            self._go("COMMIT_STATE_UNKNOWN", receipt["object_hash"], _tok=_TOKEN)
 
+    @atomic
     def request_readback(self):
-        self._go("AUTHORITATIVE_READBACK_PENDING")
+        self._go("AUTHORITATIVE_READBACK_PENDING", _tok=_TOKEN)
 
+    @atomic
     def observe_readback(self, rb):
         """rb: AuthoritativeReadbackReceipt. Non-authoritative sources and errors are UNKNOWN."""
         self._corr(rb)
@@ -276,80 +343,132 @@ class Mission:
         if rb["mutation_id"] != self.ev["mutation_id"]:
             raise GuardError("readback not correlated to mutation")
         self.ev["readback"] = rb
-        self._go("AUTHORITATIVE_READBACK_OBSERVED", rb["object_hash"])
+        self._go("AUTHORITATIVE_READBACK_OBSERVED", rb["object_hash"], _tok=_TOKEN)
 
     def _readback_authoritative(self, rb):
         return rb["source_level"] == "AUTHORITATIVE_REPOSITORY"
 
+    @atomic
     def decide_commit(self, observation):
         rb = self._need("readback")
         if observation["readback_receipt_hash"] != rb["object_hash"]:
             raise GuardError("commit observation not bound to readback")
         self._corr(observation)
         if not self._readback_authoritative(rb) or rb["existence"] == "UNKNOWN":
-            self._go("COMMIT_STATE_UNKNOWN", observation["object_hash"])
+            self._go("COMMIT_STATE_UNKNOWN", observation["object_hash"], _tok=_TOKEN)
             return self.state
         if rb["existence"] == "ABSENT":
             # Not committed. Remains fail-closed: no retry without a new authorization lineage.
-            self._go("FAILED_AFTER_POSSIBLE_MUTATION", observation["object_hash"])
+            self._go("FAILED_AFTER_POSSIBLE_MUTATION", observation["object_hash"], _tok=_TOKEN)
             return self.state
+        if observation["commit_state"] != "COMMITTED":
+            raise GuardError("commit observation contradicts authoritative EXISTS readback")
         self.ev["commit"] = observation
-        self._go("COMMITTED", observation["object_hash"])
+        self._go("COMMITTED", observation["object_hash"], _tok=_TOKEN)
         return self.state
 
+    @atomic
     def validate_outcome(self, outcome):
         self._need("commit")
         oc, rb = self._need("outcome_contract"), self._need("readback")
-        self._go("OUTCOME_VALIDATION_PENDING")
         if outcome["outcome_contract_hash"] != oc["object_hash"] or outcome["readback_receipt_hash"] != rb["object_hash"]:
             raise GuardError("outcome receipt not bound to contract+readback")
+        self._corr(outcome)
         recomputed = eval_predicates(oc["predicates"], rb["observed"])
         if outcome["result"] != recomputed:
             raise GuardError("outcome receipt result disagrees with recomputation")
+        self._go("OUTCOME_VALIDATION_PENDING", _tok=_TOKEN)
         self.ev["outcome"] = outcome
         if recomputed == "PASS":
-            self._go("OUTCOME_VALIDATED", outcome["object_hash"])
+            self._go("OUTCOME_VALIDATED", outcome["object_hash"], _tok=_TOKEN)
         elif recomputed == "FAIL":
-            self._go("COMPENSATION_REQUIRED", outcome["object_hash"])
+            self._go("COMPENSATION_REQUIRED", outcome["object_hash"], _tok=_TOKEN)
         # UNKNOWN predicate: stay in OUTCOME_VALIDATION_PENDING (COMPLETE=FALSE); never PASS/FAIL.
         return self.state
 
+    def _verify_chain(self, completion):
+        """Relational validation of the whole evidence chain (hash validity alone is not authentication)."""
+        required = [s for s, _ in CHAIN_SLOTS[:-1]] + ["outcome_contract", "readback_contract"]
+        missing = [s for s in required if s not in self.ev]
+        if missing:
+            raise GuardError("incomplete evidence chain: missing %s" % missing)
+        e = self.ev
+        for slot in required:
+            o = e[slot]
+            if not isinstance(o, dict) or o.get("kind") != SLOT_KINDS[slot]:
+                raise GuardError("evidence %s has wrong kind" % slot)
+            if not verify_hash(o):
+                raise GuardError("evidence %s hash invalid (tampered)" % slot)
+        h = lambda s: e[s]["object_hash"]
+        mid = e.get("mutation_id")
+        chk = [
+            (e["delegation"]["principal_hash"] == h("principal"), "delegation not issued to this principal"),
+            (e["authority"]["delegation_hash"] == h("delegation"), "authority not derived from delegation"),
+            (e["authority"]["mission_id"] == self.mission_id and e["intent"]["mission_id"] == self.mission_id, "mission id mismatch"),
+            (attenuated(e["authority"]["scope"], e["delegation"]["scope"]), "authority exceeds delegation"),
+            (e["budget"]["authority_hash"] == h("authority") and e["budget"]["retries"] == 0 and not e["budget"]["expansion_allowed"], "budget not bounded by authority"),
+            (e["capability"]["authority_hash"] == h("authority") and e["capability"]["capability"] in e["authority"]["scope"], "capability binding outside authority"),
+            (e["tx"]["transaction_id"] == self.transaction_id and e["tx"]["mission_id"] == self.mission_id, "transaction identity mismatch"),
+            (mid is not None and mid in e["tx"]["mutation_ids"], "mutation not in transaction"),
+            ((h("authority"), mid) in self.consumed, "mutation authority was never consumed"),
+            (e["outcome_contract"]["frozen"] and e["outcome_contract"]["transaction_id"] == self.transaction_id, "outcome contract not frozen/correlated"),
+            (e["readback_contract"]["source_level_required"] == "AUTHORITATIVE_REPOSITORY", "readback contract not authoritative"),
+            (e["checkpoint"]["transaction_hash"] == h("tx") and e["checkpoint"]["budget_hash"] == h("budget")
+             and e["checkpoint"]["outcome_contract_hash"] == h("outcome_contract") and e["checkpoint"]["readback_contract_hash"] == h("readback_contract"), "checkpoint pins do not match chain"),
+            (e["execution_receipt"]["transaction_id"] == self.transaction_id and e["execution_receipt"]["mutation_id"] == mid
+             and e["execution_receipt"]["call_class"] in POST_SEND_CLASSES, "execution receipt invalid"),
+            (e["readback"]["transaction_id"] == self.transaction_id and e["readback"]["mutation_id"] == mid
+             and e["readback"]["contract_hash"] == h("readback_contract"), "readback not correlated/under contract"),
+            (e["readback"]["source_level"] == "AUTHORITATIVE_REPOSITORY" and e["readback"]["existence"] == "EXISTS", "readback is not an authoritative EXISTS"),
+            (e["commit"]["transaction_id"] == self.transaction_id and e["commit"]["mutation_id"] == mid
+             and e["commit"]["readback_receipt_hash"] == h("readback") and e["commit"]["commit_state"] == "COMMITTED", "commit observation not bound to readback"),
+            (e["outcome"]["transaction_id"] == self.transaction_id and e["outcome"]["readback_receipt_hash"] == h("readback")
+             and e["outcome"]["outcome_contract_hash"] == h("outcome_contract") and e["outcome"]["result"] == "PASS", "outcome receipt not bound/PASS"),
+            (eval_predicates(e["outcome_contract"]["predicates"], e["readback"]["observed"]) == "PASS", "predicates do not pass on the readback"),
+        ]
+        for ok, msg in chk:
+            if not ok:
+                raise GuardError("evidence chain inconsistent: " + msg)
+        need = {"authority": "authority_hash", "execution_receipt": "execution_receipt_hash",
+                "commit": "commit_observation_hash", "outcome": "outcome_receipt_hash"}
+        for slot, field in need.items():
+            if completion.get(field) != h(slot):
+                raise GuardError("completion chain broken at %s" % slot)
+
+    @atomic
     def complete(self, completion):
-        """COMPLETE needs the whole upstream chain present and hash-valid, a hash-valid CompletionReceipt
-        linking it, and state OUTCOME_VALIDATED. The receipt is persisted only after every guard passes."""
+        """COMPLETE needs the whole chain present, hash-valid AND relationally consistent, a hash-valid
+        CompletionReceipt linking it, and state OUTCOME_VALIDATED. Persisted only after every guard passes."""
         if not isinstance(completion, dict) or completion.get("kind") != "CompletionReceipt":
             raise GuardError("completion receipt absent or wrong kind")
         if not verify_hash(completion):
             raise GuardError("completion receipt hash invalid (tampered)")
-        missing = [slot for slot, _ in CHAIN_SLOTS[:-1] if slot not in self.ev]
-        if missing:
-            raise GuardError("incomplete evidence chain: missing %s" % missing)
-        for slot, _ in CHAIN_SLOTS[:-1]:
-            if not verify_hash(self.ev[slot]):
-                raise GuardError("evidence %s hash invalid (tampered)" % slot)
-        need = {"authority": "authority_hash", "execution_receipt": "execution_receipt_hash",
-                "commit": "commit_observation_hash", "outcome": "outcome_receipt_hash"}
-        for slot, field in need.items():
-            if completion.get(field) != self.ev[slot]["object_hash"]:
-                raise GuardError("completion chain broken at %s" % slot)
         if self.state != "OUTCOME_VALIDATED":
             raise GuardError("COMPLETE requires OUTCOME_VALIDATED")
+        try:
+            self._verify_chain(completion)
+        except (KeyError, TypeError, AttributeError, IndexError) as exc:
+            raise GuardError("evidence chain malformed: %s" % type(exc).__name__)
         self._corr(completion)
-        self._go("COMPLETE", completion["object_hash"])
+        self._go("COMPLETE", completion["object_hash"], _tok=_TOKEN)
         self.ev["completion"] = completion
 
     # -- failure / compensation
+    @atomic
     def fail_before_mutation(self):
         if self.mutations_sent:
             raise GuardError("mutation possibly sent; use FAILED_AFTER_POSSIBLE_MUTATION")
-        self._go("FAILED_BEFORE_MUTATION")
+        self._go("FAILED_BEFORE_MUTATION", _tok=_TOKEN)
 
+    @atomic
     def fail_after_possible_mutation(self):
-        self._go("FAILED_AFTER_POSSIBLE_MUTATION")
+        self._go("FAILED_AFTER_POSSIBLE_MUTATION", _tok=_TOKEN)
 
+    @atomic
     def require_compensation(self):
-        self._go("COMPENSATION_REQUIRED")
+        self._go("COMPENSATION_REQUIRED", _tok=_TOKEN)
 
+    @atomic
     def authorize_compensation(self, grant):
         a = self._need("authority")
         if grant["inherits_forward_authority"]:
@@ -358,12 +477,13 @@ class Mission:
             raise GuardError("compensation grant must not be issued from forward authority")
         if grant["max_mutations"] < 1 or not grant["preconditions"] or not grant["outcome_predicates"]:
             raise GuardError("compensation grant incomplete")
-        if grant["target"] != self.ev["intent"]["target_system"] and grant["target"] != self._need("tx")["transaction_id"] \
-                and grant["target"] != self.ev["outcome_contract"]["transaction_id"]:
+        check_predicates(grant["outcome_predicates"])
+        if grant["target"] not in (self.ev["intent"]["target_system"], self._need("tx")["transaction_id"]):
             raise GuardError("compensation target not tied to mission")
         self.ev["comp_grant"] = grant
-        self._go("COMPENSATION_AUTHORIZED", grant["object_hash"])
+        self._go("COMPENSATION_AUTHORIZED", grant["object_hash"], _tok=_TOKEN)
 
+    @atomic
     def record_compensation(self, comp_receipt, post_readback):
         g = self._need("comp_grant")
         if comp_receipt["grant_hash"] != g["object_hash"]:
@@ -374,10 +494,11 @@ class Mission:
             raise GuardError("compensation receipt not bound to post readback")
         if eval_predicates(g["outcome_predicates"], post_readback["observed"]) != "PASS" or comp_receipt["result"] != "PASS":
             raise GuardError("compensation outcome predicate not satisfied")
-        self._go("COMPENSATED", comp_receipt["object_hash"])
+        self._go("COMPENSATED", comp_receipt["object_hash"], _tok=_TOKEN)
 
+    @atomic
     def declare_unrecoverable(self):
-        self._go("UNRECOVERABLE")
+        self._go("UNRECOVERABLE", _tok=_TOKEN)
 
     # -- continuation
     def checkpoint_lease(self):
@@ -392,51 +513,73 @@ class Mission:
 
     @classmethod
     def resume(cls, lease, checkpoint, original_budget, mission_id, evidence=None):
-        """Rebuild a mission from a lease. `evidence` (re-presented objects) must match the
-        checkpoint's hash pins; a resumed mission never regains consumed authority."""
+        """Rebuild a mission from a lease. The lease and checkpoint must be hash-valid and mutually consistent;
+        re-presented evidence is limited to RESUME_SLOTS and must match the checkpoint's pins. A resumed mission
+        never regains consumed authority and never inherits a post-send state: after any possible send it
+        restarts in COMMIT_STATE_UNKNOWN and must obtain a fresh readback. Lease integrity (hash) is checked;
+        lease authenticity (a signature) is NOT provided by this library."""
+        for o, kind in ((lease, "ContinuationLease"), (checkpoint, "PreMutationCheckpoint")):
+            if not isinstance(o, dict) or o.get("kind") != kind or not verify_hash(o):
+                raise GuardError("%s absent, wrong kind or hash invalid" % kind)
         if lease["checkpoint_hash"] != checkpoint["object_hash"]:
             raise GuardError("lease not bound to checkpoint")
-        if lease["remaining_budget"] > checkpoint["remaining_budget"]:
+        consumed = {tuple(s.split(":", 1)) for s in lease["consumed_authority_ids"]}
+        if lease["remaining_budget"] + len(consumed) > checkpoint["remaining_budget"]:
             raise GuardError("continuation may not enlarge budget")
-        if lease["remaining_budget"] > original_budget["max_mutations"]:
+        if lease["remaining_budget"] + len(consumed) > original_budget["max_mutations"]:
             raise GuardError("continuation exceeds original budget")
+        st = lease["state_at_checkpoint"]
+        if consumed and st in ("PREWRITE_VALIDATED", "PLANNED") or (not consumed and st not in ("PREWRITE_VALIDATED",)):
+            raise GuardError("lease state inconsistent with consumed set")
         m = cls(mission_id, lease["transaction_id"], lease["remaining_budget"])
-        m.consumed = {tuple(s.split(":", 1)) for s in lease["consumed_authority_ids"]}
+        m.consumed = consumed
         if evidence is None:
             return m
+        extra = sorted(set(evidence) - set(RESUME_SLOTS))
+        if extra:
+            raise GuardError("resume accepts no downstream evidence: %s" % extra)
+        for slot in ("tx", "budget", "outcome_contract", "readback_contract", "authority"):
+            if slot not in evidence:
+                raise GuardError("resume evidence missing %s" % slot)
+        for slot, o in evidence.items():
+            if not isinstance(o, dict) or o.get("kind") != SLOT_KINDS[slot] or not verify_hash(o):
+                raise GuardError("re-presented %s wrong kind or hash invalid" % slot)
         pins = {"tx": "transaction_hash", "budget": "budget_hash",
                 "outcome_contract": "outcome_contract_hash", "readback_contract": "readback_contract_hash"}
         for slot, field in pins.items():
-            if evidence[slot]["object_hash"] != checkpoint[field] or not verify_hash(evidence[slot]):
+            if evidence[slot]["object_hash"] != checkpoint[field]:
                 raise GuardError("re-presented %s does not match checkpoint pin" % slot)
+        if evidence["tx"]["transaction_id"] != lease["transaction_id"]:
+            raise GuardError("re-presented transaction does not match lease")
         if evidence["budget"]["authority_hash"] != evidence["authority"]["object_hash"]:
             raise GuardError("re-presented authority does not match budget")
-        for slot in ("intent", "principal", "delegation", "capability", "provider"):
-            if slot in evidence and not verify_hash(evidence[slot]):
-                raise GuardError("re-presented %s hash invalid" % slot)
         if "delegation" in evidence and evidence["authority"]["delegation_hash"] != evidence["delegation"]["object_hash"]:
             raise GuardError("re-presented delegation does not match authority")
         if "capability" in evidence and evidence["capability"]["authority_hash"] != evidence["authority"]["object_hash"]:
             raise GuardError("re-presented capability binding does not match authority")
-        m.ev.update(evidence); m.ev["checkpoint"] = checkpoint
-        m.mutations_sent = len(m.consumed)
-        st = lease["state_at_checkpoint"]
-        if not m.consumed:
-            m.state = "PREWRITE_VALIDATED" if st == "PREWRITE_VALIDATED" else "PLANNED"
+        if any(k[0] != evidence["authority"]["object_hash"] for k in consumed):
+            raise GuardError("consumed set does not belong to the re-presented authority")
+        m.ev.update(evidence)
+        m.ev["checkpoint"] = checkpoint
+        m.mutations_sent = len(consumed)
+        if not consumed:
+            m.state = "PREWRITE_VALIDATED"
             return m
-        # a send may have happened: never silently restart; reconcile through readback
-        m.ev["mutation_id"] = lease["mutation_id"]
+        # a send may have happened: never silently restart or trust carried post-send state; reconcile
+        mut = lease["mutation_id"]
+        if mut is None or mut not in evidence["tx"]["mutation_ids"] or (evidence["authority"]["object_hash"], mut) not in consumed:
+            raise GuardError("lease mutation id inconsistent")
+        m.ev["mutation_id"] = mut
         er = evidence.get("execution_receipt")
         if er is not None:
-            if er["object_hash"] != lease["execution_receipt_hash"]:
+            if er["object_hash"] != lease["execution_receipt_hash"] or er.get("mutation_id") != mut or er.get("transaction_id") != lease["transaction_id"]:
                 raise GuardError("execution receipt does not match lease")
-            m.ev["execution_receipt"] = er
         else:
-            m.ev["execution_receipt"] = make("ExecutionReceipt", receipt_id="resume-" + lease["lease_id"],
-                                             transaction_id=lease["transaction_id"], mutation_id=lease["mutation_id"],
-                                             call_class="COMMIT_UNKNOWN")
-        m.state = "COMMIT_STATE_UNKNOWN" if st in ("EXECUTION_STARTED", "COMMIT_STATE_UNKNOWN") else st
-        m.history.append(("RESUMED_AS_" + m.state, lease["object_hash"]))
+            er = make("ExecutionReceipt", receipt_id="resume-" + lease["lease_id"], transaction_id=lease["transaction_id"],
+                      mutation_id=mut, call_class="COMMIT_UNKNOWN")
+        m.ev["execution_receipt"] = er
+        m.state = "COMMIT_STATE_UNKNOWN"
+        m.history.append(("RESUMED_AS_COMMIT_STATE_UNKNOWN", lease["object_hash"]))
         return m
 
 

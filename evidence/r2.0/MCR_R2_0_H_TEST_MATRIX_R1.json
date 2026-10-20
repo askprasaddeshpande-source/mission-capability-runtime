@@ -1,0 +1,107 @@
+{
+  "evidence_class": "SYNTHETIC/LOCAL",
+  "frozen_runner_mock_regression": {
+    "error_not_persisted": {
+      "chain_links_emitted": 11,
+      "last_link": "AUTHORITATIVE_READBACK_RECEIPT",
+      "outcome_matches_frozen_R1": true
+    },
+    "outcome_fail": {
+      "chain_links_emitted": 13,
+      "last_link": "OUTCOME_RECEIPT",
+      "outcome_matches_frozen_R1": true
+    },
+    "persisted_error_response": {
+      "chain_links_emitted": 14,
+      "last_link": "COMPLETION_RECEIPT",
+      "outcome_matches_frozen_R1": true
+    },
+    "readback_error": {
+      "chain_links_emitted": 11,
+      "last_link": "AUTHORITATIVE_READBACK_RECEIPT",
+      "outcome_matches_frozen_R1": true
+    },
+    "success": {
+      "chain_links_emitted": 14,
+      "last_link": "COMPLETION_RECEIPT",
+      "outcome_matches_frozen_R1": true
+    },
+    "timeout_persisted": {
+      "chain_links_emitted": 14,
+      "last_link": "COMPLETION_RECEIPT",
+      "outcome_matches_frozen_R1": true
+    }
+  },
+  "local_scenarios_D_E": {
+    "checks": {
+      "absent_is_fail_closed": true,
+      "compensation_separate_and_not_completion": true,
+      "every_fault_case_blocks_second_send": true,
+      "every_post_send_crash_blocks_replay": true,
+      "every_post_send_resume_restarts_in_unknown": true,
+      "forged_lease_state_not_inherited": true,
+      "no_crash_point_restores_budget": true,
+      "pre_send_crash_keeps_full_budget": true,
+      "recovery_blocks_replay": true,
+      "recovery_reaches_complete_with_one_mutation": true,
+      "tampering_rejected": true,
+      "unknown_or_nonauthoritative_never_complete": true
+    },
+    "local_scenarios": "PASS",
+    "note": "R1 result kept as history; resumed post-send states changed (all restart in COMMIT_STATE_UNKNOWN) by design",
+    "result_file": "MCR_R2_0_DE_LOCAL_SCENARIOS_RESULT_R2.json"
+  },
+  "model_validator": {
+    "R2_0_A_FOUNDATION": "PASS",
+    "failed": [],
+    "group_sizes": {
+      "AUTHORITY_INVARIANTS": 7,
+      "COMMIT_UNKNOWN_HANDLING": 16,
+      "COMPENSATION_AUTHORITY_INVARIANTS": 9,
+      "COMPLETION_EVIDENCE": 22,
+      "CONTINUATION_INVARIANTS": 6,
+      "HARDENING_R2_0H": 36,
+      "MUTATION_BUDGET_INVARIANTS": 6,
+      "NO_ENTERPRISE_WRITES": 1,
+      "OUTCOME_PREDICATE_MODEL": 10,
+      "REPLAY_GUARD_INVARIANTS": 3,
+      "SCHEMA_VALIDATION": 6,
+      "STATE_MACHINE_VALID": 10,
+      "TELEMETRY_MODEL": 1
+    },
+    "groups": {
+      "AUTHORITY_INVARIANTS": "PASS",
+      "COMMIT_UNKNOWN_HANDLING": "PASS",
+      "COMPENSATION_AUTHORITY_INVARIANTS": "PASS",
+      "COMPLETION_EVIDENCE": "PASS",
+      "CONTINUATION_INVARIANTS": "PASS",
+      "HARDENING_R2_0H": "PASS",
+      "MUTATION_BUDGET_INVARIANTS": "PASS",
+      "NO_ENTERPRISE_WRITES": "PASS",
+      "OUTCOME_PREDICATE_MODEL": "PASS",
+      "REPLAY_GUARD_INVARIANTS": "PASS",
+      "SCHEMA_VALIDATION": "PASS",
+      "STATE_MACHINE_VALID": "PASS",
+      "TELEMETRY_MODEL": "PASS"
+    },
+    "history": {
+      "R1": 74,
+      "R2_after_R2_0G": 96,
+      "R3_after_R2_0H": 133
+    },
+    "result_file": "MCR_R2_0_A_VALIDATION_RESULT_R3.json",
+    "tests": 133
+  },
+  "mutation_check": {
+    "all_applied": true,
+    "all_detected": true,
+    "detected_by_assertion": 35,
+    "detected_by_crash_only": [],
+    "mutants": 35,
+    "result_file": "MCR_R2_0_H_MUTATION_CHECK_R2.json",
+    "survived_in_first_run": "chain_readback_authority_unchecked (test gap, closed by a self-consistent forged-chain test)"
+  },
+  "network_calls": 0,
+  "runner_file_changed_since_baseline": false,
+  "sap_writes": 0
+}

@@ -1,0 +1,128 @@
+{
+  "R2_0_D_continuation": {
+    "crash_matrix": [
+      {
+        "crash_after": "prewrite",
+        "mutations_known_after_resume": 0,
+        "mutations_sent_before_crash": 0,
+        "remaining_budget_after_resume": 1,
+        "replay_blocked_on_resume": null,
+        "resumed_state": "PREWRITE_VALIDATED"
+      },
+      {
+        "crash_after": "begin_execution",
+        "mutations_known_after_resume": 1,
+        "mutations_sent_before_crash": 1,
+        "remaining_budget_after_resume": 0,
+        "replay_blocked_on_resume": true,
+        "resumed_state": "COMMIT_STATE_UNKNOWN"
+      },
+      {
+        "crash_after": "record_execution",
+        "mutations_known_after_resume": 1,
+        "mutations_sent_before_crash": 1,
+        "remaining_budget_after_resume": 0,
+        "replay_blocked_on_resume": true,
+        "resumed_state": "COMMIT_STATE_UNKNOWN"
+      },
+      {
+        "crash_after": "request_readback",
+        "mutations_known_after_resume": 1,
+        "mutations_sent_before_crash": 1,
+        "remaining_budget_after_resume": 0,
+        "replay_blocked_on_resume": true,
+        "resumed_state": "COMMIT_STATE_UNKNOWN"
+      },
+      {
+        "crash_after": "observe_readback",
+        "mutations_known_after_resume": 1,
+        "mutations_sent_before_crash": 1,
+        "remaining_budget_after_resume": 0,
+        "replay_blocked_on_resume": true,
+        "resumed_state": "COMMIT_STATE_UNKNOWN"
+      },
+      {
+        "crash_after": "decide_commit",
+        "mutations_known_after_resume": 1,
+        "mutations_sent_before_crash": 1,
+        "remaining_budget_after_resume": 0,
+        "replay_blocked_on_resume": true,
+        "resumed_state": "COMMIT_STATE_UNKNOWN"
+      },
+      {
+        "crash_after": "validate_outcome",
+        "mutations_known_after_resume": 1,
+        "mutations_sent_before_crash": 1,
+        "remaining_budget_after_resume": 0,
+        "replay_blocked_on_resume": true,
+        "resumed_state": "COMMIT_STATE_UNKNOWN"
+      }
+    ],
+    "forged_lease_state": {
+      "claimed_state": "OUTCOME_VALIDATED",
+      "downstream_evidence_present": [],
+      "resumed_state": "COMMIT_STATE_UNKNOWN"
+    },
+    "recover_after_send_crash": {
+      "final_state": "COMPLETE",
+      "remaining_budget": 0,
+      "replay_blocked": true,
+      "resumed_state": "COMMIT_STATE_UNKNOWN",
+      "total_mutations_sent": 1
+    },
+    "tampered_resume": {
+      "budget_inflation_rejected": true,
+      "foreign_checkpoint_rejected": true,
+      "lease_hash_forgery_rejected": true,
+      "swapped_outcome_contract_rejected": true
+    }
+  },
+  "R2_0_E_compensation": {
+    "compensation_budget_independent_of_forward": true,
+    "final_state": "COMPENSATED",
+    "forward_budget_remaining": 0,
+    "original_mission_reached_complete": false,
+    "state_after_outcome_fail": "COMPENSATION_REQUIRED"
+  },
+  "checks": {
+    "absent_is_fail_closed": true,
+    "compensation_separate_and_not_completion": true,
+    "every_fault_case_blocks_second_send": true,
+    "every_post_send_crash_blocks_replay": true,
+    "every_post_send_resume_restarts_in_unknown": true,
+    "forged_lease_state_not_inherited": true,
+    "no_crash_point_restores_budget": true,
+    "pre_send_crash_keeps_full_budget": true,
+    "recovery_blocks_replay": true,
+    "recovery_reaches_complete_with_one_mutation": true,
+    "tampering_rejected": true,
+    "unknown_or_nonauthoritative_never_complete": true
+  },
+  "digest": "38C5E622B282BF4ED2BA77EE928AE6E5639310A1D60BA9D4D899B9CF9C7BFF08",
+  "enterprise_writes": 0,
+  "evidence_class": "SYNTHETIC/LOCAL",
+  "fault_injection": {
+    "no_response_then_authoritative_absent": {
+      "complete": false,
+      "second_send_blocked": true,
+      "state": "FAILED_AFTER_POSSIBLE_MUTATION"
+    },
+    "provider_error_then_readback_unknown": {
+      "complete": false,
+      "second_send_blocked": true,
+      "state": "COMMIT_STATE_UNKNOWN"
+    },
+    "success_and_authoritative_exists": {
+      "complete": false,
+      "second_send_blocked": true,
+      "state": "COMMITTED"
+    },
+    "success_but_readback_via_logs_only": {
+      "complete": false,
+      "second_send_blocked": true,
+      "state": "COMMIT_STATE_UNKNOWN"
+    }
+  },
+  "local_scenarios": "PASS",
+  "network_calls": 0
+}

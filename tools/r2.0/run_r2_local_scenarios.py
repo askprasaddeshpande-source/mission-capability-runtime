@@ -42,6 +42,12 @@ def run_step(m, f, step, **kw):
                         execution_receipt_hash=m.ev["execution_receipt"]["object_hash"], authority_hash=m.ev["authority"]["object_hash"]))
 
 
+def remake(obj, **chg):
+    body = {k: v for k, v in obj.items() if k not in ("kind", "object_hash")}
+    body.update(chg)
+    return make(obj["kind"], **body)
+
+
 def evidence_of(m):
     e = {k: m.ev[k] for k in ("intent", "principal", "delegation", "capability", "provider", "tx", "budget",
                               "outcome_contract", "readback_contract", "authority")}
@@ -91,6 +97,15 @@ def recover_after_send_crash():
     return out
 
 
+def forged_lease_state_scenario():
+    """A lease claiming a later state (valid hash) must not carry that state: resume restarts in UNKNOWN."""
+    m, f = fixture()
+    run_step(m, f, "prewrite"); run_step(m, f, "begin_execution")
+    forged = remake(m.checkpoint_lease(), state_at_checkpoint="OUTCOME_VALIDATED")
+    r = Mission.resume(forged, f["cp"], f["bu"], "M-SYN-1", evidence=evidence_of(m))
+    return {"claimed_state": "OUTCOME_VALIDATED", "resumed_state": r.state, "downstream_evidence_present": sorted(set(r.ev) & {"readback", "commit", "outcome", "completion"})}
+
+
 def tampered_resume_cases():
     m, f = fixture()
     run_step(m, f, "prewrite")
@@ -101,7 +116,8 @@ def tampered_resume_cases():
     ev = evidence_of(m)
     ev["outcome_contract"] = evil
     for name, fn in (("swapped_outcome_contract_rejected", lambda: Mission.resume(lease, f["cp"], f["bu"], "M-SYN-1", evidence=ev)),
-                     ("budget_inflation_rejected", lambda: Mission.resume(dict(lease, remaining_budget=3), f["cp"], f["bu"], "M-SYN-1")),
+                     ("budget_inflation_rejected", lambda: Mission.resume(remake(lease, remaining_budget=3), f["cp"], f["bu"], "M-SYN-1")),
+                     ("lease_hash_forgery_rejected", lambda: Mission.resume(dict(lease, remaining_budget=0), f["cp"], f["bu"], "M-SYN-1")),
                      ("foreign_checkpoint_rejected", lambda: Mission.resume(lease, dict(f["cp"], object_hash="0" * 64), f["bu"], "M-SYN-1"))):
         try:
             fn(); res[name] = False
@@ -172,7 +188,8 @@ def overhead(n):
 
 def main(argv):
     n = int(argv[argv.index("--n") + 1]) if "--n" in argv else 2000
-    d = {"crash_matrix": crash_matrix(), "recover_after_send_crash": recover_after_send_crash(), "tampered_resume": tampered_resume_cases()}
+    d = {"crash_matrix": crash_matrix(), "recover_after_send_crash": recover_after_send_crash(), "tampered_resume": tampered_resume_cases(),
+         "forged_lease_state": forged_lease_state_scenario()}
     det = {"R2_0_D_continuation": d, "fault_injection": fault_injection(), "R2_0_E_compensation": compensation_semantics()}
     fi = det["fault_injection"]
     checks = {
@@ -182,6 +199,8 @@ def main(argv):
         "no_crash_point_restores_budget": all(r["mutations_known_after_resume"] == r["mutations_sent_before_crash"] for r in d["crash_matrix"]),
         "pre_send_crash_keeps_full_budget": all(r["remaining_budget_after_resume"] == 1 for r in d["crash_matrix"] if not r["mutations_sent_before_crash"]),
         "tampering_rejected": all(d["tampered_resume"].values()),
+        "forged_lease_state_not_inherited": d["forged_lease_state"]["resumed_state"] == "COMMIT_STATE_UNKNOWN" and not d["forged_lease_state"]["downstream_evidence_present"],
+        "every_post_send_resume_restarts_in_unknown": all(r["resumed_state"] == "COMMIT_STATE_UNKNOWN" for r in d["crash_matrix"] if r["mutations_sent_before_crash"]),
         "unknown_or_nonauthoritative_never_complete": not fi["provider_error_then_readback_unknown"]["complete"] and not fi["success_but_readback_via_logs_only"]["complete"]
         and fi["provider_error_then_readback_unknown"]["state"] == "COMMIT_STATE_UNKNOWN" and fi["success_but_readback_via_logs_only"]["state"] == "COMMIT_STATE_UNKNOWN",
         "absent_is_fail_closed": fi["no_response_then_authoritative_absent"]["state"] == "FAILED_AFTER_POSSIBLE_MUTATION",
