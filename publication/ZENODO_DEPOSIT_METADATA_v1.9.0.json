@@ -1,0 +1,39 @@
+{
+  "upload_type": "publication",
+  "publication_type": "technicalnote",
+  "title": "From Tools to Missions: A Mission-Capability Runtime for Enterprise AI (R1.9: bounded closure with unresolved CREATE commit state)",
+  "creators": [
+    {
+      "name": "Deshpande, Prasad",
+      "orcid": "0009-0008-1344-6585",
+      "affiliation": "Independent Researcher"
+    }
+  ],
+  "description": "Research whitepaper and reproducibility package for the Mission-Capability Runtime (MCR) and Minimum Capability Working Set (MCWS) program, release 1.9.0. Preserves the frozen MCWS benchmark result (Broad 5/48, Static 17/48, MCWS 30/48) and adds bounded runtime-control evidence (R1.7, R1.8, R1.9A synthetic foundation, R1.9B bounded live mutation attempt). In R1.9B, CREATE reached the ADT MCP provider, ACTIVATE did not, and the CREATE commit state remains UNKNOWN; the work does not claim end-to-end live mutation success. Documented evidence gaps are listed in the paper and release notes.",
+  "version": "1.9.0",
+  "publication_date": "2026-10-20",
+  "language": "eng",
+  "keywords": [
+    "agentic AI",
+    "Mission-Capability Runtime",
+    "MCWS",
+    "MCP",
+    "deterministic authority",
+    "outcome validation",
+    "enterprise architecture"
+  ],
+  "license": "cc-by-4.0",
+  "related_identifiers": [
+    {
+      "relation": "isSupplementTo",
+      "identifier": "https://github.com/askprasaddeshpande-source/mission-capability-runtime/releases/tag/v1.9.0",
+      "scheme": "url"
+    },
+    {
+      "relation": "isVersionOf",
+      "identifier": "https://github.com/askprasaddeshpande-source/mission-capability-runtime",
+      "scheme": "url"
+    }
+  ],
+  "notes": "Software components are Apache-2.0; documentation is CC BY 4.0 (see LICENSE_POLICY.md in the repository)."
+}
