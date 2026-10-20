@@ -1,0 +1,40 @@
+# Local research evidence and secrets
+*.token
+*.key
+*.pfx
+*.p12
+*.pem
+*.jks
+*.keystore
+*.env
+.env.*
+auth-context*
+*AUTH_CONTEXT*
+*protected_token*
+*DPAPI*
+local-evidence/
+private-evidence/
+raw-private/
+secrets/
+
+# Local build/temp
+__pycache__/
+*.pyc
+.venv/
+venv/
+dist/
+build/
+tmp/
+temp/
+*.tmp
+*.bak
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Publication work products not yet frozen
+draft-output/
+review-output/

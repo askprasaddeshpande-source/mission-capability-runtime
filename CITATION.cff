@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use this research artifact, please cite the accompanying MCR manuscript and the eventual versioned archival release."
+title: "From Tools to Missions: A Mission-Capability Runtime for Enterprise AI"
+type: software
+authors:
+  - family-names: Deshpande
+    given-names: Prasad
+    orcid: "https://orcid.org/0009-0008-1344-6585"
+version: "1.9.0-draft-r1"
+repository-code: "https://github.com/askprasaddeshpande-source/mission-capability-runtime"
+url: "https://prasaddeshpande.com/"

@@ -1,0 +1,33 @@
+{
+  "build_id": "MCR_R1_9_RESEARCH_REPOSITORY_DRAFT_R1",
+  "status": "DRAFT_NOT_FROZEN",
+  "version": "1.9.0-draft-r1",
+  "artifact_name_planned": "MCR-PUBLIC-REPRODUCIBILITY-v1.9.0",
+  "repository_planned": "https://github.com/askprasaddeshpande-source/mission-capability-runtime",
+  "source_of_record": {
+    "paper": "From Tools to Missions: A Mission-Capability Runtime for Enterprise AI",
+    "original_version": "R1.6.1",
+    "original_date": "2026-08-31",
+    "frozen_scientific_manuscript_sha256": "E589393C6EEA0BA92E4EC521D1577A6F561F9ADFA38FF9EEE97A94695C666D90"
+  },
+  "current_scientific_boundary": "R1_9B_LIVE_MUTATION_NOT_VALIDATED_COMPLETE",
+  "current_create_commit_state": "UNKNOWN",
+  "authoritative_repository_readback": false,
+  "hf06_replay_allowed": false,
+  "hf06_authorization_reusable": false,
+  "github_release": null,
+  "zenodo_version_doi": null,
+  "zenodo_concept_doi": null,
+  "public_release_ready": false,
+  "software_license": "Apache-2.0",
+  "documentation_license": "CC-BY-4.0",
+  "release_prerequisites": [
+    "final closure classification",
+    "approved sanitized evidence package",
+    "secret scan",
+    "private path scan",
+    "claim evidence audit",
+    "reviewed PDF",
+    "release hash freeze"
+  ]
+}
