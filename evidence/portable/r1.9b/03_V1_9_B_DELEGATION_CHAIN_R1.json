@@ -1,0 +1,129 @@
+﻿{
+  "user": {
+    "providers": [
+      "ADT"
+    ],
+    "capabilities": [
+      "abap_creation-create_object",
+      "abap_activate_objects",
+      "abap_atc_run",
+      "abap_atc_get_result"
+    ],
+    "operations": [
+      "CREATE",
+      "ACTIVATE",
+      "VALIDATE_READ"
+    ],
+    "targets": [
+      "TRL_EN/ZCLINE/ZCL_MCR19B_9533C4D8"
+    ],
+    "max_mutation_count": 2
+  },
+  "agent": {
+    "providers": [
+      "ADT"
+    ],
+    "capabilities": [
+      "abap_creation-create_object",
+      "abap_activate_objects",
+      "abap_atc_run",
+      "abap_atc_get_result"
+    ],
+    "operations": [
+      "CREATE",
+      "ACTIVATE",
+      "VALIDATE_READ"
+    ],
+    "targets": [
+      "TRL_EN/ZCLINE/ZCL_MCR19B_9533C4D8"
+    ],
+    "max_mutation_count": 2
+  },
+  "mission": {
+    "providers": [
+      "ADT"
+    ],
+    "capabilities": [
+      "abap_creation-create_object",
+      "abap_activate_objects",
+      "abap_atc_run",
+      "abap_atc_get_result"
+    ],
+    "operations": [
+      "CREATE",
+      "ACTIVATE",
+      "VALIDATE_READ"
+    ],
+    "targets": [
+      "TRL_EN/ZCLINE/ZCL_MCR19B_9533C4D8"
+    ],
+    "max_mutation_count": 2
+  },
+  "transaction": {
+    "providers": [
+      "ADT"
+    ],
+    "capabilities": [
+      "abap_creation-create_object",
+      "abap_activate_objects",
+      "abap_atc_run",
+      "abap_atc_get_result"
+    ],
+    "operations": [
+      "CREATE",
+      "ACTIVATE",
+      "VALIDATE_READ"
+    ],
+    "targets": [
+      "TRL_EN/ZCLINE/ZCL_MCR19B_9533C4D8"
+    ],
+    "max_mutation_count": 2
+  },
+  "call": {
+    "providers": [
+      "ADT"
+    ],
+    "capabilities": [
+      "abap_creation-create_object",
+      "abap_activate_objects",
+      "abap_atc_run",
+      "abap_atc_get_result"
+    ],
+    "operations": [
+      "CREATE",
+      "ACTIVATE",
+      "VALIDATE_READ"
+    ],
+    "targets": [
+      "TRL_EN/ZCLINE/ZCL_MCR19B_9533C4D8"
+    ],
+    "max_mutation_count": 2
+  },
+  "effective": {
+    "providers": [
+      "ADT"
+    ],
+    "capabilities": [
+      "abap_creation-create_object",
+      "abap_activate_objects",
+      "abap_atc_run",
+      "abap_atc_get_result"
+    ],
+    "operations": [
+      "CREATE",
+      "ACTIVATE",
+      "VALIDATE_READ"
+    ],
+    "targets": [
+      "TRL_EN/ZCLINE/ZCL_MCR19B_9533C4D8"
+    ],
+    "max_mutation_count": 2
+  },
+  "attenuation_invariants": {
+    "MISSION_AUTHORITY_SUBSET_AGENT": true,
+    "AGENT_AUTHORITY_SUBSET_USER": true,
+    "TRANSACTION_AUTHORITY_SUBSET_MISSION": true,
+    "CALL_AUTHORITY_SUBSET_TRANSACTION": true
+  },
+  "authority_graph_hash": "1E94DE04358C8D8F417E43CEC37C8C1DDA9E3803DF60E0578358B6F90F4C52F1"
+}

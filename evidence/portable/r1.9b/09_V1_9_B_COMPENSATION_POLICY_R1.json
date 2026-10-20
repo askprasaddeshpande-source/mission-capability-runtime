@@ -1,0 +1,12 @@
+﻿{
+  "mission_id": "MCR_R1_9_B_LIVE_GOVERNED_MUTATION_AND_OUTCOME_R1",
+  "compensation_authority_present": false,
+  "mutation_authority_implies_compensation_authority": false,
+  "local_negative_checks": [
+    "DELETE",
+    "CLEANUP",
+    "ROLLBACK"
+  ],
+  "live_compensation_execution_capability": "NOT_ESTABLISHED",
+  "compensation_grant_candidate": null
+}

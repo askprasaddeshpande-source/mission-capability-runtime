@@ -1,0 +1,23 @@
+﻿{
+  "mission_id": "MCR_R1_9_B_LIVE_GOVERNED_MUTATION_AND_OUTCOME_R1",
+  "state": "WAITING_FOR_SAP_WRITE_AUTHORIZATION",
+  "live_sap_write_authorized": false,
+  "object_name": "ZCL_MCR19B_9533C4D8",
+  "package": "ZCLINE",
+  "provider": "ADT",
+  "destination": "TRL_EN",
+  "object_type": "CLAS/OC",
+  "object_content": "{\"description\":\"MCR R1.9B bounded governed disposable class\",\"name\":\"ZCL_MCR19B_9533C4D8\",\"packageName\":\"ZCLINE\"}",
+  "object_content_sha256": "AC73DDD3D2442F1F8F43276435B694769EE3FC3128A4A46C9E164D16B8D8999A",
+  "mutation_capabilities": [
+    "abap_creation-create_object",
+    "abap_activate_objects"
+  ],
+  "validation_capabilities": [
+    "abap_atc_run",
+    "abap_atc_get_result"
+  ],
+  "authorized_mutation_count": 2,
+  "retries_authorized": 0,
+  "idempotency_key_hash": "FB0CAD60655CF2AC0E1A2D59582D29550903D79D939D4C2B7D882006FA0039A3"
+}

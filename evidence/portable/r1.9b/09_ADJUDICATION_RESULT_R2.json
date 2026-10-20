@@ -1,0 +1,33 @@
+{
+  "mission": "MCR_R1_9_B_HF06_ATTEMPT2_CREATE_STATE_PREFLIGHT_RECONCILIATION_ADJUDICATION_R2",
+  "source_run": {
+    "broken_reconciliation_script_sha256": "504119748D25232EA47063642A9A6F73681986005B35735D51EC4333DF10A4FD",
+    "validation_raw_sha256": "79E493808385BCAB300B757882FACF8B3BCDC6B04117F926DC1736FC3DE50182",
+    "details_raw_sha256": "09F2E8AA655844DBF72C279465C7DB3C3B60B61EB9C786B16CBB1933F26DCB72",
+    "prior_provider_protocol_calls": 5,
+    "prior_tools_call_requests": 2,
+    "prior_sap_remote_read_calls": 1,
+    "prior_sap_remote_validation_calls": 1,
+    "prior_sap_writes": 0
+  },
+  "adjudication": {
+    "method": "LOCAL_PARSE_OF_ALREADY_CAPTURED_MCP_RESPONSES",
+    "existence_conflict_signal": false,
+    "positive_validation_signal": false,
+    "error_signal_count": 1,
+    "create_commit_state": "CREATE_COMMIT_REMAINS_UNKNOWN",
+    "object_state_inference": "UNKNOWN",
+    "authoritative_repository_readback": false
+  },
+  "local_execution": {
+    "mcp_provider_calls": 0,
+    "mcp_tools_call_requests": 0,
+    "sap_reads": 0,
+    "sap_writes": 0
+  },
+  "authority": {
+    "hf06_authorization_reuse_authorized": false,
+    "live_sap_write_authorized": false
+  },
+  "final_state": "CREATE_COMMIT_UNKNOWN_FURTHER_READ_ONLY_RECONCILIATION_REQUIRED"
+}

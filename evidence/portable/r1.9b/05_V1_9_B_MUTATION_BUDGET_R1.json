@@ -1,0 +1,23 @@
+﻿{
+  "budget_id": "MCR19B_MUTATION_BUDGET_R1",
+  "mission_id": "MCR_R1_9_B_LIVE_GOVERNED_MUTATION_AND_OUTCOME_R1",
+  "provider": "ADT",
+  "capabilities": [
+    "abap_creation-create_object",
+    "abap_activate_objects"
+  ],
+  "operations": [
+    "CREATE",
+    "ACTIVATE"
+  ],
+  "target": "TRL_EN/ZCLINE/ZCL_MCR19B_9533C4D8",
+  "package": "ZCLINE",
+  "max_mutation_count": 2,
+  "remaining_mutation_count": 2,
+  "issued_at": "2026-09-06T12:24:37.9030809Z",
+  "expires_at": "2026-09-07T12:24:37.8880018Z",
+  "transaction_scope": "MCR19B_TX_CREATE_ACTIVATE_VALIDATE",
+  "idempotency_key": "MCR19B-D0404EC306BB33E1DA8B279E",
+  "compensation_authority_present": false,
+  "budget_hash": "357D23D4DA715235EB4781CA7BF2C4F6DB215AB342D72B32269EF85759BEEBC7"
+}

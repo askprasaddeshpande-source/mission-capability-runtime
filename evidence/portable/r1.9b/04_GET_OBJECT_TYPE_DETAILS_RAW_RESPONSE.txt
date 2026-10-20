@@ -1,0 +1,4 @@
+id: 0c75712a-a975-42cd-bf48-4bd9fc0a89fb
+event: message
+data: {"jsonrpc":"2.0","id":3,"result":{"content":[{"type":"text","text":"{\"fields\":[{\"tag\":\"packageName\",\"required\":true,\"fieldGroup\":1},{\"tag\":\"name\",\"required\":true,\"maxLength\":30,\"fieldGroup\":1},{\"tag\":\"description\",\"required\":true,\"fieldGroup\":1},{\"tag\":\"superclass\",\"fieldGroup\":1},{\"tag\":\"interfaces\",\"fieldGroup\":1}]}"}],"isError":false,"structuredContent":{"fields":[{"tag":"packageName","required":true,"fieldGroup":1},{"tag":"name","required":true,"maxLength":30,"fieldGroup":1},{"tag":"description","required":true,"fieldGroup":1},{"tag":"superclass","fieldGroup":1},{"tag":"interfaces","fieldGroup":1}]}}}
+

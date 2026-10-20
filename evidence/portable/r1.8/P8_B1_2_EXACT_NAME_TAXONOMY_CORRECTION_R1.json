@@ -1,0 +1,489 @@
+﻿{
+  "mission": "MCR_R2E_P8_B1_2_EXACT_NAME_TAXONOMY_CORRECTION_R1",
+  "predecessor_sha256": "4D711C90B0699CF1C9E053EFC038B7D24DAF1D8FEE0F6801328505321A462D6A",
+  "raw_tool_count": 41,
+  "correction": {
+    "deterministic": true,
+    "exact_name_only": true,
+    "corrected_tools": [
+      {
+        "provider": "SAP_FIORI_MCP",
+        "tool": "get_functionality_details",
+        "from": "LOCAL_WORKSPACE_MUTATION_CAPABLE",
+        "to": "READ_ONLY_CANDIDATE"
+      },
+      {
+        "provider": "SAP_FIORI_MCP",
+        "tool": "list_functionality",
+        "from": "LOCAL_WORKSPACE_MUTATION_CAPABLE",
+        "to": "READ_ONLY_CANDIDATE"
+      }
+    ],
+    "classification_grants_execution_authority": false
+  },
+  "taxonomy": [
+    {
+      "provider": "SAP_ADT_MCP",
+      "tool": "abap_activate_objects",
+      "previous_authority_class": "ENTERPRISE_MUTATION_CAPABLE",
+      "authority_class": "ENTERPRISE_MUTATION_CAPABLE",
+      "operation_class": "MUTATE",
+      "mutation_domain": "SAP_ENTERPRISE",
+      "confidence_basis": "EXACT_TOOL_NAME",
+      "classification_changed": false
+    },
+    {
+      "provider": "SAP_ADT_MCP",
+      "tool": "abap_atc_apply_ai_fix",
+      "previous_authority_class": "ENTERPRISE_MUTATION_CAPABLE",
+      "authority_class": "ENTERPRISE_MUTATION_CAPABLE",
+      "operation_class": "MUTATE",
+      "mutation_domain": "SAP_ENTERPRISE",
+      "confidence_basis": "EXACT_TOOL_NAME",
+      "classification_changed": false
+    },
+    {
+      "provider": "SAP_ADT_MCP",
+      "tool": "abap_atc_execute_deterministic_quickfixes",
+      "previous_authority_class": "ENTERPRISE_MUTATION_CAPABLE",
+      "authority_class": "ENTERPRISE_MUTATION_CAPABLE",
+      "operation_class": "MUTATE",
+      "mutation_domain": "SAP_ENTERPRISE",
+      "confidence_basis": "EXACT_TOOL_NAME",
+      "classification_changed": false
+    },
+    {
+      "provider": "SAP_ADT_MCP",
+      "tool": "abap_atc_get_ai_fix_result",
+      "previous_authority_class": "ENTERPRISE_MUTATION_CAPABLE",
+      "authority_class": "READ_OR_ANALYSIS_CAPABLE",
+      "operation_class": "VALIDATE_ANALYZE",
+      "mutation_domain": "NONE_EXPECTED",
+      "confidence_basis": "EXACT_TOOL_NAME",
+      "classification_changed": true
+    },
+    {
+      "provider": "SAP_ADT_MCP",
+      "tool": "abap_atc_get_result",
+      "previous_authority_class": "READ_OR_ANALYSIS_CAPABLE",
+      "authority_class": "READ_OR_ANALYSIS_CAPABLE",
+      "operation_class": "VALIDATE_ANALYZE",
+      "mutation_domain": "NONE_EXPECTED",
+      "confidence_basis": "EXACT_TOOL_NAME",
+      "classification_changed": false
+    },
+    {
+      "provider": "SAP_ADT_MCP",
+      "tool": "abap_atc_run",
+      "previous_authority_class": "READ_OR_ANALYSIS_CAPABLE",
+      "authority_class": "READ_OR_ANALYSIS_CAPABLE",
+      "operation_class": "VALIDATE_ANALYZE",
+      "mutation_domain": "NONE_EXPECTED",
+      "confidence_basis": "EXACT_TOOL_NAME",
+      "classification_changed": false
+    },
+    {
+      "provider": "SAP_ADT_MCP",
+      "tool": "abap_business_services-fetch_service_information",
+      "previous_authority_class": "READ_ONLY_CANDIDATE",
+      "authority_class": "READ_ONLY_CANDIDATE",
+      "operation_class": "OBSERVE_READ",
+      "mutation_domain": "NONE_EXPECTED",
+      "confidence_basis": "EXACT_TOOL_NAME",
+      "classification_changed": false
+    },
+    {
+      "provider": "SAP_ADT_MCP",
+      "tool": "abap_business_services-fetch_services",
+      "previous_authority_class": "READ_OR_ANALYSIS_CAPABLE",
+      "authority_class": "READ_ONLY_CANDIDATE",
+      "operation_class": "OBSERVE_READ",
+      "mutation_domain": "NONE_EXPECTED",
+      "confidence_basis": "EXACT_TOOL_NAME",
+      "classification_changed": true
+    },
+    {
+      "provider": "SAP_ADT_MCP",
+      "tool": "abap_creation-create_object",
+      "previous_authority_class": "ENTERPRISE_MUTATION_CAPABLE",
+      "authority_class": "ENTERPRISE_MUTATION_CAPABLE",
+      "operation_class": "MUTATE",
+      "mutation_domain": "SAP_ENTERPRISE",
+      "confidence_basis": "EXACT_TOOL_NAME",
+      "classification_changed": false
+    },
+    {
+      "provider": "SAP_ADT_MCP",
+      "tool": "abap_creation-get_all_creatable_objects",
+      "previous_authority_class": "ENTERPRISE_MUTATION_CAPABLE",
+      "authority_class": "READ_ONLY_CANDIDATE",
+      "operation_class": "OBSERVE_READ",
+      "mutation_domain": "NONE_EXPECTED",
+      "confidence_basis": "EXACT_TOOL_NAME",
+      "classification_changed": true
+    },
+    {
+      "provider": "SAP_ADT_MCP",
+      "tool": "abap_creation-get_object_type_details",
+      "previous_authority_class": "READ_OR_ANALYSIS_CAPABLE",
+      "authority_class": "READ_ONLY_CANDIDATE",
+      "operation_class": "OBSERVE_READ",
+      "mutation_domain": "NONE_EXPECTED",
+      "confidence_basis": "EXACT_TOOL_NAME",
+      "classification_changed": true
+    },
+    {
+      "provider": "SAP_ADT_MCP",
+      "tool": "abap_creation-run_validation",
+      "previous_authority_class": "ENTERPRISE_MUTATION_CAPABLE",
+      "authority_class": "READ_OR_ANALYSIS_CAPABLE",
+      "operation_class": "VALIDATE_ANALYZE",
+      "mutation_domain": "NONE_EXPECTED",
+      "confidence_basis": "EXACT_TOOL_NAME",
+      "classification_changed": true
+    },
+    {
+      "provider": "SAP_ADT_MCP",
+      "tool": "abap_generators-generate_objects",
+      "previous_authority_class": "ENTERPRISE_MUTATION_CAPABLE",
+      "authority_class": "ENTERPRISE_MUTATION_CAPABLE",
+      "operation_class": "MUTATE",
+      "mutation_domain": "SAP_ENTERPRISE",
+      "confidence_basis": "EXACT_TOOL_NAME",
+      "classification_changed": false
+    },
+    {
+      "provider": "SAP_ADT_MCP",
+      "tool": "abap_generators-get_schema",
+      "previous_authority_class": "READ_ONLY_CANDIDATE",
+      "authority_class": "READ_ONLY_CANDIDATE",
+      "operation_class": "OBSERVE_READ",
+      "mutation_domain": "NONE_EXPECTED",
+      "confidence_basis": "EXACT_TOOL_NAME",
+      "classification_changed": false
+    },
+    {
+      "provider": "SAP_ADT_MCP",
+      "tool": "abap_generators-list_generators",
+      "previous_authority_class": "ENTERPRISE_MUTATION_CAPABLE",
+      "authority_class": "READ_ONLY_CANDIDATE",
+      "operation_class": "OBSERVE_READ",
+      "mutation_domain": "NONE_EXPECTED",
+      "confidence_basis": "EXACT_TOOL_NAME",
+      "classification_changed": true
+    },
+    {
+      "provider": "SAP_ADT_MCP",
+      "tool": "abap_list_destinations",
+      "previous_authority_class": "READ_ONLY_CANDIDATE",
+      "authority_class": "READ_ONLY_CANDIDATE",
+      "operation_class": "OBSERVE_READ",
+      "mutation_domain": "NONE_EXPECTED",
+      "confidence_basis": "EXACT_TOOL_NAME",
+      "classification_changed": false
+    },
+    {
+      "provider": "SAP_ADT_MCP",
+      "tool": "abap_run_unit_tests",
+      "previous_authority_class": "READ_OR_ANALYSIS_CAPABLE",
+      "authority_class": "READ_OR_ANALYSIS_CAPABLE",
+      "operation_class": "VALIDATE_ANALYZE",
+      "mutation_domain": "NONE_EXPECTED",
+      "confidence_basis": "EXACT_TOOL_NAME",
+      "classification_changed": false
+    },
+    {
+      "provider": "SAP_ADT_MCP",
+      "tool": "abap_transport-create",
+      "previous_authority_class": "ENTERPRISE_MUTATION_CAPABLE",
+      "authority_class": "ENTERPRISE_MUTATION_CAPABLE",
+      "operation_class": "MUTATE",
+      "mutation_domain": "SAP_ENTERPRISE",
+      "confidence_basis": "EXACT_TOOL_NAME",
+      "classification_changed": false
+    },
+    {
+      "provider": "SAP_ADT_MCP",
+      "tool": "abap_transport-get",
+      "previous_authority_class": "ENTERPRISE_MUTATION_CAPABLE",
+      "authority_class": "READ_ONLY_CANDIDATE",
+      "operation_class": "OBSERVE_READ",
+      "mutation_domain": "NONE_EXPECTED",
+      "confidence_basis": "EXACT_TOOL_NAME",
+      "classification_changed": true
+    },
+    {
+      "provider": "SAP_ADT_MCP",
+      "tool": "abap_transport-unifiedDifference",
+      "previous_authority_class": "READ_OR_ANALYSIS_CAPABLE",
+      "authority_class": "READ_ONLY_CANDIDATE",
+      "operation_class": "OBSERVE_READ",
+      "mutation_domain": "NONE_EXPECTED",
+      "confidence_basis": "EXACT_TOOL_NAME",
+      "classification_changed": true
+    },
+    {
+      "provider": "SAP_CAP_MCP",
+      "tool": "search_docs",
+      "previous_authority_class": "READ_ONLY_CANDIDATE",
+      "authority_class": "READ_ONLY_CANDIDATE",
+      "operation_class": "OBSERVE_READ",
+      "mutation_domain": "NONE_EXPECTED",
+      "confidence_basis": "PROVIDER_AWARE_SEMANTICS",
+      "classification_changed": false
+    },
+    {
+      "provider": "SAP_CAP_MCP",
+      "tool": "search_model",
+      "previous_authority_class": "READ_ONLY_CANDIDATE",
+      "authority_class": "READ_ONLY_CANDIDATE",
+      "operation_class": "OBSERVE_READ",
+      "mutation_domain": "NONE_EXPECTED",
+      "confidence_basis": "PROVIDER_AWARE_SEMANTICS",
+      "classification_changed": false
+    },
+    {
+      "provider": "SAP_FIORI_MCP",
+      "tool": "download_odata_service_metadata",
+      "previous_authority_class": "READ_ONLY_CANDIDATE",
+      "authority_class": "READ_ONLY_CANDIDATE",
+      "operation_class": "OBSERVE_READ",
+      "mutation_domain": "NONE_EXPECTED",
+      "confidence_basis": "PROVIDER_AWARE_SEMANTICS",
+      "classification_changed": false
+    },
+    {
+      "provider": "SAP_FIORI_MCP",
+      "tool": "execute_functionality",
+      "previous_authority_class": "READ_ONLY_CANDIDATE",
+      "authority_class": "LOCAL_WORKSPACE_MUTATION_CAPABLE",
+      "operation_class": "LOCAL_MUTATE",
+      "mutation_domain": "LOCAL_WORKSPACE",
+      "confidence_basis": "PROVIDER_AWARE_SEMANTICS",
+      "classification_changed": true
+    },
+    {
+      "provider": "SAP_FIORI_MCP",
+      "tool": "generate_fiori_app_cap",
+      "previous_authority_class": "READ_OR_ANALYSIS_CAPABLE",
+      "authority_class": "LOCAL_WORKSPACE_MUTATION_CAPABLE",
+      "operation_class": "LOCAL_MUTATE",
+      "mutation_domain": "LOCAL_WORKSPACE",
+      "confidence_basis": "PROVIDER_AWARE_SEMANTICS",
+      "classification_changed": true
+    },
+    {
+      "provider": "SAP_FIORI_MCP",
+      "tool": "generate_fiori_app_odata",
+      "previous_authority_class": "ENTERPRISE_MUTATION_CAPABLE",
+      "authority_class": "LOCAL_WORKSPACE_MUTATION_CAPABLE",
+      "operation_class": "LOCAL_MUTATE",
+      "mutation_domain": "LOCAL_WORKSPACE",
+      "confidence_basis": "PROVIDER_AWARE_SEMANTICS",
+      "classification_changed": true
+    },
+    {
+      "provider": "SAP_FIORI_MCP",
+      "tool": "get_functionality_details",
+      "previous_authority_class": "READ_ONLY_CANDIDATE",
+      "authority_class": "READ_ONLY_CANDIDATE",
+      "operation_class": "OBSERVE_READ",
+      "mutation_domain": "NONE_EXPECTED",
+      "confidence_basis": "EXACT_TOOL_NAME",
+      "classification_changed": true
+    },
+    {
+      "provider": "SAP_FIORI_MCP",
+      "tool": "list_fiori_apps",
+      "previous_authority_class": "READ_ONLY_CANDIDATE",
+      "authority_class": "READ_ONLY_CANDIDATE",
+      "operation_class": "OBSERVE_READ",
+      "mutation_domain": "NONE_EXPECTED",
+      "confidence_basis": "PROVIDER_AWARE_SEMANTICS",
+      "classification_changed": false
+    },
+    {
+      "provider": "SAP_FIORI_MCP",
+      "tool": "list_functionality",
+      "previous_authority_class": "READ_ONLY_CANDIDATE",
+      "authority_class": "READ_ONLY_CANDIDATE",
+      "operation_class": "OBSERVE_READ",
+      "mutation_domain": "NONE_EXPECTED",
+      "confidence_basis": "EXACT_TOOL_NAME",
+      "classification_changed": true
+    },
+    {
+      "provider": "SAP_FIORI_MCP",
+      "tool": "list_sap_systems",
+      "previous_authority_class": "READ_ONLY_CANDIDATE",
+      "authority_class": "READ_ONLY_CANDIDATE",
+      "operation_class": "OBSERVE_READ",
+      "mutation_domain": "NONE_EXPECTED",
+      "confidence_basis": "PROVIDER_AWARE_SEMANTICS",
+      "classification_changed": false
+    },
+    {
+      "provider": "SAP_FIORI_MCP",
+      "tool": "search_docs",
+      "previous_authority_class": "READ_ONLY_CANDIDATE",
+      "authority_class": "READ_ONLY_CANDIDATE",
+      "operation_class": "OBSERVE_READ",
+      "mutation_domain": "NONE_EXPECTED",
+      "confidence_basis": "PROVIDER_AWARE_SEMANTICS",
+      "classification_changed": false
+    },
+    {
+      "provider": "SAP_UI5_MCP",
+      "tool": "create_integration_card",
+      "previous_authority_class": "ENTERPRISE_MUTATION_CAPABLE",
+      "authority_class": "LOCAL_WORKSPACE_MUTATION_CAPABLE",
+      "operation_class": "LOCAL_MUTATE",
+      "mutation_domain": "LOCAL_WORKSPACE",
+      "confidence_basis": "PROVIDER_AWARE_SEMANTICS",
+      "classification_changed": true
+    },
+    {
+      "provider": "SAP_UI5_MCP",
+      "tool": "create_ui5_app",
+      "previous_authority_class": "ENTERPRISE_MUTATION_CAPABLE",
+      "authority_class": "LOCAL_WORKSPACE_MUTATION_CAPABLE",
+      "operation_class": "LOCAL_MUTATE",
+      "mutation_domain": "LOCAL_WORKSPACE",
+      "confidence_basis": "PROVIDER_AWARE_SEMANTICS",
+      "classification_changed": true
+    },
+    {
+      "provider": "SAP_UI5_MCP",
+      "tool": "get_api_reference",
+      "previous_authority_class": "READ_ONLY_CANDIDATE",
+      "authority_class": "READ_ONLY_CANDIDATE",
+      "operation_class": "OBSERVE_READ",
+      "mutation_domain": "NONE_EXPECTED",
+      "confidence_basis": "PROVIDER_AWARE_SEMANTICS",
+      "classification_changed": false
+    },
+    {
+      "provider": "SAP_UI5_MCP",
+      "tool": "get_guidelines",
+      "previous_authority_class": "READ_ONLY_CANDIDATE",
+      "authority_class": "READ_ONLY_CANDIDATE",
+      "operation_class": "OBSERVE_READ",
+      "mutation_domain": "NONE_EXPECTED",
+      "confidence_basis": "PROVIDER_AWARE_SEMANTICS",
+      "classification_changed": false
+    },
+    {
+      "provider": "SAP_UI5_MCP",
+      "tool": "get_integration_cards_guidelines",
+      "previous_authority_class": "READ_ONLY_CANDIDATE",
+      "authority_class": "READ_ONLY_CANDIDATE",
+      "operation_class": "OBSERVE_READ",
+      "mutation_domain": "NONE_EXPECTED",
+      "confidence_basis": "PROVIDER_AWARE_SEMANTICS",
+      "classification_changed": false
+    },
+    {
+      "provider": "SAP_UI5_MCP",
+      "tool": "get_project_info",
+      "previous_authority_class": "READ_ONLY_CANDIDATE",
+      "authority_class": "READ_ONLY_CANDIDATE",
+      "operation_class": "OBSERVE_READ",
+      "mutation_domain": "NONE_EXPECTED",
+      "confidence_basis": "PROVIDER_AWARE_SEMANTICS",
+      "classification_changed": false
+    },
+    {
+      "provider": "SAP_UI5_MCP",
+      "tool": "get_typescript_conversion_guidelines",
+      "previous_authority_class": "READ_ONLY_CANDIDATE",
+      "authority_class": "READ_ONLY_CANDIDATE",
+      "operation_class": "OBSERVE_READ",
+      "mutation_domain": "NONE_EXPECTED",
+      "confidence_basis": "PROVIDER_AWARE_SEMANTICS",
+      "classification_changed": false
+    },
+    {
+      "provider": "SAP_UI5_MCP",
+      "tool": "get_version_info",
+      "previous_authority_class": "READ_ONLY_CANDIDATE",
+      "authority_class": "READ_ONLY_CANDIDATE",
+      "operation_class": "OBSERVE_READ",
+      "mutation_domain": "NONE_EXPECTED",
+      "confidence_basis": "PROVIDER_AWARE_SEMANTICS",
+      "classification_changed": false
+    },
+    {
+      "provider": "SAP_UI5_MCP",
+      "tool": "run_manifest_validation",
+      "previous_authority_class": "READ_OR_ANALYSIS_CAPABLE",
+      "authority_class": "READ_OR_ANALYSIS_CAPABLE",
+      "operation_class": "VALIDATE_ANALYZE",
+      "mutation_domain": "NONE_EXPECTED",
+      "confidence_basis": "PROVIDER_AWARE_SEMANTICS",
+      "classification_changed": false
+    },
+    {
+      "provider": "SAP_UI5_MCP",
+      "tool": "run_ui5_linter",
+      "previous_authority_class": "READ_OR_ANALYSIS_CAPABLE",
+      "authority_class": "READ_OR_ANALYSIS_CAPABLE",
+      "operation_class": "VALIDATE_ANALYZE",
+      "mutation_domain": "NONE_EXPECTED",
+      "confidence_basis": "PROVIDER_AWARE_SEMANTICS",
+      "classification_changed": false
+    }
+  ],
+  "provider_summary": [
+    {
+      "provider": "SAP_ADT_MCP",
+      "tools": 20,
+      "read": 9,
+      "analysis": 5,
+      "local_mutate": 0,
+      "enterprise_mutate": 6,
+      "review": 0
+    },
+    {
+      "provider": "SAP_FIORI_MCP",
+      "tools": 9,
+      "read": 6,
+      "analysis": 0,
+      "local_mutate": 3,
+      "enterprise_mutate": 0,
+      "review": 0
+    },
+    {
+      "provider": "SAP_UI5_MCP",
+      "tools": 10,
+      "read": 6,
+      "analysis": 2,
+      "local_mutate": 2,
+      "enterprise_mutate": 0,
+      "review": 0
+    },
+    {
+      "provider": "SAP_CAP_MCP",
+      "tools": 2,
+      "read": 2,
+      "analysis": 0,
+      "local_mutate": 0,
+      "enterprise_mutate": 0,
+      "review": 0
+    }
+  ],
+  "authority_classes": {
+    "zero_write_candidate_count": 30,
+    "enterprise_mutation_capable_count": 6,
+    "local_workspace_mutation_capable_count": 5,
+    "review_required_count": 0
+  },
+  "safety": {
+    "model_calls": 0,
+    "mcp_calls": 0,
+    "sap_calls": 0,
+    "sap_writes": 0,
+    "btp_calls": 0,
+    "btp_writes": 0
+  },
+  "next_state": "P8_B2_B3_DELEGATED_AUTHORITY_GRAPH_AND_DETERMINISTIC_MCWS_COMPILER"
+}

@@ -1,0 +1,29 @@
+﻿{
+  "provider": "ADT",
+  "provider_identity": "ADT::SAP_ADT_MCP",
+  "full_provider_contract_hash": "52B73C5745214199FA6A7FF25608B187ADD3EC2B0FEAD7DA7D23204155F7E166",
+  "local_full_contract_hash": "52B73C5745214199FA6A7FF25608B187ADD3EC2B0FEAD7DA7D23204155F7E166",
+  "mission_relevant_contract_hash": "D437419566B0C4218B2EC71E681604A6FB5C8802044188BE56C44135BECEED88",
+  "qualified_at": "2026-09-06T08:42:23Z",
+  "expires_at": "2026-09-07T12:24:37.8880018Z",
+  "relevant_capabilities": [
+    "abap_transport-get",
+    "abap_creation-run_validation",
+    "abap_creation-create_object",
+    "abap_activate_objects",
+    "abap_atc_run",
+    "abap_atc_get_result"
+  ],
+  "revalidation_triggers": [
+    "PRE_MUTATION_BOUNDARY",
+    "CHECKPOINT_RESUME",
+    "LEASE_EXPIRED",
+    "CONTRACT_MISMATCH",
+    "EXPLICIT_POLICY"
+  ],
+  "contract_lease_state": "VALID",
+  "contract_classification": "IDENTICAL",
+  "runtime_revalidation_required_before_mutation": true,
+  "mission_relevant_contract_admissible": true,
+  "lease_hash": "444A15F9B61402E54A7D1838807295DF2251CAB1AF4FE4A49B6E32E1FCF51A6C"
+}
