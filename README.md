@@ -2,14 +2,14 @@
 
 **From Tools to Missions: A Mission-Capability Runtime for Enterprise AI**
 
-Research repository for the Mission-Capability Runtime (MCR) and Mission-Capability Working Set (MCWS) program.
+Research repository for the Mission-Capability Runtime (MCR) and Minimum Capability Working Set (MCWS) program.
 
 **Author:** Prasad Deshpande — Independent Researcher  
 **ORCID:** 0009-0008-1344-6585  
 **Research & Architecture:** https://prasaddeshpande.com/
 
-> **Repository status: DRAFT / CLOSURE WORKSPACE.**  
-> This repository is not yet a frozen public reproducibility release and must not be represented as a peer-reviewed journal or conference publication.
+> **Repository status: release `v1.9.0` with documented evidence gaps.**  
+> This is an independent research repository. It is not a peer-reviewed journal or conference publication. The bounded R1.9B live-mutation result is partial (see below); it is not a proof of successful end-to-end live mutation.
 
 ## Research lineage
 
@@ -34,7 +34,7 @@ MCR addresses a post-LLM enterprise-runtime problem:
 
 1. represent mission semantics independently of provider/tool identity;
 2. resolve the capability requirement for the current mission stage;
-3. expose only the stage-relevant Mission-Capability Working Set (MCWS) to probabilistic reasoning;
+3. expose only the stage-relevant Minimum Capability Working Set (MCWS) to probabilistic reasoning;
 4. keep admissibility, provider ranking, authority, parameter enforcement and binding deterministic;
 5. treat execution receipts and authoritative enterprise outcomes as different states; and
 6. re-resolve when mission state, provider state, policy, authority or outcome evidence changes.
@@ -95,9 +95,20 @@ At current closure:
 
 Therefore R1.9B must **not** be described as a successful end-to-end live mutation.
 
+**Closure classification:** `MCR_R1_9=BOUNDED_CLOSURE_WITH_UNRESOLVED_CREATE_COMMIT_STATE`. Control-plane behavior is supported; complete live mutation/outcome correctness is not. HF06 must not be rerun and its authorization must not be reused. See [`reports/MCR_R1_9_FINAL_SCIENTIFIC_CLOSURE_R3.md`](reports/MCR_R1_9_FINAL_SCIENTIFIC_CLOSURE_R3.md), the [evidence-sufficiency gate](reports/MCR_R1_9_PUBLICATION_EVIDENCE_GATE_R3.md) and the [adversarial review](reports/MCR_R1_9_EXTERNAL_ADVERSARIAL_REVIEW_R3.md).
+
+Publication manuscript: [`paper/MCR_Manuscript_R1.9_EXTERNAL_REVIEW_CANDIDATE_R3.md`](paper/MCR_Manuscript_R1.9_EXTERNAL_REVIEW_CANDIDATE_R3.md) and PDF [`publication/MCR_R1.9_From_Tools_to_Missions_R3.pdf`](publication/MCR_R1.9_From_Tools_to_Missions_R3.pdf).
+
+**Central distinction:** `REQUESTED != AUTHORIZED != BOUND != EXECUTED != COMMITTED != VALIDATED_COMPLETE`.
+
+**Evidence portability:** a fresh clone verifies 28 evidence artifacts byte-exact. The frozen scientific manuscript (`E589393C...`) and the original signed bytes of six historical scripts are not in the repository; they are documented gaps (`evidence/portable/MISSING_ARTIFACTS_R2.md`).
+
 ## Repository layout
 
-- [`paper/`](paper/) — manuscript and source-of-record lineage
+- [`paper/`](paper/) — manuscript and source-of-record lineage (final: `MCR_Manuscript_R1.9_EXTERNAL_REVIEW_CANDIDATE_R3.md`)
+- [`tools/`](tools/) — `verify_fresh_clone.py` (fresh-clone qualification) and `build_pdf.py`
+- [`reports/`](reports/) — source-of-record, claim/evidence, consistency and closure audits
+- [`evidence/portable/`](evidence/portable/) — byte-exact portable evidence and portability manifests (`-text`: never line-ending normalized)
 - [`architecture/`](architecture/) — MCR/MCWS architecture and ACLA/EAF relationship
 - [`evidence/`](evidence/) — evidence register and claim/evidence matrix
 - [`frozen-evidence-anchors/`](frozen-evidence-anchors/) — release anchor index
@@ -124,11 +135,19 @@ Recommended closed loop:
 
 `Claude Mods -> ACLA -> EAF pre-action -> MCR -> EAF post-action -> ACLA / evidence`
 
+## Verify this repository
+
+```
+python tools/verify_fresh_clone.py
+```
+
+This checks evidence hashes, `SHA256SUMS.txt`, frozen anchors, claim-to-artifact linkage, a secret scan and citation metadata. It reads files only and executes nothing from the repository.
+
 ## Publication state
 
-No MCR v1.9 GitHub release or Zenodo DOI is declared by this draft.
+GitHub release `v1.9.0`. This tagged snapshot records no DOI; if an archival DOI is later issued it is recorded in `CITATION.cff` on the default branch, not here. Known gaps (frozen manuscript bytes, six signed originals, unverified time-sensitive references) are listed in `evidence/portable/MISSING_ARTIFACTS_R2.md` and the manuscript limitations.
 
-The final release must preserve negative, partial and unresolved results exactly as observed.
+The release preserves negative, partial and unresolved results exactly as observed.
 
 ## Licensing
 
