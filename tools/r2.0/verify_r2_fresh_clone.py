@@ -20,7 +20,7 @@ import tempfile
 R1_9_TAG, R1_9_COMMIT = "v1.9.0", "9c5105fe5b35dadf7b1384f54d4bea4c490d3ae0"
 SUMS = "evidence/r2.0/SHA256SUMS_R2_0.txt"
 ROOTS = ["tools/r2.0", "architecture/r2.0", "evidence/r2.0", "reports/r2.0", "research-package/r2.0"]
-SKIP = {SUMS, "__pycache__"}
+SKIP = {SUMS, "__pycache__", "tools/r2.0/make_adt_auth_context.py"}   # local credential helper, git-ignored
 TEXT = (".py", ".md", ".json", ".txt")
 LOCAL_EXEC_DOCS = {"research-package/r2.0/r2_0c/MCR_R2_0_C_AUTHORIZATION_PACKET_R1.md"}   # owner-workspace commands by design
 ABS = re.compile(r"[A-Za-z]:\\|/Users/|/home/[a-z]")
