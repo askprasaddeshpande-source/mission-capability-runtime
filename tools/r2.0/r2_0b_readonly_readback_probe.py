@@ -25,7 +25,9 @@ import time
 import urllib.request
 
 ALLOWED_METHODS = {"initialize", "notifications/initialized", "tools/list"}
-ALLOWED_TOOLS = {"abap_list_destinations", "abap_atc_run", "abap_atc_get_result"}
+ALLOWED_TOOLS = {"abap_list_destinations", "abap_atc_run", "abap_atc_get_result",
+                 # read-only repository tools exposed by the provider since the R1.8 contract (tool count 29 vs 20)
+                 "capella_adt_repository_read_metadata", "capella_adt_class_read_source"}
 EXPECTED_ADT_TOOL_COUNT = 20      # R1.8 retained contract (SAP_ADT_MCP, 20 tools)
 KEYS = {"name": "name", "objectname": "name", "type": "type", "objecttype": "type", "package": "package",
         "packagename": "package", "findings": "findings", "worklistid": "worklistId"}
@@ -166,7 +168,22 @@ def atc_observe(c, dest, name, otype, polls=6, gap=5):
     return out
 
 
-def run(c, dest, pos, neg, otype):
+def read_stage(c, dest, name):
+    """Active/inactive metadata and class source for one name. Raw responses are saved by the client."""
+    out = {}
+    for tool, extra in (("capella_adt_repository_read_metadata", {}), ("capella_adt_class_read_source", {})):
+        for ver in ("active", "inactive"):
+            r = c.tool(tool, dict({"destination": dest, "objectName": name, "version": ver}, **extra))
+            txt, err = text_of(r)
+            out["%s:%s" % (tool, ver)] = {"is_error": err, "text_sha256": sha(txt), "bytes": len(txt),
+                                           "not_found_text": bool(err and NOT_FOUND.search(txt)),
+                                           "error_head": txt[:160] if err else None,
+                                           "name_in_text": name.upper() in txt.upper(),
+                                           "source_sha256_of_text": sha(txt) if (not err and "class" in tool) else None}
+    return out
+
+
+def run(c, dest, pos, neg, otype, skip_atc=False):
     rep = {"read_only_allowlist": sorted(ALLOWED_TOOLS | ALLOWED_METHODS), "provider_calls": 0}
     st, raw = c.call("initialize", {"protocolVersion": "2025-06-18", "capabilities": {}, "clientInfo": {"name": "MCR_R2_0_B", "version": "1"}})
     rep["initialize_ok"] = st == 200 and "result" in parse(raw)
@@ -182,6 +199,11 @@ def run(c, dest, pos, neg, otype):
     rep["has_dedicated_object_read_tool"] = any(re.search(r"get_(object|source)|read_(object|source)|search", t["name"]) for t in tl)
     dtxt, derr = text_of(c.tool("abap_list_destinations", {}))
     rep["destination_listed"] = (not derr) and dest in dtxt
+    rep["read_stage_positive"] = read_stage(c, dest, pos)
+    rep["read_stage_negative"] = read_stage(c, dest, neg)
+    if skip_atc:
+        rep["provider_calls"] = len(c.log); rep["ADJUDICATION_REQUIRED"] = True; rep["verdict_proposal"] = "SEE_READ_STAGE"
+        return rep
     rep["positive_control"] = atc_observe(c, dest, pos, otype)
     rep["negative_control"] = atc_observe(c, dest, neg, otype)
     p, n = rep["positive_control"]["signal"], rep["negative_control"]["signal"]
@@ -244,6 +266,7 @@ def main(argv=None):
     ap.add_argument("--destination", default="TRL_EN")
     ap.add_argument("--positive-control", default="ZCL_MCR_P6D_DFC3F677")
     ap.add_argument("--object-type", default="CLAS")
+    ap.add_argument("--skip-atc", action="store_true")
     ap.add_argument("--evidence-dir", help="outside-Git directory for raw responses")
     ap.add_argument("--out")
     a = ap.parse_args(argv)
@@ -262,7 +285,7 @@ def main(argv=None):
         if not ep.startswith("http://127.0.0.1:"):
             raise SystemExit("endpoint must be loopback")
         c = Client(ep, tok, a.evidence_dir)
-    rep = run(c, a.destination, a.positive_control, neg, a.object_type)
+    rep = run(c, a.destination, a.positive_control, neg, a.object_type, a.skip_atc)
     rep.update(mode="MOCK" if a.mock else "LIVE_READ_ONLY", negative_control_name=neg, sap_writes=0,
                call_log=[{k: v for k, v in e.items() if k != "ns"} for e in c.log])
     out = json.dumps(rep, indent=2, sort_keys=True)
