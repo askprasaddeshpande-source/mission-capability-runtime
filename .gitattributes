@@ -8,3 +8,7 @@
 
 # Evidence bytes are hash-bound: never normalize line endings or BOMs (R2 portability fix)
 evidence/portable/** -text
+
+# R2.0 hash-bound evidence and generated schemas: never normalize
+evidence/r2.0/** -text
+architecture/r2.0/schemas/** -text

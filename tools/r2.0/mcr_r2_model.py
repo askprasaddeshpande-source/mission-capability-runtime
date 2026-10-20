@@ -369,13 +369,18 @@ class Mission:
     # -- continuation
     def checkpoint_lease(self):
         cp = self._need("checkpoint")
-        return make("ContinuationLease", lease_id="LEASE-" + chash([cp["object_hash"], sorted(map(str, self.consumed))])[:12],
+        er = self.ev.get("execution_receipt")
+        return make("ContinuationLease", lease_id="LEASE-" + chash([cp["object_hash"], sorted(map(str, self.consumed)), self.state])[:12],
                     checkpoint_hash=cp["object_hash"], transaction_id=self.transaction_id,
-                    remaining_budget=self.remaining,
+                    remaining_budget=self.remaining, state_at_checkpoint=self.state,
+                    mutation_id=self.ev.get("mutation_id"),
+                    execution_receipt_hash=er["object_hash"] if er else None,
                     consumed_authority_ids=sorted(("%s:%s" % k) for k in self.consumed))
 
     @classmethod
-    def resume(cls, lease, checkpoint, original_budget, mission_id):
+    def resume(cls, lease, checkpoint, original_budget, mission_id, evidence=None):
+        """Rebuild a mission from a lease. `evidence` (re-presented objects) must match the
+        checkpoint's hash pins; a resumed mission never regains consumed authority."""
         if lease["checkpoint_hash"] != checkpoint["object_hash"]:
             raise GuardError("lease not bound to checkpoint")
         if lease["remaining_budget"] > checkpoint["remaining_budget"]:
@@ -384,6 +389,34 @@ class Mission:
             raise GuardError("continuation exceeds original budget")
         m = cls(mission_id, lease["transaction_id"], lease["remaining_budget"])
         m.consumed = {tuple(s.split(":", 1)) for s in lease["consumed_authority_ids"]}
+        if evidence is None:
+            return m
+        pins = {"tx": "transaction_hash", "budget": "budget_hash",
+                "outcome_contract": "outcome_contract_hash", "readback_contract": "readback_contract_hash"}
+        for slot, field in pins.items():
+            if evidence[slot]["object_hash"] != checkpoint[field] or not verify_hash(evidence[slot]):
+                raise GuardError("re-presented %s does not match checkpoint pin" % slot)
+        if evidence["budget"]["authority_hash"] != evidence["authority"]["object_hash"]:
+            raise GuardError("re-presented authority does not match budget")
+        m.ev.update(evidence); m.ev["checkpoint"] = checkpoint
+        m.mutations_sent = len(m.consumed)
+        st = lease["state_at_checkpoint"]
+        if not m.consumed:
+            m.state = "PREWRITE_VALIDATED" if st == "PREWRITE_VALIDATED" else "PLANNED"
+            return m
+        # a send may have happened: never silently restart; reconcile through readback
+        m.ev["mutation_id"] = lease["mutation_id"]
+        er = evidence.get("execution_receipt")
+        if er is not None:
+            if er["object_hash"] != lease["execution_receipt_hash"]:
+                raise GuardError("execution receipt does not match lease")
+            m.ev["execution_receipt"] = er
+        else:
+            m.ev["execution_receipt"] = make("ExecutionReceipt", receipt_id="resume-" + lease["lease_id"],
+                                             transaction_id=lease["transaction_id"], mutation_id=lease["mutation_id"],
+                                             call_class="COMMIT_UNKNOWN")
+        m.state = "COMMIT_STATE_UNKNOWN" if st in ("EXECUTION_STARTED", "COMMIT_STATE_UNKNOWN") else st
+        m.history.append(("RESUMED_AS_" + m.state, lease["object_hash"]))
         return m
 
 
