@@ -19,6 +19,21 @@ import tempfile
 
 R1_9_TAG, R1_9_COMMIT = "v1.9.0", "9c5105fe5b35dadf7b1384f54d4bea4c490d3ae0"
 SUMS = "evidence/r2.0/SHA256SUMS_R2_0.txt"
+# Historical (R2.0A-C, baseline commit 6f992c6) files that must stay byte-identical; superseding work is added as new versions.
+FROZEN_HISTORICAL = {
+    "evidence/r2.0/MCR_R2_0_A_VALIDATION_RESULT_R1.json": "8456E2D3B9148CC949086E3BB30E46F41DA78BE0D526890E04F6FB990A1EC126",
+    "evidence/r2.0/MCR_R2_0_B_DDLS_CONTROL_SUMMARY_R1.json": "1BE52855011E6A49D28BF5D4C2842D74FB44A2DDA2E42AE4F53D25286D314C17",
+    "evidence/r2.0/MCR_R2_0_B_LIVE_READONLY_PROBE_SUMMARY_R1.json": "1EE963DC90B8DE986CC83329851AB0E9A4782088AB46AF66B7A3EA6C8E2D9D40",
+    "evidence/r2.0/MCR_R2_0_C_LIVE_EXECUTION_RESULT_R1.json": "FA2B7518F7815C08EAD1658C912524CDC3EAAD0F0F82DF90B0B32A2806160A02",
+    "evidence/r2.0/MCR_R2_0_C_MOCK_SCENARIOS_R1.json": "4213C0CDAD3A58B10A2DE752010B82EFE51DD52E096E5202C61BFB72C84C58A7",
+    "evidence/r2.0/MCR_R2_0_C_PREWRITE_LIVE_READONLY_R1.json": "7E0750A1BD50196FC17C5E023F7AAE7A24F202B31DDB278DE45E38FCB25FCD66",
+    "evidence/r2.0/MCR_R2_0_DE_LOCAL_SCENARIOS_RESULT_R1.json": "4BF0B24C9032F6254258ECAC9088F1B78BE431EAE2829850FED9F3632E7ABD5E",
+    "evidence/r2.0/MCR_R2_0_HYPOTHESIS_STATUS_R2.md": "120499A8E39C34E7079838BCEDF279F1AAB57F52007D6B0B1C92F4175F2BA347",
+    "reports/r2.0/MCR_R2_0_C_LIVE_OUTCOME_STUDY_REPORT_R1.md": "B1635033CFAE49D01728B6DC19C33F5B083387E16A20AAA45C187A5B23FB1B9A",
+    "research-package/r2.0/r2_0c/MCR_R2_0_C_AUTHORIZATION_PACKET_R1.md": "751C6BD6507C4127CAFB35334F350A2CEF1518309935D0B31B27E75EA29D34D8",
+    "research-package/r2.0/r2_0c/R2_0C_FREEZE_R1.json": "43A775C21EC2AE1D640DE5A2955762D57E4877BCE828BA828EDBBBA01C67E833",
+    "tools/r2.0/r2_0c_study.py": "A73F4647E0AC9B672284A4A4D4A87AE031CBC6AFB7707362C9050ED632C3DDC9"
+}
 ROOTS = ["tools/r2.0", "architecture/r2.0", "evidence/r2.0", "reports/r2.0", "research-package/r2.0"]
 SKIP = {SUMS, "__pycache__", "tools/r2.0/make_adt_auth_context.py"}   # local credential helper, git-ignored
 TEXT = (".py", ".md", ".json", ".txt")
@@ -74,13 +89,17 @@ def main(argv):
     t = tempfile.mkdtemp(prefix="r2out_")
     a = run(root, "tools/r2.0/validate_r2_outcome_model.py", "--out", os.path.join(t, "a.json"), "--emit-schemas", os.path.join(t, "schemas"))
     res["validator_passes"] = a.returncode == 0
-    res["validator_result_reproduces"] = open(os.path.join(t, "a.json"), "rb").read() == open(os.path.join(root, "evidence/r2.0/MCR_R2_0_A_VALIDATION_RESULT_R1.json"), "rb").read().replace(b"\r\n", b"\n")
+    res["validator_result_reproduces"] = open(os.path.join(t, "a.json"), "rb").read() == open(os.path.join(root, "evidence/r2.0/MCR_R2_0_A_VALIDATION_RESULT_R2.json"), "rb").read().replace(b"\r\n", b"\n")
     sch = sorted(os.listdir(os.path.join(t, "schemas")))
     res["schemas_reproduce"] = sch == sorted(os.listdir(os.path.join(root, "architecture/r2.0/schemas"))) and all(
         open(os.path.join(t, "schemas", s), "rb").read() == open(os.path.join(root, "architecture/r2.0/schemas", s), "rb").read().replace(b"\r\n", b"\n") for s in sch)
     d = run(root, "tools/r2.0/run_r2_local_scenarios.py", "--out", os.path.join(t, "d.json"))
     res["scenarios_pass"] = d.returncode == 0
     res["scenarios_result_reproduces"] = open(os.path.join(t, "d.json"), "rb").read() == open(os.path.join(root, "evidence/r2.0/MCR_R2_0_DE_LOCAL_SCENARIOS_RESULT_R1.json"), "rb").read().replace(b"\r\n", b"\n")
+    res["frozen_historical_unchanged"] = all(os.path.exists(os.path.join(root, p)) and sha(os.path.join(root, p)) == h for p, h in FROZEN_HISTORICAL.items())
+    m = run(root, "tools/r2.0/run_r2_mutation_check.py", "--out", os.path.join(t, "m.json"))
+    res["mutation_check_passes"] = m.returncode == 0
+    res["mutation_result_reproduces"] = open(os.path.join(t, "m.json"), "rb").read() == open(os.path.join(root, "evidence/r2.0/MCR_R2_0_G_MUTATION_CHECK_R1.json"), "rb").read().replace(b"\r\n", b"\n")
     bad_abs, bad_sec = [], []
     for p in cur:
         if p.endswith(TEXT):

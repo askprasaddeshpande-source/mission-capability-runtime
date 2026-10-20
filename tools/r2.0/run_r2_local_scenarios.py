@@ -43,7 +43,8 @@ def run_step(m, f, step, **kw):
 
 
 def evidence_of(m):
-    e = {k: m.ev[k] for k in ("tx", "budget", "outcome_contract", "readback_contract", "authority")}
+    e = {k: m.ev[k] for k in ("intent", "principal", "delegation", "capability", "provider", "tx", "budget",
+                              "outcome_contract", "readback_contract", "authority")}
     if "execution_receipt" in m.ev:
         e["execution_receipt"] = m.ev["execution_receipt"]
     return e

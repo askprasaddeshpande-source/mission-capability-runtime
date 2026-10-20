@@ -315,15 +315,28 @@ class Mission:
         return self.state
 
     def complete(self, completion):
+        """COMPLETE needs the whole upstream chain present and hash-valid, a hash-valid CompletionReceipt
+        linking it, and state OUTCOME_VALIDATED. The receipt is persisted only after every guard passes."""
+        if not isinstance(completion, dict) or completion.get("kind") != "CompletionReceipt":
+            raise GuardError("completion receipt absent or wrong kind")
+        if not verify_hash(completion):
+            raise GuardError("completion receipt hash invalid (tampered)")
+        missing = [slot for slot, _ in CHAIN_SLOTS[:-1] if slot not in self.ev]
+        if missing:
+            raise GuardError("incomplete evidence chain: missing %s" % missing)
+        for slot, _ in CHAIN_SLOTS[:-1]:
+            if not verify_hash(self.ev[slot]):
+                raise GuardError("evidence %s hash invalid (tampered)" % slot)
         need = {"authority": "authority_hash", "execution_receipt": "execution_receipt_hash",
                 "commit": "commit_observation_hash", "outcome": "outcome_receipt_hash"}
         for slot, field in need.items():
-            if completion[field] != self._need(slot)["object_hash"]:
+            if completion.get(field) != self.ev[slot]["object_hash"]:
                 raise GuardError("completion chain broken at %s" % slot)
         if self.state != "OUTCOME_VALIDATED":
             raise GuardError("COMPLETE requires OUTCOME_VALIDATED")
         self._corr(completion)
         self._go("COMPLETE", completion["object_hash"])
+        self.ev["completion"] = completion
 
     # -- failure / compensation
     def fail_before_mutation(self):
@@ -398,6 +411,13 @@ class Mission:
                 raise GuardError("re-presented %s does not match checkpoint pin" % slot)
         if evidence["budget"]["authority_hash"] != evidence["authority"]["object_hash"]:
             raise GuardError("re-presented authority does not match budget")
+        for slot in ("intent", "principal", "delegation", "capability", "provider"):
+            if slot in evidence and not verify_hash(evidence[slot]):
+                raise GuardError("re-presented %s hash invalid" % slot)
+        if "delegation" in evidence and evidence["authority"]["delegation_hash"] != evidence["delegation"]["object_hash"]:
+            raise GuardError("re-presented delegation does not match authority")
+        if "capability" in evidence and evidence["capability"]["authority_hash"] != evidence["authority"]["object_hash"]:
+            raise GuardError("re-presented capability binding does not match authority")
         m.ev.update(evidence); m.ev["checkpoint"] = checkpoint
         m.mutations_sent = len(m.consumed)
         st = lease["state_at_checkpoint"]
@@ -420,11 +440,17 @@ class Mission:
         return m
 
 
+# Architecture contract (spec section 19): 14 links, fixed order. Slot name -> chain label.
+CHAIN_SLOTS = [("intent", "MISSION_INTENT"), ("principal", "PRINCIPAL_CONTEXT"), ("delegation", "DELEGATION"),
+               ("authority", "AUTHORITY"), ("capability", "CAPABILITY_BINDING"), ("provider", "PROVIDER_CONTRACT"),
+               ("budget", "MUTATION_BUDGET"), ("tx", "TRANSACTION"), ("checkpoint", "PREWRITE_CHECKPOINT"),
+               ("execution_receipt", "EXECUTION_RECEIPT"), ("commit", "COMMIT_OBSERVATION"),
+               ("readback", "AUTHORITATIVE_READBACK_RECEIPT"), ("outcome", "OUTCOME_RECEIPT"),
+               ("completion", "COMPLETION_RECEIPT")]
+EXPECTED_CHAIN = [label for _, label in CHAIN_SLOTS]
+
+
 def chain_hashes(m):
-    """Evidence chain per spec section 19 (only links that exist)."""
-    order = [("intent", "MISSION_INTENT"), ("principal", "PRINCIPAL_CONTEXT"), ("delegation", "DELEGATION"),
-             ("authority", "AUTHORITY"), ("capability", "CAPABILITY_BINDING"), ("provider", "PROVIDER_CONTRACT"),
-             ("budget", "MUTATION_BUDGET"), ("tx", "TRANSACTION"), ("checkpoint", "PREWRITE_CHECKPOINT"),
-             ("execution_receipt", "EXECUTION_RECEIPT"), ("commit", "COMMIT_OBSERVATION"),
-             ("readback", "AUTHORITATIVE_READBACK_RECEIPT"), ("outcome", "OUTCOME_RECEIPT")]
-    return [(label, m.ev[s]["object_hash"]) for s, label in order if s in m.ev]
+    """Emit the links that exist, in contract order. A COMPLETE mission emits all 14, the last being the
+    CompletionReceipt; a non-complete mission never emits a completion link."""
+    return [(label, m.ev[slot]["object_hash"]) for slot, label in CHAIN_SLOTS if slot in m.ev]

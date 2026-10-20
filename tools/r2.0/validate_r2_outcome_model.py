@@ -9,7 +9,7 @@ import sys
 import time
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from mcr_r2_model import (CALL_CLASSES, SCHEMAS, STATES, TRANSITIONS, GuardError, Mission, SchemaError,  # noqa: E402
+from mcr_r2_model import (CALL_CLASSES, CHAIN_SLOTS, EXPECTED_CHAIN, SCHEMAS, STATES, TRANSITIONS, GuardError, Mission, SchemaError,  # noqa: E402
                           chain_hashes, chash, eval_predicates, make, verify_hash)
 
 FP = "FP-" + "A" * 61
@@ -233,7 +233,7 @@ def run():
                 commit_observation_hash=m.ev["commit"]["object_hash"], execution_receipt_hash=er["object_hash"], authority_hash=f["au"]["object_hash"])
     m.complete(comp)
     t(g, "full_chain_reaches_COMPLETE", m.state == "COMPLETE")
-    t(g, "complete_has_complete_evidence_chain", len(chain_hashes(m)) == 13 and len({h for _, h in chain_hashes(m)}) == 13)
+    t(g, "complete_has_complete_evidence_chain", len(chain_hashes(m)) == 14 and len({h for _, h in chain_hashes(m)}) == 14)
     m, f = fixture(); er, rb = happy(m, f, obs={"exists": True, "package": "ZPKG_SYN"})
     t(g, "unknown_predicate_stays_pending_not_complete", m.state == "OUTCOME_VALIDATION_PENDING")
     m, f = fixture(); to_prewrite(m, f); m.begin_execution("MUT-1", FP); m.record_execution(exec_receipt(f)); m.request_readback()
@@ -275,6 +275,65 @@ def run():
     tel = make("GovernanceTelemetry", mission_id="M-SYN-1", governance_ns=gov, provider_ns=0)
     t(g, "governance_and_provider_time_are_separate_fields", "governance_ns" in tel and "provider_ns" in tel and gov >= 0)
 
+    # ---- COMPLETION_EVIDENCE (R2.0G hardening)
+    g = "COMPLETION_EVIDENCE"
+    def complete_ready(obs=None, result="PASS"):
+        m, f = fixture(); er, rb = happy(m, f, obs=obs)
+        done = lambda **kw: make("CompletionReceipt", **dict(dict(receipt_id="done", transaction_id="TX-SYN-1",
+                outcome_receipt_hash=m.ev["outcome"]["object_hash"], commit_observation_hash=m.ev["commit"]["object_hash"],
+                execution_receipt_hash=er["object_hash"], authority_hash=f["au"]["object_hash"]), **kw))
+        return m, f, er, done
+    t(g, "contract_has_14_links_completion_last", len(EXPECTED_CHAIN) == 14 and EXPECTED_CHAIN[-1] == "COMPLETION_RECEIPT" and EXPECTED_CHAIN[0] == "MISSION_INTENT")
+    m, f, er, done = complete_ready()
+    t(g, "non_complete_mission_emits_13_without_completion", len(chain_hashes(m)) == 13 and "COMPLETION_RECEIPT" not in [l for l, _ in chain_hashes(m)])
+    cr = done(); m.complete(cr)
+    ch = chain_hashes(m)
+    t(g, "completion_receipt_persisted_in_mission", m.ev.get("completion") is cr and verify_hash(m.ev["completion"]))
+    t(g, "chain_labels_exact_and_ordered", [l for l, _ in ch] == EXPECTED_CHAIN)
+    t(g, "chain_last_entry_is_completion_hash", ch[-1] == ("COMPLETION_RECEIPT", cr["object_hash"]))
+    t(g, "chain_hashes_are_unique_64_hex", len({h for _, h in ch}) == 14 and all(len(h) == 64 and h == h.upper() for _, h in ch))
+    t(g, "chain_hashes_match_objects", all(m.ev[slot]["object_hash"] == dict(ch)[label] for slot, label in CHAIN_SLOTS))
+    t(g, "completion_links_upstream_hashes", cr["outcome_receipt_hash"] == dict(ch)["OUTCOME_RECEIPT"] and cr["commit_observation_hash"] == dict(ch)["COMMIT_OBSERVATION"]
+      and cr["execution_receipt_hash"] == dict(ch)["EXECUTION_RECEIPT"] and cr["authority_hash"] == dict(ch)["AUTHORITY"])
+    t(g, "completion_transaction_matches_mission", cr["transaction_id"] == m.transaction_id == m.ev["tx"]["transaction_id"])
+    m, f, er, done = complete_ready()
+    t(g, "absent_completion_rejected", raises(lambda: m.complete(None), "absent") and m.state == "OUTCOME_VALIDATED" and "completion" not in m.ev)
+    t(g, "wrong_kind_rejected", raises(lambda: m.complete(f["au"]), "wrong kind") and "completion" not in m.ev)
+    tam = dict(done()); tam["receipt_id"] = "forged"
+    t(g, "tampered_completion_rejected", raises(lambda: m.complete(tam), "tampered") and "completion" not in m.ev)
+    t(g, "wrong_transaction_completion_rejected", raises(lambda: m.complete(done(transaction_id="TX-OTHER")), "correlation") and "completion" not in m.ev)
+    ok = True
+    for fld in ("outcome_receipt_hash", "commit_observation_hash", "execution_receipt_hash", "authority_hash"):
+        ok = ok and raises(lambda fld=fld: m.complete(done(**{fld: "0" * 64})), "chain broken") and "completion" not in m.ev and m.state == "OUTCOME_VALIDATED"
+    t(g, "each_mismatched_link_rejected_without_persisting", ok)
+    incomplete = {k: v for k, v in done().items() if k != "authority_hash"}
+    t(g, "incomplete_completion_rejected", raises(lambda: m.complete(incomplete)) and "completion" not in m.ev)
+    ok = True
+    for slot, _ in CHAIN_SLOTS[:-1]:
+        m2, f2, er2, done2 = complete_ready()
+        cr2 = done2()
+        del m2.ev[slot]
+        ok = ok and raises(lambda cr2=cr2, m2=m2: m2.complete(cr2), None) and m2.state != "COMPLETE" and "completion" not in m2.ev
+    t(g, "missing_any_of_13_upstream_links_blocks_COMPLETE", ok)
+    ok = True
+    for slot, _ in CHAIN_SLOTS[:-1]:
+        m2, f2, er2, done2 = complete_ready()
+        cr2 = done2()
+        m2.ev[slot] = dict(m2.ev[slot], tampered_marker=1)
+        ok = ok and raises(lambda cr2=cr2, m2=m2: m2.complete(cr2), "tampered") and m2.state != "COMPLETE"
+    t(g, "tampering_any_of_13_upstream_links_blocks_COMPLETE", ok)
+    m2, f2, er2, done2 = complete_ready(obs={"exists": True, "package": "ZPKG_SYN"})
+    t(g, "unknown_predicates_block_COMPLETE", m2.state == "OUTCOME_VALIDATION_PENDING" and raises(lambda: m2.complete(done2()), None) and "completion" not in m2.ev)
+    m3, f3 = fixture(); to_prewrite(m3, f3); m3.begin_execution("MUT-1", FP); m3.record_execution(exec_receipt(f3, "CALL_SENT_NO_RESPONSE"))
+    t(g, "commit_unknown_has_no_completion_link", m3.state == "COMMIT_STATE_UNKNOWN" and "COMPLETION_RECEIPT" not in [l for l, _ in chain_hashes(m3)])
+    m4, f4, er4, done4 = complete_ready(obs=dict(GOOD_OBS, package="WRONG"))
+    t(g, "failed_predicate_blocks_COMPLETE", m4.state == "COMPENSATION_REQUIRED" and raises(lambda: m4.complete(done4()), None) and "completion" not in m4.ev)
+    m5, f5 = fixture(); to_prewrite(m5, f5)
+    t(g, "complete_from_prewrite_state_rejected", raises(lambda: m5.complete(make("CompletionReceipt", receipt_id="d", transaction_id="TX-SYN-1", outcome_receipt_hash="a", commit_observation_hash="b", execution_receipt_hash="c", authority_hash="d")), None))
+    m6, f6, er6, done6 = complete_ready()
+    m6.complete(done6())
+    t(g, "complete_is_terminal_no_second_completion", raises(lambda: m6.complete(done6(receipt_id="again")), None))
+
     # ---- NO_ENTERPRISE_WRITES (structural)
     g = "NO_ENTERPRISE_WRITES"
     src = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "mcr_r2_model.py")).read()
@@ -288,7 +347,7 @@ def _exec_only_complete():
 
 ACCEPT = ["STATE_MACHINE_VALID", "SCHEMA_VALIDATION", "AUTHORITY_INVARIANTS", "MUTATION_BUDGET_INVARIANTS",
           "REPLAY_GUARD_INVARIANTS", "CONTINUATION_INVARIANTS", "COMPENSATION_AUTHORITY_INVARIANTS",
-          "OUTCOME_PREDICATE_MODEL", "COMMIT_UNKNOWN_HANDLING", "TELEMETRY_MODEL", "NO_ENTERPRISE_WRITES"]
+          "OUTCOME_PREDICATE_MODEL", "COMMIT_UNKNOWN_HANDLING", "COMPLETION_EVIDENCE", "TELEMETRY_MODEL", "NO_ENTERPRISE_WRITES"]
 
 
 def main(argv):

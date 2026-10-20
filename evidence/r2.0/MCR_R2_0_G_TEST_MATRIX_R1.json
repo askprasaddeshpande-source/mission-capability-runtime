@@ -1,0 +1,87 @@
+{
+  "evidence_class": "SYNTHETIC/LOCAL",
+  "frozen_runner_mock_regression": {
+    "error_not_persisted": {
+      "chain_links_emitted": 11,
+      "last_link": "AUTHORITATIVE_READBACK_RECEIPT",
+      "outcome_matches_frozen_R1": true
+    },
+    "outcome_fail": {
+      "chain_links_emitted": 13,
+      "last_link": "OUTCOME_RECEIPT",
+      "outcome_matches_frozen_R1": true
+    },
+    "persisted_error_response": {
+      "chain_links_emitted": 14,
+      "last_link": "COMPLETION_RECEIPT",
+      "outcome_matches_frozen_R1": true
+    },
+    "readback_error": {
+      "chain_links_emitted": 11,
+      "last_link": "AUTHORITATIVE_READBACK_RECEIPT",
+      "outcome_matches_frozen_R1": true
+    },
+    "success": {
+      "chain_links_emitted": 14,
+      "last_link": "COMPLETION_RECEIPT",
+      "outcome_matches_frozen_R1": true
+    },
+    "timeout_persisted": {
+      "chain_links_emitted": 14,
+      "last_link": "COMPLETION_RECEIPT",
+      "outcome_matches_frozen_R1": true
+    }
+  },
+  "historical_live_run": {
+    "completion_hash_emitted": false,
+    "contract_links": 14,
+    "emitted_chain_entries": 13,
+    "last_link": "OUTCOME_RECEIPT",
+    "note": "historical file unchanged; not backfilled"
+  },
+  "local_scenarios_D_E": {
+    "checks": {
+      "absent_is_fail_closed": true,
+      "compensation_separate_and_not_completion": true,
+      "every_fault_case_blocks_second_send": true,
+      "every_post_send_crash_blocks_replay": true,
+      "no_crash_point_restores_budget": true,
+      "pre_send_crash_keeps_full_budget": true,
+      "recovery_blocks_replay": true,
+      "recovery_reaches_complete_with_one_mutation": true,
+      "tampering_rejected": true,
+      "unknown_or_nonauthoritative_never_complete": true
+    },
+    "local_scenarios": "PASS",
+    "result_file": "MCR_R2_0_DE_LOCAL_SCENARIOS_RESULT_R1.json (byte-identical to the historical R1 file after the repair)"
+  },
+  "model_validator": {
+    "R2_0_A_FOUNDATION": "PASS",
+    "failed": [],
+    "groups": {
+      "AUTHORITY_INVARIANTS": "PASS",
+      "COMMIT_UNKNOWN_HANDLING": "PASS",
+      "COMPENSATION_AUTHORITY_INVARIANTS": "PASS",
+      "COMPLETION_EVIDENCE": "PASS",
+      "CONTINUATION_INVARIANTS": "PASS",
+      "MUTATION_BUDGET_INVARIANTS": "PASS",
+      "NO_ENTERPRISE_WRITES": "PASS",
+      "OUTCOME_PREDICATE_MODEL": "PASS",
+      "REPLAY_GUARD_INVARIANTS": "PASS",
+      "SCHEMA_VALIDATION": "PASS",
+      "STATE_MACHINE_VALID": "PASS",
+      "TELEMETRY_MODEL": "PASS"
+    },
+    "previous_R1_tests": 74,
+    "result_file": "MCR_R2_0_A_VALIDATION_RESULT_R2.json",
+    "tests": 96
+  },
+  "mutation_check": {
+    "all_applied": true,
+    "all_detected": true,
+    "mutants": 15,
+    "result_file": "MCR_R2_0_G_MUTATION_CHECK_R1.json"
+  },
+  "network_calls": 0,
+  "sap_writes": 0
+}
