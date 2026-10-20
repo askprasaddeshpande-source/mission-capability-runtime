@@ -1,0 +1,53 @@
+{
+ "baseline_clean_copy": "PASS",
+ "A1_forward_slash_drive_path_in_new_tool": [
+  "FAIL",
+  false
+ ],
+ "A2a_jwt": [
+  "FAIL",
+  false
+ ],
+ "A2b_sk_token": [
+  "FAIL",
+  false
+ ],
+ "A2c_quoted_secret": [
+  "FAIL",
+  false
+ ],
+ "A2d_bearer": [
+  "FAIL",
+  false
+ ],
+ "A3_pinned_frozen_file_edited_and_sums_regenerated": [
+  "FAIL",
+  false
+ ],
+ "A4_model_relation_replaced_by_True_and_sums_regenerated": [
+  "FAIL",
+  false,
+  false
+ ],
+ "A5_new_file_plus_regenerated_sums": {
+  "without_external_anchor": "PASS",
+  "with_external_anchor": "FAIL",
+  "anchor_matches": false
+ },
+ "A6_missing_r1_9_tag": {
+  "default": "FAIL",
+  "tag_field": "NOT_PRESENT_IN_CHECKOUT",
+  "with_no_git_flag": "PASS"
+ },
+ "A7_secret_inside_git_ignored_credential_helper": [
+  "FAIL",
+  [
+   "tools/r2.0/make_adt_auth_context.py"
+  ]
+ ],
+ "A8_frozen_live_result_one_byte_changed_without_regenerating_sums": [
+  "FAIL",
+  false,
+  false
+ ]
+}

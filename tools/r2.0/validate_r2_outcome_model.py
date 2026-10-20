@@ -5,6 +5,7 @@ Exit 0 only if every acceptance group passes. Output is deterministic (no timest
 """
 import json
 import os
+import re
 import sys
 import time
 
@@ -80,10 +81,14 @@ def happy(m, f, obs=None):
 
 
 def raises(fn, text=None):
+    """True only if fn raises GuardError/SchemaError (containing `text`, if given). Any other exception, or no
+    exception, is False, so a removed guard fails an assertion instead of crashing the run."""
     try:
         fn()
     except (GuardError, SchemaError) as e:
         return text is None or text in str(e)
+    except Exception:
+        return False
     return False
 
 
@@ -101,6 +106,19 @@ G = {}   # group -> [test names]
 
 def t(group, name, ok):
     T[name] = bool(ok); G.setdefault(group, []).append(name)
+
+
+UPSTREAM = ("intent", "principal", "delegation", "capability", "provider", "tx", "budget", "outcome_contract", "readback_contract", "authority")
+
+
+def ev_upstream(mm):
+    return {k: mm.ev[k] for k in UPSTREAM}
+
+
+def rsm(lease, f, mm, cp=None, evidence=None, ledger=None, mission_id="M-SYN-1"):
+    """resume() with the standard re-presented upstream evidence and the mission's own ledger."""
+    return Mission.resume(lease, cp if cp is not None else f["cp"], f["bu"], mission_id,
+                          evidence if evidence is not None else ev_upstream(mm), ledger if ledger is not None else mm.ledger)
 
 
 def run():
@@ -192,16 +210,16 @@ def run():
     to_prewrite(m, f); m.begin_execution("MUT-1", FP)
     lease = m.checkpoint_lease()
     try:
-        r = Mission.resume(lease, f["cp"], f["bu"], "M-SYN-1")
+        r = rsm(lease, f, m)
     except GuardError:
         r = None
     t(g, "resume_preserves_transaction_identity", r is not None and r.transaction_id == m.transaction_id)
     t(g, "resume_inherits_consumed_set", r is not None and r.consumed == m.consumed and r.remaining == 1)
     t(g, "resume_cannot_exceed_remaining", r is not None and r.remaining <= f["cp"]["remaining_budget"] - 1)
     inflated = make("ContinuationLease", **{k: v for k, v in lease.items() if k not in ("kind", "object_hash")} | {"remaining_budget": 9})
-    t(g, "inflated_lease_rejected", raises(lambda: Mission.resume(inflated, f["cp"], f["bu"], "M-SYN-1"), "enlarge"))
+    t(g, "inflated_lease_rejected", raises(lambda: rsm(inflated, f, m), "enlarge"))
     other_cp = make("PreMutationCheckpoint", checkpoint_id="cpZ", transaction_hash="h", budget_hash="h", outcome_contract_hash="h", readback_contract_hash="h", remaining_budget=2)
-    t(g, "lease_bound_to_checkpoint", raises(lambda: Mission.resume(lease, other_cp, f["bu"], "M-SYN-1"), "not bound"))
+    t(g, "lease_bound_to_checkpoint", raises(lambda: rsm(lease, f, m, cp=other_cp), "not bound"))
     t(g, "resumed_mission_cannot_replay_consumed", r is not None and raises(lambda: (setattr(r, "state", "PREWRITE_VALIDATED"), r.ev.update(tx=f["tx"], provider=f["pb"], authority=f["au"]),
                                                                    r.begin_execution("MUT-1", FP)), "replay"))
 
@@ -215,7 +233,7 @@ def run():
     m, f = comp_setup(dict(GOOD_OBS, package="WRONG"))
     t(g, "outcome_fail_requires_compensation_not_complete", m.state == "COMPENSATION_REQUIRED")
     gr = lambda **k: make("CompensationGrant", **dict(dict(grant_id="g1", target="SYN_SYS", capability="delete_object", max_mutations=1,
-                          preconditions=["object exists"], outcome_predicates=[{"field": "exists", "op": "eq", "expected": False}],
+                          preconditions=[{"field": "exists", "op": "eq", "expected": True}], outcome_predicates=[{"field": "exists", "op": "eq", "expected": False}],
                           inherits_forward_authority=False, issued_by="OWNER2"), **k))
     t(g, "inherited_forward_authority_rejected", raises(lambda: m.authorize_compensation(gr(inherits_forward_authority=True)), "inherit") and m.state == "COMPENSATION_REQUIRED")
     t(g, "grant_issued_from_forward_authority_rejected", raises(lambda: m.authorize_compensation(gr(issued_by=f["au"]["object_hash"])), "must not be issued"))
@@ -307,7 +325,7 @@ def run():
     t(g, "non_complete_mission_emits_13_without_completion", len(chain_hashes(m)) == 13 and "COMPLETION_RECEIPT" not in [l for l, _ in chain_hashes(m)])
     cr = done(); m.complete(cr)
     ch = chain_hashes(m)
-    t(g, "completion_receipt_persisted_in_mission", m.ev.get("completion") is cr and verify_hash(m.ev["completion"]))
+    t(g, "completion_receipt_persisted_in_mission", m.ev.get("completion") == cr and verify_hash(m.ev["completion"]))
     t(g, "chain_labels_exact_and_ordered", [l for l, _ in ch] == EXPECTED_CHAIN)
     t(g, "chain_last_entry_is_completion_hash", ch[-1] == ("COMPLETION_RECEIPT", cr["object_hash"]))
     t(g, "chain_hashes_are_unique_64_hex", len({h for _, h in ch}) == 14 and all(len(h) == 64 and h == h.upper() for _, h in ch))
@@ -320,10 +338,10 @@ def run():
     t(g, "wrong_kind_rejected", raises(lambda: m.complete(f["au"]), "wrong kind") and "completion" not in m.ev)
     tam = dict(done()); tam["receipt_id"] = "forged"
     t(g, "tampered_completion_rejected", raises(lambda: m.complete(tam), "tampered") and "completion" not in m.ev)
-    t(g, "wrong_transaction_completion_rejected", raises(lambda: m.complete(done(transaction_id="TX-OTHER")), "correlation") and "completion" not in m.ev)
+    t(g, "wrong_transaction_completion_rejected", raises(lambda: m.complete(done(transaction_id="TX-OTHER")), "completion transaction mismatch") and "completion" not in m.ev)
     ok = True
     for fld in ("outcome_receipt_hash", "commit_observation_hash", "execution_receipt_hash", "authority_hash"):
-        ok = ok and raises(lambda fld=fld: m.complete(done(**{fld: "0" * 64})), "chain broken") and "completion" not in m.ev and m.state == "OUTCOME_VALIDATED"
+        ok = ok and raises(lambda fld=fld: m.complete(done(**{fld: "0" * 64})), "evidence chain inconsistent") and "completion" not in m.ev and m.state == "OUTCOME_VALIDATED"
     t(g, "each_mismatched_link_rejected_without_persisting", ok)
     incomplete = {k: v for k, v in done().items() if k != "authority_hash"}
     t(g, "incomplete_completion_rejected", raises(lambda: m.complete(incomplete)) and "completion" not in m.ev)
@@ -364,15 +382,12 @@ def run():
         mm, ff = fixture(); to_prewrite(mm, ff); mm.begin_execution("MUT-1", FP)
         return mm, ff, mm.checkpoint_lease()
 
-    def ev_upstream(mm):
-        return {k: mm.ev[k] for k in ("intent", "principal", "delegation", "capability", "provider", "tx", "budget", "outcome_contract",
-                                      "readback_contract", "authority")}
     m, f, lease = sent_mission()
     bad_state = dict(lease, state_at_checkpoint="OUTCOME_VALIDATED")
-    t(g, "lease_with_invalid_hash_rejected", raises(lambda: Mission.resume(bad_state, f["cp"], f["bu"], "M-SYN-1", evidence=ev_upstream(m)), "hash invalid"))
+    t(g, "lease_with_invalid_hash_rejected", raises(lambda: rsm(bad_state, f, m), "hash invalid"))
     forged = remake(lease, state_at_checkpoint="OUTCOME_VALIDATED")
     try:
-        r = Mission.resume(forged, f["cp"], f["bu"], "M-SYN-1", evidence=ev_upstream(m))
+        r = rsm(forged, f, m)
     except GuardError:
         r = None
     t(g, "lease_state_never_inherited_after_send", r is not None and r.state == "COMMIT_STATE_UNKNOWN" and "readback" not in r.ev and "outcome" not in r.ev)
@@ -386,17 +401,17 @@ def run():
                            "commit": dict(observation_id="c", transaction_id="TX-SYN-1", mutation_id="MUT-1", readback_receipt_hash="h", commit_state="COMMITTED"),
                            "outcome": dict(receipt_id="o", transaction_id="TX-SYN-1", readback_receipt_hash="h", outcome_contract_hash="h", result="PASS"),
                            "completion": dict(receipt_id="d", transaction_id="TX-SYN-1", outcome_receipt_hash="h", commit_observation_hash="h", execution_receipt_hash="h", authority_hash="h")}[slot])
-        ok = ok and raises(lambda ev=ev: Mission.resume(lease, f["cp"], f["bu"], "M-SYN-1", evidence=ev), "no downstream")
+        ok = ok and raises(lambda ev=ev: rsm(lease, f, m, evidence=ev), "no downstream")
     t(g, "resume_refuses_downstream_evidence_slots", ok)
     t(g, "lease_state_inconsistent_with_consumed_rejected",
-      raises(lambda: Mission.resume(remake(lease, consumed_authority_ids=[]), f["cp"], f["bu"], "M-SYN-1", evidence=ev_upstream(m)), "inconsistent")
-      and raises(lambda: Mission.resume(remake(lease, state_at_checkpoint="PREWRITE_VALIDATED"), f["cp"], f["bu"], "M-SYN-1", evidence=ev_upstream(m)), "inconsistent"))
+      raises(lambda: rsm(remake(lease, consumed_authority_ids=[]), f, m), "inconsistent")
+      and raises(lambda: rsm(remake(lease, state_at_checkpoint="PREWRITE_VALIDATED"), f, m), "inconsistent"))
     t(g, "lease_consumed_for_other_authority_rejected",
-      raises(lambda: Mission.resume(remake(lease, consumed_authority_ids=["OTHERHASH:MUT-1"]), f["cp"], f["bu"], "M-SYN-1", evidence=ev_upstream(m)), "does not belong"))
+      raises(lambda: rsm(remake(lease, consumed_authority_ids=["OTHERHASH:MUT-1"]), f, m), "does not belong"))
     t(g, "lease_unknown_mutation_rejected",
-      raises(lambda: Mission.resume(remake(lease, mutation_id="MUT-X"), f["cp"], f["bu"], "M-SYN-1", evidence=ev_upstream(m)), "inconsistent"))
+      raises(lambda: rsm(remake(lease, mutation_id="MUT-X"), f, m), "inconsistent"))
     t(g, "resume_wrong_kind_evidence_rejected",
-      raises(lambda: Mission.resume(lease, f["cp"], f["bu"], "M-SYN-1", evidence=dict(ev_upstream(m), intent=f["pr"])), "wrong kind"))
+      raises(lambda: rsm(lease, f, m, evidence=dict(ev_upstream(m), intent=f["pr"])), "wrong kind"))
 
     # failed calls change nothing (atomicity)
     m, f, er, done = complete_ready()
@@ -451,7 +466,7 @@ def run():
     ok = True
     for lvl, ex in (("INFERRED_OR_REGEX", "EXISTS"), ("PROVIDER_LOG", "EXISTS"), ("AUTHORITATIVE_REPOSITORY", "UNKNOWN"), ("AUTHORITATIVE_REPOSITORY", "ABSENT")):
         mm, cr_ = consistent_forgery(lvl, ex)
-        ok = ok and raises(lambda mm=mm, cr_=cr_: mm.complete(cr_), "authoritative EXISTS") and mm.state == "OUTCOME_VALIDATED" and "completion" not in mm.ev
+        ok = ok and raises(lambda mm=mm, cr_=cr_: mm.complete(cr_), "readback is not") and mm.state == "OUTCOME_VALIDATED" and "completion" not in mm.ev
     t(g, "self_consistent_forged_chain_with_non_authoritative_or_non_exists_readback_blocked", ok)
     t(g, "rehashed_unknown_readback_blocked", blocked("readback", rb_receipt(ff0, "UNKNOWN", level="INFERRED_OR_REGEX", obs={})))
     t(g, "rehashed_call_not_sent_execution_receipt_blocked", blocked("execution_receipt", make("ExecutionReceipt", receipt_id="e", transaction_id="TX-SYN-1", mutation_id="MUT-1", call_class="CALL_NOT_SENT")))
@@ -462,7 +477,7 @@ def run():
     t(g, "swapped_outcome_contract_not_matching_checkpoint_blocked", blocked("outcome_contract", remake(mm0.ev["outcome_contract"], outcome_contract_id="other"), "inconsistent"))
     t(g, "erased_replay_record_blocked", blocked(None, lambda mm, ff: mm.consumed.clear(), "never consumed"))
     t(g, "rehashed_foreign_mission_authority_blocked", blocked("authority", remake(mm0.ev["authority"], mission_id="OTHER"), "inconsistent"))
-    t(g, "rehashed_checkpoint_with_other_pins_blocked", blocked("checkpoint", remake(mm0.ev["checkpoint"], budget_hash="0" * 64), "pins"))
+    t(g, "rehashed_checkpoint_with_other_pins_blocked", blocked("checkpoint", remake(mm0.ev["checkpoint"], budget_hash="0" * 64), "does not pin"))
     t(g, "rehashed_readback_wrong_contract_blocked", blocked("readback", remake(mm0.ev["readback"], contract_hash="0" * 64)))
     m, f, er, done = complete_ready()
     t(g, "direct_go_to_COMPLETE_refused_even_when_legal", raises(lambda: m._go("COMPLETE"), "direct state change refused") and m.state == "OUTCOME_VALIDATED")
@@ -481,6 +496,356 @@ def run():
     mb, fb = fixture(); mb.context_ready(fb["intent"], fb["pr"]); mb.consumed = set(ma.consumed)
     t(g, "consumed_authority_blocks_reauthorization_with_tuple_keys", raises(lambda: mb.authorize(fb["dl"], fb["au"], fb["bu"]), "already consumed"))
 
+    # ---- HARDENING_R2_0I (independent review 2: gates, ledger, terminal states, relations)
+    g = "HARDENING_R2_0I"
+    Z = "0" * 64
+    stale = lambda obj, **chg: dict(obj, **chg)          # changed content, hash NOT recomputed
+
+    def at_context():
+        mm, ff = fixture(); mm.context_ready(ff["intent"], ff["pr"])
+        return mm, ff
+
+    def at_authorized():
+        mm, ff = at_context(); mm.authorize(ff["dl"], ff["au"], ff["bu"])
+        return mm, ff
+
+    def at_bound():
+        mm, ff = at_authorized(); mm.bind(ff["cb"], ff["pb"])
+        return mm, ff
+
+    def at_started():
+        mm, ff = fixture(); to_prewrite(mm, ff); mm.begin_execution("MUT-1", FP)
+        return mm, ff
+
+    def at_observed():
+        mm, ff = fixture(); to_prewrite(mm, ff); mm.begin_execution("MUT-1", FP); mm.record_execution(exec_receipt(ff)); mm.request_readback()
+        rbo = rb_receipt(ff); mm.observe_readback(rbo)
+        return mm, ff, rbo
+
+    def at_committed():
+        mm, ff, rbo = at_observed(); mm.decide_commit(commit_obs(rbo, "COMMITTED"))
+        return mm, ff, rbo
+
+    def state_unchanged(mm, state, slots):
+        return mm.state == state and set(mm.ev) == set(slots)
+
+    # -- send-time gates verify every presented object (review 2 N1)
+    m, f = fixture()
+    t(g, "context_ready_rejects_tampered_and_wrong_kind", raises(lambda: m.context_ready(stale(f["intent"], objective="x"), f["pr"]), "hash invalid")
+      and raises(lambda: m.context_ready(f["intent"], f["intent"]), "wrong kind") and raises(lambda: m.context_ready(remake(f["intent"], mission_id="OTHER"), f["pr"]), "intent mission mismatch")
+      and m.state == "PLANNED" and not m.ev)
+    dl2 = lambda ff, **c: remake(ff["dl"], **c)
+    def chain_with(ff, dl=None, au=None, bu=None):
+        d = dl or ff["dl"]; a = remake(au or ff["au"], delegation_hash=d["object_hash"]); b = remake(bu or ff["bu"], authority_hash=a["object_hash"])
+        return d, a, b
+    cases = [
+        ("authorize_rejects_tampered_delegation", lambda ff: (stale(ff["dl"], scope=["create_object", "read_object", "delete_object"]), ff["au"], ff["bu"]), "hash invalid"),
+        ("authorize_rejects_tampered_authority", lambda ff: (ff["dl"], stale(ff["au"], max_mutations=5), ff["bu"]), "hash invalid"),
+        ("authorize_rejects_tampered_budget", lambda ff: (ff["dl"], ff["au"], stale(ff["bu"], max_mutations=5)), "hash invalid"),
+        ("authorize_rejects_wrong_kind", lambda ff: (ff["pr"], ff["au"], ff["bu"]), "wrong kind"),
+        ("authorize_rejects_delegation_for_other_principal", lambda ff: (dl2(ff, principal_hash=Z), ff["au"], ff["bu"]), "not issued to this principal"),
+        ("authorize_rejects_foreign_mission_authority", lambda ff: chain_with(ff, au=remake(ff["au"], mission_id="OTHER")), "authority mission mismatch"),
+        ("authorize_rejects_scope_beyond_delegation", lambda ff: chain_with(ff, au=remake(ff["au"], scope=["create_object", "delete_object"])), "no attenuation"),
+        ("authorize_rejects_count_beyond_delegation", lambda ff: chain_with(ff, dl=dl2(ff, max_mutations=0)), "exceeds delegation"),
+        ("authorize_rejects_authority_not_single_use", lambda ff: chain_with(ff, au=remake(ff["au"], single_use=False)), "single use"),
+        ("authorize_rejects_budget_not_derived_from_authority", lambda ff: (ff["dl"], ff["au"], remake(ff["bu"], authority_hash=Z)), "not bounded by authority"),
+        ("authorize_rejects_budget_above_authority", lambda ff: (ff["dl"], ff["au"], remake(ff["bu"], max_mutations=2)), "not bounded by authority"),
+        ("authorize_rejects_retries", lambda ff: (ff["dl"], ff["au"], remake(ff["bu"], retries=1)), "forbid expansion and retries"),
+        ("authorize_rejects_expansion", lambda ff: (ff["dl"], ff["au"], remake(ff["bu"], expansion_allowed=True)), "forbid expansion and retries"),
+    ]
+    for name, build, text in cases:
+        mm, ff = at_context()
+        t(g, name, raises(lambda mm=mm, ff=ff, build=build: mm.authorize(*build(ff)), text) and state_unchanged(mm, "CONTEXT_READY", {"intent", "principal"}))
+    mm, ff = fixture(max_mut=2); mm.max_mutations = 1; mm.remaining = 1; mm.context_ready(ff["intent"], ff["pr"])
+    t(g, "authorize_rejects_budget_differing_from_mission_limit", raises(lambda: mm.authorize(ff["dl"], ff["au"], ff["bu"]), "differs from mission limit") and mm.state == "CONTEXT_READY")
+    cases = [
+        ("bind_rejects_tampered_capability", lambda ff: (stale(ff["cb"], capability="x"), ff["pb"]), "hash invalid"),
+        ("bind_rejects_tampered_provider", lambda ff: (ff["cb"], stale(ff["pb"], tool_name="x")), "hash invalid"),
+        ("bind_rejects_wrong_kind", lambda ff: (ff["pb"], ff["cb"]), "wrong kind"),
+        ("bind_rejects_foreign_authority", lambda ff: (remake(ff["cb"], authority_hash=Z), ff["pb"]), "not from this authority"),
+        ("bind_rejects_capability_outside_scope", lambda ff: (remake(ff["cb"], capability="delete_object"), ff["pb"]), "outside authority scope"),
+        ("bind_rejects_capability_tool_mismatch", lambda ff: (ff["cb"], remake(ff["pb"], tool_name="other_tool")), "does not match provider tool"),
+        ("bind_rejects_provider_ref_mismatch", lambda ff: (ff["cb"], remake(ff["pb"], identity="OTHER::x")), "provider_ref differs"),
+    ]
+    for name, build, text in cases:
+        mm, ff = at_authorized()
+        t(g, name, raises(lambda mm=mm, ff=ff, build=build: mm.bind(*build(ff)), text) and mm.state == "AUTHORIZED" and "capability" not in mm.ev)
+    ocx = lambda ff, **c: remake(ff["oc"], **c)
+    def cp_for(ff, **c):
+        base = dict(checkpoint_id="cp1", transaction_hash=ff["tx"]["object_hash"], budget_hash=ff["bu"]["object_hash"], outcome_contract_hash=ff["oc"]["object_hash"],
+                    readback_contract_hash=ff["rc"]["object_hash"], remaining_budget=1)
+        base.update(c)
+        return make("PreMutationCheckpoint", **base)
+    cases = [
+        ("prewrite_rejects_tampered_transaction", lambda ff: (stale(ff["tx"], boundary="x"), ff["oc"], ff["rc"], ff["cp"]), "hash invalid"),
+        ("prewrite_rejects_tampered_outcome_contract", lambda ff: (ff["tx"], stale(ff["oc"], frozen=False), ff["rc"], ff["cp"]), "hash invalid"),
+        ("prewrite_rejects_tampered_readback_contract", lambda ff: (ff["tx"], ff["oc"], stale(ff["rc"], checks=[]), ff["cp"]), "hash invalid"),
+        ("prewrite_rejects_tampered_checkpoint", lambda ff: (ff["tx"], ff["oc"], ff["rc"], stale(ff["cp"], remaining_budget=9)), "hash invalid"),
+        ("prewrite_rejects_foreign_mission_transaction", lambda ff: (remake(ff["tx"], mission_id="OTHER"), ff["oc"], ff["rc"], ff["cp"]), "mission mismatch"),
+        ("prewrite_rejects_foreign_mission_outcome_contract", lambda ff: (ff["tx"], ocx(ff, mission_id="OTHER"), ff["rc"], ff["cp"]), "mission mismatch"),
+        ("prewrite_rejects_string_mutation_ids", lambda ff: (remake(ff["tx"], mutation_ids="MUT-1"), ff["oc"], ff["rc"], ff["cp"]), "non-empty list of strings"),
+        ("prewrite_rejects_empty_mutation_ids", lambda ff: (remake(ff["tx"], mutation_ids=[]), ff["oc"], ff["rc"], ff["cp"]), "non-empty list of strings"),
+        ("prewrite_rejects_non_string_mutation_id", lambda ff: (remake(ff["tx"], mutation_ids=[1]), ff["oc"], ff["rc"], ff["cp"]), "non-empty list of strings"),
+        ("prewrite_rejects_unfrozen_outcome_contract", lambda ff: (ff["tx"], ocx(ff, frozen=False), ff["rc"], ff["cp"]), "not frozen"),
+        ("prewrite_rejects_checkpoint_not_pinning_outcome_contract", lambda ff: (ff["tx"], ff["oc"], ff["rc"], cp_for(ff, outcome_contract_hash=Z)), "pin outcome contract"),
+        ("prewrite_rejects_checkpoint_not_pinning_readback_contract", lambda ff: (ff["tx"], ff["oc"], ff["rc"], cp_for(ff, readback_contract_hash=Z)), "pin readback contract"),
+        ("prewrite_rejects_checkpoint_not_pinning_budget", lambda ff: (ff["tx"], ff["oc"], ff["rc"], cp_for(ff, budget_hash=Z)), "pin budget"),
+        ("prewrite_rejects_checkpoint_not_pinning_transaction", lambda ff: (ff["tx"], ff["oc"], ff["rc"], cp_for(ff, transaction_hash=Z)), "pin transaction"),
+        ("prewrite_rejects_checkpoint_budget_mismatch", lambda ff: (ff["tx"], ff["oc"], ff["rc"], cp_for(ff, remaining_budget=2)), "checkpoint budget differs"),
+        ("prewrite_rejects_non_authoritative_readback_contract", lambda ff: (ff["tx"], ff["oc"], remake(ff["rc"], source_level_required="PROVIDER_LOG"), ff["cp"]), "pin readback contract"),
+    ]
+    for name, build, text in cases:
+        mm, ff = at_bound()
+        t(g, name, raises(lambda mm=mm, ff=ff, build=build: mm.prewrite_validate(*build(ff)), text) and mm.state == "BOUND" and "tx" not in mm.ev)
+    mm, ff = at_bound()
+    rc_weak = remake(ff["rc"], source_level_required="PROVIDER_LOG"); cp_weak = cp_for(ff, readback_contract_hash=rc_weak["object_hash"])
+    t(g, "prewrite_rejects_readback_contract_that_is_not_authoritative", raises(lambda: mm.prewrite_validate(ff["tx"], ff["oc"], rc_weak, cp_weak), "not authoritative") and mm.state == "BOUND")
+    mm, ff = at_bound(); mm.prewrite_validate(ff["tx"], ff["oc"], ff["rc"], ff["cp"])
+    t(g, "begin_execution_rejects_invalid_mutation_ids", all(raises(lambda mid=mid: mm.begin_execution(mid, FP), "invalid mutation id") for mid in (None, 1, "", "MUT-1\n"))
+      and mm.state == "PREWRITE_VALIDATED" and mm.mutations_sent == 0 and not mm.ledger.for_authority(ff["au"]["object_hash"]))
+    mm, ff = at_started()
+    t(g, "execution_receipt_gate_rejects_tampered_and_wrong_kind", raises(lambda: mm.record_execution(stale(exec_receipt(ff), call_class="PROVIDER_ERROR")), "hash invalid")
+      and raises(lambda: mm.record_execution(ff["cp"]), "wrong kind") and state_unchanged(mm, "EXECUTION_STARTED", set(mm.ev)))
+    mm, ff = at_started(); mm.record_execution(exec_receipt(ff)); mm.request_readback()
+    t(g, "readback_gate_rejects_tampered_and_wrong_kind", raises(lambda: mm.observe_readback(stale(rb_receipt(ff), existence="ABSENT")), "hash invalid")
+      and raises(lambda: mm.observe_readback(ff["cp"]), "wrong kind") and mm.state == "AUTHORITATIVE_READBACK_PENDING" and "readback" not in mm.ev)
+    mm, ff, rbo = at_observed()
+    t(g, "commit_gate_rejects_tampered_wrong_kind_and_foreign_mutation", raises(lambda: mm.decide_commit(stale(commit_obs(rbo, "COMMITTED"), commit_state="COMMITTED", observation_id="x")), "hash invalid")
+      and raises(lambda: mm.decide_commit(ff["cp"]), "wrong kind")
+      and raises(lambda: mm.decide_commit(make("CommitObservation", observation_id="c", transaction_id="TX-SYN-1", mutation_id="MUT-OTHER", readback_receipt_hash=rbo["object_hash"], commit_state="COMMITTED")), "not correlated to mutation")
+      and raises(lambda: mm.decide_commit(make("CommitObservation", observation_id="c", transaction_id="TX-OTHER", mutation_id="MUT-1", readback_receipt_hash=rbo["object_hash"], commit_state="COMMITTED")), "correlation")
+      and mm.state == "AUTHORITATIVE_READBACK_OBSERVED" and "commit" not in mm.ev)
+    mm, ff, rbo = at_committed()
+    t(g, "outcome_gate_rejects_tampered_wrong_kind_and_foreign_transaction", raises(lambda: mm.validate_outcome(stale(outcome(ff, rbo, "PASS"), result="PASS", receipt_id="x")), "hash invalid")
+      and raises(lambda: mm.validate_outcome(ff["cp"]), "wrong kind")
+      and raises(lambda: mm.validate_outcome(make("OutcomeReceipt", receipt_id="o", transaction_id="TX-OTHER", readback_receipt_hash=rbo["object_hash"], outcome_contract_hash=ff["oc"]["object_hash"], result="PASS")), "correlation")
+      and mm.state == "COMMITTED" and "outcome" not in mm.ev)
+
+    # -- terminal and intermediate states are reachable only on verified evidence (review 2 N3, N3b)
+    mm, ff, rbo = at_observed(); fake = dict(commit_obs(rbo, "COMMITTED")); fake.pop("object_hash")
+    t(g, "committed_not_reachable_on_unhashed_dict", raises(lambda: mm.decide_commit(fake)) and mm.state == "AUTHORITATIVE_READBACK_OBSERVED")
+    mm, ff, rbo = at_committed(); fake = dict(outcome(ff, rbo, "PASS")); fake.pop("object_hash")
+    t(g, "outcome_validated_not_reachable_on_unhashed_dict", raises(lambda: mm.validate_outcome(fake)) and mm.state == "COMMITTED")
+
+    def comp_ready(bad_obs=None):
+        mm, ff = fixture(); to_prewrite(mm, ff); mm.begin_execution("MUT-1", FP); mm.record_execution(exec_receipt(ff)); mm.request_readback()
+        obs = bad_obs or dict(GOOD_OBS, package="WRONG"); rbo = rb_receipt(ff, obs=obs); mm.observe_readback(rbo); mm.decide_commit(commit_obs(rbo, "COMMITTED"))
+        mm.validate_outcome(outcome(ff, rbo, eval_predicates(PREDS, obs)))
+        return mm, ff
+    PRE = [{"field": "exists", "op": "eq", "expected": True}]
+    GOAL = [{"field": "exists", "op": "eq", "expected": False}]
+    grant_of = lambda **k: make("CompensationGrant", **dict(dict(grant_id="g1", target="SYN_SYS", capability="delete_object", max_mutations=1, preconditions=PRE,
+                                outcome_predicates=GOAL, inherits_forward_authority=False, issued_by="OWNER2"), **k))
+    cases = [
+        ("compensation_rejects_tampered_grant", lambda ff: stale(grant_of(), capability="x"), "hash invalid"),
+        ("compensation_rejects_wrong_kind_grant", lambda ff: ff["cp"], "wrong kind"),
+        ("compensation_rejects_capability_inside_forward_scope", lambda ff: grant_of(capability="create_object"), "within forward authority scope"),
+        ("compensation_rejects_zero_budget_grant", lambda ff: grant_of(max_mutations=0), "incomplete"),
+        ("compensation_rejects_boolean_budget_grant", lambda ff: grant_of(max_mutations=True), "incomplete"),
+        ("compensation_rejects_free_text_preconditions", lambda ff: grant_of(preconditions=["object exists"]), "malformed predicate"),
+        ("compensation_rejects_unsatisfied_precondition", lambda ff: grant_of(preconditions=[{"field": "package", "op": "eq", "expected": "ZPKG_SYN"}]), "precondition not satisfied"),
+        ("compensation_rejects_vacuous_outcome_predicates", lambda ff: grant_of(outcome_predicates=[{"field": "exists", "op": "like", "expected": 1}]), "unknown predicate op"),
+    ]
+    for name, build, text in cases:
+        mm, ff = comp_ready()
+        t(g, name, raises(lambda mm=mm, ff=ff, build=build: mm.authorize_compensation(build(ff)), text) and mm.state == "COMPENSATION_REQUIRED" and "comp_grant" not in mm.ev)
+    mm, ff = fixture(); to_prewrite(mm, ff); mm.begin_execution("MUT-1", FP)
+    mm.fail_after_possible_mutation()
+    t(g, "compensation_needs_forward_readback", (mm.require_compensation(), raises(lambda: mm.authorize_compensation(grant_of()), "need the forward readback"))[1] and mm.state == "COMPENSATION_REQUIRED")
+    mm, ff = fixture(); to_prewrite(mm, ff); mm.begin_execution("MUT-1", FP); mm.record_execution(exec_receipt(ff)); mm.request_readback()
+    rba = rb_receipt(ff, "ABSENT", obs={"exists": False}); mm.observe_readback(rba); mm.decide_commit(commit_obs(rba, "ABSENT")); mm.require_compensation()
+    t(g, "compensation_refused_when_nothing_exists_to_compensate", raises(lambda: mm.authorize_compensation(grant_of()), "precondition not satisfied") and mm.state == "COMPENSATION_REQUIRED")
+
+    def comp_authorized2():
+        mm, ff = comp_ready(); gg = grant_of(); mm.authorize_compensation(gg)
+        return mm, ff, gg
+    def comp_receipt_for(gg, post, res="PASS"):
+        return make("CompensationReceipt", receipt_id="cr", grant_hash=gg["object_hash"], readback_receipt_hash=post["object_hash"], result=res)
+    cases = [
+        ("compensation_rejects_foreign_transaction_readback", lambda ff: rb_receipt(ff, "ABSENT", obs={"exists": False}, tx="TX-OTHER"), "correlation"),
+        ("compensation_rejects_foreign_mutation_readback", lambda ff: rb_receipt(ff, "ABSENT", obs={"exists": False}, mut="MUT-OTHER"), "not correlated to the mission"),
+        ("compensation_rejects_readback_under_other_contract", lambda ff: remake(rb_receipt(ff, "ABSENT", obs={"exists": False}), contract_hash=Z), "not correlated to the mission"),
+        ("compensation_rejects_unhashed_readback", lambda ff: stale(rb_receipt(ff, "ABSENT", obs={"exists": False}), existence="ABSENT", receipt_id="q"), "hash invalid"),
+    ]
+    for name, build, text in cases:
+        mm, ff, gg = comp_authorized2(); post = build(ff)
+        t(g, name, raises(lambda mm=mm, gg=gg, post=post: mm.record_compensation(comp_receipt_for(gg, post), post), text) and mm.state == "COMPENSATION_AUTHORIZED")
+    mm, ff, gg = comp_authorized2(); post = rb_receipt(ff, "ABSENT", obs={"exists": False})
+    t(g, "compensation_rejects_tampered_receipt_and_foreign_grant", raises(lambda: mm.record_compensation(stale(comp_receipt_for(gg, post), result="PASS", receipt_id="x"), post), "hash invalid")
+      and raises(lambda: mm.record_compensation(make("CompensationReceipt", receipt_id="cr", grant_hash=Z, readback_receipt_hash=post["object_hash"], result="PASS"), post), "not bound to its grant")
+      and raises(lambda: mm.record_compensation(make("CompensationReceipt", receipt_id="cr", grant_hash=gg["object_hash"], readback_receipt_hash=Z, result="PASS"), post), "not bound to post readback")
+      and raises(lambda: mm.record_compensation(comp_receipt_for(gg, post, "FAIL"), post), "predicate not satisfied") and mm.state == "COMPENSATION_AUTHORIZED")
+    mm, ff, gg = comp_authorized2(); post = rb_receipt(ff, "ABSENT", obs={"exists": False}); mm.record_compensation(comp_receipt_for(gg, post), post)
+    t(g, "compensation_with_verified_evidence_reaches_COMPENSATED_only", mm.state == "COMPENSATED" and "completion" not in mm.ev)
+
+    # -- replay ledger and stale leases (review 2 N2)
+    mm, ff = fixture(); to_prewrite(mm, ff)
+    stale_lease = mm.checkpoint_lease()
+    mm.begin_execution("MUT-1", FP)                       # the send happens; the lease below was never refreshed
+    rr = rsm(stale_lease, ff, mm)
+    t(g, "stale_lease_resume_restarts_in_unknown", rr.state == "COMMIT_STATE_UNKNOWN" and rr.mutations_sent == 1 and rr.remaining == 0)
+    t(g, "stale_lease_cannot_replay_the_mutation", raises(lambda: (setattr(rr, "state", "PREWRITE_VALIDATED"), rr.begin_execution("MUT-1", FP)), "replay") and rr.mutations_sent == 1)
+    import tempfile
+    ldir = tempfile.mkdtemp(prefix="r2ledger_"); lpath = os.path.join(ldir, "ledger.txt")
+    m1, f1 = fixture(); m1.ledger = MODEL.ReplayLedger(lpath); to_prewrite(m1, f1); lease_a = m1.checkpoint_lease(); m1.begin_execution("MUT-1", FP)
+    reloaded = MODEL.ReplayLedger(lpath)                  # simulated process restart: only the file survives
+    r2 = rsm(lease_a, f1, m1, ledger=reloaded)
+    t(g, "file_backed_ledger_survives_restart_and_blocks_stale_lease", reloaded.has((f1["au"]["object_hash"], "MUT-1")) and r2.state == "COMMIT_STATE_UNKNOWN"
+      and raises(lambda: (setattr(r2, "state", "PREWRITE_VALIDATED"), r2.begin_execution("MUT-1", FP)), "replay"))
+    m3, f3 = fixture(); m3.ledger = MODEL.ReplayLedger(lpath); m3.context_ready(f3["intent"], f3["pr"])
+    t(g, "new_mission_cannot_reuse_authority_recorded_in_ledger", raises(lambda: m3.authorize(f3["dl"], f3["au"], f3["bu"]), "already consumed") and m3.state == "CONTEXT_READY")
+    mm, ff = fixture(); to_prewrite(mm, ff); mm.begin_execution("MUT-1", FP)
+    n_before = len(mm.ledger.for_authority(ff["au"]["object_hash"]))
+    t(g, "ledger_entry_survives_failed_later_calls", raises(lambda: mm.begin_execution("MUT-1", FP)) and raises(lambda: mm.record_execution(exec_receipt(ff, mut="MUT-OTHER")))
+      and len(mm.ledger.for_authority(ff["au"]["object_hash"])) == n_before == 1)
+    bad_ledger = MODEL.ReplayLedger(os.path.join(ldir, "missing_dir", "x.txt"))   # parent missing: the write fails
+    mm, ff = fixture(); mm.ledger = bad_ledger; to_prewrite(mm, ff)
+    t(g, "failed_ledger_write_blocks_the_send_and_changes_nothing", not safe(lambda: mm.begin_execution("MUT-1", FP)) and mm.state == "PREWRITE_VALIDATED" and mm.mutations_sent == 0 and mm.remaining == 1)
+    m, f, lease = sent_mission()
+    t(g, "resume_requires_ledger_and_evidence", raises(lambda: Mission.resume(lease, f["cp"], f["bu"], "M-SYN-1", ev_upstream(m), None), "ReplayLedger")
+      and raises(lambda: Mission.resume(lease, f["cp"], f["bu"], "M-SYN-1", None, m.ledger), "re-presented evidence")
+      and raises(lambda: Mission.resume(lease, f["cp"], f["bu"], "M-SYN-1", {k: v for k, v in ev_upstream(m).items() if k != "tx"}, m.ledger), "missing tx"))
+    t(g, "resume_rejects_foreign_mission_id", raises(lambda: rsm(lease, f, m, mission_id="OTHER-MISSION"), "another mission"))
+    other_budget = make("MutationBudget", budget_id="bx", authority_hash=f["au"]["object_hash"], max_mutations=1, retries=0, expansion_allowed=False)
+    t(g, "resume_rejects_original_budget_not_matching_evidence", raises(lambda: Mission.resume(lease, f["cp"], other_budget, "M-SYN-1", ev_upstream(m), m.ledger), "original budget does not match")
+      and raises(lambda: Mission.resume(lease, f["cp"], stale(f["bu"], max_mutations=9), "M-SYN-1", ev_upstream(m), m.ledger), "hash invalid"))
+    t(g, "resume_rejects_invalid_remaining_budget_values", all(raises(lambda v=v: rsm(remake(lease, remaining_budget=v), f, m), "remaining_budget invalid") for v in (-1, True, 1.5, "1")))
+    t(g, "resume_rejects_malformed_consumed_ids", raises(lambda: rsm(remake(lease, consumed_authority_ids=["noseparator"]), f, m), "consumed ids invalid")
+      and raises(lambda: rsm(remake(lease, consumed_authority_ids=["%s:MUT-1" % f["au"]["object_hash"]] * 2), f, m), "consumed ids invalid")
+      and raises(lambda: rsm(remake(lease, consumed_authority_ids="x:y"), f, m), "consumed ids invalid"))
+    t(g, "resume_rejects_lease_for_foreign_transaction", raises(lambda: rsm(remake(lease, transaction_id="TX-OTHER"), f, m), "does not match lease"))
+    t(g, "resume_rejects_execution_receipt_not_matching_lease", raises(lambda: rsm(lease, f, m, evidence=dict(ev_upstream(m), execution_receipt=exec_receipt(f))), "does not match lease"))
+    t(g, "resume_rejects_evidence_not_pinned_by_checkpoint", raises(lambda: rsm(lease, f, m, evidence=dict(ev_upstream(m), tx=remake(f["tx"], boundary="other"))), "checkpoint pin")
+      and raises(lambda: rsm(lease, f, m, evidence=dict(ev_upstream(m), budget=remake(f["bu"], budget_id="other"))), "checkpoint pin"))
+    t(g, "resume_rejects_inconsistent_delegation_capability_and_authority", raises(lambda: rsm(lease, f, m, evidence=dict(ev_upstream(m), delegation=remake(f["dl"], delegation_id="z"))), "does not match authority")
+      and raises(lambda: rsm(lease, f, m, evidence=dict(ev_upstream(m), capability=remake(f["cb"], authority_hash=Z))), "does not match authority")
+      and raises(lambda: rsm(lease, f, m, evidence=dict(ev_upstream(m), authority=remake(f["au"], authority_id="z"))), "does not match budget"))
+    t(g, "resume_rejects_enlarged_budget", raises(lambda: rsm(remake(lease, remaining_budget=1), f, m), "enlarge"))
+    m_over, f_over, lease_over = sent_mission()
+    m_over.ledger.consume((f_over["au"]["object_hash"], "MUT-2"))              # ledger shows more sends than the budget allows
+    t(g, "resume_rejects_ledger_consumption_beyond_the_original_budget", raises(lambda: rsm(lease_over, f_over, m_over), "exceed the original budget"))
+    mm, ff = fixture(max_mut=2); ff["tx"] = make("TransactionEnvelope", transaction_id="TX-SYN-1", mutation_ids=["MUT-1", "MUT-2"], mission_id="M-SYN-1", boundary="b")
+    ff["cp"] = make("PreMutationCheckpoint", checkpoint_id="cp1", transaction_hash=ff["tx"]["object_hash"], budget_hash=ff["bu"]["object_hash"], outcome_contract_hash=ff["oc"]["object_hash"],
+                    readback_contract_hash=ff["rc"]["object_hash"], remaining_budget=2)
+    to_prewrite(mm, ff); mm.begin_execution("MUT-1", FP); mm.ledger.consume((ff["au"]["object_hash"], "MUT-2"))   # a second send is recorded only in the ledger
+    r5 = rsm(mm.checkpoint_lease(), ff, mm)
+    t(g, "ledger_only_consumption_reduces_the_resumed_budget", r5.remaining == 0 and len(r5.consumed) == 2)
+    mm, ff = fixture(); to_prewrite(mm, ff); lease_pre = mm.checkpoint_lease()
+    r6 = rsm(lease_pre, ff, mm)
+    t(g, "pre_send_lease_with_empty_ledger_resumes_prewrite_with_full_budget", r6.state == "PREWRITE_VALIDATED" and r6.remaining == 1 and not r6.consumed)
+    mm, ff = fixture(); to_prewrite(mm, ff); mm.begin_execution("MUT-1", FP)
+    lease_post = mm.checkpoint_lease()
+    t(g, "post_send_lease_without_mutation_id_uses_the_ledger_entry", rsm(remake(lease_post, mutation_id=None), ff, mm).ev.get("mutation_id") == "MUT-1")
+    t(g, "post_send_lease_with_unknown_mutation_id_rejected", raises(lambda: rsm(remake(lease_post, mutation_id="MUT-X"), ff, mm), "inconsistent"))
+
+    # -- strict predicates (review 2 N5)
+    t(g, "predicate_eq_is_type_strict", eval_predicates([{"field": "a", "op": "eq", "expected": True}], {"a": 1}) == "FAIL" and eval_predicates([{"field": "a", "op": "eq", "expected": 1}], {"a": 1.0}) == "FAIL"
+      and eval_predicates([{"field": "a", "op": "eq", "expected": 1}], {"a": 1}) == "PASS")
+    t(g, "predicate_ne_semantics", eval_predicates([{"field": "a", "op": "ne", "expected": 5}], {"a": 5}) == "FAIL" and eval_predicates([{"field": "a", "op": "ne", "expected": 5}], {"a": 6}) == "PASS"
+      and eval_predicates([{"field": "a", "op": "ne", "expected": True}], {"a": 1}) == "PASS")
+    t(g, "predicate_in_semantics", eval_predicates([{"field": "a", "op": "in", "expected": ["x", "y"]}], {"a": "x"}) == "PASS" and eval_predicates([{"field": "a", "op": "in", "expected": ["x", "y"]}], {"a": "z"}) == "FAIL"
+      and eval_predicates([{"field": "a", "op": "in", "expected": [1, 2]}], {"a": True}) == "FAIL")
+    t(g, "predicate_in_rejects_empty_collection", raises(lambda: eval_predicates([{"field": "a", "op": "in", "expected": []}], {"a": 1}), "non-empty collection"))
+    t(g, "predicate_malformed_entries_rejected", raises(lambda: eval_predicates([{"field": "a", "op": "eq"}], {"a": 1}), "malformed") and raises(lambda: eval_predicates(["x"], {"a": 1}), "malformed")
+      and raises(lambda: eval_predicates("x", {"a": 1}), "vacuous") and raises(lambda: eval_predicates(None, {"a": 1}), "vacuous"))
+    t(g, "predicate_odd_observed_values", eval_predicates([{"field": "a", "op": "eq", "expected": [1, 2]}], {"a": [1, 2]}) == "PASS" and eval_predicates([{"field": "a", "op": "eq", "expected": 1}], {"a": [1]}) == "FAIL"
+      and eval_predicates([{"field": "a", "op": "eq", "expected": 1.0}], {"a": float("nan")}) == "FAIL")
+
+    # -- aliasing and type guards (review 2 N6, N7, N8)
+    intent_alias, pr_alias = dict(f["intent"]), dict(f["pr"])
+    mm = Mission("M-SYN-1", "TX-SYN-1", 1); mm.context_ready(intent_alias, pr_alias)
+    intent_alias["mission_id"] = "OTHER"
+    t(g, "accepted_evidence_is_private_copy", mm.ev["intent"]["mission_id"] == "M-SYN-1" and verify_hash(mm.ev["intent"]) and mm.ev["intent"] is not intent_alias)
+    mm, ff, er, done = complete_ready()
+    cr_alias = done()
+    forged_alias = remake(ff["au"], max_mutations=0)
+    ff["au"].update({k: v for k, v in forged_alias.items()})          # the caller rewrites and re-hashes ITS object
+    t(g, "rewriting_the_callers_object_after_acceptance_does_not_change_the_chain", safe(lambda: (mm.complete(cr_alias), mm.state)[1] == "COMPLETE") and mm.ev["authority"]["max_mutations"] == 1)
+    t(g, "mission_limit_must_be_a_non_negative_integer", all(raises(lambda v=v: Mission("M", "T", v), "non-negative integer") for v in (True, -1, 1.5, "1", None)))
+
+    # -- gaps found by the generated mutants
+    lg = MODEL.ReplayLedger(); lg.consume(("a", "b"))
+    t(g, "ledger_consume_twice_is_refused", raises(lambda: lg.consume(("a", "b")), "replay") and lg.has(("a", "b")))
+    mm, ff = fixture()
+    t(g, "guard_methods_refuse_missing_prerequisite_evidence", raises(lambda: mm.authorize(ff["dl"], ff["au"], ff["bu"]), "missing evidence principal")
+      and raises(lambda: mm.bind(ff["cb"], ff["pb"]), "missing evidence authority") and mm.state == "PLANNED" and not mm.ev)
+
+    def two_mutation_mission(max_mut):
+        mm_, ff_ = fixture(max_mut=max_mut)
+        ff_["tx"] = make("TransactionEnvelope", transaction_id="TX-SYN-1", mutation_ids=["MUT-1", "MUT-2"], mission_id="M-SYN-1", boundary="b")
+        ff_["cp"] = make("PreMutationCheckpoint", checkpoint_id="cp1", transaction_hash=ff_["tx"]["object_hash"], budget_hash=ff_["bu"]["object_hash"],
+                         outcome_contract_hash=ff_["oc"]["object_hash"], readback_contract_hash=ff_["rc"]["object_hash"], remaining_budget=max_mut)
+        to_prewrite(mm_, ff_); mm_.begin_execution("MUT-1", FP)
+        return mm_, ff_
+    mm, ff = two_mutation_mission(1)
+    t(g, "second_mutation_refused_when_budget_exhausted", raises(lambda: mm.begin_execution("MUT-2", FP), "budget exhausted") and mm.remaining == 0 and mm.mutations_sent == 1)
+    mm, ff = two_mutation_mission(2)
+    t(g, "illegal_state_send_does_not_burn_the_ledger", raises(lambda: mm.begin_execution("MUT-2", FP), "illegal transition") and not mm.ledger.has((ff["au"]["object_hash"], "MUT-2"))
+      and mm.remaining == 1 and mm.mutations_sent == 1)
+    mm, ff = at_started()
+    t(g, "invalid_call_class_rejected_in_the_right_state", raises(lambda: mm.record_execution(exec_receipt(ff, "CALL_NOT_SENT")), "not valid after execution started")
+      and raises(lambda: mm.record_execution(exec_receipt(ff, "OUTCOME_VALIDATED")), "not valid after execution started") and state_unchanged(mm, "EXECUTION_STARTED", set(mm.ev)))
+    mm, ff, rbo = at_committed()
+    placeholder = make("CompletionReceipt", receipt_id="d", transaction_id="TX-SYN-1", outcome_receipt_hash=Z, commit_observation_hash=mm.ev["commit"]["object_hash"],
+                       execution_receipt_hash=mm.ev["execution_receipt"]["object_hash"], authority_hash=ff["au"]["object_hash"])
+    t(g, "complete_refused_before_outcome_is_validated", raises(lambda: mm.complete(placeholder), "requires OUTCOME_VALIDATED") and mm.state == "COMMITTED" and "completion" not in mm.ev)
+
+    # -- every chain relation has its own violation recipe (review 2 gaps 4/8)
+    def cascade(mm_, slot, new):
+        old = mm_.ev[slot]; mm_.ev[slot] = new
+        queue = [(old["object_hash"], new["object_hash"], slot)]
+        while queue:
+            oh, nh, src = queue.pop()
+            for s, o in list(mm_.ev.items()):
+                if s == src or not isinstance(o, dict) or "object_hash" not in o:
+                    continue
+                if any(v == oh for k, v in o.items() if k not in ("kind", "object_hash")):
+                    n2 = make(o["kind"], **{k: (nh if v == oh else v) for k, v in o.items() if k not in ("kind", "object_hash")})
+                    mm_.ev[s] = n2
+                    queue.append((o["object_hash"], n2["object_hash"], s))
+    def mod(mm_, slot, **chg):
+        cascade(mm_, slot, remake(mm_.ev[slot], **chg))
+    RECIPES = {
+        "R01": lambda mm_, d: mod(mm_, "delegation", principal_hash=Z), "R02": lambda mm_, d: mod(mm_, "authority", delegation_hash=Z),
+        "R03": lambda mm_, d: mod(mm_, "authority", mission_id="OTHER"), "R04": lambda mm_, d: mod(mm_, "intent", mission_id="OTHER"),
+        "R05": lambda mm_, d: mod(mm_, "authority", scope=["create_object", "delete_object"]), "R06": lambda mm_, d: mod(mm_, "delegation", max_mutations=0),
+        "R07": lambda mm_, d: mod(mm_, "budget", authority_hash=Z), "R08": lambda mm_, d: mod(mm_, "authority", max_mutations=0),
+        "R09": lambda mm_, d: mod(mm_, "budget", retries=1), "R10": lambda mm_, d: mod(mm_, "budget", max_mutations=0),
+        "R11": lambda mm_, d: mod(mm_, "authority", single_use=False), "R12": lambda mm_, d: mod(mm_, "capability", authority_hash=Z),
+        "R13": lambda mm_, d: (mod(mm_, "capability", capability="other"), mod(mm_, "provider", tool_name="other")),
+        "R14": lambda mm_, d: mod(mm_, "provider", tool_name="other"), "R15": lambda mm_, d: mod(mm_, "provider", identity="OTHER::x"),
+        "R16": lambda mm_, d: mod(mm_, "tx", transaction_id="OTHER"), "R17": lambda mm_, d: mod(mm_, "tx", mission_id="OTHER"),
+        "R18": lambda mm_, d: mod(mm_, "tx", mutation_ids=["MUT-2"]), "R19": lambda mm_, d: mm_.consumed.clear(),
+        "R20": lambda mm_, d: mod(mm_, "outcome_contract", frozen=False), "R22": lambda mm_, d: mod(mm_, "readback_contract", source_level_required="PROVIDER_LOG"),
+        "R23": lambda mm_, d: mod(mm_, "checkpoint", transaction_hash=Z), "R24": lambda mm_, d: mod(mm_, "checkpoint", budget_hash=Z),
+        "R25": lambda mm_, d: mod(mm_, "checkpoint", outcome_contract_hash=Z), "R26": lambda mm_, d: mod(mm_, "checkpoint", readback_contract_hash=Z),
+        "R27": lambda mm_, d: mod(mm_, "checkpoint", remaining_budget=2),
+        "R28": lambda mm_, d: mod(mm_, "execution_receipt", transaction_id="OTHER"), "R29": lambda mm_, d: mod(mm_, "execution_receipt", mutation_id="OTHER"),
+        "R30": lambda mm_, d: mod(mm_, "execution_receipt", call_class="CALL_NOT_SENT"),
+        "R31": lambda mm_, d: mod(mm_, "readback", transaction_id="OTHER"), "R32": lambda mm_, d: mod(mm_, "readback", mutation_id="OTHER"),
+        "R33": lambda mm_, d: mod(mm_, "readback", contract_hash=Z), "R34": lambda mm_, d: mod(mm_, "readback", source_level="INFERRED_OR_REGEX"),
+        "R35": lambda mm_, d: mod(mm_, "readback", existence="UNKNOWN"),
+        "R36": lambda mm_, d: mod(mm_, "commit", transaction_id="OTHER"), "R37": lambda mm_, d: mod(mm_, "commit", mutation_id="OTHER"),
+        "R38": lambda mm_, d: mod(mm_, "commit", readback_receipt_hash=Z), "R39": lambda mm_, d: mod(mm_, "commit", commit_state="UNKNOWN"),
+        "R40": lambda mm_, d: mod(mm_, "outcome", transaction_id="OTHER"), "R41": lambda mm_, d: mod(mm_, "outcome", readback_receipt_hash=Z),
+        "R42": lambda mm_, d: mod(mm_, "outcome", outcome_contract_hash=Z), "R43": lambda mm_, d: mod(mm_, "outcome", result="FAIL"),
+        "R44": lambda mm_, d: mod(mm_, "readback", observed=dict(GOOD_OBS, package="WRONG")),
+        "R45": lambda mm_, d: d(authority_hash=Z), "R46": lambda mm_, d: d(execution_receipt_hash=Z),
+        "R47": lambda mm_, d: d(commit_observation_hash=Z), "R48": lambda mm_, d: d(outcome_receipt_hash=Z), "R49": lambda mm_, d: d(transaction_id="OTHER"),
+    }
+    t(g, "every_chain_relation_has_a_violation_recipe", set(RECIPES) == set(MODEL.RELATIONS))
+    src_ids = set(re.findall(r'self\._rel\("(R\d+)"', open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "mcr_r2_model.py"), encoding="utf-8").read()))
+    t(g, "relation_ids_in_source_equal_relation_table", src_ids == set(MODEL.RELATIONS))
+    for rid in sorted(RECIPES):
+        mm, ff, er, done = complete_ready()
+        res = RECIPES[rid](mm, done)
+        cr = res if isinstance(res, dict) and res.get("kind") == "CompletionReceipt" else done()
+        t(g, "relation_%s_violation_blocked" % rid, raises(lambda mm=mm, cr=cr: mm.complete(cr), "[%s]" % rid) and mm.state == "OUTCOME_VALIDATED" and "completion" not in mm.ev)
+    mm, ff, er, done = complete_ready(); mod(mm, "outcome_contract", predicates=[])
+    t(g, "empty_predicates_in_chain_blocked", raises(lambda: mm.complete(done()), "vacuous") and "completion" not in mm.ev)
+    mm, ff, er, done = complete_ready()
+    t(g, "all_relations_hold_on_a_genuine_chain", safe(lambda: (mm.complete(done()), mm.state)[1] == "COMPLETE"))
+
     # ---- NO_ENTERPRISE_WRITES (structural)
     g = "NO_ENTERPRISE_WRITES"
     src = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "mcr_r2_model.py")).read()
@@ -494,7 +859,7 @@ def _exec_only_complete():
 
 ACCEPT = ["STATE_MACHINE_VALID", "SCHEMA_VALIDATION", "AUTHORITY_INVARIANTS", "MUTATION_BUDGET_INVARIANTS",
           "REPLAY_GUARD_INVARIANTS", "CONTINUATION_INVARIANTS", "COMPENSATION_AUTHORITY_INVARIANTS",
-          "OUTCOME_PREDICATE_MODEL", "COMMIT_UNKNOWN_HANDLING", "COMPLETION_EVIDENCE", "HARDENING_R2_0H", "TELEMETRY_MODEL", "NO_ENTERPRISE_WRITES"]
+          "OUTCOME_PREDICATE_MODEL", "COMMIT_UNKNOWN_HANDLING", "COMPLETION_EVIDENCE", "HARDENING_R2_0H", "HARDENING_R2_0I", "TELEMETRY_MODEL", "NO_ENTERPRISE_WRITES"]
 
 
 def main(argv):

@@ -12,7 +12,7 @@ import time
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from mcr_r2_model import GuardError, Mission, chash, eval_predicates, make  # noqa: E402
-from validate_r2_outcome_model import (FP, GOOD_OBS, commit_obs, exec_receipt, fixture, outcome,  # noqa: E402
+from validate_r2_outcome_model import (FP, rsm, GOOD_OBS, commit_obs, exec_receipt, fixture, outcome,  # noqa: E402
                                        rb_receipt, to_prewrite)
 
 STEPS = ["prewrite", "begin_execution", "record_execution", "request_readback", "observe_readback",
@@ -77,7 +77,7 @@ def crash_matrix():
         for s in STEPS[:k]:
             run_step(m, f, s)
         lease = m.checkpoint_lease()
-        r = Mission.resume(lease, f["cp"], f["bu"], "M-SYN-1", evidence=evidence_of(m))
+        r = rsm(lease, f, m, evidence=evidence_of(m))
         rows.append({"crash_after": STEPS[k - 1], "resumed_state": r.state,
                      "mutations_sent_before_crash": m.mutations_sent, "mutations_known_after_resume": r.mutations_sent,
                      "replay_blocked_on_resume": replay_blocked(r) if m.mutations_sent else None,
@@ -89,7 +89,7 @@ def recover_after_send_crash():
     """Crash right after EXECUTION_STARTED: resume -> UNKNOWN -> readback -> COMPLETE with exactly one mutation."""
     m, f = fixture()
     run_step(m, f, "prewrite"); run_step(m, f, "begin_execution")
-    r = Mission.resume(m.checkpoint_lease(), f["cp"], f["bu"], "M-SYN-1", evidence=evidence_of(m))
+    r = rsm(m.checkpoint_lease(), f, m, evidence=evidence_of(m))
     out = {"resumed_state": r.state, "replay_blocked": replay_blocked(r)}
     for s in ("request_readback", "observe_readback", "decide_commit", "validate_outcome", "complete"):
         run_step(r, f, s)
@@ -102,8 +102,20 @@ def forged_lease_state_scenario():
     m, f = fixture()
     run_step(m, f, "prewrite"); run_step(m, f, "begin_execution")
     forged = remake(m.checkpoint_lease(), state_at_checkpoint="OUTCOME_VALIDATED")
-    r = Mission.resume(forged, f["cp"], f["bu"], "M-SYN-1", evidence=evidence_of(m))
+    r = rsm(forged, f, m, evidence=evidence_of(m))
     return {"claimed_state": "OUTCOME_VALIDATED", "resumed_state": r.state, "downstream_evidence_present": sorted(set(r.ev) & {"readback", "commit", "outcome", "completion"})}
+
+
+def stale_lease_scenario():
+    """The realistic crash: the lease was taken before the send and never refreshed. The external ledger still
+    knows the send happened, so the resumed mission must restart in UNKNOWN and must not be able to send again."""
+    m, f = fixture()
+    run_step(m, f, "prewrite")
+    stale = m.checkpoint_lease()
+    run_step(m, f, "begin_execution")
+    r = rsm(stale, f, m, evidence=evidence_of(m))
+    return {"lease_taken_at": stale["state_at_checkpoint"], "lease_lists_consumed": len(stale["consumed_authority_ids"]),
+            "resumed_state": r.state, "mutations_known_after_resume": r.mutations_sent, "replay_blocked": replay_blocked(r)}
 
 
 def tampered_resume_cases():
@@ -115,10 +127,10 @@ def tampered_resume_cases():
                 predicates=[{"field": "exists", "op": "eq", "expected": True}], frozen=True)
     ev = evidence_of(m)
     ev["outcome_contract"] = evil
-    for name, fn in (("swapped_outcome_contract_rejected", lambda: Mission.resume(lease, f["cp"], f["bu"], "M-SYN-1", evidence=ev)),
-                     ("budget_inflation_rejected", lambda: Mission.resume(remake(lease, remaining_budget=3), f["cp"], f["bu"], "M-SYN-1")),
-                     ("lease_hash_forgery_rejected", lambda: Mission.resume(dict(lease, remaining_budget=0), f["cp"], f["bu"], "M-SYN-1")),
-                     ("foreign_checkpoint_rejected", lambda: Mission.resume(lease, dict(f["cp"], object_hash="0" * 64), f["bu"], "M-SYN-1"))):
+    for name, fn in (("swapped_outcome_contract_rejected", lambda: rsm(lease, f, m, evidence=ev)),
+                     ("budget_inflation_rejected", lambda: rsm(remake(lease, remaining_budget=3), f, m)),
+                     ("lease_hash_forgery_rejected", lambda: rsm(dict(lease, remaining_budget=0), f, m)),
+                     ("foreign_checkpoint_rejected", lambda: rsm(lease, f, m, cp=dict(f["cp"], object_hash="0" * 64)))):
         try:
             fn(); res[name] = False
         except GuardError:
@@ -151,7 +163,7 @@ def compensation_semantics():
     run_step(m, f, "decide_commit"); run_step(m, f, "validate_outcome")
     r = {"state_after_outcome_fail": m.state, "forward_budget_remaining": m.remaining}
     grant = make("CompensationGrant", grant_id="g", target="SYN_SYS", capability="delete_object", max_mutations=1,
-                 preconditions=["object exists"], outcome_predicates=[{"field": "exists", "op": "eq", "expected": False}],
+                 preconditions=[{"field": "exists", "op": "eq", "expected": True}], outcome_predicates=[{"field": "exists", "op": "eq", "expected": False}],
                  inherits_forward_authority=False, issued_by="OWNER-COMP")
     m.authorize_compensation(grant)
     r["compensation_budget_independent_of_forward"] = grant["max_mutations"] == 1 and m.remaining == 0
@@ -189,7 +201,7 @@ def overhead(n):
 def main(argv):
     n = int(argv[argv.index("--n") + 1]) if "--n" in argv else 2000
     d = {"crash_matrix": crash_matrix(), "recover_after_send_crash": recover_after_send_crash(), "tampered_resume": tampered_resume_cases(),
-         "forged_lease_state": forged_lease_state_scenario()}
+         "forged_lease_state": forged_lease_state_scenario(), "stale_lease": stale_lease_scenario()}
     det = {"R2_0_D_continuation": d, "fault_injection": fault_injection(), "R2_0_E_compensation": compensation_semantics()}
     fi = det["fault_injection"]
     checks = {
@@ -200,6 +212,8 @@ def main(argv):
         "pre_send_crash_keeps_full_budget": all(r["remaining_budget_after_resume"] == 1 for r in d["crash_matrix"] if not r["mutations_sent_before_crash"]),
         "tampering_rejected": all(d["tampered_resume"].values()),
         "forged_lease_state_not_inherited": d["forged_lease_state"]["resumed_state"] == "COMMIT_STATE_UNKNOWN" and not d["forged_lease_state"]["downstream_evidence_present"],
+        "stale_lease_cannot_replay_the_send": d["stale_lease"]["resumed_state"] == "COMMIT_STATE_UNKNOWN" and d["stale_lease"]["replay_blocked"] is True
+        and d["stale_lease"]["mutations_known_after_resume"] == 1 and d["stale_lease"]["lease_lists_consumed"] == 0,
         "every_post_send_resume_restarts_in_unknown": all(r["resumed_state"] == "COMMIT_STATE_UNKNOWN" for r in d["crash_matrix"] if r["mutations_sent_before_crash"]),
         "unknown_or_nonauthoritative_never_complete": not fi["provider_error_then_readback_unknown"]["complete"] and not fi["success_but_readback_via_logs_only"]["complete"]
         and fi["provider_error_then_readback_unknown"]["state"] == "COMMIT_STATE_UNKNOWN" and fi["success_but_readback_via_logs_only"]["state"] == "COMMIT_STATE_UNKNOWN",

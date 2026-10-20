@@ -81,15 +81,40 @@ PIN_G_ERA_8a383b6 = {
     "reports/r2.0/MCR_R2_0_C_REPORT_ERRATUM_R1.md": "3ACACE47AF8BCBA35A5D2187A87842A69FC4144C55EC355A8E6341362910EF6F",
     "reports/r2.0/MCR_R2_0_G_QUALIFICATION_SUMMARY_R1.md": "6DFC43221A44282A56B889A99D1D0E15BB866B0934F21A338BFAA8F6340914F9"
 }
-FROZEN_HISTORICAL = dict(PIN_BASELINE_6f992c6, **PIN_G_ERA_8a383b6)
+PIN_H_ERA_b5cca1f = {
+    "architecture/r2.0/MCR_R2_0_EVIDENCE_CHAIN_CONTRACT_R2.md": "4287D6734441F00E7F0489EAB3846F3C1B8160B52033B7B6C4D17E3A4170925C",
+    "evidence/r2.0/MCR_R2_0_A_VALIDATION_RESULT_R3.json": "C6A0AF14325745986716929AE3B185A60EDE9761FEDA4ABB62A342D8177FE3AA",
+    "evidence/r2.0/MCR_R2_0_DE_LOCAL_SCENARIOS_RESULT_R2.json": "212BC2FD28EDD0ACFDD48258A69FFD0FDC5ABB99F2491D2328867CF406C167F1",
+    "evidence/r2.0/MCR_R2_0_HYPOTHESIS_STATUS_R4.md": "05FAAA09D54D32B0670BFB0ED7DC735E9CFFD2C0ABEB9B27012B1AE11034F8C2",
+    "evidence/r2.0/MCR_R2_0_H_MUTATION_CHECK_R2.json": "7B8F895634F55402DAD4D6E881AAFB213B6687BE4426D70D22EB4DC025A910F3",
+    "evidence/r2.0/MCR_R2_0_H_TEST_MATRIX_R1.json": "4503D4B949FEE4A45F529BCDDA2D8B568328969573625095A25209683EE8E8A8",
+    "reports/r2.0/MCR_R2_0_H_HARDENING_REPORT_R1.md": "DA60EEFD41D4DB08432CF561AC619C06FE96E89995AB79039DD0ADC41C31035B",
+    "reports/r2.0/MCR_R2_0_INDEPENDENT_QUALIFICATION_R1_FINDINGS.md": "EF8916A81D663DCDCDF67B159FF4BFDAF1648A924433FAF11DA6A6299BB14F21",
+    "research-package/r2.0/r2_0c/MCR_R2_0_C_AUTHORIZATION_CONSUMED_R1.md": "524244079B7CB2513772F39D6EF7B246A7EB9743A9C8FDA7256B1E4E42ED2716"
+}
+# SHA-256 (CRLF-insensitive) of the model-side files at the revision submitted for independent review. Changing any of
+# them requires editing this table in the same commit, which makes the change visible; it is not an external anchor.
+PIN_REVIEWED_REVISION = {
+    "tools/r2.0/mcr_r2_model.py": "474CFACCE7528B19E05A8FC172A5EC90185B52AF8AE91D59EEBCF4EAB43D17FF",
+    "tools/r2.0/run_r2_local_scenarios.py": "52331E2E532583FB3DE0AFF4E497B364A026C873C52FCB6DFFDA36AA07FDDE1D",
+    "tools/r2.0/run_r2_mutation_check.py": "ADEAB666E5BD1BD860751A94C8035F6F90A16E0985DAAAC466AC9B9D1602767C",
+    "tools/r2.0/validate_r2_outcome_model.py": "83D51752CD2453DB24D9C6BA7D4FC5B157BB4EE22D9DBC66B8BDEA74FADF0110"
+}
+FROZEN_HISTORICAL = dict(PIN_BASELINE_6f992c6, **PIN_G_ERA_8a383b6, **PIN_H_ERA_b5cca1f)
 ROOTS = ["tools/r2.0", "architecture/r2.0", "evidence/r2.0", "reports/r2.0", "research-package/r2.0"]
 SKIP = {SUMS, "__pycache__", "tools/r2.0/make_adt_auth_context.py"}   # local credential helper, git-ignored
 TEXT = (".py", ".md", ".json", ".txt")
 # Frozen live tooling with owner-workspace default paths (not publication logic); any other tool must be path-free.
 TOOLS_WITH_DEFAULT_PATHS = {"tools/r2.0/r2_0c_study.py", "tools/r2.0/r2_0b_readonly_readback_probe.py"}
 LOCAL_EXEC_DOCS = {"research-package/r2.0/r2_0c/MCR_R2_0_C_AUTHORIZATION_PACKET_R1.md"}   # owner-workspace commands by design
-ABS = re.compile(r"(?<![A-Za-z0-9_])[A-Za-z]:\\|/Us" + "ers/|/ho" + "me/[a-z]")  # drive paths and user-profile paths
-SECRET = re.compile(r"Bearer\s+[A-Za-z0-9._-]{20,}|protected_token_b64\"\s*:\s*\"[A-Za-z0-9+/=]{20,}|BEGIN (RSA |EC )?PRIVATE KEY")
+ABS = re.compile(r"(?<![A-Za-z0-9_])[A-Za-z]:[\\/](?!/)|/Us" + "ers/|/ho" + "me/[a-z]")  # drive paths (either slash) and user-profile paths
+SECRET = re.compile(
+    r"Bearer\s+[A-Za-z0-9._-]{20,}"
+    r"|protected_token_b64\"\s*:\s*\"[A-Za-z0-9+/=]{20,}"
+    r"|BEGIN (RSA |EC |OPENSSH )?PRIVATE " "KEY"
+    r"|eyJ[A-Za-z0-9_-]{15,}\.[A-Za-z0-9_-]{15,}\.[A-Za-z0-9_-]{5,}"
+    r"|(?<![A-Za-z0-9])sk-[A-Za-z0-9]{20,}"
+    r"|(?i:token|secret|password|api[_-]?key)\s*[:=]\s*[\"'][A-Za-z0-9+/=_-]{24,}[\"']")
 
 
 def files(root):
@@ -139,17 +164,21 @@ def main(argv):
     t = tempfile.mkdtemp(prefix="r2out_")
     a = run(root, "tools/r2.0/validate_r2_outcome_model.py", "--out", os.path.join(t, "a.json"), "--emit-schemas", os.path.join(t, "schemas"))
     res["validator_passes"] = a.returncode == 0
-    res["validator_result_reproduces"] = open(os.path.join(t, "a.json"), "rb").read() == open(os.path.join(root, "evidence/r2.0/MCR_R2_0_A_VALIDATION_RESULT_R3.json"), "rb").read().replace(b"\r\n", b"\n")
+    res["validator_result_reproduces"] = open(os.path.join(t, "a.json"), "rb").read() == open(os.path.join(root, "evidence/r2.0/MCR_R2_0_A_VALIDATION_RESULT_R4.json"), "rb").read().replace(b"\r\n", b"\n")
     sch = sorted(os.listdir(os.path.join(t, "schemas")))
     res["schemas_reproduce"] = sch == sorted(os.listdir(os.path.join(root, "architecture/r2.0/schemas"))) and all(
         open(os.path.join(t, "schemas", s), "rb").read() == open(os.path.join(root, "architecture/r2.0/schemas", s), "rb").read().replace(b"\r\n", b"\n") for s in sch)
     d = run(root, "tools/r2.0/run_r2_local_scenarios.py", "--out", os.path.join(t, "d.json"))
     res["scenarios_pass"] = d.returncode == 0
-    res["scenarios_result_reproduces"] = open(os.path.join(t, "d.json"), "rb").read() == open(os.path.join(root, "evidence/r2.0/MCR_R2_0_DE_LOCAL_SCENARIOS_RESULT_R2.json"), "rb").read().replace(b"\r\n", b"\n")
+    res["scenarios_result_reproduces"] = open(os.path.join(t, "d.json"), "rb").read() == open(os.path.join(root, "evidence/r2.0/MCR_R2_0_DE_LOCAL_SCENARIOS_RESULT_R3.json"), "rb").read().replace(b"\r\n", b"\n")
+    res["reviewed_revision_pins_match"] = all(os.path.exists(os.path.join(root, p_)) and sha(os.path.join(root, p_)) == h_ for p_, h_ in PIN_REVIEWED_REVISION.items())
+    sums_sha = sha(os.path.join(root, SUMS))
+    exp = argv[argv.index("--expect-sums-sha256") + 1].upper() if "--expect-sums-sha256" in argv else None
+    res["sums_anchor_matches"] = (sums_sha == exp) if exp else "NOT_CHECKED (pass --expect-sums-sha256 from a source outside the repository)"
     res["frozen_historical_unchanged"] = all(os.path.exists(os.path.join(root, p)) and sha(os.path.join(root, p)) == h for p, h in FROZEN_HISTORICAL.items())
     m = run(root, "tools/r2.0/run_r2_mutation_check.py", "--out", os.path.join(t, "m.json"))
     res["mutation_check_passes"] = m.returncode == 0
-    res["mutation_result_reproduces"] = open(os.path.join(t, "m.json"), "rb").read() == open(os.path.join(root, "evidence/r2.0/MCR_R2_0_H_MUTATION_CHECK_R2.json"), "rb").read().replace(b"\r\n", b"\n")
+    res["mutation_result_reproduces"] = open(os.path.join(t, "m.json"), "rb").read() == open(os.path.join(root, "evidence/r2.0/MCR_R2_0_I_MUTATION_CHECK_R3.json"), "rb").read().replace(b"\r\n", b"\n")
     bad_abs, bad_sec = [], []
     for p in cur:
         if p.endswith(TEXT):
@@ -161,12 +190,19 @@ def main(argv):
                 bad_abs.append(p)
             if SECRET.search(txt):
                 bad_sec.append(p)
+    helper = os.path.join(root, "tools", "r2.0", "make_adt_auth_context.py")
+    if os.path.exists(helper):
+        htxt = open(helper, encoding="utf-8", errors="replace").read()
+        if SECRET.search(htxt):
+            bad_sec.append("tools/r2.0/make_adt_auth_context.py")
+        if ABS.search(htxt):
+            bad_abs.append("tools/r2.0/make_adt_auth_context.py")
     res["no_absolute_paths_in_docs"] = not bad_abs
     res["no_secret_like_strings"] = not bad_sec
     g = subprocess.run(["git", "rev-parse", "-q", "--verify", R1_9_TAG + "^{commit}"], cwd=root, capture_output=True, text=True)
     res["r1_9_tag"] = ("UNCHANGED" if g.stdout.strip() == R1_9_COMMIT else "CHANGED") if g.returncode == 0 else "NOT_PRESENT_IN_CHECKOUT"
-    ok = all(v is True for k, v in res.items() if k != "r1_9_tag") and res["r1_9_tag"] != "CHANGED"         and (res["r1_9_tag"] == "UNCHANGED" or "--no-git" in argv)
-    print(json.dumps(dict(res, details={"absolute_path_files": bad_abs, "secret_like_files": bad_sec}, R2_FRESH_CLONE_VERIFY="PASS" if ok else "FAIL"), indent=2, sort_keys=True))
+    ok = all(v is True for k, v in res.items() if k not in ("r1_9_tag", "sums_anchor_matches")) and res["sums_anchor_matches"] is not False and res["r1_9_tag"] != "CHANGED"         and (res["r1_9_tag"] == "UNCHANGED" or "--no-git" in argv)
+    print(json.dumps(dict(res, sums_sha256=sums_sha, details={"absolute_path_files": bad_abs, "secret_like_files": bad_sec}, R2_FRESH_CLONE_VERIFY="PASS" if ok else "FAIL"), indent=2, sort_keys=True))
     return 0 if ok else 1
 
 
