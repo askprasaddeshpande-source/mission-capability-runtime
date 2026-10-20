@@ -44,3 +44,8 @@ Raw evidence must be copied into the eventual public research package only after
 5. final closure approval.
 
 Do not publish local authentication context, tokens, certificates, user paths or private environment metadata.
+
+## R2 erratum (appended; R1 table above is unchanged)
+
+- `MCR-R1.7-P7` lists a 54-character value, which is not a valid SHA-256 and is not in `FROZEN_EVIDENCE_ANCHORS.json`. It is unverified and must be recovered from the original workstation or removed. See `reports/MCR_R1_9_SOURCE_OF_RECORD_AUDIT_R2.md`.
+- `HF06-SOURCE`, `HF06-ADJ-R2` and the other signed scripts: original bytes are not in Git (normalized reading copies only). See `evidence/portable/MISSING_ARTIFACTS_R2.md`.

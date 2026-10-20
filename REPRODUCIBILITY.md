@@ -2,7 +2,7 @@
 
 ## Current repository status
 
-This repository is a **draft closure workspace**, not yet the frozen MCR public reproducibility release.
+This repository is a **private external-review candidate with documented gaps**, not the frozen MCR public reproducibility release.
 
 The original R1.6.1 MCWS scientific experiment is frozen and must not be rerun merely to improve presentation.
 
@@ -61,6 +61,15 @@ Before a public reproducibility ZIP is built:
 8. freeze `PUBLICATION_MANIFEST.json`;
 9. generate the reviewed PDF from the final manuscript;
 10. build the release ZIP without rerunning experiments or enterprise mutations.
+
+## Verifying evidence bytes
+
+1. Check out the candidate branch on any machine.
+2. Recompute SHA-256 for every `included_exact` entry in `evidence/portable/PORTABILITY_MANIFEST_R2.json` (command in `PORTABILITY.md`). Expected: no mismatches.
+3. Do not rely on line-ending conversion: `evidence/portable/**` is `-text` so bytes are identical on every platform.
+4. Six scripts and the frozen manuscript are documented gaps and are expected to be absent or non-matching.
+
+The previous portability commit stored line-ending-normalized evidence (19 of 28 files did not match their recorded hashes); this was corrected in R2 without rewriting history.
 
 ## Frozen anchor policy
 

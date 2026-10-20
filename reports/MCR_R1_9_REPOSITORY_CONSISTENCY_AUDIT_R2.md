@@ -1,0 +1,55 @@
+# MCR R1.9 Repository Consistency Audit R2
+
+Scope: README, paper/, architecture/, evidence/, reports/, research-package/, REPRODUCIBILITY.md, PORTABILITY.md, FROZEN_EVIDENCE_ANCHORS.json, PUBLICATION_MANIFEST.json, SHA256SUMS.txt, CITATION.cff, LICENSE_POLICY.md, publication/.
+
+Method: programmatic hash comparison (anchors vs recomputed bytes, register vs anchors, SHA256SUMS vs files), text sweeps for contradiction patterns, and manual reading.
+
+## Result
+
+**REPOSITORY_CONSISTENCY=PASS_WITH_GAPS**
+
+All contradictions about the scientific state were resolved or confirmed absent. Remaining gaps are evidence-availability gaps, not inconsistencies in what is claimed.
+
+## Contradiction checks
+
+| Check | Result |
+|---|---|
+| CREATE "committed" vs UNKNOWN | PASS. Every occurrence in tracked prose is a negation or "may have"; no file asserts CREATE committed or did not commit |
+| `SAP_WRITES=0` asserted for HF06 attempt 2 | PASS. Appears nowhere as a claim. The adjudication file's `prior_sap_writes: 0` is reconciliation-run accounting and is explicitly annotated in the manuscript and audits |
+| Autonomous self-healing | PASS. All occurrences are denials (matrix, checklist, manuscript, closure report) |
+| "R1.9 complete" vs bounded closure | PASS. "Complete and frozen" refers to R1.9A only; R1.9 closure is stated as `BOUNDED_CLOSURE_WITH_UNRESOLVED_CREATE_COMMIT_STATE` |
+| MCWS metrics (5/48, 17/48, 30/48; p-values; held-out) | PASS. Identical in README, source-of-record note, closure draft, R2 manuscript, and the R1.6.1 PDF; arithmetic verified |
+| Provider counts | PASS. 41 contracts / 30 zero-write (23 READ + 7 ANALYSIS) / ADT 20, Fiori 9, UI5 10, CAP 2 consistent with the C1D closure |
+| Frozen hashes | PASS with one defect. All 64-hex register hashes equal anchor hashes (and vice versa); see F5 |
+| Invented DOI / release metadata | PASS. `github_release`, Zenodo DOIs null; CITATION.cff has no DOI or release date |
+| GitHub path | PASS. `askprasaddeshpande-source/mission-capability-runtime` throughout |
+| Frozen anchors vs bytes | PASS for the 10 anchors with bytes in Git (recomputed equal); 5 anchors have no bytes (documented) |
+
+## Findings
+
+| ID | Finding | Severity | Status |
+|---|---|---|---|
+| F1 | MCWS expanded inconsistently: R1.6.1 source of record says **Minimum** Capability Working Set; README, architecture doc and closure draft said "Mission-Capability Working Set" | Medium | FIXED in README, architecture, R2 manuscript. Earlier closure draft R1 retained unchanged as history |
+| F2 | R1 portability commit stored line-ending-normalized evidence; 19 of 28 "exact" copies did not match their recorded hashes (`HASH_MISMATCH=0` was wrong) | High | FIXED for 13 files (restored, hash-verified) with `-text` guard; 6 unrecoverable (documented). R1 records retained |
+| F3 | `PORTABILITY.md` had corrupted paths (`vidence/portable/...`) | Low | FIXED (rewritten for R2) |
+| F4 | `SHA256SUMS.txt` stale for `.gitattributes`, R1 portability manifest/summary, `PORTABILITY.md` and six scripts | Medium | FIXED (regenerated for all tracked files) |
+| F5 | Register entry `MCR-R1.7-P7` has a 54-character (invalid) hash; not in anchors; no bytes | Medium | OPEN. Erratum appended to the register; owner must recover or remove |
+| F6 | R1 claim matrix rows C11, C12, C13, C14 overstate (see audit R2: C11 PARTIAL, C13 OBSERVED/indirect, C14 PARTIAL). `PROVEN` for replay prevention rests on a lock's existence, not a tested refusal | Medium | NARROWED in claim audit R2; erratum appended to R1 matrix (R1 table unchanged) |
+| F7 | Closure draft R1 said a provider "can execute CREATE while the client fails to interpret the response" and attributed the stop to "response-shape handling". Retained evidence cannot distinguish an error payload from an alternate success layout | Medium | FIXED in R2 manuscript (C20 NOT_ESTABLISHED) |
+| F8 | Closure draft R1 said "four distinct evidence classes" above a five-row table | Low | FIXED in R2 |
+| F9 | `PUBLICATION_MANIFEST.json`, `CITATION.cff`, README, REPRODUCIBILITY still said "DRAFT / CLOSURE WORKSPACE" and version `1.9.0-draft-r1` | Low | FIXED (candidate-with-gaps, `1.9.0-external-review-candidate-r2`) |
+| F10 | R1.7 matrix lists "SAP write safety" and "P6-D completed" as NOT CLAIMED, while P6-D1 later passed | Info | Not a conflict: sequential records; R2 manuscript labels P6-D1 as a separate bounded result and not general write safety |
+| F11 | R1.9A microbenchmark reports identical p50/p95/p99 | Low | Disclosed in manuscript, hypothesis matrix (H38) and claim C25 |
+| F12 | `paper/README.md` public-release rule says R1.9 must not be described as closed until the classification is frozen | Info | Consistent: classification is selected; owner freeze pending |
+| F13 | Expected local path `D:\MCP\research-paper\mission-capability-runtime` did not exist on this machine | Info | Environmental; work performed in a fresh clone at `D:\MCR\mission-capability-runtime` |
+| F14 | The six scripts' `SHA256SUMS` entries (R1) record the frozen original hashes while the stored bytes differ | Medium | Documented in manifest R2 (`HASH_MISMATCH`, cause = normalization); SHA256SUMS now describes the stored bytes |
+
+## Residual gaps (not inconsistencies)
+
+- Frozen scientific manuscript bytes absent.
+- Six signed originals absent.
+- R1.8 reviewer PDF package and R1.7 P7 closure ZIP absent.
+- HF06 raw CREATE response and HF05 failure transcript not retained.
+- 41 of 48 references are time-sensitive or emerging and unverified in this mission.
+
+PASS_WITH_GAPS is the correct verdict: nothing in the repository now contradicts the evidence, but the evidence set is not complete.

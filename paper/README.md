@@ -21,7 +21,10 @@ See [`ORIGINAL_R1.6.1_SOURCE_OF_RECORD.md`](ORIGINAL_R1.6.1_SOURCE_OF_RECORD.md)
 
 ## Current manuscript
 
-- [`MCR_Manuscript_R1.9_CLOSURE_DRAFT_R1.md`](MCR_Manuscript_R1.9_CLOSURE_DRAFT_R1.md)
+- [`MCR_Manuscript_R1.9_EXTERNAL_REVIEW_CANDIDATE_R2.md`](MCR_Manuscript_R1.9_EXTERNAL_REVIEW_CANDIDATE_R2.md) — current external-review candidate (original title, subtitle and section progression preserved)
+- [`MCR_Manuscript_R1.9_CLOSURE_DRAFT_R1.md`](MCR_Manuscript_R1.9_CLOSURE_DRAFT_R1.md) — earlier closure draft, retained unchanged
+
+The original R1.6.1 PDF is held byte-exact at `../evidence/portable/r1.6/`.
 
 ## Scientific status
 
@@ -31,7 +34,7 @@ R1.7/R1.8 add separately frozen runtime/provider engineering evidence.
 
 R1.9A adds a deterministic governed-execution foundation.
 
-R1.9B is a **partial live mutation result**, not a completed success. CREATE reached the ADT provider; ACTIVATE did not. Persistent SAP state after the failed CREATE response remains unresolved at this draft.
+R1.9B is a **partial live mutation result**, not a completed success. CREATE reached the ADT provider; ACTIVATE did not. Persistent SAP state after the CREATE response (which lacked the expected file path) remains unresolved; `MCR_R1_9=BOUNDED_CLOSURE_WITH_UNRESOLVED_CREATE_COMMIT_STATE`.
 
 ## Publication principle
 
