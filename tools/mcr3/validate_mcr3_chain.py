@@ -14,6 +14,7 @@ import evc1  # noqa: E402
 import mcr3_adapters as AD  # noqa: E402
 import mcr3_chain as CH  # noqa: E402
 import validate_mcr3_adapters as VA  # noqa: E402
+import validate_mcr3_evc1 as VE  # noqa: E402
 import validate_mcr3_hardening as H  # noqa: E402
 from validate_mcr3_inherited import FP, exec_receipt, fixture, to_prewrite  # noqa: E402
 
@@ -107,8 +108,27 @@ def run():
     t(g, "acknowledged_class_over_an_unacknowledged_receipt_is_reported", has(CH.check_mission_events(reseal_all(nb.convert(m1, now=NOW), lambda es: (es[2]["claim"].update(call_class="PROVIDER_ERROR", provider_acknowledged=False)))), "PROVIDER_ACKNOWLEDGED needs"))
     t(g, "commit_observed_class_without_a_commit_event_is_reported", has(CH.check_mission_events(rl(part, lambda es: [es.pop(4) for _ in (0,)])), "commit"))
     t(g, "compensated_without_attempts_is_reported", has(CH.check_mission_events(rl(nb.convert(mm, now=NOW), lambda es: [es.remove(e) for e in [x for x in es if x["type"] == "mcr.compensation.attempted"]])), "COMPENSATED needs"))
-    t(g, "unrecoverable_disposition_needs_the_unrecoverable_class", has(CH.check_mission_events(reseal_all(nb.convert(mu, now=NOW), lambda es: es[-1]["claim"].update(outcome_class="COMMIT_UNKNOWN"))), "UNRECOVERABLE disposition"))
+    t(g, "unrecoverable_disposition_needs_the_unrecoverable_class", has(CH.check_mission_events(reseal_all(nb.convert(mu, now=NOW), lambda es: (es[-1]["claim"].update(outcome_class="COMMIT_UNKNOWN"), es[-1].update(outcome_class="COMMIT_UNKNOWN")))), "UNRECOVERABLE disposition"))
     t(g, "an_authoritative_claim_from_a_weak_level_is_stopped_by_the_event_contract_first", has(CH.check_mission_events(reseal_all(full, lambda es: es[3]["claim"].update(source_level="PROVIDER_LOG"))), "not a valid"))
+    # --- targeted tests added after the first full mutation run
+    m_none = VE.base("mcr.mission.started", VE.CLAIMS["mcr.mission.started"], correlation={"mission_id": None, "transaction_id": None, "correlation_id": "CORR-SYN-1", "causation_id": None})
+    t(g, "a_chain_whose_only_event_has_no_mission_id_is_reported", has(CH.check_mission_events([m_none]), "missions"))
+    no_tx = reseal_all(full, lambda es: [e["correlation"].update(transaction_id=None) for e in es[1:]])
+    t(g, "events_without_a_transaction_id_are_reported", has(CH.check_mission_events(no_tx), "transaction"))
+    commit_unknown_hist = reseal_all(hist, lambda es: es[4]["claim"].update(commit_state="UNKNOWN"))
+    t(g, "a_commit_reading_of_unknown_needs_no_exists_readback", not has(CH.check_mission_events(commit_unknown_hist), "COMMITTED needs"))
+    t(g, "a_pass_outcome_over_an_unknown_commit_is_reported", has(CH.check_mission_events(commit_unknown_hist), "PASS outcome needs a committed"))
+    t(g, "a_committed_reading_after_a_failed_call_is_reported", has(CH.check_mission_events(reseal_all(full, lambda es: es[2]["claim"].update(call_class="PROVIDER_ERROR", provider_acknowledged=False))), "execution receipt before it"))
+    t(g, "a_committed_reading_after_a_commit_unknown_call_is_not_reported_for_the_receipt", not has(CH.check_mission_events(reseal_all(full, lambda es: es[2]["claim"].update(call_class="COMMIT_UNKNOWN", provider_acknowledged=False))), "execution receipt before it"))
+    dup14 = reseal_all(full, lambda es: es[-1]["claim"].update(chain_digests=es[-1]["claim"]["chain_digests"][:13] + [es[-1]["claim"]["chain_digests"][0]]))
+    t(g, "fourteen_digests_with_a_repeat_are_not_a_full_chain", has(CH.check_mission_events(dup14), "14-digest"))
+    fifteen = reseal_all(full, lambda es: es[-1]["claim"].update(chain_digests=es[-1]["claim"]["chain_digests"] + [es[-1]["claim"]["chain_digests"][0]]))
+    t(g, "fifteen_digests_are_not_a_full_chain", has(CH.check_mission_events(fifteen), "14-digest"))
+    t(g, "complete_without_an_outcome_event_is_reported", has(CH.check_mission_events(rl(full, lambda es: es.pop(5))), "COMPLETE needs a PASS"))
+    t(g, "complete_without_a_commit_event_is_reported", has(CH.check_mission_events(rl(full, lambda es: es.pop(4))), "COMPLETE needs a PASS"))
+    t(g, "validated_class_without_an_outcome_event_is_reported", has(CH.check_mission_events(rl(part, lambda es: es.pop(5))), "OUTCOME_VALIDATED needs"))
+    ack = nb.convert(m1, now=NOW)
+    t(g, "acknowledged_class_without_an_execution_receipt_is_reported", has(CH.check_mission_events(rl(ack, lambda es: es.pop(2))), "PROVIDER_ACKNOWLEDGED needs"))
     t(g, "every_problem_message_is_a_string", all(isinstance(p, str) for p in CH.check_mission_events(full[:1] + full[2:3])))
     t(g, "a_hostile_list_never_raises", all(isinstance(CH.check_mission_events(x), list) for x in ([None], [1], ["a"], [[]], [{}], [full[0], None], [{"contract": "mcr-evidence/1"}])))
 

@@ -3,11 +3,11 @@
   "SAP_WRITES": 0,
   "by_suite": {
     "adapters_interop": 99,
-    "evidence_chain": 40,
+    "evidence_chain": 52,
     "evidence_contract": 207,
     "hardening": 140,
     "inherited_r2": 519,
-    "mutation_gap_tests": 213,
+    "mutation_gap_tests": 230,
     "provenance_authority": 115,
     "readback": 34,
     "scanner": 99
@@ -16,5 +16,5 @@
   "network_calls": 0,
   "not_verified": [],
   "suites": 9,
-  "tests": 1466
+  "tests": 1495
 }

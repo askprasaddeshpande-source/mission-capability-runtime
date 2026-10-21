@@ -1,52 +1,52 @@
 {
-  "max_peak_bytes": 37830656,
+  "max_peak_bytes": 37961728,
   "note": "descriptive, machine-dependent",
   "suites": [
     {
-      "peak_bytes": 35446784,
+      "peak_bytes": 34443264,
       "suite": "inherited_r2",
-      "wall_seconds": 6.48
+      "wall_seconds": 9.27
     },
     {
-      "peak_bytes": 28659712,
+      "peak_bytes": 27963392,
       "suite": "hardening",
       "wall_seconds": 0.35
     },
     {
-      "peak_bytes": 28168192,
+      "peak_bytes": 28078080,
       "suite": "evidence_contract",
-      "wall_seconds": 1.01
+      "wall_seconds": 1.06
     },
     {
-      "peak_bytes": 29003776,
+      "peak_bytes": 28545024,
       "suite": "provenance_authority",
-      "wall_seconds": 0.59
+      "wall_seconds": 0.94
     },
     {
-      "peak_bytes": 23965696,
+      "peak_bytes": 23867392,
       "suite": "adapters_interop",
-      "wall_seconds": 0.22
+      "wall_seconds": 0.7
     },
     {
-      "peak_bytes": 23040000,
+      "peak_bytes": 23482368,
       "suite": "evidence_chain",
-      "wall_seconds": 0.23
+      "wall_seconds": 0.48
     },
     {
-      "peak_bytes": 21106688,
+      "peak_bytes": 21073920,
       "suite": "readback",
       "wall_seconds": 0.1
     },
     {
-      "peak_bytes": 37830656,
+      "peak_bytes": 37961728,
       "suite": "mutation_gap_tests",
-      "wall_seconds": 0.37
+      "wall_seconds": 0.79
     },
     {
-      "peak_bytes": 30363648,
+      "peak_bytes": 30466048,
       "suite": "scanner",
-      "wall_seconds": 18.85
+      "wall_seconds": 37.62
     }
   ],
-  "total_wall_seconds": 28.2
+  "total_wall_seconds": 51.31
 }

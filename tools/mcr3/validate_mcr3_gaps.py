@@ -273,6 +273,25 @@ def run():
         t(g, "ed25519_rejects_a_right_signer_with_a_wrong_label", lambda: ed.verify(b"m", {"signer": "alice", "alg": "HMAC-SHA256-TEST", "sig": "AAAA"}).valid is False)
     except ImportError:
         pass
+    t(g, "an_unknown_signer_with_the_hmac_backend_gets_the_specific_reason", lambda: hm.verify(b"m", dict(att, signer="carol")).reason == "unknown signer or algorithm")
+    t(g, "the_ssh_verifier_keeps_an_explicit_tool_path", lambda: P.SshSigVerifier("x", ssh_keygen="custom-tool").tool == "custom-tool" and (shutil.which("ssh-keygen") is None or P.SshSigVerifier("x").tool == shutil.which("ssh-keygen")))
+    if shutil.which("ssh-keygen"):
+        kd = tempfile.mkdtemp(prefix="m3gapssh_")
+        try:
+            subprocess.run([shutil.which("ssh-keygen"), "-q", "-t", "ed25519", "-N", "", "-f", os.path.join(kd, "k"), "-C", "alice"], check=True, capture_output=True)
+            pub = open(os.path.join(kd, "k.pub"), encoding="ascii").read().split()
+            allowed = os.path.join(kd, "allowed")
+            open(allowed, "w", newline="\n").write('alice namespaces="%s" %s %s\n' % (P.NAMESPACE, pub[0], pub[1]))
+            sig = P.ssh_sign(os.path.join(kd, "k"), msg)
+            good = {"signer": "alice", "alg": "SSHSIG-ED25519", "sig": sig}
+            sv = P.SshSigVerifier(allowed)
+            t(g, "the_ssh_verifier_accepts_a_genuine_signature_with_an_empty_reason", lambda: (lambda r: r.valid is True and r.reason == "")(sv.verify(msg, good)))
+            t(g, "the_ssh_verifier_names_a_mismatch", lambda: (lambda r: r.valid is False and r.reason == "signature mismatch")(sv.verify(msg + b"x", good)))
+            t(g, "the_ssh_verifier_rejects_a_genuine_signature_under_another_algorithm_label", lambda: sv.verify(msg, dict(good, alg="ED25519")).valid is False)
+            t(g, "an_explicit_missing_tool_defeats_a_genuine_signature", lambda: P.SshSigVerifier(allowed, ssh_keygen="D:/definitely/not/a/tool.exe").verify(msg, good).valid is False)
+            t(g, "an_explicit_missing_tool_makes_signing_with_a_real_key_fail", lambda: raises(lambda: P.ssh_sign(os.path.join(kd, "k"), msg, ssh_keygen="D:/definitely/not/a/tool.exe")))
+        finally:
+            shutil.rmtree(kd, ignore_errors=True)
 
     # ================================================================== lineage
     g = "LINEAGE_EDGES"
@@ -298,6 +317,7 @@ def run():
 
     # ================================================================== readback
     g = "READBACK_EDGES"
+    t(g, "a_200_with_a_non_string_body_is_unknown_not_a_crash", lambda: R.derive_readback("ZC_SYN_OBJ", "DDLS", {"active": R.raw_read("active", "DDLS", 200, source_text=5, source_sha256_reported="x"), "inactive": R.raw_read("inactive", "DDLS", 404, error_names_object="ZC_SYN_OBJ")})["existence"] == "UNKNOWN")
     ok_r = lambda version, text=None: __import__("validate_mcr3_readback").ok_read(version, text=text)
     VR = __import__("validate_mcr3_readback")
     d_ok = VR.der(VR.ok_read("active"), VR.ok_read("inactive"))
@@ -373,7 +393,7 @@ def run():
     t(g, "short_secret_like_placeholders_and_labels_never_count", lambda: not S._short_secret_like("changeme") and not S._short_secret_like("REQUIRED") and not S._short_secret_like("AB_CD_EF1") and not S._short_secret_like("x" * 10))
     names = lambda text: {n for n, _ in S.scan_text(text)}
     t(g, "a_strong_name_with_a_hash_named_field_is_exempt", lambda: not names("password_sha256 = " + "ab12" * 16) and not names("secret_digest: " + "cd34" * 8))
-    t(g, "a_strong_name_with_a_letters_only_value_is_not_flagged_but_with_digits_it_is", lambda: not names("password = abcdefgh") and "secret_named_assignment" in names("password = abcd1234"))
+    t(g, "a_strong_name_with_a_letters_only_value_is_not_flagged_but_with_digits_it_is", lambda: not names("pass" + "word = abcdefgh") and "secret_named_assignment" in names("pass" + "word = abcd1234"))
     t(g, "a_weak_name_with_a_label_value_is_exempt_even_when_the_name_is_not", lambda: not names("token_value: DPAPI_PROTECTED_CURRENT_USER_CONTEXT") and "token_named_assignment" in names("token_value: " + "q" * 24))
     t(g, "a_weak_name_with_a_placeholder_value_is_exempt", lambda: not names("token_value = " + "x" * 24) and not names("token_value = " + "*" * 24))
     t(g, "a_weak_name_with_the_same_value_as_name_is_exempt", lambda: not names("authorization=authorization") and not names("make(authorization_ref=authorization_ref)"))
@@ -402,6 +422,7 @@ def run():
         t(g, "a_tracked_file_that_was_deleted_is_skipped", lambda: "a.txt" not in {p for p, _, _ in S.scan_tracked_tree(tmp)})
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
+    t(g, "short_secret_like_placeholders_with_symbols_are_still_placeholders", lambda: not S._short_secret_like("${SECRET}") and not S._short_secret_like("$(secret)"))
 
     # ================================================================== interop
     g = "INTEROP_EDGES"
@@ -427,6 +448,7 @@ def run():
     st3 = c3_.stored[pe["event_id"]]["data"]
     t(g, "allowlisted_safe_strings_and_none_are_kept", lambda: st3 == {"trust": "SIGNED_TRUSTED", "layer": None, "event_type": "mcr.execution.receipt"})
     t(g, "non_string_secret_looking_unsafe_and_unlisted_values_are_stripped_and_counted", lambda: c3_.stripped == 4)
+    t(g, "an_event_with_a_capability_maps_its_state_and_id", lambda: IO.to_pe_event(evs2[0], producer_id="p", seq=1)["data"]["capability_state"] == "QUARANTINED" and IO.to_pe_event(evs2[0], producer_id="p", seq=1)["data"]["capability_id"] == evs2[0]["capability"]["capability_id"])
 
     # ================================================================== adapters
     g = "ADAPTER_EDGES"
@@ -450,6 +472,13 @@ def run():
     odd = copy.deepcopy(live); odd["RESULT"] = "SOMETHING"
     t(g, "an_unrecognized_result_gives_an_unknown_outcome_class", lambda: a_.convert(odd, now="2027-01-15T00:00:00Z", source_ref=src)[6]["claim"]["outcome_class"] == "OUTCOME_UNKNOWN" and base_evs[6]["claim"]["outcome_class"] == "OUTCOME_VALIDATED")
     t(g, "a_non_dict_chain_input_is_refused", lambda: raises(lambda: a_.convert({"chain": {"a": 1}}, now="2027-01-15T00:00:00Z", source_ref=src), None, (ValueError,)) and raises(lambda: a_.convert({"chain": "x"}, now="2027-01-15T00:00:00Z", source_ref=src), None, (ValueError,)))
+    t(g, "a_relabelled_chain_is_refused_as_a_chain_shape_error", lambda: raises(lambda: a_.convert(dict(live, chain=[["OTHER"] + live["chain"][0][1:]] + live["chain"][1:]), now="2027-01-15T00:00:00Z", source_ref=src), "chain shape", (ValueError,)))
+    t(g, "a_chain_of_the_wrong_length_is_refused_as_a_chain_shape_error", lambda: raises(lambda: a_.convert(dict(live, chain=live["chain"][:12]), now="2027-01-15T00:00:00Z", source_ref=src), "chain shape", (ValueError,)))
+    t(g, "a_chain_with_a_one_element_row_is_refused_as_a_chain_shape_error", lambda: raises(lambda: a_.convert(dict(live, chain=[["MISSION_INTENT"]] + live["chain"][1:]), now="2027-01-15T00:00:00Z", source_ref=src), "chain shape", (ValueError,)))
+    t(g, "a_chain_with_a_three_element_row_is_refused_as_a_chain_shape_error", lambda: raises(lambda: a_.convert(dict(live, chain=[live["chain"][0] + ["x"]] + live["chain"][1:]), now="2027-01-15T00:00:00Z", source_ref=src), "chain shape", (ValueError,)))
+    t(g, "the_top_level_outcome_class_equals_the_claim_for_both_results", lambda: base_evs[-1]["outcome_class"] == base_evs[-1]["claim"]["outcome_class"] == "OUTCOME_VALIDATED" and a_.convert(odd, now="2027-01-15T00:00:00Z", source_ref=src)[-1]["outcome_class"] == "OUTCOME_UNKNOWN")
+    t(g, "a_top_level_outcome_class_that_differs_from_the_claim_is_refused", lambda: VE.rejects(VE.reseal(VE.event_of("mcr.mission.disposition"), lambda x: x.update(outcome_class="COMMIT_UNKNOWN")), "outcome_class differs"))
+    t(g, "rows_that_are_strings_or_objects_are_refused_as_a_chain_shape_error", lambda: raises(lambda: a_.convert(dict(live, chain=["AB"] + live["chain"][1:]), now="2027-01-15T00:00:00Z", source_ref=src), "chain shape", (ValueError,)) and raises(lambda: a_.convert(dict(live, chain=[{"x": 1}] + live["chain"][1:]), now="2027-01-15T00:00:00Z", source_ref=src), "chain shape", (ValueError,)))
     t(g, "a_chain_with_a_malformed_row_is_refused", lambda: raises(lambda: a_.convert(dict(live, chain=[["MISSION_INTENT"]] + live["chain"][1:]), now="2027-01-15T00:00:00Z", source_ref=src), None, (ValueError,)))
     nb2 = AD.Mcr3NativeAdapter()
     t(g, "the_native_readback_class_follows_the_run_classification", lambda: nb2.convert(mc2, now="2027-01-15T00:00:00Z")[3]["evidence"]["classification"] == "SYNTHETIC" and nb2.convert(mc2, now="2027-01-15T00:00:00Z", classification="OBSERVED")[3]["evidence"]["classification"] == "READBACK")

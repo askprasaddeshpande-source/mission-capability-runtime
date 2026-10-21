@@ -311,6 +311,8 @@ def semantic_problems(e, full=None):
             p.append("outcome_class COMPLETE needs disposition COMPLETE")
         if "disposition" in e and e["disposition"] != cl["disposition"]:
             p.append("top-level disposition differs from the claim")
+        if "outcome_class" in e and e["outcome_class"] != cl["outcome_class"]:
+            p.append("top-level outcome_class differs from the claim")
     if cl["kind"] == "EXECUTION_RECEIPT" and cl["call_class"] == "PROVIDER_RESPONSE_SUCCESS" and not cl["provider_acknowledged"]:
         p.append("a successful provider response is an acknowledgement")
     if cl["kind"] == "EXECUTION_RECEIPT" and cl["call_class"] in ("CALL_NOT_SENT", "CALL_SENT_NO_RESPONSE", "PROVIDER_ERROR") and cl["provider_acknowledged"]:

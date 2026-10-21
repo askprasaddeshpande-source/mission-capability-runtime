@@ -1,94 +1,102 @@
 {
   "MUTATION_CHECK": "FAIL",
   "by_kind": {
-    "ast": 1220,
+    "ast": 1333,
     "guard": 141,
     "relation": 53,
     "special": 28
   },
   "by_module": {
     "evc1.py": {
-      "assertion": 65,
-      "crash": 52,
-      "detected": 117,
+      "assertion": 83,
+      "crash": 54,
+      "detected": 137,
       "hang": 0,
-      "mutants": 144,
-      "survivors": 27
+      "mutants": 141,
+      "survivors": 4
     },
     "mcr3_adapters.py": {
-      "assertion": 16,
+      "assertion": 30,
       "crash": 14,
-      "detected": 30,
+      "detected": 44,
       "hang": 0,
       "mutants": 56,
-      "survivors": 26
-    },
-    "mcr3_authority.py": {
-      "assertion": 27,
-      "crash": 55,
-      "detected": 82,
-      "hang": 0,
-      "mutants": 102,
-      "survivors": 20
-    },
-    "mcr3_interop.py": {
-      "assertion": 15,
-      "crash": 8,
-      "detected": 23,
-      "hang": 0,
-      "mutants": 35,
       "survivors": 12
     },
+    "mcr3_authority.py": {
+      "assertion": 41,
+      "crash": 56,
+      "detected": 97,
+      "hang": 0,
+      "mutants": 102,
+      "survivors": 5
+    },
+    "mcr3_chain.py": {
+      "assertion": 78,
+      "crash": 24,
+      "detected": 102,
+      "hang": 0,
+      "mutants": 116,
+      "survivors": 14
+    },
+    "mcr3_interop.py": {
+      "assertion": 24,
+      "crash": 10,
+      "detected": 34,
+      "hang": 0,
+      "mutants": 35,
+      "survivors": 1
+    },
     "mcr3_lineage.py": {
-      "assertion": 17,
+      "assertion": 19,
       "crash": 0,
-      "detected": 17,
+      "detected": 19,
       "hang": 0,
       "mutants": 19,
-      "survivors": 2
+      "survivors": 0
     },
     "mcr3_model.py": {
-      "assertion": 387,
+      "assertion": 411,
       "crash": 353,
-      "detected": 741,
+      "detected": 765,
       "hang": 1,
       "mutants": 773,
-      "survivors": 32
+      "survivors": 8
     },
     "mcr3_provenance.py": {
-      "assertion": 43,
+      "assertion": 60,
       "crash": 6,
-      "detected": 49,
+      "detected": 66,
       "hang": 0,
       "mutants": 73,
-      "survivors": 24
+      "survivors": 7
     },
     "mcr3_readback.py": {
-      "assertion": 29,
+      "assertion": 36,
       "crash": 2,
-      "detected": 31,
+      "detected": 38,
       "hang": 0,
       "mutants": 40,
-      "survivors": 9
+      "survivors": 2
     },
     "mcr3_scan.py": {
-      "assertion": 14,
-      "crash": 61,
-      "detected": 75,
+      "assertion": 28,
+      "crash": 63,
+      "detected": 91,
       "hang": 0,
       "mutants": 94,
-      "survivors": 19
+      "survivors": 3
     },
     "mini_jsonschema.py": {
-      "assertion": 31,
+      "assertion": 50,
       "crash": 56,
-      "detected": 87,
+      "detected": 106,
       "hang": 0,
       "mutants": 106,
-      "survivors": 19
+      "survivors": 0
     }
   },
-  "detected_by_assertion": 644,
+  "detected_by_assertion": 860,
   "detected_by_hang": [
     "mcr3_model.py::guard@L278: time.time() - start > timeout"
   ],
@@ -107,6 +115,7 @@
     "evc1.py::ast@L275: flip e[\"digests\"][\"payload\"] != digest_of(e[\"claim\"])": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
     "evc1.py::ast@L277: flip e[\"digests\"][\"schema\"] != SCHEMA_DIGEST": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
     "evc1.py::ast@L280: drop clause 1 of full or e": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L280: drop clause 2 of full or e": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
     "evc1.py::ast@L280: flip k != \"integrity\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
     "evc1.py::ast@L281: flip e[\"integrity\"][\"event_digest\"] != digest_of(body)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
     "evc1.py::ast@L284: flip ev[\"trust\"] != derive_trust(ev[\"provenance\"])": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
@@ -124,6 +133,7 @@
     "evc1.py::ast@L305: drop clause 1 of cl[\"kind\"] == \"OUTCOME_EVALUATION\" and ev[\"classification\"] ": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
     "evc1.py::ast@L305: flip cl[\"kind\"] == \"OUTCOME_EVALUATION\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
     "evc1.py::ast@L307: flip cl[\"kind\"] == \"MISSION_DISPOSITION\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L312: drop clause 2 of \"disposition\" in e and e[\"disposition\"] != cl[\"disposition\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
     "evc1.py::ast@L314: drop clause 3 of cl[\"kind\"] == \"EXECUTION_RECEIPT\" and cl[\"call_class\"] == \"P": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
     "evc1.py::ast@L314: remove not in not cl[\"provider_acknowledged\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
     "evc1.py::ast@L316: drop clause 2 of cl[\"kind\"] == \"EXECUTION_RECEIPT\" and cl[\"call_class\"] in (\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
@@ -170,6 +180,7 @@
     "mcr3_authority.py::ast@L105: remove not in not passed": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
     "mcr3_authority.py::ast@L111: flip reviewer_verdict not in (\"GO\", \"GO_WITH_DOCUMENTED_GAPS\")": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
     "mcr3_authority.py::ast@L113: drop clause 1 of not _hex64(qualification_digest) or not isinstance(reviewer,": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L113: drop clause 2 of not _hex64(qualification_digest) or not isinstance(reviewer,": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
     "mcr3_authority.py::ast@L113: drop clause 3 of not _hex64(qualification_digest) or not isinstance(reviewer,": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
     "mcr3_authority.py::ast@L113: remove not in not _hex64(qualification_digest)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
     "mcr3_authority.py::ast@L113: remove not in not isinstance(reviewer, str)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
@@ -214,12 +225,38 @@
     "mcr3_authority.py::ast@L83: flip c.state == \"DISCOVERED\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
     "mcr3_authority.py::ast@L94: flip c.state == \"REVOKED\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
     "mcr3_authority.py::ast@L96: flip to not in FORWARD[c.state]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L18: drop clause 2 of not isinstance(events, list) or not events": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L18: remove not in not events": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L42: flip e[\"type\"] == \"mcr.mission.disposition\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L43: drop clause 1 of disp and disp[0] != len(parsed) - 1": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L46: swap +/- in i - 1": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L54: flip e[\"type\"] == \"mcr.mutation.attempted\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L57: flip e[\"type\"] == \"mcr.compensation.attempted\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L65: flip t in pos": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L70: drop clause 1 of co and (not rb or co[\"claim\"][\"readback_digest\"] != rb[\"evid": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L70: drop clause 1 of not rb or co[\"claim\"][\"readback_digest\"] != rb[\"evidence\"][\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L70: remove not in not rb": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L72: drop clause 1 of not rb or oc[\"claim\"][\"readback_digest\"] != rb[\"evidence\"][\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L72: remove not in not rb": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L75: drop clause 1 of co and co[\"claim\"][\"commit_state\"] == \"COMMITTED\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L76: drop clause 1 of not rb or rb[\"claim\"][\"existence\"] != \"EXISTS\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L76: remove not in not rb": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L78: drop clause 1 of not er or er[\"claim\"][\"call_class\"] not in (\"PROVIDER_RESPON": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L78: remove not in not er": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L80: drop clause 1 of co and co[\"claim\"][\"commit_state\"] == \"COMMITTED\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L80: drop clause 1 of oc and oc[\"claim\"][\"result\"] == \"PASS\" and not (co and co[\"c": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L82: drop clause 1 of rb and rb[\"claim\"][\"claimed_authoritative\"] and rb[\"claim\"][": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L89: drop clause 1 of t in by and by[t][\"evidence\"][\"digest\"] not in digs": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L89: flip t in by": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L92: drop clause 3 of oc and oc[\"claim\"][\"result\"] == \"PASS\" and co and co[\"claim\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
     "mcr3_interop.py::ast@L101: drop clause 1 of pe.get(\"data\") or {}": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_interop.py::ast@L102: drop clause 1 of isinstance(v, str) and _SAFE.match(v) and not _SECRETISH.sea": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
     "mcr3_interop.py::ast@L102: drop clause 2 of v is None or (isinstance(v, str) and _SAFE.match(v) and not ": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
     "mcr3_interop.py::ast@L102: flip k in DATA_ALLOWED": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
     "mcr3_interop.py::ast@L102: remove not in not _SECRETISH.search(v)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
     "mcr3_interop.py::ast@L129: flip e[\"type\"] == \"mcr.mission.disposition\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
     "mcr3_interop.py::ast@L132: remove not in not evs": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_interop.py::ast@L46: drop clause 2 of known.get(\"capability\") or {}": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
     "mcr3_interop.py::ast@L56: flip known.get(k) is not None": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
     "mcr3_interop.py::ast@L59: flip k in claim": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
     "mcr3_model.py::ast@L1000: flip completion.get(\"transaction_id\") == T": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
@@ -347,7 +384,7 @@
     "mcr3_model.py::ast@L329: flip ord(c) == 127": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
     "mcr3_model.py::ast@L331: flip c in _BAD_PATH_CHARS": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
     "mcr3_model.py::ast@L334: flip path[1] == \":\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_model.py::ast@L335: drop clause 2 of len(path) > 2 and path[2] not in \"/\\\\\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_model.py::ast@L335: flip len(path) == 2": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
     "mcr3_model.py::ast@L335: flip path[2] not in \"/\\\\\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
     "mcr3_model.py::ast@L338: flip \":\" in rest": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
     "mcr3_model.py::ast@L343: flip part == \"..\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
@@ -583,67 +620,69 @@
     "mcr3_provenance.py::ast@L263: flip k != \"integrity\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
     "mcr3_readback.py::ast@L66: flip existence == \"ABSENT\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
     "mcr3_readback.py::ast@L66: flip existence == \"EXISTS\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L154: swap +/- in \"sk\" + \"-ant-\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L154: swap +/- in \"sk\" + \"-ant-\" + \"api03-\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L154: swap +/- in \"sk\" + \"-ant-\" + \"api03-\" + _a(40, \"x\")": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L155: swap +/- in \"sk\" + \"-proj-\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L155: swap +/- in \"sk\" + \"-proj-\" + _a(40, \"x\")": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L156: swap +/- in \"sk\" + \"-\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L156: swap +/- in \"sk\" + \"-\" + _a(40)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L157: swap +/- in \"gh\" + \"p_\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L157: swap +/- in \"gh\" + \"p_\" + _a(36)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L158: swap +/- in \"github\" + \"_pat_\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L158: swap +/- in \"github\" + \"_pat_\" + _a(30)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L159: swap +/- in \"gl\" + \"pat-\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L159: swap +/- in \"gl\" + \"pat-\" + _a(24)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L160: swap +/- in \"AI\" + \"za\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L160: swap +/- in \"AI\" + \"za\" + _a(35)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L161: swap +/- in \"ya\" + \"29.\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L161: swap +/- in \"ya\" + \"29.\" + _a(30)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L162: swap +/- in '\"private' + '_key\": \"-----BEGIN '": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L162: swap +/- in '\"private' + '_key\": \"-----BEGIN ' + 'PRIVATE KEY-----\"'": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L163: swap +/- in \"SG\" + \".\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L163: swap +/- in \"SG\" + \".\" + _a(22)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L163: swap +/- in \"SG\" + \".\" + _a(22) + \".\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L163: swap +/- in \"SG\" + \".\" + _a(22) + \".\" + _a(43)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L164: swap +/- in \"sk\" + \"_live_\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L164: swap +/- in \"sk\" + \"_live_\" + _a(24)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L165: swap +/- in \"whsec\" + \"_\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L165: swap +/- in \"whsec\" + \"_\" + _a(32)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L166: swap +/- in \"AK\" + \"IA\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L166: swap +/- in \"AK\" + \"IA\" + \"ABCDEFGHIJKLMNOP\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L167: swap +/- in \"aws_secret\" + \"_access_key = \"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L167: swap +/- in \"aws_secret\" + \"_access_key = \" + _a(40, \"a\")": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L168: swap +/- in \"Account\" + \"Key=\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L168: swap +/- in \"Account\" + \"Key=\" + _a(44)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L168: swap +/- in \"Account\" + \"Key=\" + _a(44) + \"==\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L169: swap +/- in \"?sv=2020&\" + \"sig=\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L169: swap +/- in \"?sv=2020&\" + \"sig=\" + _a(40)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L170: swap +/- in \"xo\" + \"xb-\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L170: swap +/- in \"xo\" + \"xb-\" + \"1234567890-abcdefghij\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L171: swap +/- in \"S\" + \"K\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L171: swap +/- in \"S\" + \"K\" + \"0123456789abcdef\" * 2": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L172: swap +/- in \"np\" + \"m_\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L172: swap +/- in \"np\" + \"m_\" + _a(36)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L173: swap +/- in \"py\" + \"pi-\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L173: swap +/- in \"py\" + \"pi-\" + _a(60)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L174: swap +/- in \"h\" + \"f_\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L174: swap +/- in \"h\" + \"f_\" + _a(34)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L175: swap +/- in \"ey\" + \"J\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L175: swap +/- in \"ey\" + \"J\" + _a(20)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L176: swap +/- in \"-----BEGIN \" + \"RSA PRIVATE \"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L176: swap +/- in \"-----BEGIN \" + \"RSA PRIVATE \" + \"KEY-----\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L177: swap +/- in \"Bear\" + \"er \"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L177: swap +/- in \"Bear\" + \"er \" + _a(30)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L178: swap +/- in \"Bas\" + \"ic \"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L178: swap +/- in \"Bas\" + \"ic \" + _a(30)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L179: swap +/- in \"https://user:\" + \"hunter22\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L179: swap +/- in \"https://user:\" + \"hunter22\" + \"@example.org/x\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L180: swap +/- in \"pass\" + \"word = \"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L180: swap +/- in \"pass\" + \"word = \" + \"p@ss!w0rd\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L181: swap +/- in \"to\" + \"ken: \"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L181: swap +/- in \"to\" + \"ken: \" + _a(24, \"q\")": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
-    "mcr3_scan.py::ast@L187: swap +/- in [n for n, _ in SHAPES] + [\"secret_named_assignment\", \"token_": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L140: swap +/- in p + \"!\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L140: swap +/- in p + \"!\" + mem": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L157: swap +/- in \"sk\" + \"-ant-\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L157: swap +/- in \"sk\" + \"-ant-\" + \"api03-\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L157: swap +/- in \"sk\" + \"-ant-\" + \"api03-\" + _a(40, \"x\")": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L158: swap +/- in \"sk\" + \"-proj-\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L158: swap +/- in \"sk\" + \"-proj-\" + _a(40, \"x\")": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L159: swap +/- in \"sk\" + \"-\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L159: swap +/- in \"sk\" + \"-\" + _a(40)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L160: swap +/- in \"gh\" + \"p_\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L160: swap +/- in \"gh\" + \"p_\" + _a(36)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L161: swap +/- in \"github\" + \"_pat_\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L161: swap +/- in \"github\" + \"_pat_\" + _a(30)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L162: swap +/- in \"gl\" + \"pat-\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L162: swap +/- in \"gl\" + \"pat-\" + _a(24)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L163: swap +/- in \"AI\" + \"za\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L163: swap +/- in \"AI\" + \"za\" + _a(35)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L164: swap +/- in \"ya\" + \"29.\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L164: swap +/- in \"ya\" + \"29.\" + _a(30)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L165: swap +/- in '\"private' + '_key\": \"-----BEGIN '": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L165: swap +/- in '\"private' + '_key\": \"-----BEGIN ' + 'PRIVATE KEY-----\"'": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L166: swap +/- in \"SG\" + \".\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L166: swap +/- in \"SG\" + \".\" + _a(22)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L166: swap +/- in \"SG\" + \".\" + _a(22) + \".\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L166: swap +/- in \"SG\" + \".\" + _a(22) + \".\" + _a(43)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L167: swap +/- in \"sk\" + \"_live_\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L167: swap +/- in \"sk\" + \"_live_\" + _a(24)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L168: swap +/- in \"whsec\" + \"_\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L168: swap +/- in \"whsec\" + \"_\" + _a(32)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L169: swap +/- in \"AK\" + \"IA\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L169: swap +/- in \"AK\" + \"IA\" + \"ABCDEFGHIJKLMNOP\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L170: swap +/- in \"aws_secret\" + \"_access_key = \"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L170: swap +/- in \"aws_secret\" + \"_access_key = \" + _a(40, \"a\")": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L171: swap +/- in \"Account\" + \"Key=\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L171: swap +/- in \"Account\" + \"Key=\" + _a(44)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L171: swap +/- in \"Account\" + \"Key=\" + _a(44) + \"==\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L172: swap +/- in \"?sv=2020&\" + \"sig=\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L172: swap +/- in \"?sv=2020&\" + \"sig=\" + _a(40)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L173: swap +/- in \"xo\" + \"xb-\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L173: swap +/- in \"xo\" + \"xb-\" + \"1234567890-abcdefghij\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L174: swap +/- in \"S\" + \"K\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L174: swap +/- in \"S\" + \"K\" + \"0123456789abcdef\" * 2": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L175: swap +/- in \"np\" + \"m_\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L175: swap +/- in \"np\" + \"m_\" + _a(36)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L176: swap +/- in \"py\" + \"pi-\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L176: swap +/- in \"py\" + \"pi-\" + _a(60)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L177: swap +/- in \"h\" + \"f_\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L177: swap +/- in \"h\" + \"f_\" + _a(34)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L178: swap +/- in \"ey\" + \"J\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L178: swap +/- in \"ey\" + \"J\" + _a(20)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L179: swap +/- in \"-----BEGIN \" + \"RSA PRIVATE \"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L179: swap +/- in \"-----BEGIN \" + \"RSA PRIVATE \" + \"KEY-----\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L180: swap +/- in \"Bear\" + \"er \"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L180: swap +/- in \"Bear\" + \"er \" + _a(30)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L181: swap +/- in \"Bas\" + \"ic \"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L181: swap +/- in \"Bas\" + \"ic \" + _a(30)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L182: swap +/- in \"https://user:\" + \"hunter22\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L182: swap +/- in \"https://user:\" + \"hunter22\" + \"@example.org/x\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L183: swap +/- in \"pass\" + \"word = \"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L183: swap +/- in \"pass\" + \"word = \" + \"p@ss!w0rd\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L184: swap +/- in \"to\" + \"ken: \"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L184: swap +/- in \"to\" + \"ken: \" + _a(24, \"q\")": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L190: swap +/- in [n for n, _ in SHAPES] + [\"secret_named_assignment\", \"token_": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
     "mini_jsonschema.py::ast@L102: flip r not in v": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
     "mini_jsonschema.py::ast@L108: flip k in props": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
     "mini_jsonschema.py::ast@L115: drop clause 1 of not matched and \"additionalProperties\" in schema": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
@@ -711,7 +750,7 @@
     "mcr3_model.py::ast@L967: drop clause 1 of mid is not None and mid in tx[\"mutation_ids\"]": "equivalent: None is never a member of a list of non-empty strings"
   },
   "inconclusive": [],
-  "mutants": 1442,
+  "mutants": 1555,
   "not_applied": [],
   "results": [
     {
@@ -776,8 +815,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_model.py::guard@L327: len(path) > 4096"
     },
     {
@@ -788,15 +827,15 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_model.py::guard@L331: any(c in _BAD_PATH_CHARS for c in path)"
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "assertion",
-      "mutant": "mcr3_model.py::guard@L335: len(path) > 2 and path[2] not in \"/\\\\\""
+      "mutant": "mcr3_model.py::guard@L335: len(path) == 2 or path[2] not in \"/\\\\\""
     },
     {
       "applied": true,
@@ -806,8 +845,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_model.py::guard@L343: part == \"..\""
     },
     {
@@ -1364,8 +1403,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_model.py::guard@L1081: resolution[\"mutation_id\"] != self.ev[\"mutation_id\"] or resolution[\"con"
     },
     {
@@ -1946,32 +1985,32 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_model.py::ast@L327: flip len(path) > 4096"
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_model.py::ast@L334: drop clause 1 of len(path) >= 2 and path[1] == \":\" and path[0].isalpha() and "
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_model.py::ast@L334: drop clause 2 of len(path) >= 2 and path[1] == \":\" and path[0].isalpha() and "
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_model.py::ast@L334: drop clause 3 of len(path) >= 2 and path[1] == \":\" and path[0].isalpha() and "
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_model.py::ast@L334: drop clause 4 of len(path) >= 2 and path[1] == \":\" and path[0].isalpha() and "
     },
     {
@@ -2006,14 +2045,14 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_model.py::ast@L586: drop clause 2 of not isinstance(ref, str) or not isinstance(provider_id, str)"
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_model.py::ast@L586: drop clause 3 of not isinstance(ref, str) or not isinstance(provider_id, str)"
     },
     {
@@ -2264,8 +2303,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_model.py::ast@L334: flip len(path) >= 2"
     },
     {
@@ -2276,15 +2315,15 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
-      "mutant": "mcr3_model.py::ast@L335: drop clause 1 of len(path) > 2 and path[2] not in \"/\\\\\""
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_model.py::ast@L335: drop clause 1 of len(path) == 2 or path[2] not in \"/\\\\\""
     },
     {
       "applied": true,
       "detected": true,
-      "detected_by": "crash",
-      "mutant": "mcr3_model.py::ast@L335: drop clause 2 of len(path) > 2 and path[2] not in \"/\\\\\""
+      "detected_by": "assertion",
+      "mutant": "mcr3_model.py::ast@L335: drop clause 2 of len(path) == 2 or path[2] not in \"/\\\\\""
     },
     {
       "applied": true,
@@ -2300,8 +2339,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_model.py::ast@L345: drop clause 1 of part != \".\" and (part.endswith(\".\") or part.endswith(\" \"))"
     },
     {
@@ -2432,8 +2471,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_model.py::ast@L500: drop clause 4 of not isinstance(anchor, dict) or not isinstance(anchor.get(\"l"
     },
     {
@@ -2876,8 +2915,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_model.py::ast@L814: drop clause 1 of not isinstance(chk, list) or not chk or not all(isinstance(c"
     },
     {
@@ -3002,8 +3041,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_model.py::ast@L888: drop clause 1 of isinstance(obs, dict) and all(c in obs and obs[c] not in (No"
     },
     {
@@ -3578,8 +3617,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_model.py::ast@L329: drop clause 2 of ord(c) < 32 or ord(c) == 127"
     },
     {
@@ -3590,9 +3629,9 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
-      "mutant": "mcr3_model.py::ast@L335: flip len(path) > 2"
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_model.py::ast@L335: flip len(path) == 2"
     },
     {
       "applied": true,
@@ -4364,14 +4403,14 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_model.py::ast@L1081: drop clause 1 of resolution[\"mutation_id\"] != self.ev[\"mutation_id\"] or resol"
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_model.py::ast@L1081: drop clause 2 of resolution[\"mutation_id\"] != self.ev[\"mutation_id\"] or resol"
     },
     {
@@ -4382,8 +4421,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_model.py::ast@L1083: drop clause 2 of resolution[\"source_level\"] != \"AUTHORITATIVE_REPOSITORY\" or "
     },
     {
@@ -4580,14 +4619,14 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_model.py::ast@L1302: drop clause 1 of er and er[\"call_class\"] == \"PROVIDER_RESPONSE_SUCCESS\""
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_model.py::ast@L1302: drop clause 2 of er and er[\"call_class\"] == \"PROVIDER_RESPONSE_SUCCESS\""
     },
     {
@@ -5408,8 +5447,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "evc1.py::ast@L239: drop clause 1 of provenance or unsigned_provenance()"
     },
     {
@@ -5516,8 +5555,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "evc1.py::ast@L299: drop clause 2 of cl[\"kind\"] == \"READBACK_CLAIM\" and cl[\"claimed_authoritative"
     },
     {
@@ -5540,8 +5579,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "evc1.py::ast@L301: drop clause 3 of cl[\"kind\"] == \"READBACK_CLAIM\" and cl[\"provenance_verified\"]"
     },
     {
@@ -5570,8 +5609,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "evc1.py::ast@L305: drop clause 2 of cl[\"kind\"] == \"OUTCOME_EVALUATION\" and ev[\"classification\"] "
     },
     {
@@ -5594,8 +5633,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "evc1.py::ast@L314: drop clause 2 of cl[\"kind\"] == \"EXECUTION_RECEIPT\" and cl[\"call_class\"] == \"P"
     },
     {
@@ -5618,8 +5657,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "evc1.py::ast@L316: drop clause 3 of cl[\"kind\"] == \"EXECUTION_RECEIPT\" and cl[\"call_class\"] in (\""
     },
     {
@@ -5630,8 +5669,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "evc1.py::ast@L318: drop clause 2 of cl[\"kind\"] == \"COMMIT_OBSERVATION\" and cl[\"commit_state\"] =="
     },
     {
@@ -5704,24 +5743,12 @@
       "applied": true,
       "detected": false,
       "detected_by": null,
-      "mutant": "evc1.py::ast@L370: drop clause 1 of tmin < smin and unknown"
+      "mutant": "evc1.py::ast@L376: drop clause 1 of known.get(\"integrity\", {}).get(\"event_digest\") or digest_of("
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "assertion",
-      "mutant": "evc1.py::ast@L370: drop clause 2 of tmin < smin and unknown"
-    },
-    {
-      "applied": true,
-      "detected": false,
-      "detected_by": null,
-      "mutant": "evc1.py::ast@L376: drop clause 1 of known.get(\"integrity\", {}).get(\"event_digest\") or digest_of("
-    },
-    {
-      "applied": true,
-      "detected": false,
-      "detected_by": null,
       "mutant": "evc1.py::ast@L376: drop clause 2 of known.get(\"integrity\", {}).get(\"event_digest\") or digest_of("
     },
     {
@@ -5780,8 +5807,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "evc1.py::ast@L249: drop clause 1 of lineage or {\"transformations\": [], \"source_event_id\": None, "
     },
     {
@@ -5864,8 +5891,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "evc1.py::ast@L296: flip name not in KNOWN_CRITICAL"
     },
     {
@@ -5918,26 +5945,26 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "evc1.py::ast@L305: flip ev[\"classification\"] != \"HISTORICAL\""
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "evc1.py::ast@L305: drop clause 1 of cl[\"expected_digest\"] is None or cl[\"predicates_digest\"] is "
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "evc1.py::ast@L305: drop clause 2 of cl[\"expected_digest\"] is None or cl[\"predicates_digest\"] is "
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "evc1.py::ast@L308: drop clause 1 of cl[\"disposition\"] == \"COMPLETE\" and cl[\"outcome_class\"] != \""
     },
     {
@@ -5948,8 +5975,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "evc1.py::ast@L310: drop clause 1 of cl[\"outcome_class\"] == \"COMPLETE\" and cl[\"disposition\"] != \""
     },
     {
@@ -5966,8 +5993,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "crash",
       "mutant": "evc1.py::ast@L312: drop clause 2 of \"disposition\" in e and e[\"disposition\"] != cl[\"disposition\"]"
     },
     {
@@ -6050,8 +6077,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "evc1.py::ast@L346: drop clause 1 of name in unknown or name not in KNOWN_CRITICAL"
     },
     {
@@ -6059,12 +6086,6 @@
       "detected": false,
       "detected_by": null,
       "mutant": "evc1.py::ast@L346: drop clause 2 of name in unknown or name not in KNOWN_CRITICAL"
-    },
-    {
-      "applied": true,
-      "detected": false,
-      "detected_by": null,
-      "mutant": "evc1.py::ast@L370: flip tmin < smin"
     },
     {
       "applied": true,
@@ -6140,14 +6161,14 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "evc1.py::ast@L346: flip name in unknown"
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "evc1.py::ast@L346: flip name not in KNOWN_CRITICAL"
     },
     {
@@ -6200,8 +6221,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "evc1.py::ast@L376: flip k != \"integrity\""
     },
     {
@@ -6212,8 +6233,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "crash",
       "mutant": "evc1.py::ast@L280: drop clause 2 of full or e"
     },
     {
@@ -6338,14 +6359,14 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mini_jsonschema.py::ast@L85: drop clause 1 of isinstance(v, (int, float)) and not isinstance(v, bool)"
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mini_jsonschema.py::ast@L85: drop clause 2 of isinstance(v, (int, float)) and not isinstance(v, bool)"
     },
     {
@@ -6374,8 +6395,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mini_jsonschema.py::ast@L131: drop clause 2 of \"not\" in schema and not _sub(schema[\"not\"], root, v, path)"
     },
     {
@@ -6398,14 +6419,14 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mini_jsonschema.py::ast@L27: drop clause 1 of isinstance(v, (int, float)) and not isinstance(v, bool)"
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mini_jsonschema.py::ast@L27: drop clause 2 of isinstance(v, (int, float)) and not isinstance(v, bool)"
     },
     {
@@ -6428,14 +6449,14 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mini_jsonschema.py::ast@L48: drop clause 1 of not isinstance(node, dict) or part not in node"
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mini_jsonschema.py::ast@L48: drop clause 2 of not isinstance(node, dict) or part not in node"
     },
     {
@@ -6542,8 +6563,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mini_jsonschema.py::ast@L88: drop clause 2 of \"maximum\" in schema and v > schema[\"maximum\"]"
     },
     {
@@ -6566,20 +6587,20 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mini_jsonschema.py::ast@L93: drop clause 2 of \"maxItems\" in schema and len(v) > schema[\"maxItems\"]"
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mini_jsonschema.py::ast@L95: drop clause 1 of schema.get(\"uniqueItems\") and len({repr(x) for x in v}) != l"
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mini_jsonschema.py::ast@L95: drop clause 2 of schema.get(\"uniqueItems\") and len({repr(x) for x in v}) != l"
     },
     {
@@ -6590,8 +6611,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mini_jsonschema.py::ast@L125: remove not in not any(not _sub(s, root, v, path) for s in schema[\"anyOf\"])"
     },
     {
@@ -6662,8 +6683,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mini_jsonschema.py::ast@L79: flip len(v) > schema[\"maxLength\"]"
     },
     {
@@ -6710,8 +6731,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mini_jsonschema.py::ast@L88: flip v > schema[\"maximum\"]"
     },
     {
@@ -6734,8 +6755,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mini_jsonschema.py::ast@L93: flip len(v) > schema[\"maxItems\"]"
     },
     {
@@ -6794,8 +6815,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mini_jsonschema.py::ast@L163: flip k in (\"items\", \"additionalProperties\", \"not\", \"if\", \"then\", "
     },
     {
@@ -6818,20 +6839,20 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mini_jsonschema.py::ast@L117: flip ap is False"
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mini_jsonschema.py::ast@L119: flip ap is not True"
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mini_jsonschema.py::ast@L125: remove not in not _sub(s, root, v, path)"
     },
     {
@@ -6854,14 +6875,14 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_provenance.py::ast@L36: drop clause 1 of not isinstance(ts, str) or not ts.endswith(\"Z\")"
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_provenance.py::ast@L36: drop clause 2 of not isinstance(ts, str) or not ts.endswith(\"Z\")"
     },
     {
@@ -6902,8 +6923,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_provenance.py::ast@L232: drop clause 4 of prov[\"hash_consistent\"] and content is not None and attestat"
     },
     {
@@ -6938,8 +6959,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_provenance.py::ast@L77: drop clause 1 of attestation.get(\"alg\") != self.alg or signer not in self.key"
     },
     {
@@ -6956,8 +6977,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_provenance.py::ast@L98: drop clause 2 of attestation.get(\"alg\") != self.alg or signer not in self._ke"
     },
     {
@@ -6986,8 +7007,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_provenance.py::ast@L120: drop clause 2 of attestation.get(\"alg\") != self.alg or not isinstance(attesta"
     },
     {
@@ -7010,8 +7031,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_provenance.py::ast@L173: drop clause 2 of clock or _time.time"
     },
     {
@@ -7040,14 +7061,14 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_provenance.py::ast@L185: drop clause 2 of (rec.get(\"not_before\") is not None and at < rec[\"not_before\""
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_provenance.py::ast@L195: drop clause 1 of alg or signer_backend.alg"
     },
     {
@@ -7082,8 +7103,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_provenance.py::ast@L236: drop clause 1 of policy.expected_policy_digest is not None and pd != policy.e"
     },
     {
@@ -7094,8 +7115,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_provenance.py::ast@L238: drop clause 1 of policy.expected_authority_digest is not None and ad != polic"
     },
     {
@@ -7148,8 +7169,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_provenance.py::ast@L170: drop clause 2 of issuers or {}"
     },
     {
@@ -7160,8 +7181,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_provenance.py::ast@L185: drop clause 2 of rec.get(\"not_before\") is not None and at < rec[\"not_before\"]"
     },
     {
@@ -7172,8 +7193,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_provenance.py::ast@L185: drop clause 2 of rec.get(\"not_after\") is not None and at > rec[\"not_after\"]"
     },
     {
@@ -7226,8 +7247,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_provenance.py::ast@L256: drop clause 3 of record_replay and prov[\"issuer_trust\"] == \"TRUSTED\" and prov"
     },
     {
@@ -7250,8 +7271,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_provenance.py::ast@L185: flip at < rec[\"not_before\"]"
     },
     {
@@ -7262,8 +7283,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_provenance.py::ast@L185: flip at > rec[\"not_after\"]"
     },
     {
@@ -7292,20 +7313,20 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_authority.py::ast@L271: drop clause 1 of isinstance(s, str) and len(s) == 64 and all(c in \"0123456789"
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_authority.py::ast@L271: drop clause 2 of isinstance(s, str) and len(s) == 64 and all(c in \"0123456789"
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_authority.py::ast@L271: drop clause 3 of isinstance(s, str) and len(s) == 64 and all(c in \"0123456789"
     },
     {
@@ -7358,8 +7379,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_authority.py::ast@L89: flip c is None"
     },
     {
@@ -7412,8 +7433,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "crash",
       "mutant": "mcr3_authority.py::ast@L113: drop clause 2 of not _hex64(qualification_digest) or not isinstance(reviewer,"
     },
     {
@@ -7538,8 +7559,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_authority.py::ast@L207: drop clause 2 of all(d[k] not in (None, \"\", []) for k in (\"ADAPTER_ID\", \"SOUR"
     },
     {
@@ -7580,8 +7601,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_authority.py::ast@L242: drop clause 1 of to_mode not in order or order[to_mode] <= order[a.declaratio"
     },
     {
@@ -7604,8 +7625,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_authority.py::ast@L246: drop clause 2 of not isinstance(approval_reference, dict) or not approval_ref"
     },
     {
@@ -7616,8 +7637,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_authority.py::ast@L248: flip order[to_mode] > order.get(self.floor.get(adapter_id, \"ACTIV"
     },
     {
@@ -7658,8 +7679,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_authority.py::ast@L77: drop clause 3 of isinstance(capability_id, str) and capability_id and isinsta"
     },
     {
@@ -7670,8 +7691,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_authority.py::ast@L77: drop clause 5 of isinstance(capability_id, str) and capability_id and isinsta"
     },
     {
@@ -7730,8 +7751,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_authority.py::ast@L143: flip self.clock() >= exp"
     },
     {
@@ -7778,8 +7799,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_authority.py::ast@L185: drop clause 1 of scope is None or self._approval_scope_matches(c, scope)"
     },
     {
@@ -7856,8 +7877,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_authority.py::ast@L179: flip self.clock() >= exp"
     },
     {
@@ -7874,8 +7895,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_authority.py::ast@L136: drop clause 1 of isinstance(record[k], str) and record[k]"
     },
     {
@@ -7904,8 +7925,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_scan.py::ast@L66: drop clause 1 of bool(seg) and (any(x in _HASHY for x in seg) or seg[-1] in _"
     },
     {
@@ -7922,27 +7943,27 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_scan.py::ast@L70: drop clause 2 of _PLACEHOLDER.match(v) or _LABEL.fullmatch(v)"
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_scan.py::ast@L72: drop clause 1 of (any(c.isdigit() for c in v) and any(c.isalpha() for c in v)"
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_scan.py::ast@L72: drop clause 2 of (any(c.isdigit() for c in v) and any(c.isalpha() for c in v)"
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L187: swap +/- in [n for n, _ in SHAPES] + [\"secret_named_assignment\", \"token_"
+      "mutant": "mcr3_scan.py::ast@L190: swap +/- in [n for n, _ in SHAPES] + [\"secret_named_assignment\", \"token_"
     },
     {
       "applied": true,
@@ -7958,14 +7979,14 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_scan.py::ast@L72: drop clause 1 of any(c.isdigit() for c in v) and any(c.isalpha() for c in v)"
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_scan.py::ast@L72: drop clause 2 of any(c.isdigit() for c in v) and any(c.isalpha() for c in v)"
     },
     {
@@ -7982,21 +8003,21 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
-      "mutant": "mcr3_scan.py::ast@L123: flip tr.returncode == 0"
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L126: flip tr.returncode == 0"
     },
     {
       "applied": true,
       "detected": false,
       "detected_by": null,
-      "mutant": "mcr3_scan.py::ast@L128: drop clause 1 of not os.path.isfile(fp) or p.lower().endswith(BINARY_EXT)"
+      "mutant": "mcr3_scan.py::ast@L131: drop clause 1 of not os.path.isfile(fp) or p.lower().endswith(BINARY_EXT)"
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
-      "mutant": "mcr3_scan.py::ast@L128: drop clause 2 of not os.path.isfile(fp) or p.lower().endswith(BINARY_EXT)"
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L131: drop clause 2 of not os.path.isfile(fp) or p.lower().endswith(BINARY_EXT)"
     },
     {
       "applied": true,
@@ -8006,8 +8027,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_scan.py::ast@L96: drop clause 1 of _exempt_name(m.group(\"n\")) or not _short_secret_like(m.group"
     },
     {
@@ -8024,14 +8045,14 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_scan.py::ast@L100: drop clause 2 of _exempt_name(m.group(\"n\")) or _LABEL.fullmatch(v) or _PLACEH"
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_scan.py::ast@L100: drop clause 3 of _exempt_name(m.group(\"n\")) or _LABEL.fullmatch(v) or _PLACEH"
     },
     {
@@ -8054,176 +8075,176 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
-      "mutant": "mcr3_scan.py::ast@L128: remove not in not os.path.isfile(fp)"
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L131: remove not in not os.path.isfile(fp)"
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L154: swap +/- in \"sk\" + \"-ant-\" + \"api03-\" + _a(40, \"x\")"
+      "mutant": "mcr3_scan.py::ast@L157: swap +/- in \"sk\" + \"-ant-\" + \"api03-\" + _a(40, \"x\")"
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L155: swap +/- in \"sk\" + \"-proj-\" + _a(40, \"x\")"
+      "mutant": "mcr3_scan.py::ast@L158: swap +/- in \"sk\" + \"-proj-\" + _a(40, \"x\")"
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L156: swap +/- in \"sk\" + \"-\" + _a(40)"
+      "mutant": "mcr3_scan.py::ast@L159: swap +/- in \"sk\" + \"-\" + _a(40)"
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L157: swap +/- in \"gh\" + \"p_\" + _a(36)"
+      "mutant": "mcr3_scan.py::ast@L160: swap +/- in \"gh\" + \"p_\" + _a(36)"
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L158: swap +/- in \"github\" + \"_pat_\" + _a(30)"
+      "mutant": "mcr3_scan.py::ast@L161: swap +/- in \"github\" + \"_pat_\" + _a(30)"
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L159: swap +/- in \"gl\" + \"pat-\" + _a(24)"
+      "mutant": "mcr3_scan.py::ast@L162: swap +/- in \"gl\" + \"pat-\" + _a(24)"
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L160: swap +/- in \"AI\" + \"za\" + _a(35)"
+      "mutant": "mcr3_scan.py::ast@L163: swap +/- in \"AI\" + \"za\" + _a(35)"
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L161: swap +/- in \"ya\" + \"29.\" + _a(30)"
+      "mutant": "mcr3_scan.py::ast@L164: swap +/- in \"ya\" + \"29.\" + _a(30)"
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L162: swap +/- in '\"private' + '_key\": \"-----BEGIN ' + 'PRIVATE KEY-----\"'"
+      "mutant": "mcr3_scan.py::ast@L165: swap +/- in '\"private' + '_key\": \"-----BEGIN ' + 'PRIVATE KEY-----\"'"
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L163: swap +/- in \"SG\" + \".\" + _a(22) + \".\" + _a(43)"
+      "mutant": "mcr3_scan.py::ast@L166: swap +/- in \"SG\" + \".\" + _a(22) + \".\" + _a(43)"
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L164: swap +/- in \"sk\" + \"_live_\" + _a(24)"
+      "mutant": "mcr3_scan.py::ast@L167: swap +/- in \"sk\" + \"_live_\" + _a(24)"
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L165: swap +/- in \"whsec\" + \"_\" + _a(32)"
+      "mutant": "mcr3_scan.py::ast@L168: swap +/- in \"whsec\" + \"_\" + _a(32)"
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L166: swap +/- in \"AK\" + \"IA\" + \"ABCDEFGHIJKLMNOP\""
+      "mutant": "mcr3_scan.py::ast@L169: swap +/- in \"AK\" + \"IA\" + \"ABCDEFGHIJKLMNOP\""
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L167: swap +/- in \"aws_secret\" + \"_access_key = \" + _a(40, \"a\")"
+      "mutant": "mcr3_scan.py::ast@L170: swap +/- in \"aws_secret\" + \"_access_key = \" + _a(40, \"a\")"
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L168: swap +/- in \"Account\" + \"Key=\" + _a(44) + \"==\""
+      "mutant": "mcr3_scan.py::ast@L171: swap +/- in \"Account\" + \"Key=\" + _a(44) + \"==\""
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L169: swap +/- in \"?sv=2020&\" + \"sig=\" + _a(40)"
+      "mutant": "mcr3_scan.py::ast@L172: swap +/- in \"?sv=2020&\" + \"sig=\" + _a(40)"
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L170: swap +/- in \"xo\" + \"xb-\" + \"1234567890-abcdefghij\""
+      "mutant": "mcr3_scan.py::ast@L173: swap +/- in \"xo\" + \"xb-\" + \"1234567890-abcdefghij\""
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L171: swap +/- in \"S\" + \"K\" + \"0123456789abcdef\" * 2"
+      "mutant": "mcr3_scan.py::ast@L174: swap +/- in \"S\" + \"K\" + \"0123456789abcdef\" * 2"
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L172: swap +/- in \"np\" + \"m_\" + _a(36)"
+      "mutant": "mcr3_scan.py::ast@L175: swap +/- in \"np\" + \"m_\" + _a(36)"
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L173: swap +/- in \"py\" + \"pi-\" + _a(60)"
+      "mutant": "mcr3_scan.py::ast@L176: swap +/- in \"py\" + \"pi-\" + _a(60)"
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L174: swap +/- in \"h\" + \"f_\" + _a(34)"
+      "mutant": "mcr3_scan.py::ast@L177: swap +/- in \"h\" + \"f_\" + _a(34)"
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L176: swap +/- in \"-----BEGIN \" + \"RSA PRIVATE \" + \"KEY-----\""
+      "mutant": "mcr3_scan.py::ast@L179: swap +/- in \"-----BEGIN \" + \"RSA PRIVATE \" + \"KEY-----\""
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L177: swap +/- in \"Bear\" + \"er \" + _a(30)"
+      "mutant": "mcr3_scan.py::ast@L180: swap +/- in \"Bear\" + \"er \" + _a(30)"
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L178: swap +/- in \"Bas\" + \"ic \" + _a(30)"
+      "mutant": "mcr3_scan.py::ast@L181: swap +/- in \"Bas\" + \"ic \" + _a(30)"
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L179: swap +/- in \"https://user:\" + \"hunter22\" + \"@example.org/x\""
+      "mutant": "mcr3_scan.py::ast@L182: swap +/- in \"https://user:\" + \"hunter22\" + \"@example.org/x\""
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L180: swap +/- in \"pass\" + \"word = \" + \"p@ss!w0rd\""
+      "mutant": "mcr3_scan.py::ast@L183: swap +/- in \"pass\" + \"word = \" + \"p@ss!w0rd\""
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L181: swap +/- in \"to\" + \"ken: \" + _a(24, \"q\")"
+      "mutant": "mcr3_scan.py::ast@L184: swap +/- in \"to\" + \"ken: \" + _a(24, \"q\")"
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_scan.py::ast@L72: flip c in \"!@#$%^&*+=?~\""
     },
     {
@@ -8242,163 +8263,163 @@
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L154: swap +/- in \"sk\" + \"-ant-\" + \"api03-\""
+      "mutant": "mcr3_scan.py::ast@L157: swap +/- in \"sk\" + \"-ant-\" + \"api03-\""
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L155: swap +/- in \"sk\" + \"-proj-\""
+      "mutant": "mcr3_scan.py::ast@L158: swap +/- in \"sk\" + \"-proj-\""
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L156: swap +/- in \"sk\" + \"-\""
+      "mutant": "mcr3_scan.py::ast@L159: swap +/- in \"sk\" + \"-\""
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L157: swap +/- in \"gh\" + \"p_\""
+      "mutant": "mcr3_scan.py::ast@L160: swap +/- in \"gh\" + \"p_\""
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L158: swap +/- in \"github\" + \"_pat_\""
+      "mutant": "mcr3_scan.py::ast@L161: swap +/- in \"github\" + \"_pat_\""
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L159: swap +/- in \"gl\" + \"pat-\""
+      "mutant": "mcr3_scan.py::ast@L162: swap +/- in \"gl\" + \"pat-\""
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L160: swap +/- in \"AI\" + \"za\""
+      "mutant": "mcr3_scan.py::ast@L163: swap +/- in \"AI\" + \"za\""
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L161: swap +/- in \"ya\" + \"29.\""
+      "mutant": "mcr3_scan.py::ast@L164: swap +/- in \"ya\" + \"29.\""
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L162: swap +/- in '\"private' + '_key\": \"-----BEGIN '"
+      "mutant": "mcr3_scan.py::ast@L165: swap +/- in '\"private' + '_key\": \"-----BEGIN '"
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L163: swap +/- in \"SG\" + \".\" + _a(22) + \".\""
+      "mutant": "mcr3_scan.py::ast@L166: swap +/- in \"SG\" + \".\" + _a(22) + \".\""
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L164: swap +/- in \"sk\" + \"_live_\""
+      "mutant": "mcr3_scan.py::ast@L167: swap +/- in \"sk\" + \"_live_\""
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L165: swap +/- in \"whsec\" + \"_\""
+      "mutant": "mcr3_scan.py::ast@L168: swap +/- in \"whsec\" + \"_\""
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L166: swap +/- in \"AK\" + \"IA\""
+      "mutant": "mcr3_scan.py::ast@L169: swap +/- in \"AK\" + \"IA\""
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L167: swap +/- in \"aws_secret\" + \"_access_key = \""
+      "mutant": "mcr3_scan.py::ast@L170: swap +/- in \"aws_secret\" + \"_access_key = \""
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L168: swap +/- in \"Account\" + \"Key=\" + _a(44)"
+      "mutant": "mcr3_scan.py::ast@L171: swap +/- in \"Account\" + \"Key=\" + _a(44)"
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L169: swap +/- in \"?sv=2020&\" + \"sig=\""
+      "mutant": "mcr3_scan.py::ast@L172: swap +/- in \"?sv=2020&\" + \"sig=\""
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L170: swap +/- in \"xo\" + \"xb-\""
+      "mutant": "mcr3_scan.py::ast@L173: swap +/- in \"xo\" + \"xb-\""
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L171: swap +/- in \"S\" + \"K\""
+      "mutant": "mcr3_scan.py::ast@L174: swap +/- in \"S\" + \"K\""
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L172: swap +/- in \"np\" + \"m_\""
+      "mutant": "mcr3_scan.py::ast@L175: swap +/- in \"np\" + \"m_\""
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L173: swap +/- in \"py\" + \"pi-\""
+      "mutant": "mcr3_scan.py::ast@L176: swap +/- in \"py\" + \"pi-\""
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L174: swap +/- in \"h\" + \"f_\""
+      "mutant": "mcr3_scan.py::ast@L177: swap +/- in \"h\" + \"f_\""
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L176: swap +/- in \"-----BEGIN \" + \"RSA PRIVATE \""
+      "mutant": "mcr3_scan.py::ast@L179: swap +/- in \"-----BEGIN \" + \"RSA PRIVATE \""
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L177: swap +/- in \"Bear\" + \"er \""
+      "mutant": "mcr3_scan.py::ast@L180: swap +/- in \"Bear\" + \"er \""
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L178: swap +/- in \"Bas\" + \"ic \""
+      "mutant": "mcr3_scan.py::ast@L181: swap +/- in \"Bas\" + \"ic \""
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L179: swap +/- in \"https://user:\" + \"hunter22\""
+      "mutant": "mcr3_scan.py::ast@L182: swap +/- in \"https://user:\" + \"hunter22\""
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L180: swap +/- in \"pass\" + \"word = \""
+      "mutant": "mcr3_scan.py::ast@L183: swap +/- in \"pass\" + \"word = \""
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L181: swap +/- in \"to\" + \"ken: \""
+      "mutant": "mcr3_scan.py::ast@L184: swap +/- in \"to\" + \"ken: \""
     },
     {
       "applied": true,
@@ -8410,61 +8431,61 @@
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L154: swap +/- in \"sk\" + \"-ant-\""
+      "mutant": "mcr3_scan.py::ast@L157: swap +/- in \"sk\" + \"-ant-\""
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L163: swap +/- in \"SG\" + \".\" + _a(22)"
+      "mutant": "mcr3_scan.py::ast@L166: swap +/- in \"SG\" + \".\" + _a(22)"
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L168: swap +/- in \"Account\" + \"Key=\""
+      "mutant": "mcr3_scan.py::ast@L171: swap +/- in \"Account\" + \"Key=\""
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L175: swap +/- in \"ey\" + \"J\" + _a(20)"
+      "mutant": "mcr3_scan.py::ast@L178: swap +/- in \"ey\" + \"J\" + _a(20)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L137: drop clause 1 of mem.lower().endswith(BINARY_EXT) or mem.endswith(\"/\")"
     },
     {
       "applied": true,
       "detected": false,
       "detected_by": null,
-      "mutant": "mcr3_scan.py::ast@L134: drop clause 1 of mem.lower().endswith(BINARY_EXT) or mem.endswith(\"/\")"
-    },
-    {
-      "applied": true,
-      "detected": false,
-      "detected_by": null,
-      "mutant": "mcr3_scan.py::ast@L134: drop clause 2 of mem.lower().endswith(BINARY_EXT) or mem.endswith(\"/\")"
+      "mutant": "mcr3_scan.py::ast@L137: drop clause 2 of mem.lower().endswith(BINARY_EXT) or mem.endswith(\"/\")"
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L163: swap +/- in \"SG\" + \".\""
+      "mutant": "mcr3_scan.py::ast@L166: swap +/- in \"SG\" + \".\""
     },
     {
       "applied": true,
       "detected": true,
       "detected_by": "crash",
-      "mutant": "mcr3_scan.py::ast@L175: swap +/- in \"ey\" + \"J\""
+      "mutant": "mcr3_scan.py::ast@L178: swap +/- in \"ey\" + \"J\""
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
-      "mutant": "mcr3_scan.py::ast@L137: swap +/- in p + \"!\" + mem"
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L140: swap +/- in p + \"!\" + mem"
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
-      "mutant": "mcr3_scan.py::ast@L137: swap +/- in p + \"!\""
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L140: swap +/- in p + \"!\""
     },
     {
       "applied": true,
@@ -8516,8 +8537,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_readback.py::ast@L96: drop clause 2 of first[\"existence\"] == second[\"existence\"] != \"UNKNOWN\" and f"
     },
     {
@@ -8648,38 +8669,38 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_readback.py::ast@L68: flip existence == \"EXISTS\""
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_readback.py::ast@L68: drop clause 1 of act[1] or ina[1]"
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_readback.py::ast@L68: drop clause 2 of act[1] or ina[1]"
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_readback.py::ast@L69: flip existence == \"EXISTS\""
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_readback.py::ast@L69: drop clause 1 of act[2] or ina[2]"
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_readback.py::ast@L69: drop clause 2 of act[2] or ina[2]"
     },
     {
@@ -8720,8 +8741,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_adapters.py::ast@L39: swap +/- in fallback_prefix + hashlib.sha256(v.encode(\"utf-8\")).hexdiges"
     },
     {
@@ -8804,14 +8825,14 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_adapters.py::ast@L156: drop clause 1 of st == \"OUTCOME_VALIDATION_PENDING\" and m.ev.get(\"outcome\", {"
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_adapters.py::ast@L156: drop clause 2 of st == \"OUTCOME_VALIDATION_PENDING\" and m.ev.get(\"outcome\", {"
     },
     {
@@ -8870,20 +8891,20 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_adapters.py::ast@L187: drop clause 1 of path.startswith(\"/\") and len(path.split(\"/\")) > 2"
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_adapters.py::ast@L187: drop clause 2 of path.startswith(\"/\") and len(path.split(\"/\")) > 2"
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_adapters.py::ast@L207: drop clause 1 of ex == \"EXISTS\" and result.get(\"RESULT\", \"\").startswith(\"COMM"
     },
     {
@@ -8906,8 +8927,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_adapters.py::ast@L66: drop clause 1 of classification or self.classification"
     },
     {
@@ -8930,20 +8951,20 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_adapters.py::ast@L187: flip len(path.split(\"/\")) > 2"
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_adapters.py::ast@L197: drop clause 1 of target or \"UNKNOWN_IN_ARCHIVE\""
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_adapters.py::ast@L197: drop clause 2 of target or \"UNKNOWN_IN_ARCHIVE\""
     },
     {
@@ -8960,8 +8981,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_adapters.py::ast@L67: flip etype == \"mcr.authorization.referenced\""
     },
     {
@@ -8996,14 +9017,14 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_adapters.py::ast@L130: flip entry[\"call_class\"] not in M.COMP_UNKNOWN_CLASSES"
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_adapters.py::ast@L205: flip ro.get(\"exists\") is True"
     },
     {
@@ -9020,8 +9041,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_adapters.py::ast@L119: flip classification != \"SYNTHETIC\""
     },
     {
@@ -9098,8 +9119,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_lineage.py::ast@L41: drop clause 1 of old[\"correlation\"][\"mission_id\"] != mission or old[\"type\"] !"
     },
     {
@@ -9122,8 +9143,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_lineage.py::ast@L68: swap +/- in len(self._events) + 1"
     },
     {
@@ -9164,8 +9185,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "crash",
       "mutant": "mcr3_interop.py::ast@L46: drop clause 2 of known.get(\"capability\") or {}"
     },
     {
@@ -9182,14 +9203,14 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_interop.py::ast@L85: drop clause 1 of not isinstance(pe, dict) or pe.get(\"schema\") != PE_SCHEMA"
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_interop.py::ast@L85: drop clause 2 of not isinstance(pe, dict) or pe.get(\"schema\") != PE_SCHEMA"
     },
     {
@@ -9242,8 +9263,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_interop.py::ast@L102: drop clause 1 of k in DATA_ALLOWED and (v is None or (isinstance(v, str) and "
     },
     {
@@ -9272,8 +9293,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_interop.py::ast@L101: drop clause 2 of pe.get(\"data\") or {}"
     },
     {
@@ -9284,8 +9305,8 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_interop.py::ast@L102: drop clause 1 of v is None or (isinstance(v, str) and _SAFE.match(v) and not "
     },
     {
@@ -9308,14 +9329,14 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_interop.py::ast@L91: drop clause 1 of not isinstance(pe.get(\"event_id\"), str) or not re.match(r\"^["
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_interop.py::ast@L91: drop clause 2 of not isinstance(pe.get(\"event_id\"), str) or not re.match(r\"^["
     },
     {
@@ -9326,20 +9347,20 @@
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "crash",
       "mutant": "mcr3_interop.py::ast@L102: drop clause 1 of isinstance(v, str) and _SAFE.match(v) and not _SECRETISH.sea"
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_interop.py::ast@L102: drop clause 2 of isinstance(v, str) and _SAFE.match(v) and not _SECRETISH.sea"
     },
     {
       "applied": true,
-      "detected": false,
-      "detected_by": null,
+      "detected": true,
+      "detected_by": "assertion",
       "mutant": "mcr3_interop.py::ast@L102: drop clause 3 of isinstance(v, str) and _SAFE.match(v) and not _SECRETISH.sea"
     },
     {
@@ -9365,384 +9386,812 @@
       "detected": true,
       "detected_by": "crash",
       "mutant": "mcr3_interop.py::ast@L102: remove not in not _SECRETISH.search(v)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L18: drop clause 1 of not isinstance(events, list) or not events"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L18: drop clause 2 of not isinstance(events, list) or not events"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L31: flip len(set(ids)) != len(ids)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L34: drop clause 1 of len(missions) != 1 or None in missions"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "mcr3_chain.py::ast@L34: drop clause 2 of len(missions) != 1 or None in missions"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L37: drop clause 1 of len(txs) > 1 or None in txs"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "mcr3_chain.py::ast@L37: drop clause 2 of len(txs) > 1 or None in txs"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L40: drop clause 1 of len(starts) != 1 or starts[0] != 0"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L40: drop clause 2 of len(starts) != 1 or starts[0] != 0"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "mcr3_chain.py::ast@L43: drop clause 1 of len(disp) > 1 or (disp and disp[0] != len(parsed) - 1)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L43: drop clause 2 of len(disp) > 1 or (disp and disp[0] != len(parsed) - 1)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L48: flip parsed[0][\"correlation\"][\"causation_id\"] is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L51: flip times != sorted(times)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L55: flip att != list(range(1, len(att) + 1))"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L58: flip comp != list(range(1, len(comp) + 1))"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L66: flip seen != sorted(seen)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L70: drop clause 1 of co and (not rb or co[\"claim\"][\"readback_digest\"] != rb[\"evid"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L70: drop clause 2 of co and (not rb or co[\"claim\"][\"readback_digest\"] != rb[\"evid"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L72: drop clause 1 of oc and (not rb or oc[\"claim\"][\"readback_digest\"] != rb[\"evid"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L72: drop clause 2 of oc and (not rb or oc[\"claim\"][\"readback_digest\"] != rb[\"evid"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L75: drop clause 1 of co and co[\"claim\"][\"commit_state\"] == \"COMMITTED\""
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "mcr3_chain.py::ast@L75: drop clause 2 of co and co[\"claim\"][\"commit_state\"] == \"COMMITTED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L80: drop clause 1 of oc and oc[\"claim\"][\"result\"] == \"PASS\" and not (co and co[\"c"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "mcr3_chain.py::ast@L80: drop clause 2 of oc and oc[\"claim\"][\"result\"] == \"PASS\" and not (co and co[\"c"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L80: drop clause 3 of oc and oc[\"claim\"][\"result\"] == \"PASS\" and not (co and co[\"c"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L82: drop clause 1 of rb and rb[\"claim\"][\"claimed_authoritative\"] and rb[\"claim\"]["
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "mcr3_chain.py::ast@L82: drop clause 2 of rb and rb[\"claim\"][\"claimed_authoritative\"] and rb[\"claim\"]["
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L82: drop clause 3 of rb and rb[\"claim\"][\"claimed_authoritative\"] and rb[\"claim\"]["
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L18: remove not in not isinstance(events, list)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L18: remove not in not events"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L34: flip len(missions) != 1"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L34: flip None in missions"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L37: flip len(txs) > 1"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L37: flip None in txs"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L40: flip len(starts) != 1"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L40: flip starts[0] != 0"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L43: flip len(disp) > 1"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L43: drop clause 1 of disp and disp[0] != len(parsed) - 1"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L43: drop clause 2 of disp and disp[0] != len(parsed) - 1"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L46: flip parsed[i][\"correlation\"][\"causation_id\"] != parsed[i - 1][\"i"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L70: drop clause 1 of not rb or co[\"claim\"][\"readback_digest\"] != rb[\"evidence\"][\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L70: drop clause 2 of not rb or co[\"claim\"][\"readback_digest\"] != rb[\"evidence\"][\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L72: drop clause 1 of not rb or oc[\"claim\"][\"readback_digest\"] != rb[\"evidence\"][\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L72: drop clause 2 of not rb or oc[\"claim\"][\"readback_digest\"] != rb[\"evidence\"][\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L75: flip co[\"claim\"][\"commit_state\"] == \"COMMITTED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L76: drop clause 1 of not rb or rb[\"claim\"][\"existence\"] != \"EXISTS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L76: drop clause 2 of not rb or rb[\"claim\"][\"existence\"] != \"EXISTS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L78: drop clause 1 of not er or er[\"claim\"][\"call_class\"] not in (\"PROVIDER_RESPON"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "mcr3_chain.py::ast@L78: drop clause 2 of not er or er[\"claim\"][\"call_class\"] not in (\"PROVIDER_RESPON"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L80: flip oc[\"claim\"][\"result\"] == \"PASS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L80: remove not in not (co and co[\"claim\"][\"commit_state\"] == \"COMMITTED\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L82: flip rb[\"claim\"][\"source_level\"] != \"AUTHORITATIVE_REPOSITORY\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L91: flip c[\"disposition\"] == \"COMPLETE\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L96: drop clause 1 of c[\"outcome_class\"] == \"OUTCOME_VALIDATED\" and not (oc and oc"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L96: drop clause 2 of c[\"outcome_class\"] == \"OUTCOME_VALIDATED\" and not (oc and oc"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L98: drop clause 1 of c[\"outcome_class\"] in (\"COMMIT_OBSERVED\", \"OUTCOME_OBSERVED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L98: drop clause 2 of c[\"outcome_class\"] in (\"COMMIT_OBSERVED\", \"OUTCOME_OBSERVED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L100: drop clause 1 of c[\"outcome_class\"] == \"PROVIDER_ACKNOWLEDGED\" and not (er an"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L100: drop clause 2 of c[\"outcome_class\"] == \"PROVIDER_ACKNOWLEDGED\" and not (er an"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L102: drop clause 1 of c[\"disposition\"] == \"COMPENSATED\" and not comp"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L102: drop clause 2 of c[\"disposition\"] == \"COMPENSATED\" and not comp"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L104: drop clause 1 of c[\"disposition\"] == \"UNRECOVERABLE\" and c[\"outcome_class\"] !"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L104: drop clause 2 of c[\"disposition\"] == \"UNRECOVERABLE\" and c[\"outcome_class\"] !"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L36: flip e[\"type\"] != \"mcr.mission.started\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L39: flip e[\"type\"] == \"mcr.mission.started\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L42: flip e[\"type\"] == \"mcr.mission.disposition\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L43: flip disp[0] != len(parsed) - 1"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L54: flip e[\"type\"] == \"mcr.mutation.attempted\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L57: flip e[\"type\"] == \"mcr.compensation.attempted\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L63: flip e[\"type\"] not in (\"mcr.compensation.attempted\",)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L65: flip t in pos"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L70: remove not in not rb"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L70: flip co[\"claim\"][\"readback_digest\"] != rb[\"evidence\"][\"digest\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L72: remove not in not rb"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L72: flip oc[\"claim\"][\"readback_digest\"] != rb[\"evidence\"][\"digest\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L76: remove not in not rb"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L76: flip rb[\"claim\"][\"existence\"] != \"EXISTS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L78: remove not in not er"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L78: flip er[\"claim\"][\"call_class\"] not in (\"PROVIDER_RESPONSE_SUCCESS"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L80: drop clause 1 of co and co[\"claim\"][\"commit_state\"] == \"COMMITTED\""
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "mcr3_chain.py::ast@L80: drop clause 2 of co and co[\"claim\"][\"commit_state\"] == \"COMMITTED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L89: drop clause 1 of t in by and by[t][\"evidence\"][\"digest\"] not in digs"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L89: drop clause 2 of t in by and by[t][\"evidence\"][\"digest\"] not in digs"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L92: remove not in not (oc and oc[\"claim\"][\"result\"] == \"PASS\" and co and co[\"c"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "mcr3_chain.py::ast@L94: drop clause 1 of len(digs) != 14 or len(c[\"chain_digests\"]) != 14"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "mcr3_chain.py::ast@L94: drop clause 2 of len(digs) != 14 or len(c[\"chain_digests\"]) != 14"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L96: flip c[\"outcome_class\"] == \"OUTCOME_VALIDATED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L96: remove not in not (oc and oc[\"claim\"][\"result\"] == \"PASS\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L98: flip c[\"outcome_class\"] in (\"COMMIT_OBSERVED\", \"OUTCOME_OBSERVED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L98: remove not in not co"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L100: flip c[\"outcome_class\"] == \"PROVIDER_ACKNOWLEDGED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L100: remove not in not (er and er[\"claim\"][\"provider_acknowledged\"])"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L102: flip c[\"disposition\"] == \"COMPENSATED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L102: remove not in not comp"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L104: flip c[\"disposition\"] == \"UNRECOVERABLE\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L104: flip c[\"outcome_class\"] != \"UNRECOVERABLE\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L43: swap +/- in len(parsed) - 1"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L55: swap +/- in len(att) + 1"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L58: swap +/- in len(comp) + 1"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L80: flip co[\"claim\"][\"commit_state\"] == \"COMMITTED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L89: flip t in by"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L89: flip by[t][\"evidence\"][\"digest\"] not in digs"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "mcr3_chain.py::ast@L92: drop clause 1 of oc and oc[\"claim\"][\"result\"] == \"PASS\" and co and co[\"claim\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L92: drop clause 2 of oc and oc[\"claim\"][\"result\"] == \"PASS\" and co and co[\"claim\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L92: drop clause 3 of oc and oc[\"claim\"][\"result\"] == \"PASS\" and co and co[\"claim\""
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "mcr3_chain.py::ast@L92: drop clause 4 of oc and oc[\"claim\"][\"result\"] == \"PASS\" and co and co[\"claim\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L94: flip len(digs) != 14"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L94: flip len(c[\"chain_digests\"]) != 14"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "mcr3_chain.py::ast@L96: drop clause 1 of oc and oc[\"claim\"][\"result\"] == \"PASS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L96: drop clause 2 of oc and oc[\"claim\"][\"result\"] == \"PASS\""
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "mcr3_chain.py::ast@L100: drop clause 1 of er and er[\"claim\"][\"provider_acknowledged\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L100: drop clause 2 of er and er[\"claim\"][\"provider_acknowledged\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L46: swap +/- in i - 1"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L92: flip oc[\"claim\"][\"result\"] == \"PASS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L92: flip co[\"claim\"][\"commit_state\"] == \"COMMITTED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L96: flip oc[\"claim\"][\"result\"] == \"PASS\""
     }
   ],
   "survivors": [
-    "mcr3_model.py::guard@L327: len(path) > 4096",
-    "mcr3_model.py::guard@L331: any(c in _BAD_PATH_CHARS for c in path)",
-    "mcr3_model.py::guard@L343: part == \"..\"",
-    "mcr3_model.py::guard@L1081: resolution[\"mutation_id\"] != self.ev[\"mutation_id\"] or resolution[\"con",
-    "mcr3_model.py::ast@L327: flip len(path) > 4096",
-    "mcr3_model.py::ast@L334: drop clause 1 of len(path) >= 2 and path[1] == \":\" and path[0].isalpha() and ",
-    "mcr3_model.py::ast@L334: drop clause 2 of len(path) >= 2 and path[1] == \":\" and path[0].isalpha() and ",
-    "mcr3_model.py::ast@L334: drop clause 3 of len(path) >= 2 and path[1] == \":\" and path[0].isalpha() and ",
-    "mcr3_model.py::ast@L334: drop clause 4 of len(path) >= 2 and path[1] == \":\" and path[0].isalpha() and ",
-    "mcr3_model.py::ast@L586: drop clause 2 of not isinstance(ref, str) or not isinstance(provider_id, str)",
-    "mcr3_model.py::ast@L586: drop clause 3 of not isinstance(ref, str) or not isinstance(provider_id, str)",
     "mcr3_model.py::ast@L586: drop clause 4 of not isinstance(ref, str) or not isinstance(provider_id, str)",
     "mcr3_model.py::ast@L589: drop clause 1 of sep == \"::\" and pid == provider_id and tail != \"\" and \"::\" n",
-    "mcr3_model.py::ast@L334: flip len(path) >= 2",
-    "mcr3_model.py::ast@L335: drop clause 1 of len(path) > 2 and path[2] not in \"/\\\\\"",
-    "mcr3_model.py::ast@L345: drop clause 1 of part != \".\" and (part.endswith(\".\") or part.endswith(\" \"))",
-    "mcr3_model.py::ast@L500: drop clause 4 of not isinstance(anchor, dict) or not isinstance(anchor.get(\"l",
-    "mcr3_model.py::ast@L814: drop clause 1 of not isinstance(chk, list) or not chk or not all(isinstance(c",
-    "mcr3_model.py::ast@L888: drop clause 1 of isinstance(obs, dict) and all(c in obs and obs[c] not in (No",
     "mcr3_model.py::ast@L1143: drop clause 1 of post_readback[\"object_hash\"] == fwd[\"object_hash\"] or post_r",
-    "mcr3_model.py::ast@L329: drop clause 2 of ord(c) < 32 or ord(c) == 127",
-    "mcr3_model.py::ast@L335: flip len(path) > 2",
     "mcr3_model.py::ast@L406: drop clause 1 of isinstance(key, tuple) and len(key) == 2 and all(isinstance(",
     "mcr3_model.py::ast@L967: drop clause 1 of mid is not None and mid in tx[\"mutation_ids\"]",
-    "mcr3_model.py::ast@L1081: drop clause 1 of resolution[\"mutation_id\"] != self.ev[\"mutation_id\"] or resol",
-    "mcr3_model.py::ast@L1081: drop clause 2 of resolution[\"mutation_id\"] != self.ev[\"mutation_id\"] or resol",
-    "mcr3_model.py::ast@L1083: drop clause 2 of resolution[\"source_level\"] != \"AUTHORITATIVE_REPOSITORY\" or ",
-    "mcr3_model.py::ast@L1302: drop clause 1 of er and er[\"call_class\"] == \"PROVIDER_RESPONSE_SUCCESS\"",
-    "mcr3_model.py::ast@L1302: drop clause 2 of er and er[\"call_class\"] == \"PROVIDER_RESPONSE_SUCCESS\"",
     "mcr3_model.py::ast@L278: flip time.time() - start > timeout",
     "mcr3_model.py::ast@L440: drop clause 1 of isinstance(a, str) and isinstance(m_, str) and c == self._cr",
     "mcr3_model.py::ast@L440: drop clause 2 of isinstance(a, str) and isinstance(m_, str) and c == self._cr",
-    "evc1.py::ast@L239: drop clause 1 of provenance or unsigned_provenance()",
     "evc1.py::ast@L273: drop clause 2 of e[\"claim\"][\"kind\"] != kind or e[\"claim\"][\"layer\"] != layer",
-    "evc1.py::ast@L299: drop clause 2 of cl[\"kind\"] == \"READBACK_CLAIM\" and cl[\"claimed_authoritative",
-    "evc1.py::ast@L301: drop clause 3 of cl[\"kind\"] == \"READBACK_CLAIM\" and cl[\"provenance_verified\"]",
-    "evc1.py::ast@L305: drop clause 2 of cl[\"kind\"] == \"OUTCOME_EVALUATION\" and ev[\"classification\"] ",
-    "evc1.py::ast@L314: drop clause 2 of cl[\"kind\"] == \"EXECUTION_RECEIPT\" and cl[\"call_class\"] == \"P",
-    "evc1.py::ast@L316: drop clause 3 of cl[\"kind\"] == \"EXECUTION_RECEIPT\" and cl[\"call_class\"] in (\"",
-    "evc1.py::ast@L318: drop clause 2 of cl[\"kind\"] == \"COMMIT_OBSERVATION\" and cl[\"commit_state\"] ==",
-    "evc1.py::ast@L370: drop clause 1 of tmin < smin and unknown",
     "evc1.py::ast@L376: drop clause 1 of known.get(\"integrity\", {}).get(\"event_digest\") or digest_of(",
-    "evc1.py::ast@L376: drop clause 2 of known.get(\"integrity\", {}).get(\"event_digest\") or digest_of(",
     "evc1.py::ast@L162: drop clause 1 of isinstance(v, bool) or v is None or isinstance(v, (str, int)",
-    "evc1.py::ast@L249: drop clause 1 of lineage or {\"transformations\": [], \"source_event_id\": None, ",
-    "evc1.py::ast@L296: flip name not in KNOWN_CRITICAL",
-    "evc1.py::ast@L305: flip ev[\"classification\"] != \"HISTORICAL\"",
-    "evc1.py::ast@L305: drop clause 1 of cl[\"expected_digest\"] is None or cl[\"predicates_digest\"] is ",
-    "evc1.py::ast@L305: drop clause 2 of cl[\"expected_digest\"] is None or cl[\"predicates_digest\"] is ",
-    "evc1.py::ast@L308: drop clause 1 of cl[\"disposition\"] == \"COMPLETE\" and cl[\"outcome_class\"] != \"",
-    "evc1.py::ast@L310: drop clause 1 of cl[\"outcome_class\"] == \"COMPLETE\" and cl[\"disposition\"] != \"",
-    "evc1.py::ast@L312: drop clause 2 of \"disposition\" in e and e[\"disposition\"] != cl[\"disposition\"]",
-    "evc1.py::ast@L346: drop clause 1 of name in unknown or name not in KNOWN_CRITICAL",
     "evc1.py::ast@L346: drop clause 2 of name in unknown or name not in KNOWN_CRITICAL",
-    "evc1.py::ast@L370: flip tmin < smin",
-    "evc1.py::ast@L346: flip name in unknown",
-    "evc1.py::ast@L346: flip name not in KNOWN_CRITICAL",
-    "evc1.py::ast@L376: flip k != \"integrity\"",
-    "evc1.py::ast@L280: drop clause 2 of full or e",
-    "mini_jsonschema.py::ast@L85: drop clause 1 of isinstance(v, (int, float)) and not isinstance(v, bool)",
-    "mini_jsonschema.py::ast@L85: drop clause 2 of isinstance(v, (int, float)) and not isinstance(v, bool)",
-    "mini_jsonschema.py::ast@L131: drop clause 2 of \"not\" in schema and not _sub(schema[\"not\"], root, v, path)",
-    "mini_jsonschema.py::ast@L27: drop clause 1 of isinstance(v, (int, float)) and not isinstance(v, bool)",
-    "mini_jsonschema.py::ast@L27: drop clause 2 of isinstance(v, (int, float)) and not isinstance(v, bool)",
-    "mini_jsonschema.py::ast@L48: drop clause 1 of not isinstance(node, dict) or part not in node",
-    "mini_jsonschema.py::ast@L48: drop clause 2 of not isinstance(node, dict) or part not in node",
-    "mini_jsonschema.py::ast@L88: drop clause 2 of \"maximum\" in schema and v > schema[\"maximum\"]",
-    "mini_jsonschema.py::ast@L93: drop clause 2 of \"maxItems\" in schema and len(v) > schema[\"maxItems\"]",
-    "mini_jsonschema.py::ast@L95: drop clause 1 of schema.get(\"uniqueItems\") and len({repr(x) for x in v}) != l",
-    "mini_jsonschema.py::ast@L95: drop clause 2 of schema.get(\"uniqueItems\") and len({repr(x) for x in v}) != l",
-    "mini_jsonschema.py::ast@L125: remove not in not any(not _sub(s, root, v, path) for s in schema[\"anyOf\"])",
-    "mini_jsonschema.py::ast@L79: flip len(v) > schema[\"maxLength\"]",
-    "mini_jsonschema.py::ast@L88: flip v > schema[\"maximum\"]",
-    "mini_jsonschema.py::ast@L93: flip len(v) > schema[\"maxItems\"]",
-    "mini_jsonschema.py::ast@L163: flip k in (\"items\", \"additionalProperties\", \"not\", \"if\", \"then\", ",
-    "mini_jsonschema.py::ast@L117: flip ap is False",
-    "mini_jsonschema.py::ast@L119: flip ap is not True",
-    "mini_jsonschema.py::ast@L125: remove not in not _sub(s, root, v, path)",
-    "mcr3_provenance.py::ast@L36: drop clause 1 of not isinstance(ts, str) or not ts.endswith(\"Z\")",
-    "mcr3_provenance.py::ast@L36: drop clause 2 of not isinstance(ts, str) or not ts.endswith(\"Z\")",
     "mcr3_provenance.py::ast@L138: drop clause 1 of ssh_keygen or shutil.which(\"ssh-keygen\")",
     "mcr3_provenance.py::ast@L232: drop clause 1 of prov[\"hash_consistent\"] and content is not None and attestat",
     "mcr3_provenance.py::ast@L232: drop clause 2 of prov[\"hash_consistent\"] and content is not None and attestat",
-    "mcr3_provenance.py::ast@L232: drop clause 4 of prov[\"hash_consistent\"] and content is not None and attestat",
-    "mcr3_provenance.py::ast@L77: drop clause 1 of attestation.get(\"alg\") != self.alg or signer not in self.key",
     "mcr3_provenance.py::ast@L77: drop clause 2 of attestation.get(\"alg\") != self.alg or signer not in self.key",
-    "mcr3_provenance.py::ast@L98: drop clause 2 of attestation.get(\"alg\") != self.alg or signer not in self._ke",
     "mcr3_provenance.py::ast@L114: drop clause 1 of ssh_keygen or shutil.which(\"ssh-keygen\")",
     "mcr3_provenance.py::ast@L120: drop clause 1 of attestation.get(\"alg\") != self.alg or not isinstance(attesta",
-    "mcr3_provenance.py::ast@L120: drop clause 2 of attestation.get(\"alg\") != self.alg or not isinstance(attesta",
-    "mcr3_provenance.py::ast@L173: drop clause 2 of clock or _time.time",
-    "mcr3_provenance.py::ast@L185: drop clause 2 of (rec.get(\"not_before\") is not None and at < rec[\"not_before\"",
-    "mcr3_provenance.py::ast@L195: drop clause 1 of alg or signer_backend.alg",
-    "mcr3_provenance.py::ast@L236: drop clause 1 of policy.expected_policy_digest is not None and pd != policy.e",
-    "mcr3_provenance.py::ast@L238: drop clause 1 of policy.expected_authority_digest is not None and ad != polic",
-    "mcr3_provenance.py::ast@L170: drop clause 2 of issuers or {}",
-    "mcr3_provenance.py::ast@L185: drop clause 2 of rec.get(\"not_before\") is not None and at < rec[\"not_before\"]",
-    "mcr3_provenance.py::ast@L185: drop clause 2 of rec.get(\"not_after\") is not None and at > rec[\"not_after\"]",
-    "mcr3_provenance.py::ast@L256: drop clause 3 of record_replay and prov[\"issuer_trust\"] == \"TRUSTED\" and prov",
-    "mcr3_provenance.py::ast@L185: flip at < rec[\"not_before\"]",
-    "mcr3_provenance.py::ast@L185: flip at > rec[\"not_after\"]",
     "mcr3_provenance.py::ast@L129: flip r.returncode == 0 #2",
-    "mcr3_authority.py::ast@L271: drop clause 1 of isinstance(s, str) and len(s) == 64 and all(c in \"0123456789",
-    "mcr3_authority.py::ast@L271: drop clause 2 of isinstance(s, str) and len(s) == 64 and all(c in \"0123456789",
-    "mcr3_authority.py::ast@L271: drop clause 3 of isinstance(s, str) and len(s) == 64 and all(c in \"0123456789",
-    "mcr3_authority.py::ast@L89: flip c is None",
-    "mcr3_authority.py::ast@L113: drop clause 2 of not _hex64(qualification_digest) or not isinstance(reviewer,",
     "mcr3_authority.py::ast@L143: drop clause 1 of require_unexpired and self.clock() >= exp",
     "mcr3_authority.py::ast@L148: drop clause 1 of a is not None and all(a[k] == scope.get(k) for k in SCOPE_FI",
     "mcr3_authority.py::ast@L177: drop clause 1 of c.state == \"APPROVED\" and c.approval is not None",
     "mcr3_authority.py::ast@L177: drop clause 2 of c.state == \"APPROVED\" and c.approval is not None",
-    "mcr3_authority.py::ast@L207: drop clause 2 of all(d[k] not in (None, \"\", []) for k in (\"ADAPTER_ID\", \"SOUR",
-    "mcr3_authority.py::ast@L242: drop clause 1 of to_mode not in order or order[to_mode] <= order[a.declaratio",
-    "mcr3_authority.py::ast@L246: drop clause 2 of not isinstance(approval_reference, dict) or not approval_ref",
-    "mcr3_authority.py::ast@L248: flip order[to_mode] > order.get(self.floor.get(adapter_id, \"ACTIV",
-    "mcr3_authority.py::ast@L77: drop clause 3 of isinstance(capability_id, str) and capability_id and isinsta",
-    "mcr3_authority.py::ast@L77: drop clause 5 of isinstance(capability_id, str) and capability_id and isinsta",
-    "mcr3_authority.py::ast@L143: flip self.clock() >= exp",
     "mcr3_authority.py::ast@L179: drop clause 1 of exp is None or self.clock() >= exp",
-    "mcr3_authority.py::ast@L185: drop clause 1 of scope is None or self._approval_scope_matches(c, scope)",
-    "mcr3_authority.py::ast@L179: flip self.clock() >= exp",
-    "mcr3_authority.py::ast@L136: drop clause 1 of isinstance(record[k], str) and record[k]",
-    "mcr3_scan.py::ast@L66: drop clause 1 of bool(seg) and (any(x in _HASHY for x in seg) or seg[-1] in _",
     "mcr3_scan.py::ast@L70: drop clause 1 of _PLACEHOLDER.match(v) or _LABEL.fullmatch(v)",
-    "mcr3_scan.py::ast@L70: drop clause 2 of _PLACEHOLDER.match(v) or _LABEL.fullmatch(v)",
-    "mcr3_scan.py::ast@L72: drop clause 1 of (any(c.isdigit() for c in v) and any(c.isalpha() for c in v)",
-    "mcr3_scan.py::ast@L72: drop clause 2 of (any(c.isdigit() for c in v) and any(c.isalpha() for c in v)",
-    "mcr3_scan.py::ast@L72: drop clause 1 of any(c.isdigit() for c in v) and any(c.isalpha() for c in v)",
-    "mcr3_scan.py::ast@L72: drop clause 2 of any(c.isdigit() for c in v) and any(c.isalpha() for c in v)",
-    "mcr3_scan.py::ast@L123: flip tr.returncode == 0",
-    "mcr3_scan.py::ast@L128: drop clause 1 of not os.path.isfile(fp) or p.lower().endswith(BINARY_EXT)",
-    "mcr3_scan.py::ast@L128: drop clause 2 of not os.path.isfile(fp) or p.lower().endswith(BINARY_EXT)",
-    "mcr3_scan.py::ast@L96: drop clause 1 of _exempt_name(m.group(\"n\")) or not _short_secret_like(m.group",
-    "mcr3_scan.py::ast@L100: drop clause 2 of _exempt_name(m.group(\"n\")) or _LABEL.fullmatch(v) or _PLACEH",
-    "mcr3_scan.py::ast@L100: drop clause 3 of _exempt_name(m.group(\"n\")) or _LABEL.fullmatch(v) or _PLACEH",
-    "mcr3_scan.py::ast@L128: remove not in not os.path.isfile(fp)",
-    "mcr3_scan.py::ast@L72: flip c in \"!@#$%^&*+=?~\"",
-    "mcr3_scan.py::ast@L134: drop clause 1 of mem.lower().endswith(BINARY_EXT) or mem.endswith(\"/\")",
-    "mcr3_scan.py::ast@L134: drop clause 2 of mem.lower().endswith(BINARY_EXT) or mem.endswith(\"/\")",
-    "mcr3_scan.py::ast@L137: swap +/- in p + \"!\" + mem",
-    "mcr3_scan.py::ast@L137: swap +/- in p + \"!\"",
-    "mcr3_readback.py::ast@L96: drop clause 2 of first[\"existence\"] == second[\"existence\"] != \"UNKNOWN\" and f",
+    "mcr3_scan.py::ast@L131: drop clause 1 of not os.path.isfile(fp) or p.lower().endswith(BINARY_EXT)",
+    "mcr3_scan.py::ast@L137: drop clause 2 of mem.lower().endswith(BINARY_EXT) or mem.endswith(\"/\")",
     "mcr3_readback.py::ast@L40: drop clause 1 of not isinstance(src, str) or not src",
     "mcr3_readback.py::ast@L40: drop clause 2 of not isinstance(src, str) or not src",
-    "mcr3_readback.py::ast@L68: flip existence == \"EXISTS\"",
-    "mcr3_readback.py::ast@L68: drop clause 1 of act[1] or ina[1]",
-    "mcr3_readback.py::ast@L68: drop clause 2 of act[1] or ina[1]",
-    "mcr3_readback.py::ast@L69: flip existence == \"EXISTS\"",
-    "mcr3_readback.py::ast@L69: drop clause 1 of act[2] or ina[2]",
-    "mcr3_readback.py::ast@L69: drop clause 2 of act[2] or ina[2]",
-    "mcr3_adapters.py::ast@L39: swap +/- in fallback_prefix + hashlib.sha256(v.encode(\"utf-8\")).hexdiges",
     "mcr3_adapters.py::ast@L62: drop clause 1 of attempt or self.attempt_id",
     "mcr3_adapters.py::ast@L131: drop clause 1 of mission.state == \"COMPENSATED\" and \"comp_receipt\" in ev",
     "mcr3_adapters.py::ast@L131: drop clause 2 of mission.state == \"COMPENSATED\" and \"comp_receipt\" in ev",
-    "mcr3_adapters.py::ast@L156: drop clause 1 of st == \"OUTCOME_VALIDATION_PENDING\" and m.ev.get(\"outcome\", {",
-    "mcr3_adapters.py::ast@L156: drop clause 2 of st == \"OUTCOME_VALIDATION_PENDING\" and m.ev.get(\"outcome\", {",
     "mcr3_adapters.py::ast@L180: drop clause 1 of not isinstance(chain, list) or [c[0] for c in chain if isins",
     "mcr3_adapters.py::ast@L180: drop clause 2 of not isinstance(chain, list) or [c[0] for c in chain if isins",
-    "mcr3_adapters.py::ast@L187: drop clause 1 of path.startswith(\"/\") and len(path.split(\"/\")) > 2",
-    "mcr3_adapters.py::ast@L187: drop clause 2 of path.startswith(\"/\") and len(path.split(\"/\")) > 2",
-    "mcr3_adapters.py::ast@L207: drop clause 1 of ex == \"EXISTS\" and result.get(\"RESULT\", \"\").startswith(\"COMM",
-    "mcr3_adapters.py::ast@L66: drop clause 1 of classification or self.classification",
     "mcr3_adapters.py::ast@L106: drop clause 1 of mission.mutations_sent or 1",
     "mcr3_adapters.py::ast@L106: drop clause 2 of mission.mutations_sent or 1",
-    "mcr3_adapters.py::ast@L187: flip len(path.split(\"/\")) > 2",
-    "mcr3_adapters.py::ast@L197: drop clause 1 of target or \"UNKNOWN_IN_ARCHIVE\"",
-    "mcr3_adapters.py::ast@L197: drop clause 2 of target or \"UNKNOWN_IN_ARCHIVE\"",
-    "mcr3_adapters.py::ast@L67: flip etype == \"mcr.authorization.referenced\"",
     "mcr3_adapters.py::ast@L107: drop clause 1 of mission.mutations_sent or 1",
     "mcr3_adapters.py::ast@L107: drop clause 2 of mission.mutations_sent or 1",
-    "mcr3_adapters.py::ast@L130: flip entry[\"call_class\"] not in M.COMP_UNKNOWN_CLASSES",
-    "mcr3_adapters.py::ast@L205: flip ro.get(\"exists\") is True",
     "mcr3_adapters.py::ast@L215: flip res == \"PASS\"",
-    "mcr3_adapters.py::ast@L119: flip classification != \"SYNTHETIC\"",
     "mcr3_adapters.py::ast@L180: drop clause 1 of isinstance(c, list) and len(c) == 2",
     "mcr3_adapters.py::ast@L180: drop clause 2 of isinstance(c, list) and len(c) == 2",
-    "mcr3_lineage.py::ast@L41: drop clause 1 of old[\"correlation\"][\"mission_id\"] != mission or old[\"type\"] !",
-    "mcr3_lineage.py::ast@L68: swap +/- in len(self._events) + 1",
     "mcr3_interop.py::ast@L46: drop clause 1 of known.get(\"capability\") or {}",
-    "mcr3_interop.py::ast@L46: drop clause 2 of known.get(\"capability\") or {}",
-    "mcr3_interop.py::ast@L85: drop clause 1 of not isinstance(pe, dict) or pe.get(\"schema\") != PE_SCHEMA",
-    "mcr3_interop.py::ast@L85: drop clause 2 of not isinstance(pe, dict) or pe.get(\"schema\") != PE_SCHEMA",
-    "mcr3_interop.py::ast@L102: drop clause 1 of k in DATA_ALLOWED and (v is None or (isinstance(v, str) and ",
-    "mcr3_interop.py::ast@L101: drop clause 2 of pe.get(\"data\") or {}",
-    "mcr3_interop.py::ast@L102: drop clause 1 of v is None or (isinstance(v, str) and _SAFE.match(v) and not ",
-    "mcr3_interop.py::ast@L91: drop clause 1 of not isinstance(pe.get(\"event_id\"), str) or not re.match(r\"^[",
-    "mcr3_interop.py::ast@L91: drop clause 2 of not isinstance(pe.get(\"event_id\"), str) or not re.match(r\"^[",
-    "mcr3_interop.py::ast@L102: drop clause 1 of isinstance(v, str) and _SAFE.match(v) and not _SECRETISH.sea",
-    "mcr3_interop.py::ast@L102: drop clause 2 of isinstance(v, str) and _SAFE.match(v) and not _SECRETISH.sea",
-    "mcr3_interop.py::ast@L102: drop clause 3 of isinstance(v, str) and _SAFE.match(v) and not _SECRETISH.sea"
+    "mcr3_chain.py::ast@L34: drop clause 2 of len(missions) != 1 or None in missions",
+    "mcr3_chain.py::ast@L37: drop clause 2 of len(txs) > 1 or None in txs",
+    "mcr3_chain.py::ast@L43: drop clause 1 of len(disp) > 1 or (disp and disp[0] != len(parsed) - 1)",
+    "mcr3_chain.py::ast@L75: drop clause 2 of co and co[\"claim\"][\"commit_state\"] == \"COMMITTED\"",
+    "mcr3_chain.py::ast@L80: drop clause 2 of oc and oc[\"claim\"][\"result\"] == \"PASS\" and not (co and co[\"c",
+    "mcr3_chain.py::ast@L82: drop clause 2 of rb and rb[\"claim\"][\"claimed_authoritative\"] and rb[\"claim\"][",
+    "mcr3_chain.py::ast@L78: drop clause 2 of not er or er[\"claim\"][\"call_class\"] not in (\"PROVIDER_RESPON",
+    "mcr3_chain.py::ast@L80: drop clause 2 of co and co[\"claim\"][\"commit_state\"] == \"COMMITTED\"",
+    "mcr3_chain.py::ast@L94: drop clause 1 of len(digs) != 14 or len(c[\"chain_digests\"]) != 14",
+    "mcr3_chain.py::ast@L94: drop clause 2 of len(digs) != 14 or len(c[\"chain_digests\"]) != 14",
+    "mcr3_chain.py::ast@L92: drop clause 1 of oc and oc[\"claim\"][\"result\"] == \"PASS\" and co and co[\"claim\"",
+    "mcr3_chain.py::ast@L92: drop clause 4 of oc and oc[\"claim\"][\"result\"] == \"PASS\" and co and co[\"claim\"",
+    "mcr3_chain.py::ast@L96: drop clause 1 of oc and oc[\"claim\"][\"result\"] == \"PASS\"",
+    "mcr3_chain.py::ast@L100: drop clause 1 of er and er[\"claim\"][\"provider_acknowledged\"]"
   ],
   "unexplained_survivors": [
-    "mcr3_model.py::guard@L327: len(path) > 4096",
-    "mcr3_model.py::guard@L331: any(c in _BAD_PATH_CHARS for c in path)",
-    "mcr3_model.py::guard@L343: part == \"..\"",
-    "mcr3_model.py::guard@L1081: resolution[\"mutation_id\"] != self.ev[\"mutation_id\"] or resolution[\"con",
-    "mcr3_model.py::ast@L327: flip len(path) > 4096",
-    "mcr3_model.py::ast@L334: drop clause 1 of len(path) >= 2 and path[1] == \":\" and path[0].isalpha() and ",
-    "mcr3_model.py::ast@L334: drop clause 2 of len(path) >= 2 and path[1] == \":\" and path[0].isalpha() and ",
-    "mcr3_model.py::ast@L334: drop clause 3 of len(path) >= 2 and path[1] == \":\" and path[0].isalpha() and ",
-    "mcr3_model.py::ast@L334: drop clause 4 of len(path) >= 2 and path[1] == \":\" and path[0].isalpha() and ",
-    "mcr3_model.py::ast@L586: drop clause 2 of not isinstance(ref, str) or not isinstance(provider_id, str)",
-    "mcr3_model.py::ast@L586: drop clause 3 of not isinstance(ref, str) or not isinstance(provider_id, str)",
     "mcr3_model.py::ast@L586: drop clause 4 of not isinstance(ref, str) or not isinstance(provider_id, str)",
     "mcr3_model.py::ast@L589: drop clause 1 of sep == \"::\" and pid == provider_id and tail != \"\" and \"::\" n",
-    "mcr3_model.py::ast@L334: flip len(path) >= 2",
-    "mcr3_model.py::ast@L335: drop clause 1 of len(path) > 2 and path[2] not in \"/\\\\\"",
-    "mcr3_model.py::ast@L345: drop clause 1 of part != \".\" and (part.endswith(\".\") or part.endswith(\" \"))",
-    "mcr3_model.py::ast@L500: drop clause 4 of not isinstance(anchor, dict) or not isinstance(anchor.get(\"l",
-    "mcr3_model.py::ast@L814: drop clause 1 of not isinstance(chk, list) or not chk or not all(isinstance(c",
-    "mcr3_model.py::ast@L888: drop clause 1 of isinstance(obs, dict) and all(c in obs and obs[c] not in (No",
-    "mcr3_model.py::ast@L329: drop clause 2 of ord(c) < 32 or ord(c) == 127",
-    "mcr3_model.py::ast@L335: flip len(path) > 2",
-    "mcr3_model.py::ast@L1081: drop clause 1 of resolution[\"mutation_id\"] != self.ev[\"mutation_id\"] or resol",
-    "mcr3_model.py::ast@L1081: drop clause 2 of resolution[\"mutation_id\"] != self.ev[\"mutation_id\"] or resol",
-    "mcr3_model.py::ast@L1083: drop clause 2 of resolution[\"source_level\"] != \"AUTHORITATIVE_REPOSITORY\" or ",
-    "mcr3_model.py::ast@L1302: drop clause 1 of er and er[\"call_class\"] == \"PROVIDER_RESPONSE_SUCCESS\"",
-    "mcr3_model.py::ast@L1302: drop clause 2 of er and er[\"call_class\"] == \"PROVIDER_RESPONSE_SUCCESS\"",
-    "evc1.py::ast@L239: drop clause 1 of provenance or unsigned_provenance()",
     "evc1.py::ast@L273: drop clause 2 of e[\"claim\"][\"kind\"] != kind or e[\"claim\"][\"layer\"] != layer",
-    "evc1.py::ast@L299: drop clause 2 of cl[\"kind\"] == \"READBACK_CLAIM\" and cl[\"claimed_authoritative",
-    "evc1.py::ast@L301: drop clause 3 of cl[\"kind\"] == \"READBACK_CLAIM\" and cl[\"provenance_verified\"]",
-    "evc1.py::ast@L305: drop clause 2 of cl[\"kind\"] == \"OUTCOME_EVALUATION\" and ev[\"classification\"] ",
-    "evc1.py::ast@L314: drop clause 2 of cl[\"kind\"] == \"EXECUTION_RECEIPT\" and cl[\"call_class\"] == \"P",
-    "evc1.py::ast@L316: drop clause 3 of cl[\"kind\"] == \"EXECUTION_RECEIPT\" and cl[\"call_class\"] in (\"",
-    "evc1.py::ast@L318: drop clause 2 of cl[\"kind\"] == \"COMMIT_OBSERVATION\" and cl[\"commit_state\"] ==",
-    "evc1.py::ast@L370: drop clause 1 of tmin < smin and unknown",
     "evc1.py::ast@L376: drop clause 1 of known.get(\"integrity\", {}).get(\"event_digest\") or digest_of(",
-    "evc1.py::ast@L376: drop clause 2 of known.get(\"integrity\", {}).get(\"event_digest\") or digest_of(",
     "evc1.py::ast@L162: drop clause 1 of isinstance(v, bool) or v is None or isinstance(v, (str, int)",
-    "evc1.py::ast@L249: drop clause 1 of lineage or {\"transformations\": [], \"source_event_id\": None, ",
-    "evc1.py::ast@L296: flip name not in KNOWN_CRITICAL",
-    "evc1.py::ast@L305: flip ev[\"classification\"] != \"HISTORICAL\"",
-    "evc1.py::ast@L305: drop clause 1 of cl[\"expected_digest\"] is None or cl[\"predicates_digest\"] is ",
-    "evc1.py::ast@L305: drop clause 2 of cl[\"expected_digest\"] is None or cl[\"predicates_digest\"] is ",
-    "evc1.py::ast@L308: drop clause 1 of cl[\"disposition\"] == \"COMPLETE\" and cl[\"outcome_class\"] != \"",
-    "evc1.py::ast@L310: drop clause 1 of cl[\"outcome_class\"] == \"COMPLETE\" and cl[\"disposition\"] != \"",
-    "evc1.py::ast@L312: drop clause 2 of \"disposition\" in e and e[\"disposition\"] != cl[\"disposition\"]",
-    "evc1.py::ast@L346: drop clause 1 of name in unknown or name not in KNOWN_CRITICAL",
     "evc1.py::ast@L346: drop clause 2 of name in unknown or name not in KNOWN_CRITICAL",
-    "evc1.py::ast@L370: flip tmin < smin",
-    "evc1.py::ast@L346: flip name in unknown",
-    "evc1.py::ast@L346: flip name not in KNOWN_CRITICAL",
-    "evc1.py::ast@L376: flip k != \"integrity\"",
-    "evc1.py::ast@L280: drop clause 2 of full or e",
-    "mini_jsonschema.py::ast@L85: drop clause 1 of isinstance(v, (int, float)) and not isinstance(v, bool)",
-    "mini_jsonschema.py::ast@L85: drop clause 2 of isinstance(v, (int, float)) and not isinstance(v, bool)",
-    "mini_jsonschema.py::ast@L131: drop clause 2 of \"not\" in schema and not _sub(schema[\"not\"], root, v, path)",
-    "mini_jsonschema.py::ast@L27: drop clause 1 of isinstance(v, (int, float)) and not isinstance(v, bool)",
-    "mini_jsonschema.py::ast@L27: drop clause 2 of isinstance(v, (int, float)) and not isinstance(v, bool)",
-    "mini_jsonschema.py::ast@L48: drop clause 1 of not isinstance(node, dict) or part not in node",
-    "mini_jsonschema.py::ast@L48: drop clause 2 of not isinstance(node, dict) or part not in node",
-    "mini_jsonschema.py::ast@L88: drop clause 2 of \"maximum\" in schema and v > schema[\"maximum\"]",
-    "mini_jsonschema.py::ast@L93: drop clause 2 of \"maxItems\" in schema and len(v) > schema[\"maxItems\"]",
-    "mini_jsonschema.py::ast@L95: drop clause 1 of schema.get(\"uniqueItems\") and len({repr(x) for x in v}) != l",
-    "mini_jsonschema.py::ast@L95: drop clause 2 of schema.get(\"uniqueItems\") and len({repr(x) for x in v}) != l",
-    "mini_jsonschema.py::ast@L125: remove not in not any(not _sub(s, root, v, path) for s in schema[\"anyOf\"])",
-    "mini_jsonschema.py::ast@L79: flip len(v) > schema[\"maxLength\"]",
-    "mini_jsonschema.py::ast@L88: flip v > schema[\"maximum\"]",
-    "mini_jsonschema.py::ast@L93: flip len(v) > schema[\"maxItems\"]",
-    "mini_jsonschema.py::ast@L163: flip k in (\"items\", \"additionalProperties\", \"not\", \"if\", \"then\", ",
-    "mini_jsonschema.py::ast@L117: flip ap is False",
-    "mini_jsonschema.py::ast@L119: flip ap is not True",
-    "mini_jsonschema.py::ast@L125: remove not in not _sub(s, root, v, path)",
-    "mcr3_provenance.py::ast@L36: drop clause 1 of not isinstance(ts, str) or not ts.endswith(\"Z\")",
-    "mcr3_provenance.py::ast@L36: drop clause 2 of not isinstance(ts, str) or not ts.endswith(\"Z\")",
     "mcr3_provenance.py::ast@L138: drop clause 1 of ssh_keygen or shutil.which(\"ssh-keygen\")",
     "mcr3_provenance.py::ast@L232: drop clause 1 of prov[\"hash_consistent\"] and content is not None and attestat",
     "mcr3_provenance.py::ast@L232: drop clause 2 of prov[\"hash_consistent\"] and content is not None and attestat",
-    "mcr3_provenance.py::ast@L232: drop clause 4 of prov[\"hash_consistent\"] and content is not None and attestat",
-    "mcr3_provenance.py::ast@L77: drop clause 1 of attestation.get(\"alg\") != self.alg or signer not in self.key",
     "mcr3_provenance.py::ast@L77: drop clause 2 of attestation.get(\"alg\") != self.alg or signer not in self.key",
-    "mcr3_provenance.py::ast@L98: drop clause 2 of attestation.get(\"alg\") != self.alg or signer not in self._ke",
     "mcr3_provenance.py::ast@L114: drop clause 1 of ssh_keygen or shutil.which(\"ssh-keygen\")",
     "mcr3_provenance.py::ast@L120: drop clause 1 of attestation.get(\"alg\") != self.alg or not isinstance(attesta",
-    "mcr3_provenance.py::ast@L120: drop clause 2 of attestation.get(\"alg\") != self.alg or not isinstance(attesta",
-    "mcr3_provenance.py::ast@L173: drop clause 2 of clock or _time.time",
-    "mcr3_provenance.py::ast@L185: drop clause 2 of (rec.get(\"not_before\") is not None and at < rec[\"not_before\"",
-    "mcr3_provenance.py::ast@L195: drop clause 1 of alg or signer_backend.alg",
-    "mcr3_provenance.py::ast@L236: drop clause 1 of policy.expected_policy_digest is not None and pd != policy.e",
-    "mcr3_provenance.py::ast@L238: drop clause 1 of policy.expected_authority_digest is not None and ad != polic",
-    "mcr3_provenance.py::ast@L170: drop clause 2 of issuers or {}",
-    "mcr3_provenance.py::ast@L185: drop clause 2 of rec.get(\"not_before\") is not None and at < rec[\"not_before\"]",
-    "mcr3_provenance.py::ast@L185: drop clause 2 of rec.get(\"not_after\") is not None and at > rec[\"not_after\"]",
-    "mcr3_provenance.py::ast@L256: drop clause 3 of record_replay and prov[\"issuer_trust\"] == \"TRUSTED\" and prov",
-    "mcr3_provenance.py::ast@L185: flip at < rec[\"not_before\"]",
-    "mcr3_provenance.py::ast@L185: flip at > rec[\"not_after\"]",
     "mcr3_provenance.py::ast@L129: flip r.returncode == 0 #2",
-    "mcr3_authority.py::ast@L271: drop clause 1 of isinstance(s, str) and len(s) == 64 and all(c in \"0123456789",
-    "mcr3_authority.py::ast@L271: drop clause 2 of isinstance(s, str) and len(s) == 64 and all(c in \"0123456789",
-    "mcr3_authority.py::ast@L271: drop clause 3 of isinstance(s, str) and len(s) == 64 and all(c in \"0123456789",
-    "mcr3_authority.py::ast@L89: flip c is None",
-    "mcr3_authority.py::ast@L113: drop clause 2 of not _hex64(qualification_digest) or not isinstance(reviewer,",
     "mcr3_authority.py::ast@L143: drop clause 1 of require_unexpired and self.clock() >= exp",
     "mcr3_authority.py::ast@L148: drop clause 1 of a is not None and all(a[k] == scope.get(k) for k in SCOPE_FI",
     "mcr3_authority.py::ast@L177: drop clause 1 of c.state == \"APPROVED\" and c.approval is not None",
     "mcr3_authority.py::ast@L177: drop clause 2 of c.state == \"APPROVED\" and c.approval is not None",
-    "mcr3_authority.py::ast@L207: drop clause 2 of all(d[k] not in (None, \"\", []) for k in (\"ADAPTER_ID\", \"SOUR",
-    "mcr3_authority.py::ast@L242: drop clause 1 of to_mode not in order or order[to_mode] <= order[a.declaratio",
-    "mcr3_authority.py::ast@L246: drop clause 2 of not isinstance(approval_reference, dict) or not approval_ref",
-    "mcr3_authority.py::ast@L248: flip order[to_mode] > order.get(self.floor.get(adapter_id, \"ACTIV",
-    "mcr3_authority.py::ast@L77: drop clause 3 of isinstance(capability_id, str) and capability_id and isinsta",
-    "mcr3_authority.py::ast@L77: drop clause 5 of isinstance(capability_id, str) and capability_id and isinsta",
-    "mcr3_authority.py::ast@L143: flip self.clock() >= exp",
     "mcr3_authority.py::ast@L179: drop clause 1 of exp is None or self.clock() >= exp",
-    "mcr3_authority.py::ast@L185: drop clause 1 of scope is None or self._approval_scope_matches(c, scope)",
-    "mcr3_authority.py::ast@L179: flip self.clock() >= exp",
-    "mcr3_authority.py::ast@L136: drop clause 1 of isinstance(record[k], str) and record[k]",
-    "mcr3_scan.py::ast@L66: drop clause 1 of bool(seg) and (any(x in _HASHY for x in seg) or seg[-1] in _",
     "mcr3_scan.py::ast@L70: drop clause 1 of _PLACEHOLDER.match(v) or _LABEL.fullmatch(v)",
-    "mcr3_scan.py::ast@L70: drop clause 2 of _PLACEHOLDER.match(v) or _LABEL.fullmatch(v)",
-    "mcr3_scan.py::ast@L72: drop clause 1 of (any(c.isdigit() for c in v) and any(c.isalpha() for c in v)",
-    "mcr3_scan.py::ast@L72: drop clause 2 of (any(c.isdigit() for c in v) and any(c.isalpha() for c in v)",
-    "mcr3_scan.py::ast@L72: drop clause 1 of any(c.isdigit() for c in v) and any(c.isalpha() for c in v)",
-    "mcr3_scan.py::ast@L72: drop clause 2 of any(c.isdigit() for c in v) and any(c.isalpha() for c in v)",
-    "mcr3_scan.py::ast@L123: flip tr.returncode == 0",
-    "mcr3_scan.py::ast@L128: drop clause 1 of not os.path.isfile(fp) or p.lower().endswith(BINARY_EXT)",
-    "mcr3_scan.py::ast@L128: drop clause 2 of not os.path.isfile(fp) or p.lower().endswith(BINARY_EXT)",
-    "mcr3_scan.py::ast@L96: drop clause 1 of _exempt_name(m.group(\"n\")) or not _short_secret_like(m.group",
-    "mcr3_scan.py::ast@L100: drop clause 2 of _exempt_name(m.group(\"n\")) or _LABEL.fullmatch(v) or _PLACEH",
-    "mcr3_scan.py::ast@L100: drop clause 3 of _exempt_name(m.group(\"n\")) or _LABEL.fullmatch(v) or _PLACEH",
-    "mcr3_scan.py::ast@L128: remove not in not os.path.isfile(fp)",
-    "mcr3_scan.py::ast@L72: flip c in \"!@#$%^&*+=?~\"",
-    "mcr3_scan.py::ast@L134: drop clause 1 of mem.lower().endswith(BINARY_EXT) or mem.endswith(\"/\")",
-    "mcr3_scan.py::ast@L134: drop clause 2 of mem.lower().endswith(BINARY_EXT) or mem.endswith(\"/\")",
-    "mcr3_scan.py::ast@L137: swap +/- in p + \"!\" + mem",
-    "mcr3_scan.py::ast@L137: swap +/- in p + \"!\"",
-    "mcr3_readback.py::ast@L96: drop clause 2 of first[\"existence\"] == second[\"existence\"] != \"UNKNOWN\" and f",
+    "mcr3_scan.py::ast@L131: drop clause 1 of not os.path.isfile(fp) or p.lower().endswith(BINARY_EXT)",
+    "mcr3_scan.py::ast@L137: drop clause 2 of mem.lower().endswith(BINARY_EXT) or mem.endswith(\"/\")",
     "mcr3_readback.py::ast@L40: drop clause 1 of not isinstance(src, str) or not src",
     "mcr3_readback.py::ast@L40: drop clause 2 of not isinstance(src, str) or not src",
-    "mcr3_readback.py::ast@L68: flip existence == \"EXISTS\"",
-    "mcr3_readback.py::ast@L68: drop clause 1 of act[1] or ina[1]",
-    "mcr3_readback.py::ast@L68: drop clause 2 of act[1] or ina[1]",
-    "mcr3_readback.py::ast@L69: flip existence == \"EXISTS\"",
-    "mcr3_readback.py::ast@L69: drop clause 1 of act[2] or ina[2]",
-    "mcr3_readback.py::ast@L69: drop clause 2 of act[2] or ina[2]",
-    "mcr3_adapters.py::ast@L39: swap +/- in fallback_prefix + hashlib.sha256(v.encode(\"utf-8\")).hexdiges",
     "mcr3_adapters.py::ast@L62: drop clause 1 of attempt or self.attempt_id",
     "mcr3_adapters.py::ast@L131: drop clause 1 of mission.state == \"COMPENSATED\" and \"comp_receipt\" in ev",
     "mcr3_adapters.py::ast@L131: drop clause 2 of mission.state == \"COMPENSATED\" and \"comp_receipt\" in ev",
-    "mcr3_adapters.py::ast@L156: drop clause 1 of st == \"OUTCOME_VALIDATION_PENDING\" and m.ev.get(\"outcome\", {",
-    "mcr3_adapters.py::ast@L156: drop clause 2 of st == \"OUTCOME_VALIDATION_PENDING\" and m.ev.get(\"outcome\", {",
     "mcr3_adapters.py::ast@L180: drop clause 1 of not isinstance(chain, list) or [c[0] for c in chain if isins",
     "mcr3_adapters.py::ast@L180: drop clause 2 of not isinstance(chain, list) or [c[0] for c in chain if isins",
-    "mcr3_adapters.py::ast@L187: drop clause 1 of path.startswith(\"/\") and len(path.split(\"/\")) > 2",
-    "mcr3_adapters.py::ast@L187: drop clause 2 of path.startswith(\"/\") and len(path.split(\"/\")) > 2",
-    "mcr3_adapters.py::ast@L207: drop clause 1 of ex == \"EXISTS\" and result.get(\"RESULT\", \"\").startswith(\"COMM",
-    "mcr3_adapters.py::ast@L66: drop clause 1 of classification or self.classification",
     "mcr3_adapters.py::ast@L106: drop clause 1 of mission.mutations_sent or 1",
     "mcr3_adapters.py::ast@L106: drop clause 2 of mission.mutations_sent or 1",
-    "mcr3_adapters.py::ast@L187: flip len(path.split(\"/\")) > 2",
-    "mcr3_adapters.py::ast@L197: drop clause 1 of target or \"UNKNOWN_IN_ARCHIVE\"",
-    "mcr3_adapters.py::ast@L197: drop clause 2 of target or \"UNKNOWN_IN_ARCHIVE\"",
-    "mcr3_adapters.py::ast@L67: flip etype == \"mcr.authorization.referenced\"",
     "mcr3_adapters.py::ast@L107: drop clause 1 of mission.mutations_sent or 1",
     "mcr3_adapters.py::ast@L107: drop clause 2 of mission.mutations_sent or 1",
-    "mcr3_adapters.py::ast@L130: flip entry[\"call_class\"] not in M.COMP_UNKNOWN_CLASSES",
-    "mcr3_adapters.py::ast@L205: flip ro.get(\"exists\") is True",
     "mcr3_adapters.py::ast@L215: flip res == \"PASS\"",
-    "mcr3_adapters.py::ast@L119: flip classification != \"SYNTHETIC\"",
     "mcr3_adapters.py::ast@L180: drop clause 1 of isinstance(c, list) and len(c) == 2",
     "mcr3_adapters.py::ast@L180: drop clause 2 of isinstance(c, list) and len(c) == 2",
-    "mcr3_lineage.py::ast@L41: drop clause 1 of old[\"correlation\"][\"mission_id\"] != mission or old[\"type\"] !",
-    "mcr3_lineage.py::ast@L68: swap +/- in len(self._events) + 1",
     "mcr3_interop.py::ast@L46: drop clause 1 of known.get(\"capability\") or {}",
-    "mcr3_interop.py::ast@L46: drop clause 2 of known.get(\"capability\") or {}",
-    "mcr3_interop.py::ast@L85: drop clause 1 of not isinstance(pe, dict) or pe.get(\"schema\") != PE_SCHEMA",
-    "mcr3_interop.py::ast@L85: drop clause 2 of not isinstance(pe, dict) or pe.get(\"schema\") != PE_SCHEMA",
-    "mcr3_interop.py::ast@L102: drop clause 1 of k in DATA_ALLOWED and (v is None or (isinstance(v, str) and ",
-    "mcr3_interop.py::ast@L101: drop clause 2 of pe.get(\"data\") or {}",
-    "mcr3_interop.py::ast@L102: drop clause 1 of v is None or (isinstance(v, str) and _SAFE.match(v) and not ",
-    "mcr3_interop.py::ast@L91: drop clause 1 of not isinstance(pe.get(\"event_id\"), str) or not re.match(r\"^[",
-    "mcr3_interop.py::ast@L91: drop clause 2 of not isinstance(pe.get(\"event_id\"), str) or not re.match(r\"^[",
-    "mcr3_interop.py::ast@L102: drop clause 1 of isinstance(v, str) and _SAFE.match(v) and not _SECRETISH.sea",
-    "mcr3_interop.py::ast@L102: drop clause 2 of isinstance(v, str) and _SAFE.match(v) and not _SECRETISH.sea",
-    "mcr3_interop.py::ast@L102: drop clause 3 of isinstance(v, str) and _SAFE.match(v) and not _SECRETISH.sea"
+    "mcr3_chain.py::ast@L34: drop clause 2 of len(missions) != 1 or None in missions",
+    "mcr3_chain.py::ast@L37: drop clause 2 of len(txs) > 1 or None in txs",
+    "mcr3_chain.py::ast@L43: drop clause 1 of len(disp) > 1 or (disp and disp[0] != len(parsed) - 1)",
+    "mcr3_chain.py::ast@L75: drop clause 2 of co and co[\"claim\"][\"commit_state\"] == \"COMMITTED\"",
+    "mcr3_chain.py::ast@L80: drop clause 2 of oc and oc[\"claim\"][\"result\"] == \"PASS\" and not (co and co[\"c",
+    "mcr3_chain.py::ast@L82: drop clause 2 of rb and rb[\"claim\"][\"claimed_authoritative\"] and rb[\"claim\"][",
+    "mcr3_chain.py::ast@L78: drop clause 2 of not er or er[\"claim\"][\"call_class\"] not in (\"PROVIDER_RESPON",
+    "mcr3_chain.py::ast@L80: drop clause 2 of co and co[\"claim\"][\"commit_state\"] == \"COMMITTED\"",
+    "mcr3_chain.py::ast@L94: drop clause 1 of len(digs) != 14 or len(c[\"chain_digests\"]) != 14",
+    "mcr3_chain.py::ast@L94: drop clause 2 of len(digs) != 14 or len(c[\"chain_digests\"]) != 14",
+    "mcr3_chain.py::ast@L92: drop clause 1 of oc and oc[\"claim\"][\"result\"] == \"PASS\" and co and co[\"claim\"",
+    "mcr3_chain.py::ast@L92: drop clause 4 of oc and oc[\"claim\"][\"result\"] == \"PASS\" and co and co[\"claim\"",
+    "mcr3_chain.py::ast@L96: drop clause 1 of oc and oc[\"claim\"][\"result\"] == \"PASS\"",
+    "mcr3_chain.py::ast@L100: drop clause 1 of er and er[\"claim\"][\"provider_acknowledged\"]"
   ]
 }
