@@ -31,7 +31,9 @@ R1_9_TAG, R1_9_COMMIT = "v1.9.0", "9c5105fe5b35dadf7b1384f54d4bea4c490d3ae0"
 NEW_DIRS = ("tools/mcr3/", "architecture/mcr3/", "evidence/mcr3/", "reports/mcr3/")
 SUMS = "evidence/mcr3/SHA256SUMS_MCR3.txt"
 ABS = re.compile(r"(?i)(?<![A-Za-z0-9])[A-Za-z]:[\\/](?!/)|\\\\[A-Za-z0-9_.-]+\\|/(?:home|Users)/[A-Za-z0-9_.-]+")
-ABS_ALLOWED_FILES = {"tools/mcr3/verify_mcr3.py", "tools/mcr3/run_mcr3_verifier_attacks.py"}
+# files that contain path-form TEST VECTORS on purpose (device names, drive forms, a fake tool path), not machine-specific paths
+ABS_ALLOWED_FILES = {"tools/mcr3/verify_mcr3.py", "tools/mcr3/run_mcr3_verifier_attacks.py", "tools/mcr3/validate_mcr3_adapters.py",
+                     "tools/mcr3/validate_mcr3_gaps.py", "tools/mcr3/validate_mcr3_hardening.py", "tools/mcr3/validate_mcr3_authority.py"}
 
 
 def sh(path):
