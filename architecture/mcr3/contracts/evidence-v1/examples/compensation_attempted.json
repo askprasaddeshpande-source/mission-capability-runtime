@@ -19,7 +19,7 @@
   "digests": {
     "payload": "ed743e6562f42035945d3057cd786e913bd5f49a64fa1ec8d9c5e955be03f5f9",
     "policy": null,
-    "schema": "2cd240f8ea4b1c0b69af5dd2f61e3362f12be9f185074cba1c39f6f66b115ecf"
+    "schema": "54e14e326a509b5f19194b9bc27fedb3eb355474697319545da95fc0af75ad58"
   },
   "evidence": {
     "classification": "SYNTHETIC",
@@ -38,7 +38,7 @@
   },
   "id": "EVT-cd50bc51b6",
   "integrity": {
-    "event_digest": "69b63f4fca28789a35c8a8b05feaeb6734f2200635832a064bc20d6b4db70530"
+    "event_digest": "80b92903c89e4a97e6bf15cddc42804da7d19f816ab5750c7a6332c31e2d4d55"
   },
   "lineage": {
     "source_digest": null,

@@ -290,7 +290,7 @@ def semantic_problems(e, full=None):
         p.append("principal assurance VERIFIED needs SIGNED_TRUSTED evidence")
     if e["type"] != "mcr.mission.started" and e["correlation"]["mission_id"] is None:
         p.append("correlation.mission_id is required for %s" % e["type"])
-    if e["type"] in ("mcr.mutation.attempted", "mcr.compensation.attempted") and e["correlation"]["mutation_attempt_id"] is None:
+    if e["type"] in ("mcr.mutation.attempted", "mcr.compensation.attempted") and e["correlation"].get("mutation_attempt_id") is None:
         p.append("mutation_attempt_id is required for an attempt event")
     for name in e.get("critical", []):
         if name not in KNOWN_CRITICAL:
@@ -336,8 +336,8 @@ def parse(event, *, supported_major=SUPPORTED_MAJOR, supported_minor=CURRENT_MIN
     if major != supported_major:
         raise ContractError("unsupported major version %d (this consumer supports %d)" % (major, supported_major))
     crit = event.get("critical", [])
-    if not isinstance(crit, list):
-        raise ContractError("critical must be a list")
+    if not isinstance(crit, list) or not all(isinstance(x, str) for x in crit):
+        raise ContractError("critical must be a list of strings")
     top_known = set(SCHEMA["properties"])
     unknown = {k: v for k, v in event.items() if k not in top_known}
     if unknown and minor <= supported_minor:
@@ -350,7 +350,10 @@ def parse(event, *, supported_major=SUPPORTED_MAJOR, supported_minor=CURRENT_MIN
     probs = validate(known, SCHEMA)
     if probs:
         raise ContractError("schema violation: " + "; ".join(probs[:6]))
-    sem = semantic_problems(known, event)
+    try:
+        sem = semantic_problems(known, event)
+    except (ValueError, TypeError, KeyError, AttributeError) as exc:       # hostile content that the schema cannot describe (for example non-string keys)
+        raise ContractError("semantic violation: unusable content (%s)" % type(exc).__name__) from exc
     if sem:
         raise ContractError("semantic violation: " + "; ".join(sem[:6]))
     return known, unknown

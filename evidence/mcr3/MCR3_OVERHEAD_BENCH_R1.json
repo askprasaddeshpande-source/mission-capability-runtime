@@ -1,0 +1,47 @@
+{
+  "adapter_convert_complete_mission_7_events": {
+    "max_ms": 2.97,
+    "mean_ms": 0.715,
+    "median_ms": 0.647,
+    "n": 300,
+    "p95_ms": 1.136
+  },
+  "contract_parse_one_event": {
+    "max_ms": 3.803,
+    "mean_ms": 0.237,
+    "median_ms": 0.2,
+    "n": 300,
+    "p95_ms": 0.232
+  },
+  "mission_end_to_end_3_0_model_incl_fixture_build": {
+    "max_ms": 0.901,
+    "mean_ms": 0.425,
+    "median_ms": 0.428,
+    "n": 300,
+    "p95_ms": 0.464
+  },
+  "mission_end_to_end_r2_0_model_incl_fixture_build": {
+    "max_ms": 1.211,
+    "mean_ms": 0.381,
+    "median_ms": 0.363,
+    "n": 300,
+    "p95_ms": 0.464
+  },
+  "note": "descriptive; machine-dependent; one process; no inference about production",
+  "platform": "win32",
+  "provenance_assess_one_event": {
+    "max_ms": 0.685,
+    "mean_ms": 0.133,
+    "median_ms": 0.123,
+    "n": 300,
+    "p95_ms": 0.17
+  },
+  "python": "3.13.14",
+  "seal_one_event": {
+    "max_ms": 0.773,
+    "mean_ms": 0.072,
+    "median_ms": 0.063,
+    "n": 300,
+    "p95_ms": 0.099
+  }
+}

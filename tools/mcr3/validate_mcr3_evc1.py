@@ -293,6 +293,68 @@ def run():
     t(g, "migrating_a_tampered_event_is_refused", lambda: (_raises(lambda: evc1.migrate(dict(v10, time="2026-10-21T13:00:00Z")))))
     t(g, "migration_is_deterministic", lambda: (evc1.migrate(v10, "1.1.0") == evc1.migrate(v10, "1.1.0")))
 
+    # ---------------------------------------------------------------- robustness: hostile input is a ContractError, never another exception
+    g = "ROBUSTNESS"
+    import random
+    import mcr3_interop as IOP
+    import mcr3_lineage as LNG
+    import mcr3_provenance as PRV
+    t(g, "critical_with_non_string_entries_is_a_contract_error", rejects(dict(v10, critical=[["x"]]), "critical") and rejects(dict(v10, critical=[1])) and rejects(dict(v10, critical=[None])))
+    t(g, "non_string_keys_inside_extensions_are_a_contract_error", rejects(dict(v10, extensions={1: "x"})))
+    t(g, "an_event_without_mutation_attempt_id_in_correlation_is_valid_for_other_types", "mutation_attempt_id" not in event_of("mcr.mission.started")["correlation"] or accepts(event_of("mcr.mission.started")))
+    corr_wo = {"mission_id": "M-SYN-1", "transaction_id": "TX-SYN-1", "correlation_id": "CORR-SYN-1", "causation_id": None}
+    wo = evc1.make_event("mcr.execution.receipt", CLAIMS["mcr.execution.receipt"], event_id="EVT-NOATT-0001", source="mcr://x", time="2026-10-21T12:00:00Z", runtime_version="3.0.0", adapter_id="a", adapter_version="1.0.0",
+                         source_runtime_version="3.0.0", correlation=corr_wo, evidence_digest=H, classification="SYNTHETIC")
+    wo["correlation"].pop("mutation_attempt_id", None)
+    wo = evc1.seal({k: v for k, v in wo.items() if k != "integrity"})
+    t(g, "a_missing_optional_mutation_attempt_id_is_not_a_crash", accepts(wo))
+    hm_ = PRV.HmacTestVerifier({"a": b"k"})
+    pol_ = PRV.TrustPolicy()
+    t(g, "assess_never_raises_on_hostile_events_or_attestations", all(evc1.derive_trust(PRV.assess(e_, a_, hm_, pol_, PRV.ReplayCache())) in evc1.TRUST_LEVELS
+                                                                     for e_ in (None, "x", 5, [], {}, {"integrity": "x"}, dict(v10, integrity="x"), dict(v10, evidence="x"), dict(v10, evidence={"provenance": 1}))
+                                                                     for a_ in (None, "x", 5, [], {}, {"signer": []}, {"signer": "a", "signed_at": 5})))
+    rnd = random.Random(20261021)
+    junk = [None, True, False, 0, -1, 1.5, "", "x", "A" * 300, [], [[]], [None], {}, {"a": 1}, [1, 2], "2026-10-21T12:00:00Z", "\u0000", 10 ** 30, float("nan"), b"x", {1: 2}, (1, 2), {"a": {"b": [1]}}]
+    base_events = [event_of(tt) for tt in sorted(evc1.TYPE_TABLE)]
+
+    def walk(o, path=()):
+        yield path
+        if isinstance(o, dict):
+            for k_, v_ in o.items():
+                yield from walk(v_, path + (k_,))
+        elif isinstance(o, list):
+            for i_, v_ in enumerate(o):
+                yield from walk(v_, path + (i_,))
+
+    def mutate_one(e_):
+        paths = [pp for pp in walk(e_) if pp]
+        pp = rnd.choice(paths)
+        node = e_
+        try:
+            for k_ in pp[:-1]:
+                node = node[k_]
+            if rnd.random() < 0.25:
+                del node[pp[-1]]
+            else:
+                node[pp[-1]] = copy.deepcopy(rnd.choice(junk))
+        except Exception:
+            pass
+    unexpected = set()
+    for _ in range(1500):
+        e_ = copy.deepcopy(rnd.choice(base_events))
+        for _k in range(rnd.choice([1, 1, 2, 3])):
+            mutate_one(e_)
+        if rnd.random() < 0.3:
+            e_[rnd.choice(["critical", "extensions", "future", "contract_version"])] = copy.deepcopy(rnd.choice(junk))
+        for name_, fn_ in (("parse", lambda: evc1.parse(e_)), ("migrate", lambda: evc1.migrate(e_, "1.1.0")), ("pe", lambda: IOP.to_pe_event(e_, producer_id="p", seq=1)), ("store", lambda: LNG.EventStore().add(e_))):
+            try:
+                fn_()
+            except (evc1.ContractError, LNG.LineageError):
+                pass
+            except Exception as exc:
+                unexpected.add((name_, type(exc).__name__))
+    t(g, "fuzzing_1500_hostile_events_through_parse_migrate_mapping_and_store_raises_only_contract_errors", not unexpected)
+
     # ---------------------------------------------------------------- cross-check with the optional library
     g = "LIBRARY_CROSS_CHECK"
     if have_js:

@@ -1,0 +1,20 @@
+{
+  "MCR3_TESTS": "FAIL",
+  "SAP_WRITES": 0,
+  "by_suite": {
+    "adapters_interop": 99,
+    "evidence_contract": 207,
+    "hardening": 140,
+    "inherited_r2": 519,
+    "provenance_authority": 115,
+    "readback": 34,
+    "scanner": 99
+  },
+  "failed": [
+    "no_stray_file_was_created_by_a_refused_path"
+  ],
+  "network_calls": 0,
+  "not_verified": [],
+  "suites": 7,
+  "tests": 1213
+}

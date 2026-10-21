@@ -399,7 +399,10 @@
           "properties": {
             "expected_digest": {
               "pattern": "^[0-9a-f]{64}$",
-              "type": "string"
+              "type": [
+                "string",
+                "null"
+              ]
             },
             "kind": {
               "const": "OUTCOME_EVALUATION"
@@ -413,7 +416,10 @@
             },
             "predicates_digest": {
               "pattern": "^[0-9a-f]{64}$",
-              "type": "string"
+              "type": [
+                "string",
+                "null"
+              ]
             },
             "readback_digest": {
               "pattern": "^[0-9a-f]{64}$",

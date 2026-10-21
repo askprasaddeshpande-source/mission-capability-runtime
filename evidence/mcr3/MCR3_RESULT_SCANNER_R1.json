@@ -1,0 +1,16 @@
+{
+  "evidence_class": "SYNTHETIC/LOCAL",
+  "failed": [],
+  "groups": {
+    "DOCUMENTED_UNSUPPORTED": "PASS",
+    "ENCODINGS": "PASS",
+    "FALSE_POSITIVES": "PASS",
+    "NO_SECRET_LEAKS_IN_FINDINGS": "PASS",
+    "REPOSITORY_TREE": "PASS",
+    "SHAPES_DETECTED": "PASS"
+  },
+  "network_calls": 0,
+  "stage": "MCR3_SCANNER",
+  "tests": 99,
+  "tests_digest": "2166F6836839A42BFC3EBF7066A718A159F801922213E3F0DDBB5052DD79CE6E"
+}

@@ -222,7 +222,7 @@ def run_one(item):
             env = dict(os.environ, MCR3_OVERRIDE_DIR=tmp, MCR3_SKIP_TREE="1", PYTHONDONTWRITEBYTECODE="1")
             kind = None
             for v in validators:
-                r = subprocess.run([sys.executable, v], cwd=HERE, capture_output=True, text=True, timeout=300, env=env)
+                r = subprocess.run([sys.executable, os.path.join(HERE, v)], cwd=tmp, capture_output=True, text=True, timeout=300, env=env)   # cwd = scratch: a mutant that lets a bad path through must not litter the repository
                 kind = classify(r)
                 if kind is not None:
                     break

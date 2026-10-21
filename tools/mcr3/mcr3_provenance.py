@@ -204,6 +204,15 @@ def make_attestation_with_signature(event, signer, alg, sig, signed_at, policy_d
 def assess(event, attestation, verifier, policy, replay_cache=None, record_replay=True):
     """Return an evc1 provenance record for `event`. Never raises for hostile input; a failure is a weaker record.
     The record says nothing about authority or about whether the business outcome occurred."""
+    try:
+        return _assess(event, attestation, verifier, policy, replay_cache, record_replay)
+    except Exception:
+        weak = evc1.unsigned_provenance()
+        weak["hash_consistent"] = False
+        return weak
+
+
+def _assess(event, attestation, verifier, policy, replay_cache, record_replay):
     prov = evc1.unsigned_provenance()
     body = {k: v for k, v in event.items() if k != "integrity"}
     try:

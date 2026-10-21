@@ -1,0 +1,45 @@
+{
+  "contract": "mcr-evidence/1",
+  "current_version": "1.0.0",
+  "matrix": {
+    "consumer_supports_1_0": {
+      "authority_effect_grant": "REJECTED: schema violation",
+      "tampered_claim": "REJECTED: semantic violation",
+      "unknown_enum_value": "REJECTED: schema violation",
+      "unknown_event_type": "REJECTED: schema violation",
+      "v1_0_event": "ACCEPTED",
+      "v1_0_event_with_unknown_field": "REJECTED: unknown top-level field(s) ['future_field'] in version 1.0.0",
+      "v1_1_event_no_new_fields": "ACCEPTED",
+      "v1_1_event_with_unknown_critical_field": "REJECTED: unknown critical semantics 'future_field' (fail closed)",
+      "v1_1_event_with_unknown_noncritical_field": "ACCEPTED_UNRECOGNIZED_FIELDS_RETAINED_NOT_INTERPRETED",
+      "v2_0_event": "REJECTED: unsupported major version 2 (this consumer supports 1)"
+    },
+    "consumer_supports_1_1": {
+      "authority_effect_grant": "REJECTED: schema violation",
+      "tampered_claim": "REJECTED: semantic violation",
+      "unknown_enum_value": "REJECTED: schema violation",
+      "unknown_event_type": "REJECTED: schema violation",
+      "v1_0_event": "ACCEPTED",
+      "v1_0_event_with_unknown_field": "REJECTED: unknown top-level field(s) ['future_field'] in version 1.0.0",
+      "v1_1_event_no_new_fields": "ACCEPTED",
+      "v1_1_event_with_unknown_critical_field": "REJECTED: unknown top-level field(s) ['future_field'] in version 1.1.0",
+      "v1_1_event_with_unknown_noncritical_field": "REJECTED: unknown top-level field(s) ['future_field'] in version 1.1.0",
+      "v2_0_event": "REJECTED: unsupported major version 2 (this consumer supports 1)"
+    }
+  },
+  "rules": [
+    "same major only; a newer minor may add optional top-level fields, which an older consumer retains but never interprets",
+    "an unknown field in the SAME minor is rejected",
+    "an unknown critical name is always rejected",
+    "a new enum value or event type is a major change (rejected here)",
+    "migration within a major relabels, records lineage and the source digest, and refuses to drop unrecognized fields"
+  ],
+  "schema_digest": "54e14e326a509b5f19194b9bc27fedb3eb355474697319545da95fc0af75ad58",
+  "spec_pins": {
+    "cloudevents": "1.0.2",
+    "in-toto-attestation": "v1",
+    "mcp-authorization": "2025-06-18",
+    "opentelemetry-semantic-conventions": "attribute naming only (no SDK)",
+    "owasp": "Top 10 for Agentic Applications / Agentic AI Threats and Mitigations (checklist, not a dependency)"
+  }
+}
