@@ -211,6 +211,17 @@ def unsigned_provenance():
     return {"hash_consistent": True, "signature": "ABSENT", "signer": None, "issuer_trust": "UNKNOWN", "freshness": "UNKNOWN", "replay": "UNKNOWN", "verified_by": None}
 
 
+def content_digest(event):
+    """Digest of what the PRODUCER asserted: the event without its integrity block and with the verifier-controlled
+    provenance/trust reset. Signatures bind this value, so a verifier can attach its provenance verdict without
+    invalidating the producer's signature."""
+    e = copy.deepcopy(event)
+    e.pop("integrity", None)
+    e["evidence"]["provenance"] = unsigned_provenance()
+    e["evidence"]["trust"] = "UNTRUSTED_RESEARCH"
+    return digest_of(e)
+
+
 def seal(event):
     """Set digests.payload and integrity.event_digest. Returns a new event."""
     e = copy.deepcopy(event)
