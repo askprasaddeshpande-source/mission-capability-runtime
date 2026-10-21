@@ -267,9 +267,23 @@ def _io_guard(fn):
     def wrapper(*a, **k):
         try:
             return fn(*a, **k)
-        except OSError as exc:
+        except GuardError:
+            raise
+        except (OSError, ValueError, TypeError) as exc:
             raise GuardError("ledger I/O error: %s" % type(exc).__name__) from exc
     return wrapper
+
+
+_RESERVED_NAMES = frozenset(["CON", "PRN", "AUX", "NUL"] + ["COM%d" % i for i in range(1, 10)] + ["LPT%d" % i for i in range(1, 10)])
+
+
+def _check_ledger_path(path):
+    """A NUL byte or a Windows device name in any path component is refused on every platform (fail closed)."""
+    if "\x00" in path:
+        raise GuardError("ledger path contains a NUL character")
+    for part in path.replace("\\", "/").split("/"):
+        if part.split(".")[0].rstrip(" ").upper() in _RESERVED_NAMES:
+            raise GuardError("ledger path names a reserved device")
 
 
 class ReplayLedger:
@@ -297,6 +311,8 @@ class ReplayLedger:
     def __init__(self, path=None, expected_id=None):
         if path is not None and (not isinstance(path, str) or not path):
             raise GuardError("ledger path must be a non-empty string or None")
+        if path is not None:
+            _check_ledger_path(path)
         if expected_id is not None and path is None:
             raise GuardError("expected_id needs a file-backed ledger")
         self._tlock = threading.RLock()

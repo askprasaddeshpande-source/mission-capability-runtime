@@ -1,0 +1,4059 @@
+{
+  "MUTATION_CHECK": "PASS",
+  "by_kind": {
+    "ast": 422,
+    "guard": 119,
+    "relation": 50,
+    "special": 28
+  },
+  "detected_by_assertion": 305,
+  "detected_by_hang": [
+    "guard@L239: time.time() - start > timeout"
+  ],
+  "detected_by_validator_crash": {
+    "ast@L1000: remove not in not isinstance(evidence, dict)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L1003: flip o.get(\"kind\") != kind": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L1003: remove not in not _hash_ok(o)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L1003: remove not in not isinstance(o, dict)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L1005: flip lease[\"checkpoint_hash\"] != checkpoint[\"object_hash\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L1007: drop clause 1 of lease.get(\"ledger_id\") is not None and lease[\"ledger_id\"] !=": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L1007: drop clause 2 of lease.get(\"ledger_id\") is not None and lease[\"ledger_id\"] !=": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L1007: flip lease.get(\"ledger_id\") is not None": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L1007: flip lease[\"ledger_id\"] != ledger.ledger_id": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L1010: remove not in not _count(lease_rem)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L1013: flip \":\" in s_": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L1013: flip len(ids) != len(set(ids))": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L1013: remove not in not all(isinstance(s_, str) and \":\" in s_ for s_ in ids)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L1013: remove not in not isinstance(ids, list)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L1016: flip lease[\"state_at_checkpoint\"] == \"PREWRITE_VALIDATED\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L1017: drop clause 1 of lease_consumed and pre_send": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L1017: drop clause 1 of not lease_consumed and not pre_send": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L1017: drop clause 2 of lease_consumed and pre_send": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L1017: drop clause 2 of not lease_consumed and not pre_send": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L1017: remove not in not lease_consumed": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L1017: remove not in not pre_send": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L1019: swap +/- in set(evidence) - set(RESUME_SLOTS)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L1023: flip slot not in evidence": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L1026: flip original_budget[\"object_hash\"] != ev[\"budget\"][\"object_hash\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L1029: flip k[0] != auth": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L1032: flip lease_rem + len(lease_consumed) > min(checkpoint[\"remaining_": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L1044: flip lease_consumed <= recorded": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L1044: remove not in not lease_consumed <= recorded": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L1048: flip m.remaining < 0": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L1052: remove not in not consumed": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L1056: flip (auth, mut) not in consumed": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L1056: flip mut not in ev[\"tx\"][\"mutation_ids\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L1060: flip er is not None": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L1064: swap +/- in \"resume-\" + lease[\"lease_id\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L1085: flip slot in m.ev": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L135: flip f not in fields": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L139: flip fields[f] not in allowed": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L146: flip k != \"object_hash\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L147: flip obj.get(\"object_hash\") == chash(body)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L160: drop clause 2 of type(a) is type(b) and a == b": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L160: flip a == b": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L160: flip type(a) is type(b)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L165: remove not in not isinstance(predicates, (list, tuple))": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L165: remove not in not predicates": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L168: flip {\"field\", \"op\", \"expected\"} <= set(p)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L168: remove not in not isinstance(p, dict)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L168: remove not in not {\"field\", \"op\", \"expected\"} <= set(p)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L170: flip p[\"op\"] not in PRED_OPS": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L172: drop clause 1 of p[\"op\"] == \"in\" and (not isinstance(p[\"expected\"], (list, tu": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L172: drop clause 2 of p[\"op\"] == \"in\" and (not isinstance(p[\"expected\"], (list, tu": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L172: flip p[\"op\"] == \"in\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L172: remove not in not isinstance(p[\"expected\"], (list, tuple, set, frozenset))": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L172: remove not in not p[\"expected\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L183: drop clause 1 of p[\"field\"] not in observed or observed[p[\"field\"]] in (None,": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L183: flip observed[p[\"field\"]] in (None, \"UNKNOWN\")": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L183: flip p[\"field\"] not in observed": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L187: flip op == \"eq\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L187: flip op == \"ne\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L188: remove not in not ok": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L195: flip set(child_scope) <= set(parent_scope)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L211: flip obj.get(\"kind\") != SLOT_KINDS[slot]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L211: remove not in not isinstance(obj, dict)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L213: remove not in not _hash_ok(obj)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L218: drop clause 1 of (k.endswith(\"_id\") or k.endswith(\"_hash\")) and not isinstanc": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L218: drop clause 2 of (k.endswith(\"_id\") or k.endswith(\"_hash\")) and not isinstanc": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L218: remove not in not isinstance(v, str)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L220: drop clause 1 of k in _STR_FIELDS and not isinstance(v, str)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L220: drop clause 2 of k in _STR_FIELDS and not isinstance(v, str)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L220: flip k in _STR_FIELDS": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L220: remove not in not isinstance(v, str)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L222: drop clause 1 of k == \"scope\" and (not isinstance(v, (list, tuple)) or not al": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L222: drop clause 2 of k == \"scope\" and (not isinstance(v, (list, tuple)) or not al": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L222: flip k == \"scope\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L222: remove not in not all(isinstance(x, str) and x for x in v)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L222: remove not in not isinstance(v, (list, tuple))": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L232: flip msvcrt is not None": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L246: flip msvcrt is not None": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L277: swap +/- in [\"CON\", \"PRN\", \"AUX\", \"NUL\"] + [\"COM%d\" % i for i in range(1": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L277: swap +/- in [\"CON\", \"PRN\", \"AUX\", \"NUL\"] + [\"COM%d\" % i for i in range(1 #2": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L282: flip \"\\x00\" in path": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L285: flip part.split(\".\")[0].rstrip(\" \").upper() in _RESERVED_NAMES": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L312: drop clause 1 of path is not None and (not isinstance(path, str) or not path)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L312: drop clause 2 of path is not None and (not isinstance(path, str) or not path)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L312: flip path is not None": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L312: remove not in not isinstance(path, str)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L312: remove not in not path": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L314: flip path is not None": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L316: drop clause 1 of expected_id is not None and path is None": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L316: drop clause 2 of expected_id is not None and path is None": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L316: flip expected_id is not None": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L316: flip path is None": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L320: flip path is not None": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L329: swap +/- in auth + \"\\x00\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L329: swap +/- in auth + \"\\x00\" + mut": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L342: flip len(key) == 2": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L342: remove not in not (isinstance(key, tuple) and len(key) == 2 and all(isinst": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L344: flip ord(c) == 127": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L344: swap +/- in key[0] + key[1]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L347: swap +/- in key[0] + key[1]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L352: swap +/- in json.dumps({\"hdr\": self.HEADER, \"v\": 1, \"id\": lid, \"c\": self": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L367: flip n == 1": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L368: flip rec.get(\"hdr\") == self.HEADER": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L368: flip rec.get(\"v\") == 1": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L369: flip rec.get(\"c\") == self._crc(rec[\"id\"], \"HDR\")": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L370: remove not in not ok": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L376: flip c == self._crc(a, m_)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L379: remove not in not ok": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L389: flip lid is None": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L390: flip self.expected_id is not None": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L400: drop clause 1 of self.ledger_id is not None and lid != self.ledger_id": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L400: drop clause 2 of self.ledger_id is not None and lid != self.ledger_id": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L400: flip lid != self.ledger_id": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L400: flip self.ledger_id is not None": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L402: drop clause 1 of self.expected_id is not None and lid != self.expected_id": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L402: drop clause 2 of self.expected_id is not None and lid != self.expected_id": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L402: flip lid != self.expected_id": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L402: flip self.expected_id is not None": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L409: drop clause 1 of self.expected_id is not None and not os.path.exists(self.pat": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L409: drop clause 2 of self.expected_id is not None and not os.path.exists(self.pat": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L409: flip self.expected_id is not None": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L409: remove not in not os.path.exists(self.path)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L428: flip key in self._keys": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L434: flip k[0] == authority_hash": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L437: flip key in self._keys": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L439: drop clause 1 of limit is not None and sum(1 for k in self._keys if k[0] == k": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L439: drop clause 2 of limit is not None and sum(1 for k in self._keys if k[0] == k": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L439: flip k[0] == key[0]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L439: flip limit is not None": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L446: drop clause 1 of limit is not None and not _count(limit)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L446: drop clause 2 of limit is not None and not _count(limit)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L446: flip limit is not None": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L446: remove not in not _count(limit)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L448: remove not in not self.path": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L465: swap +/- in len(data) - len(torn)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L467: swap +/- in json.dumps({\"a\": key[0], \"m\": key[1], \"c\": self._crc(*key)},": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L477: flip x >= 0": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L477: remove not in not isinstance(x, bool)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L484: flip rb[\"existence\"] == \"EXISTS\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L561: flip max_mutations < 0": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L561: remove not in not isinstance(max_mutations, int)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L570: flip ledger is not None": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L578: flip _tok is not _TOKEN": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L580: flip to not in TRANSITIONS[self.state]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L586: flip slot not in self.ev": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L594: flip obj.get(\"transaction_id\") != self.transaction_id": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L598: remove not in not ok": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L605: flip intent[\"mission_id\"] != self.mission_id": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L614: flip delegation[\"principal_hash\"] != self._need(\"principal\")[\"obj": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L616: flip authority[\"delegation_hash\"] != delegation[\"object_hash\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L618: flip authority[\"mission_id\"] != self.mission_id": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L620: remove not in not attenuated(authority[\"scope\"], delegation[\"scope\"])": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L622: flip authority[\"max_mutations\"] > delegation[\"max_mutations\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L625: remove not in not _count(val)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L627: flip authority[\"single_use\"] is not True": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L629: flip budget[\"authority_hash\"] != authority[\"object_hash\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L629: flip budget[\"max_mutations\"] > authority[\"max_mutations\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L631: flip budget[\"expansion_allowed\"] is not False": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L631: flip budget[\"retries\"] != 0": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L631: flip type(budget[\"retries\"]) is not int": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L633: flip budget[\"max_mutations\"] != self.max_mutations": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L636: drop clause 1 of not self._resuming and self.ledger.for_authority(authority[\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L636: drop clause 2 of not self._resuming and self.ledger.for_authority(authority[\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L636: remove not in not self._resuming": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L645: flip capability_binding[\"authority_hash\"] != a[\"object_hash\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L647: flip capability_binding[\"capability\"] not in a[\"scope\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L649: flip capability_binding[\"capability\"] != provider_binding[\"tool_n": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L651: flip capability_binding[\"provider_ref\"] != provider_binding[\"iden": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L662: flip outcome_contract[\"mission_id\"] != self.mission_id": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L662: flip tx[\"mission_id\"] != self.mission_id": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L665: remove not in not all(isinstance(i, str) and i for i in ids)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L665: remove not in not ids": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L665: remove not in not isinstance(ids, list)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L667: flip outcome_contract[\"frozen\"] is not True": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L671: flip checkpoint[\"outcome_contract_hash\"] != outcome_contract[\"obj": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L673: flip checkpoint[\"readback_contract_hash\"] != readback_contract[\"o": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L675: flip checkpoint[\"budget_hash\"] != budget[\"object_hash\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L677: flip checkpoint[\"transaction_hash\"] != tx[\"object_hash\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L679: flip checkpoint[\"remaining_budget\"] != budget[\"max_mutations\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L679: remove not in not _count(checkpoint[\"remaining_budget\"])": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L681: flip readback_contract[\"source_level_required\"] != \"AUTHORITATIVE": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L683: remove not in not readback_contract[\"provider_ref\"].startswith(self._need(": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L683: swap +/- in self._need(\"provider\")[\"provider_id\"] + \"::\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L692: flip ord(c) == 127": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L692: remove not in not isinstance(mutation_id, str)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L692: remove not in not mutation_id": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L694: flip contract_fingerprint_now != self._need(\"provider\")[\"contract": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L696: flip mutation_id not in self._need(\"tx\")[\"mutation_ids\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L699: flip key in self.consumed": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L703: flip \"EXECUTION_STARTED\" not in TRANSITIONS[self.state]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L717: flip receipt.get(\"mutation_id\") != self.ev.get(\"mutation_id\")": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L720: flip c not in POST_SEND_CLASSES": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L738: flip rb[\"contract_hash\"] != contract[\"object_hash\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L740: flip rb[\"mutation_id\"] != self.ev[\"mutation_id\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L742: remove not in not _exists_consistent(rb)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L748: flip rb[\"source_level\"] == \"AUTHORITATIVE_REPOSITORY\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L754: flip observation[\"readback_receipt_hash\"] != rb[\"object_hash\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L757: flip observation[\"mutation_id\"] != self.ev[\"mutation_id\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L759: drop clause 1 of not self._readback_authoritative(rb) or rb[\"existence\"] == \"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L759: drop clause 2 of not self._readback_authoritative(rb) or rb[\"existence\"] == \"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L759: flip rb[\"existence\"] == \"UNKNOWN\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L759: remove not in not self._readback_authoritative(rb)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L762: flip rb[\"existence\"] == \"ABSENT\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L766: flip observation[\"commit_state\"] != \"COMMITTED\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L777: flip outcome[\"outcome_contract_hash\"] != oc[\"object_hash\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L777: flip outcome[\"readback_receipt_hash\"] != rb[\"object_hash\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L781: flip outcome[\"result\"] != recomputed": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L785: flip recomputed == \"PASS\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L787: flip recomputed == \"FAIL\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L794: swap +/- in [s for s, _ in CHAIN_SLOTS[:-1]] + [\"outcome_contract\", \"rea": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L795: flip s not in self.ev": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L801: flip o.get(\"kind\") != SLOT_KINDS[slot]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L801: remove not in not isinstance(o, dict)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L803: remove not in not _hash_ok(o)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L810: flip dl[\"principal_hash\"] == h(\"principal\")": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L811: flip au[\"delegation_hash\"] == h(\"delegation\")": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L812: flip au[\"mission_id\"] == self.mission_id": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L813: flip e[\"intent\"][\"mission_id\"] == self.mission_id": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L816: flip bu[\"authority_hash\"] == h(\"authority\")": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L817: flip bu[\"max_mutations\"] <= au[\"max_mutations\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L818: flip bu[\"expansion_allowed\"] is False": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L818: flip bu[\"retries\"] == 0": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L818: flip type(bu[\"retries\"]) is int": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L819: flip bu[\"max_mutations\"] == self.max_mutations": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L820: flip au[\"single_use\"] is True": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L821: flip cb[\"authority_hash\"] == h(\"authority\")": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L822: flip cb[\"capability\"] in au[\"scope\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L823: flip cb[\"capability\"] == pv[\"tool_name\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L824: flip cb[\"provider_ref\"] == pv[\"identity\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L825: flip tx[\"transaction_id\"] == T": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L826: flip tx[\"mission_id\"] == self.mission_id": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L827: flip mid in tx[\"mutation_ids\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L827: flip mid is not None": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L828: flip (h(\"authority\"), mid) in self.consumed": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L829: flip oc[\"frozen\"] is True": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L829: flip oc[\"mission_id\"] == self.mission_id": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L829: flip oc[\"transaction_id\"] == T": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L831: flip rc[\"source_level_required\"] == \"AUTHORITATIVE_REPOSITORY\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L832: swap +/- in pv[\"provider_id\"] + \"::\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L833: flip cp[\"transaction_hash\"] == h(\"tx\")": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L834: flip cp[\"budget_hash\"] == h(\"budget\")": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L835: flip cp[\"outcome_contract_hash\"] == h(\"outcome_contract\")": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L836: flip cp[\"readback_contract_hash\"] == h(\"readback_contract\")": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L837: flip cp[\"remaining_budget\"] == bu[\"max_mutations\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L838: flip er[\"transaction_id\"] == T": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L839: flip er[\"mutation_id\"] == mid": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L840: flip er[\"call_class\"] in POST_SEND_CLASSES": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L841: flip rb[\"transaction_id\"] == T": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L842: flip rb[\"mutation_id\"] == mid": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L843: flip rb[\"contract_hash\"] == h(\"readback_contract\")": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L844: flip rb[\"source_level\"] == \"AUTHORITATIVE_REPOSITORY\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L845: flip rb[\"existence\"] == \"EXISTS\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L847: flip co[\"transaction_id\"] == T": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L848: flip co[\"mutation_id\"] == mid": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L849: flip co[\"readback_receipt_hash\"] == h(\"readback\")": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L850: flip co[\"commit_state\"] == \"COMMITTED\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L851: flip oo[\"transaction_id\"] == T": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L852: flip oo[\"readback_receipt_hash\"] == h(\"readback\")": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L853: flip oo[\"outcome_contract_hash\"] == h(\"outcome_contract\")": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L854: flip oo[\"result\"] == \"PASS\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L855: flip eval_predicates(oc[\"predicates\"], rb[\"observed\"]) == \"PASS\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L856: flip completion.get(\"authority_hash\") == h(\"authority\")": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L857: flip completion.get(\"execution_receipt_hash\") == h(\"execution_rec": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L858: flip completion.get(\"commit_observation_hash\") == h(\"commit\")": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L859: flip completion.get(\"outcome_receipt_hash\") == h(\"outcome\")": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L860: flip completion.get(\"transaction_id\") == T": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L867: flip self.state != \"OUTCOME_VALIDATED\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L897: flip grant[\"issued_by\"] == a[\"object_hash\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L899: flip grant[\"max_mutations\"] < 1": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L899: remove not in not _count(grant[\"max_mutations\"])": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L899: remove not in not grant[\"outcome_predicates\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L899: remove not in not grant[\"preconditions\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L901: flip grant[\"capability\"] in a[\"scope\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L905: flip grant[\"target\"] not in (self.ev[\"intent\"][\"target_system\"], ": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L907: flip \"readback\" not in self.ev": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L909: flip self.ev[\"readback\"][\"source_level\"] != \"AUTHORITATIVE_REPOSI": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L911: flip eval_predicates(grant[\"preconditions\"], self.ev[\"readback\"][": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L913: flip eval_predicates(grant[\"outcome_predicates\"], self.ev[\"readba": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L923: flip self.state != \"COMPENSATION_AUTHORIZED\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L937: remove not in not self.ev.get(\"comp_started\")": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L940: flip comp_execution[\"mutation_id\"] != \"COMPENSATION:\" + g[\"object": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L940: swap +/- in \"COMPENSATION:\" + g[\"object_hash\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L942: flip comp_execution[\"call_class\"] != \"PROVIDER_RESPONSE_SUCCESS\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L944: flip comp_receipt[\"grant_hash\"] != g[\"object_hash\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L947: flip post_readback[\"contract_hash\"] != self._need(\"readback_contr": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L947: flip post_readback[\"mutation_id\"] != self.ev[\"mutation_id\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L949: flip post_readback[\"source_level\"] != \"AUTHORITATIVE_REPOSITORY\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L951: remove not in not _exists_consistent(post_readback)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L954: flip post_readback[\"object_hash\"] == fwd[\"object_hash\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L954: flip post_readback[\"observed\"] == fwd[\"observed\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L956: flip comp_receipt[\"readback_receipt_hash\"] != post_readback[\"obje": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L958: flip comp_receipt[\"result\"] != \"PASS\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L958: flip eval_predicates(g[\"outcome_predicates\"], post_readback[\"obse": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L971: swap +/- in \"LEASE-\" + chash([cp[\"object_hash\"], sorted(map(str, self.co": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L996: remove not in not isinstance(ledger, ReplayLedger)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L998: drop clause 1 of not ledger.is_durable and not allow_volatile_ledger": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L998: drop clause 2 of not ledger.is_durable and not allow_volatile_ledger": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L998: remove not in not allow_volatile_ledger": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "ast@L998: remove not in not ledger.is_durable": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "guard@L694: contract_fingerprint_now != self._need(\"provider\")[\"contract_fingerpri": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "special: budget_not_decremented": "a legitimate resume is refused because the lease budget no longer adds up",
+    "special: ledger_header_not_written": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "special: ledger_not_written_on_send": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "special: mission_consumed_set_not_recorded": "a genuine chain is refused by R19 because the replay set was never filled",
+    "special: predicate_eq_always_true": "the compensation fixture reaches an illegal transition because an eq predicate passes wrongly",
+    "special: readback_authority_helper_always_true": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "special: resume_ignores_ledger": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "special: resume_state_inherited_from_lease": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)"
+  },
+  "evidence_class": "SYNTHETIC/LOCAL",
+  "explained_survivors": {
+    "ast@L239: flip time.time() - start > timeout": "equivalent: > versus >= on a float clock difference changes nothing observable",
+    "ast@L342: drop clause 1 of isinstance(key, tuple) and len(key) == 2 and all(isinstance(": "equivalent: _as_key() always returns a tuple before _check_key() runs",
+    "ast@L376: drop clause 1 of isinstance(a, str) and isinstance(m_, str) and c == self._cr": "equivalent: _crc() raises TypeError for non-strings, which the surrounding except turns into 'corrupted'",
+    "ast@L376: drop clause 2 of isinstance(a, str) and isinstance(m_, str) and c == self._cr": "equivalent: _crc() raises TypeError for non-strings, which the surrounding except turns into 'corrupted'",
+    "ast@L827: drop clause 1 of mid is not None and mid in tx[\"mutation_ids\"]": "equivalent: None is never a member of a list of non-empty strings",
+    "ast@L954: drop clause 1 of post_readback[\"object_hash\"] == fwd[\"object_hash\"] or post_r": "equivalent: an identical object hash implies identical content, so the observed-state clause already covers it"
+  },
+  "inconclusive": [],
+  "mutants": 619,
+  "not_applied": [],
+  "results": [
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L165: not isinstance(predicates, (list, tuple)) or not predicates"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L168: not isinstance(p, dict) or not {\"field\", \"op\", \"expected\"} <= set(p)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L170: p[\"op\"] not in PRED_OPS"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L172: p[\"op\"] == \"in\" and (not isinstance(p[\"expected\"], (list, tuple, set, "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L211: not isinstance(obj, dict) or obj.get(\"kind\") != SLOT_KINDS[slot]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L213: not _hash_ok(obj)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L218: (k.endswith(\"_id\") or k.endswith(\"_hash\")) and not isinstance(v, str)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L220: k in _STR_FIELDS and not isinstance(v, str)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L222: k == \"scope\" and (not isinstance(v, (list, tuple)) or not all(isinstan"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "hang",
+      "mutant": "guard@L239: time.time() - start > timeout"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L282: \"\\x00\" in path"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L285: part.split(\".\")[0].rstrip(\" \").upper() in _RESERVED_NAMES"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L312: path is not None and (not isinstance(path, str) or not path)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L316: expected_id is not None and path is None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L333: isinstance(key, (str, bytes))"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L342: not (isinstance(key, tuple) and len(key) == 2 and all(isinstance(x, st"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L344: any(ord(c) < 32 or ord(c) == 127 for c in key[0] + key[1])"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L370: not ok"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L379: not ok"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L390: self.expected_id is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L400: self.ledger_id is not None and lid != self.ledger_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L402: self.expected_id is not None and lid != self.expected_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L409: self.expected_id is not None and not os.path.exists(self.path)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L437: key in self._keys"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L439: limit is not None and sum(1 for k in self._keys if k[0] == key[0]) >= "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L446: limit is not None and not _count(limit)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L550: isinstance(exc, (KeyError, TypeError, AttributeError, ValueError, Inde"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L561: not isinstance(max_mutations, int) or isinstance(max_mutations, bool) "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L578: _tok is not _TOKEN"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L580: to not in TRANSITIONS[self.state]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L586: slot not in self.ev"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L594: obj.get(\"transaction_id\") != self.transaction_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L598: not ok"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L605: intent[\"mission_id\"] != self.mission_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L614: delegation[\"principal_hash\"] != self._need(\"principal\")[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L616: authority[\"delegation_hash\"] != delegation[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L618: authority[\"mission_id\"] != self.mission_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L620: not attenuated(authority[\"scope\"], delegation[\"scope\"])"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L622: authority[\"max_mutations\"] > delegation[\"max_mutations\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L625: not _count(val)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L627: authority[\"single_use\"] is not True"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L629: budget[\"authority_hash\"] != authority[\"object_hash\"] or budget[\"max_mu"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L631: budget[\"expansion_allowed\"] is not False or type(budget[\"retries\"]) is"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L633: budget[\"max_mutations\"] != self.max_mutations"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L635: any((k[0] if isinstance(k, tuple) else k) == authority[\"object_hash\"] "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L645: capability_binding[\"authority_hash\"] != a[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L647: capability_binding[\"capability\"] not in a[\"scope\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L649: capability_binding[\"capability\"] != provider_binding[\"tool_name\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L651: capability_binding[\"provider_ref\"] != provider_binding[\"identity\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L662: tx[\"mission_id\"] != self.mission_id or outcome_contract[\"mission_id\"] "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L665: not isinstance(ids, list) or not ids or not all(isinstance(i, str) and"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L667: outcome_contract[\"frozen\"] is not True"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L671: checkpoint[\"outcome_contract_hash\"] != outcome_contract[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L673: checkpoint[\"readback_contract_hash\"] != readback_contract[\"object_hash"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L675: checkpoint[\"budget_hash\"] != budget[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L677: checkpoint[\"transaction_hash\"] != tx[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L679: not _count(checkpoint[\"remaining_budget\"]) or checkpoint[\"remaining_bu"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L681: readback_contract[\"source_level_required\"] != \"AUTHORITATIVE_REPOSITOR"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L683: not readback_contract[\"provider_ref\"].startswith(self._need(\"provider\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L692: not isinstance(mutation_id, str) or not mutation_id or any(ord(c) < 32"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "guard@L694: contract_fingerprint_now != self._need(\"provider\")[\"contract_fingerpri"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L696: mutation_id not in self._need(\"tx\")[\"mutation_ids\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L699: key in self.consumed or self.ledger.has(key)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L701: self.remaining <= 0"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L703: \"EXECUTION_STARTED\" not in TRANSITIONS[self.state]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L717: receipt.get(\"mutation_id\") != self.ev.get(\"mutation_id\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L720: c not in POST_SEND_CLASSES"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L738: rb[\"contract_hash\"] != contract[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L740: rb[\"mutation_id\"] != self.ev[\"mutation_id\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L742: not _exists_consistent(rb)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L754: observation[\"readback_receipt_hash\"] != rb[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L757: observation[\"mutation_id\"] != self.ev[\"mutation_id\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L766: observation[\"commit_state\"] != \"COMMITTED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L777: outcome[\"outcome_contract_hash\"] != oc[\"object_hash\"] or outcome[\"read"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L781: outcome[\"result\"] != recomputed"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L796: missing"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L801: not isinstance(o, dict) or o.get(\"kind\") != SLOT_KINDS[slot]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L803: not _hash_ok(o)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L867: self.state != \"OUTCOME_VALIDATED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L879: self.mutations_sent or (\"authority\" in self.ev and self.ledger.for_aut"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L895: grant[\"inherits_forward_authority\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L897: grant[\"issued_by\"] == a[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L899: not _count(grant[\"max_mutations\"]) or grant[\"max_mutations\"] < 1 or no"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L901: grant[\"capability\"] in a[\"scope\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L905: grant[\"target\"] not in (self.ev[\"intent\"][\"target_system\"], self._need"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L907: \"readback\" not in self.ev"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L909: self.ev[\"readback\"][\"source_level\"] != \"AUTHORITATIVE_REPOSITORY\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L911: eval_predicates(grant[\"preconditions\"], self.ev[\"readback\"][\"observed\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L913: eval_predicates(grant[\"outcome_predicates\"], self.ev[\"readback\"][\"obse"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L923: self.state != \"COMPENSATION_AUTHORIZED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L925: self.ev.get(\"comp_started\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L937: not self.ev.get(\"comp_started\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L940: comp_execution[\"mutation_id\"] != \"COMPENSATION:\" + g[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L942: comp_execution[\"call_class\"] != \"PROVIDER_RESPONSE_SUCCESS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L944: comp_receipt[\"grant_hash\"] != g[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L947: post_readback[\"mutation_id\"] != self.ev[\"mutation_id\"] or post_readbac"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L949: post_readback[\"source_level\"] != \"AUTHORITATIVE_REPOSITORY\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L951: not _exists_consistent(post_readback)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L954: post_readback[\"object_hash\"] == fwd[\"object_hash\"] or post_readback[\"o"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L956: comp_receipt[\"readback_receipt_hash\"] != post_readback[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L958: eval_predicates(g[\"outcome_predicates\"], post_readback[\"observed\"]) !="
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L996: not isinstance(ledger, ReplayLedger)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L998: not ledger.is_durable and not allow_volatile_ledger"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L1000: not isinstance(evidence, dict)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L1003: not isinstance(o, dict) or o.get(\"kind\") != kind or not _hash_ok(o)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L1005: lease[\"checkpoint_hash\"] != checkpoint[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L1007: lease.get(\"ledger_id\") is not None and lease[\"ledger_id\"] != ledger.le"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L1010: not _count(lease_rem)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L1013: not isinstance(ids, list) or not all(isinstance(s_, str) and \":\" in s_"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L1017: (lease_consumed and pre_send) or (not lease_consumed and not pre_send)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L1020: extra"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L1023: slot not in evidence"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L1026: original_budget[\"object_hash\"] != ev[\"budget\"][\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L1029: any(k[0] != auth for k in lease_consumed)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L1032: lease_rem + len(lease_consumed) > min(checkpoint[\"remaining_budget\"], "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L1044: not lease_consumed <= recorded"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L1048: m.remaining < 0"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L1056: mut not in ev[\"tx\"][\"mutation_ids\"] or (auth, mut) not in consumed"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L1061: er[\"object_hash\"] != lease[\"execution_receipt_hash\"] or er.get(\"mutati"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R01"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R02"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R03"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R04"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R05"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R06"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R07"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R08"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R09"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R10"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R11"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R12"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R13"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R14"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R15"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R16"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R17"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R18"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R19"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R20"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R22"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R51"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R23"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R24"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R25"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R26"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R27"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R28"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R29"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R30"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R31"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R32"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R33"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R34"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R35"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R50"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R36"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R37"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R38"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R39"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R40"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R41"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R42"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R43"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R44"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R45"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R46"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R47"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R48"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R49"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L147: flip obj.get(\"object_hash\") == chash(body)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L160: drop clause 1 of type(a) is type(b) and a == b"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L160: drop clause 2 of type(a) is type(b) and a == b"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L165: drop clause 1 of not isinstance(predicates, (list, tuple)) or not predicates"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L165: drop clause 2 of not isinstance(predicates, (list, tuple)) or not predicates"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L195: flip set(child_scope) <= set(parent_scope)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L211: drop clause 1 of not isinstance(obj, dict) or obj.get(\"kind\") != SLOT_KINDS[s"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L211: drop clause 2 of not isinstance(obj, dict) or obj.get(\"kind\") != SLOT_KINDS[s"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L213: remove not in not _hash_ok(obj)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L277: swap +/- in [\"CON\", \"PRN\", \"AUX\", \"NUL\"] + [\"COM%d\" % i for i in range(1"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L282: flip \"\\x00\" in path"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L477: drop clause 1 of isinstance(x, int) and not isinstance(x, bool) and x >= 0"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L477: drop clause 2 of isinstance(x, int) and not isinstance(x, bool) and x >= 0"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L477: drop clause 3 of isinstance(x, int) and not isinstance(x, bool) and x >= 0"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L482: drop clause 1 of rb[\"existence\"] == \"UNKNOWN\" or \"exists\" not in o"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L482: drop clause 2 of rb[\"existence\"] == \"UNKNOWN\" or \"exists\" not in o"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L139: flip fields[f] not in allowed"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L160: flip type(a) is type(b)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L160: flip a == b"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L165: remove not in not isinstance(predicates, (list, tuple))"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L165: remove not in not predicates"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L168: drop clause 1 of not isinstance(p, dict) or not {\"field\", \"op\", \"expected\"} <"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L168: drop clause 2 of not isinstance(p, dict) or not {\"field\", \"op\", \"expected\"} <"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L170: flip p[\"op\"] not in PRED_OPS"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L172: drop clause 1 of p[\"op\"] == \"in\" and (not isinstance(p[\"expected\"], (list, tu"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L172: drop clause 2 of p[\"op\"] == \"in\" and (not isinstance(p[\"expected\"], (list, tu"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L183: drop clause 1 of p[\"field\"] not in observed or observed[p[\"field\"]] in (None,"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L183: drop clause 2 of p[\"field\"] not in observed or observed[p[\"field\"]] in (None,"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L188: remove not in not ok"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L211: remove not in not isinstance(obj, dict)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L211: flip obj.get(\"kind\") != SLOT_KINDS[slot]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L216: flip k == \"kind\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L218: drop clause 1 of (k.endswith(\"_id\") or k.endswith(\"_hash\")) and not isinstanc"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L218: drop clause 2 of (k.endswith(\"_id\") or k.endswith(\"_hash\")) and not isinstanc"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L220: drop clause 1 of k in _STR_FIELDS and not isinstance(v, str)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L220: drop clause 2 of k in _STR_FIELDS and not isinstance(v, str)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L222: drop clause 1 of k == \"scope\" and (not isinstance(v, (list, tuple)) or not al"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L222: drop clause 2 of k == \"scope\" and (not isinstance(v, (list, tuple)) or not al"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L246: flip msvcrt is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L277: swap +/- in [\"CON\", \"PRN\", \"AUX\", \"NUL\"] + [\"COM%d\" % i for i in range(1 #2"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L285: flip part.split(\".\")[0].rstrip(\" \").upper() in _RESERVED_NAMES"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L312: drop clause 1 of path is not None and (not isinstance(path, str) or not path)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L312: drop clause 2 of path is not None and (not isinstance(path, str) or not path)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L314: flip path is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L316: drop clause 1 of expected_id is not None and path is None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L316: drop clause 2 of expected_id is not None and path is None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L320: flip path is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L342: remove not in not (isinstance(key, tuple) and len(key) == 2 and all(isinst"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L389: flip lid is None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L400: drop clause 1 of self.ledger_id is not None and lid != self.ledger_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L400: drop clause 2 of self.ledger_id is not None and lid != self.ledger_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L402: drop clause 1 of self.expected_id is not None and lid != self.expected_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L402: drop clause 2 of self.expected_id is not None and lid != self.expected_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L409: drop clause 1 of self.expected_id is not None and not os.path.exists(self.pat"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L409: drop clause 2 of self.expected_id is not None and not os.path.exists(self.pat"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L428: flip key in self._keys"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L437: flip key in self._keys"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L439: drop clause 1 of limit is not None and sum(1 for k in self._keys if k[0] == k"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L439: drop clause 2 of limit is not None and sum(1 for k in self._keys if k[0] == k"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L446: drop clause 1 of limit is not None and not _count(limit)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L446: drop clause 2 of limit is not None and not _count(limit)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L448: remove not in not self.path"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L477: remove not in not isinstance(x, bool)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L477: flip x >= 0"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L482: flip rb[\"existence\"] == \"UNKNOWN\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L482: flip \"exists\" not in o"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L484: flip rb[\"existence\"] == \"EXISTS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L561: drop clause 1 of not isinstance(max_mutations, int) or isinstance(max_mutatio"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L561: drop clause 2 of not isinstance(max_mutations, int) or isinstance(max_mutatio"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L561: drop clause 3 of not isinstance(max_mutations, int) or isinstance(max_mutatio"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L578: flip _tok is not _TOKEN"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L580: flip to not in TRANSITIONS[self.state]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L586: flip slot not in self.ev"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L594: flip obj.get(\"transaction_id\") != self.transaction_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L598: remove not in not ok"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L605: flip intent[\"mission_id\"] != self.mission_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L614: flip delegation[\"principal_hash\"] != self._need(\"principal\")[\"obj"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L616: flip authority[\"delegation_hash\"] != delegation[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L618: flip authority[\"mission_id\"] != self.mission_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L620: remove not in not attenuated(authority[\"scope\"], delegation[\"scope\"])"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L622: flip authority[\"max_mutations\"] > delegation[\"max_mutations\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L627: flip authority[\"single_use\"] is not True"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L629: drop clause 1 of budget[\"authority_hash\"] != authority[\"object_hash\"] or budg"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L629: drop clause 2 of budget[\"authority_hash\"] != authority[\"object_hash\"] or budg"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L631: drop clause 1 of budget[\"expansion_allowed\"] is not False or type(budget[\"ret"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L631: drop clause 2 of budget[\"expansion_allowed\"] is not False or type(budget[\"ret"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L631: drop clause 3 of budget[\"expansion_allowed\"] is not False or type(budget[\"ret"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L633: flip budget[\"max_mutations\"] != self.max_mutations"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L635: drop clause 1 of any((k[0] if isinstance(k, tuple) else k) == authority[\"obje"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L635: drop clause 2 of any((k[0] if isinstance(k, tuple) else k) == authority[\"obje"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L645: flip capability_binding[\"authority_hash\"] != a[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L647: flip capability_binding[\"capability\"] not in a[\"scope\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L649: flip capability_binding[\"capability\"] != provider_binding[\"tool_n"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L651: flip capability_binding[\"provider_ref\"] != provider_binding[\"iden"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L662: drop clause 1 of tx[\"mission_id\"] != self.mission_id or outcome_contract[\"mis"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L662: drop clause 2 of tx[\"mission_id\"] != self.mission_id or outcome_contract[\"mis"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L665: drop clause 1 of not isinstance(ids, list) or not ids or not all(isinstance(i"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L665: drop clause 2 of not isinstance(ids, list) or not ids or not all(isinstance(i"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L665: drop clause 3 of not isinstance(ids, list) or not ids or not all(isinstance(i"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L667: flip outcome_contract[\"frozen\"] is not True"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L671: flip checkpoint[\"outcome_contract_hash\"] != outcome_contract[\"obj"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L673: flip checkpoint[\"readback_contract_hash\"] != readback_contract[\"o"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L675: flip checkpoint[\"budget_hash\"] != budget[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L677: flip checkpoint[\"transaction_hash\"] != tx[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L679: drop clause 1 of not _count(checkpoint[\"remaining_budget\"]) or checkpoint[\"re"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L679: drop clause 2 of not _count(checkpoint[\"remaining_budget\"]) or checkpoint[\"re"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L681: flip readback_contract[\"source_level_required\"] != \"AUTHORITATIVE"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L683: remove not in not readback_contract[\"provider_ref\"].startswith(self._need("
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L692: drop clause 1 of not isinstance(mutation_id, str) or not mutation_id or any(o"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L692: drop clause 2 of not isinstance(mutation_id, str) or not mutation_id or any(o"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L692: drop clause 3 of not isinstance(mutation_id, str) or not mutation_id or any(o"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L694: flip contract_fingerprint_now != self._need(\"provider\")[\"contract"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L696: flip mutation_id not in self._need(\"tx\")[\"mutation_ids\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L699: drop clause 1 of key in self.consumed or self.ledger.has(key)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L699: drop clause 2 of key in self.consumed or self.ledger.has(key)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L701: flip self.remaining <= 0"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L703: flip \"EXECUTION_STARTED\" not in TRANSITIONS[self.state]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L717: flip receipt.get(\"mutation_id\") != self.ev.get(\"mutation_id\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L720: flip c not in POST_SEND_CLASSES"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L723: flip c == \"PROVIDER_RESPONSE_SUCCESS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L738: flip rb[\"contract_hash\"] != contract[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L740: flip rb[\"mutation_id\"] != self.ev[\"mutation_id\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L742: remove not in not _exists_consistent(rb)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L748: flip rb[\"source_level\"] == \"AUTHORITATIVE_REPOSITORY\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L754: flip observation[\"readback_receipt_hash\"] != rb[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L757: flip observation[\"mutation_id\"] != self.ev[\"mutation_id\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L759: drop clause 1 of not self._readback_authoritative(rb) or rb[\"existence\"] == \""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L759: drop clause 2 of not self._readback_authoritative(rb) or rb[\"existence\"] == \""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L762: flip rb[\"existence\"] == \"ABSENT\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L766: flip observation[\"commit_state\"] != \"COMMITTED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L777: drop clause 1 of outcome[\"outcome_contract_hash\"] != oc[\"object_hash\"] or out"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L777: drop clause 2 of outcome[\"outcome_contract_hash\"] != oc[\"object_hash\"] or out"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L781: flip outcome[\"result\"] != recomputed"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L785: flip recomputed == \"PASS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L794: swap +/- in [s for s, _ in CHAIN_SLOTS[:-1]] + [\"outcome_contract\", \"rea"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L867: flip self.state != \"OUTCOME_VALIDATED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L879: drop clause 1 of self.mutations_sent or (\"authority\" in self.ev and self.ledg"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L879: drop clause 2 of self.mutations_sent or (\"authority\" in self.ev and self.ledg"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L897: flip grant[\"issued_by\"] == a[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L899: drop clause 1 of not _count(grant[\"max_mutations\"]) or grant[\"max_mutations\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L899: drop clause 2 of not _count(grant[\"max_mutations\"]) or grant[\"max_mutations\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L899: drop clause 3 of not _count(grant[\"max_mutations\"]) or grant[\"max_mutations\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L899: drop clause 4 of not _count(grant[\"max_mutations\"]) or grant[\"max_mutations\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L901: flip grant[\"capability\"] in a[\"scope\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L905: flip grant[\"target\"] not in (self.ev[\"intent\"][\"target_system\"], "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L907: flip \"readback\" not in self.ev"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L909: flip self.ev[\"readback\"][\"source_level\"] != \"AUTHORITATIVE_REPOSI"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L911: flip eval_predicates(grant[\"preconditions\"], self.ev[\"readback\"]["
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L913: flip eval_predicates(grant[\"outcome_predicates\"], self.ev[\"readba"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L923: flip self.state != \"COMPENSATION_AUTHORIZED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L937: remove not in not self.ev.get(\"comp_started\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L940: flip comp_execution[\"mutation_id\"] != \"COMPENSATION:\" + g[\"object"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L942: flip comp_execution[\"call_class\"] != \"PROVIDER_RESPONSE_SUCCESS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L944: flip comp_receipt[\"grant_hash\"] != g[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L947: drop clause 1 of post_readback[\"mutation_id\"] != self.ev[\"mutation_id\"] or po"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L947: drop clause 2 of post_readback[\"mutation_id\"] != self.ev[\"mutation_id\"] or po"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L949: flip post_readback[\"source_level\"] != \"AUTHORITATIVE_REPOSITORY\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L951: remove not in not _exists_consistent(post_readback)"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "ast@L954: drop clause 1 of post_readback[\"object_hash\"] == fwd[\"object_hash\"] or post_r"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L954: drop clause 2 of post_readback[\"object_hash\"] == fwd[\"object_hash\"] or post_r"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L956: flip comp_receipt[\"readback_receipt_hash\"] != post_readback[\"obje"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L958: drop clause 1 of eval_predicates(g[\"outcome_predicates\"], post_readback[\"obse"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L958: drop clause 2 of eval_predicates(g[\"outcome_predicates\"], post_readback[\"obse"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L996: remove not in not isinstance(ledger, ReplayLedger)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L998: drop clause 1 of not ledger.is_durable and not allow_volatile_ledger"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L998: drop clause 2 of not ledger.is_durable and not allow_volatile_ledger"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1000: remove not in not isinstance(evidence, dict)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1005: flip lease[\"checkpoint_hash\"] != checkpoint[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1007: drop clause 1 of lease.get(\"ledger_id\") is not None and lease[\"ledger_id\"] !="
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1007: drop clause 2 of lease.get(\"ledger_id\") is not None and lease[\"ledger_id\"] !="
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1010: remove not in not _count(lease_rem)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L1013: drop clause 1 of not isinstance(ids, list) or not all(isinstance(s_, str) and"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L1013: drop clause 2 of not isinstance(ids, list) or not all(isinstance(s_, str) and"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L1013: drop clause 3 of not isinstance(ids, list) or not all(isinstance(s_, str) and"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1016: flip lease[\"state_at_checkpoint\"] == \"PREWRITE_VALIDATED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L1017: drop clause 1 of (lease_consumed and pre_send) or (not lease_consumed and not"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L1017: drop clause 2 of (lease_consumed and pre_send) or (not lease_consumed and not"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1026: flip original_budget[\"object_hash\"] != ev[\"budget\"][\"object_hash\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1032: flip lease_rem + len(lease_consumed) > min(checkpoint[\"remaining_"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1044: remove not in not lease_consumed <= recorded"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1048: flip m.remaining < 0"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1052: remove not in not consumed"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L1056: drop clause 1 of mut not in ev[\"tx\"][\"mutation_ids\"] or (auth, mut) not in co"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L1056: drop clause 2 of mut not in ev[\"tx\"][\"mutation_ids\"] or (auth, mut) not in co"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1060: flip er is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L135: flip f not in fields"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L146: flip k != \"object_hash\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L168: remove not in not isinstance(p, dict)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L168: remove not in not {\"field\", \"op\", \"expected\"} <= set(p)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L172: flip p[\"op\"] == \"in\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L172: drop clause 1 of not isinstance(p[\"expected\"], (list, tuple, set, frozenset))"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L172: drop clause 2 of not isinstance(p[\"expected\"], (list, tuple, set, frozenset))"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L183: flip p[\"field\"] not in observed"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L183: flip observed[p[\"field\"]] in (None, \"UNKNOWN\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L187: flip op == \"eq\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L218: drop clause 1 of k.endswith(\"_id\") or k.endswith(\"_hash\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L218: drop clause 2 of k.endswith(\"_id\") or k.endswith(\"_hash\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L218: remove not in not isinstance(v, str)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L220: flip k in _STR_FIELDS"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L220: remove not in not isinstance(v, str)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L222: flip k == \"scope\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L222: drop clause 1 of not isinstance(v, (list, tuple)) or not all(isinstance(x, st"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L222: drop clause 2 of not isinstance(v, (list, tuple)) or not all(isinstance(x, st"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L232: flip msvcrt is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L312: flip path is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L312: drop clause 1 of not isinstance(path, str) or not path"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L312: drop clause 2 of not isinstance(path, str) or not path"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L316: flip expected_id is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L316: flip path is None"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "ast@L342: drop clause 1 of isinstance(key, tuple) and len(key) == 2 and all(isinstance("
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L342: drop clause 2 of isinstance(key, tuple) and len(key) == 2 and all(isinstance("
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L342: drop clause 3 of isinstance(key, tuple) and len(key) == 2 and all(isinstance("
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L367: flip n == 1"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L379: remove not in not ok"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L390: flip self.expected_id is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L400: flip self.ledger_id is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L400: flip lid != self.ledger_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L402: flip self.expected_id is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L402: flip lid != self.expected_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L409: flip self.expected_id is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L409: remove not in not os.path.exists(self.path)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L439: flip limit is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L439: flip sum(1 for k in self._keys if k[0] == key[0]) >= limit"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L446: flip limit is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L446: remove not in not _count(limit)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L561: remove not in not isinstance(max_mutations, int)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L561: flip max_mutations < 0"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L570: flip ledger is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L625: remove not in not _count(val)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L629: flip budget[\"authority_hash\"] != authority[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L629: flip budget[\"max_mutations\"] > authority[\"max_mutations\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L631: flip budget[\"expansion_allowed\"] is not False"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L631: flip type(budget[\"retries\"]) is not int"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L631: flip budget[\"retries\"] != 0"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L636: drop clause 1 of not self._resuming and self.ledger.for_authority(authority[\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L636: drop clause 2 of not self._resuming and self.ledger.for_authority(authority[\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L662: flip tx[\"mission_id\"] != self.mission_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L662: flip outcome_contract[\"mission_id\"] != self.mission_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L665: remove not in not isinstance(ids, list)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L665: remove not in not ids"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L665: remove not in not all(isinstance(i, str) and i for i in ids)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L679: remove not in not _count(checkpoint[\"remaining_budget\"])"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L679: flip checkpoint[\"remaining_budget\"] != budget[\"max_mutations\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L692: remove not in not isinstance(mutation_id, str)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L692: remove not in not mutation_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L699: flip key in self.consumed"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L759: remove not in not self._readback_authoritative(rb)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L759: flip rb[\"existence\"] == \"UNKNOWN\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L777: flip outcome[\"outcome_contract_hash\"] != oc[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L777: flip outcome[\"readback_receipt_hash\"] != rb[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L787: flip recomputed == \"FAIL\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L801: drop clause 1 of not isinstance(o, dict) or o.get(\"kind\") != SLOT_KINDS[slot]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L801: drop clause 2 of not isinstance(o, dict) or o.get(\"kind\") != SLOT_KINDS[slot]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L803: remove not in not _hash_ok(o)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L810: flip dl[\"principal_hash\"] == h(\"principal\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L811: flip au[\"delegation_hash\"] == h(\"delegation\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L812: flip au[\"mission_id\"] == self.mission_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L813: flip e[\"intent\"][\"mission_id\"] == self.mission_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L815: flip au[\"max_mutations\"] <= dl[\"max_mutations\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L816: flip bu[\"authority_hash\"] == h(\"authority\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L817: flip bu[\"max_mutations\"] <= au[\"max_mutations\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L818: drop clause 1 of type(bu[\"retries\"]) is int and bu[\"retries\"] == 0 and bu[\"ex"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L818: drop clause 2 of type(bu[\"retries\"]) is int and bu[\"retries\"] == 0 and bu[\"ex"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L818: drop clause 3 of type(bu[\"retries\"]) is int and bu[\"retries\"] == 0 and bu[\"ex"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L819: flip bu[\"max_mutations\"] == self.max_mutations"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L820: flip au[\"single_use\"] is True"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L821: flip cb[\"authority_hash\"] == h(\"authority\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L822: flip cb[\"capability\"] in au[\"scope\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L823: flip cb[\"capability\"] == pv[\"tool_name\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L824: flip cb[\"provider_ref\"] == pv[\"identity\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L825: flip tx[\"transaction_id\"] == T"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L826: flip tx[\"mission_id\"] == self.mission_id"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "ast@L827: drop clause 1 of mid is not None and mid in tx[\"mutation_ids\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L827: drop clause 2 of mid is not None and mid in tx[\"mutation_ids\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L828: flip (h(\"authority\"), mid) in self.consumed"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L829: drop clause 1 of oc[\"frozen\"] is True and oc[\"transaction_id\"] == T and oc[\"m"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L829: drop clause 2 of oc[\"frozen\"] is True and oc[\"transaction_id\"] == T and oc[\"m"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L829: drop clause 3 of oc[\"frozen\"] is True and oc[\"transaction_id\"] == T and oc[\"m"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L831: flip rc[\"source_level_required\"] == \"AUTHORITATIVE_REPOSITORY\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L833: flip cp[\"transaction_hash\"] == h(\"tx\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L834: flip cp[\"budget_hash\"] == h(\"budget\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L835: flip cp[\"outcome_contract_hash\"] == h(\"outcome_contract\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L836: flip cp[\"readback_contract_hash\"] == h(\"readback_contract\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L837: flip cp[\"remaining_budget\"] == bu[\"max_mutations\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L838: flip er[\"transaction_id\"] == T"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L839: flip er[\"mutation_id\"] == mid"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L840: flip er[\"call_class\"] in POST_SEND_CLASSES"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L841: flip rb[\"transaction_id\"] == T"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L842: flip rb[\"mutation_id\"] == mid"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L843: flip rb[\"contract_hash\"] == h(\"readback_contract\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L844: flip rb[\"source_level\"] == \"AUTHORITATIVE_REPOSITORY\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L845: flip rb[\"existence\"] == \"EXISTS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L847: flip co[\"transaction_id\"] == T"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L848: flip co[\"mutation_id\"] == mid"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L849: flip co[\"readback_receipt_hash\"] == h(\"readback\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L850: flip co[\"commit_state\"] == \"COMMITTED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L851: flip oo[\"transaction_id\"] == T"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L852: flip oo[\"readback_receipt_hash\"] == h(\"readback\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L853: flip oo[\"outcome_contract_hash\"] == h(\"outcome_contract\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L854: flip oo[\"result\"] == \"PASS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L855: flip eval_predicates(oc[\"predicates\"], rb[\"observed\"]) == \"PASS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L856: flip completion.get(\"authority_hash\") == h(\"authority\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L857: flip completion.get(\"execution_receipt_hash\") == h(\"execution_rec"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L858: flip completion.get(\"commit_observation_hash\") == h(\"commit\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L859: flip completion.get(\"outcome_receipt_hash\") == h(\"outcome\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L860: flip completion.get(\"transaction_id\") == T"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L879: drop clause 1 of \"authority\" in self.ev and self.ledger.for_authority(self.ev"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L879: drop clause 2 of \"authority\" in self.ev and self.ledger.for_authority(self.ev"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L899: remove not in not _count(grant[\"max_mutations\"])"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L899: flip grant[\"max_mutations\"] < 1"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L899: remove not in not grant[\"preconditions\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L899: remove not in not grant[\"outcome_predicates\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L940: swap +/- in \"COMPENSATION:\" + g[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L947: flip post_readback[\"mutation_id\"] != self.ev[\"mutation_id\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L947: flip post_readback[\"contract_hash\"] != self._need(\"readback_contr"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L954: flip post_readback[\"object_hash\"] == fwd[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L954: flip post_readback[\"observed\"] == fwd[\"observed\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L958: flip eval_predicates(g[\"outcome_predicates\"], post_readback[\"obse"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L958: flip comp_receipt[\"result\"] != \"PASS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L998: remove not in not ledger.is_durable"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L998: remove not in not allow_volatile_ledger"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L1003: drop clause 1 of not isinstance(o, dict) or o.get(\"kind\") != kind or not _has"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L1003: drop clause 2 of not isinstance(o, dict) or o.get(\"kind\") != kind or not _has"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L1003: drop clause 3 of not isinstance(o, dict) or o.get(\"kind\") != kind or not _has"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1007: flip lease.get(\"ledger_id\") is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1007: flip lease[\"ledger_id\"] != ledger.ledger_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1013: remove not in not isinstance(ids, list)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1013: remove not in not all(isinstance(s_, str) and \":\" in s_ for s_ in ids)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1013: flip len(ids) != len(set(ids))"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1017: drop clause 1 of lease_consumed and pre_send"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1017: drop clause 2 of lease_consumed and pre_send"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1017: drop clause 1 of not lease_consumed and not pre_send"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1017: drop clause 2 of not lease_consumed and not pre_send"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1019: swap +/- in set(evidence) - set(RESUME_SLOTS)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1023: flip slot not in evidence"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L1032: swap +/- in lease_rem + len(lease_consumed)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1044: flip lease_consumed <= recorded"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L1047: swap +/- in total - len(consumed)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1056: flip mut not in ev[\"tx\"][\"mutation_ids\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1056: flip (auth, mut) not in consumed"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L1061: drop clause 1 of er[\"object_hash\"] != lease[\"execution_receipt_hash\"] or er.g"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L1061: drop clause 2 of er[\"object_hash\"] != lease[\"execution_receipt_hash\"] or er.g"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L1061: drop clause 3 of er[\"object_hash\"] != lease[\"execution_receipt_hash\"] or er.g"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1085: flip slot in m.ev"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L168: flip {\"field\", \"op\", \"expected\"} <= set(p)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L172: remove not in not isinstance(p[\"expected\"], (list, tuple, set, frozenset))"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L172: remove not in not p[\"expected\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L184: flip result != \"FAIL\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L187: flip op == \"ne\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L187: remove not in not _same(v, e)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L222: remove not in not isinstance(v, (list, tuple))"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L222: remove not in not all(isinstance(x, str) and x for x in v)"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "ast@L239: flip time.time() - start > timeout"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L312: remove not in not isinstance(path, str)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L312: remove not in not path"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L342: flip len(key) == 2"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L344: drop clause 1 of ord(c) < 32 or ord(c) == 127"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L344: drop clause 2 of ord(c) < 32 or ord(c) == 127"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L352: swap +/- in json.dumps({\"hdr\": self.HEADER, \"v\": 1, \"id\": lid, \"c\": self"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L368: drop clause 1 of isinstance(rec, dict) and rec.get(\"hdr\") == self.HEADER and "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L368: drop clause 2 of isinstance(rec, dict) and rec.get(\"hdr\") == self.HEADER and "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L368: drop clause 3 of isinstance(rec, dict) and rec.get(\"hdr\") == self.HEADER and "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L368: drop clause 4 of isinstance(rec, dict) and rec.get(\"hdr\") == self.HEADER and "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L368: drop clause 5 of isinstance(rec, dict) and rec.get(\"hdr\") == self.HEADER and "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L370: remove not in not ok"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "ast@L376: drop clause 1 of isinstance(a, str) and isinstance(m_, str) and c == self._cr"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "ast@L376: drop clause 2 of isinstance(a, str) and isinstance(m_, str) and c == self._cr"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L376: drop clause 3 of isinstance(a, str) and isinstance(m_, str) and c == self._cr"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L434: flip k[0] == authority_hash"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L636: remove not in not self._resuming"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L683: swap +/- in self._need(\"provider\")[\"provider_id\"] + \"::\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L795: flip s not in self.ev"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L801: remove not in not isinstance(o, dict)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L801: flip o.get(\"kind\") != SLOT_KINDS[slot]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L818: flip type(bu[\"retries\"]) is int"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L818: flip bu[\"retries\"] == 0"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L818: flip bu[\"expansion_allowed\"] is False"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L827: flip mid is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L827: flip mid in tx[\"mutation_ids\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L829: flip oc[\"frozen\"] is True"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L829: flip oc[\"transaction_id\"] == T"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L829: flip oc[\"mission_id\"] == self.mission_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L832: swap +/- in pv[\"provider_id\"] + \"::\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L879: flip \"authority\" in self.ev"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1003: remove not in not isinstance(o, dict)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1003: flip o.get(\"kind\") != kind"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1003: remove not in not _hash_ok(o)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1017: remove not in not lease_consumed"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1017: remove not in not pre_send"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1029: flip k[0] != auth"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L1061: flip er[\"object_hash\"] != lease[\"execution_receipt_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L1061: flip er.get(\"mutation_id\") != mut"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L1061: flip er.get(\"transaction_id\") != lease[\"transaction_id\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L239: swap +/- in time.time() - start"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L344: flip ord(c) < 32"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L344: flip ord(c) == 127"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L344: swap +/- in key[0] + key[1]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L347: swap +/- in key[0] + key[1]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L368: flip rec.get(\"hdr\") == self.HEADER"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L368: flip rec.get(\"v\") == 1"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L369: flip rec.get(\"c\") == self._crc(rec[\"id\"], \"HDR\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L376: flip c == self._crc(a, m_)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L692: drop clause 1 of ord(c) < 32 or ord(c) == 127"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L692: drop clause 2 of ord(c) < 32 or ord(c) == 127"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L971: swap +/- in \"LEASE-\" + chash([cp[\"object_hash\"], sorted(map(str, self.co"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1064: swap +/- in \"resume-\" + lease[\"lease_id\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L342: drop clause 1 of isinstance(x, str) and x"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L342: drop clause 2 of isinstance(x, str) and x"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L465: swap +/- in len(data) - len(torn)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L665: drop clause 1 of isinstance(i, str) and i"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L665: drop clause 2 of isinstance(i, str) and i"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L692: flip ord(c) < 32"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L692: flip ord(c) == 127"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L1013: drop clause 1 of isinstance(s_, str) and \":\" in s_"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L1013: drop clause 2 of isinstance(s_, str) and \":\" in s_"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L222: drop clause 1 of isinstance(x, str) and x"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L222: drop clause 2 of isinstance(x, str) and x"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L329: swap +/- in auth + \"\\x00\" + mut"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L439: flip k[0] == key[0]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L467: swap +/- in json.dumps({\"a\": key[0], \"m\": key[1], \"c\": self._crc(*key)},"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1013: flip \":\" in s_"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L329: swap +/- in auth + \"\\x00\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "special: readback_authority_helper_always_true"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "special: budget_not_decremented"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: completion_not_persisted"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: completion_link_dropped_from_chain"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: atomic_rollback_removed"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "special: ledger_not_written_on_send"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "special: mission_consumed_set_not_recorded"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "special: resume_ignores_ledger"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "special: resume_state_inherited_from_lease"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: resume_budget_taken_from_lease_only"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: resume_evidence_not_verified"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: resume_consumed_set_not_restored"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: resume_sent_counter_not_restored"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: accepted_objects_not_copied"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: predicates_not_type_strict"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: predicate_ne_always_true"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: predicate_in_always_true"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "special: predicate_eq_always_true"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: unknown_observed_value_treated_as_known"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: unknown_predicate_never_degrades"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: go_token_not_required"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: thread_lock_removed"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: ledger_thread_lock_body_removed"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: ledger_has_not_thread_locked"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: ledger_for_authority_not_thread_locked"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: ledger_consume_not_thread_locked"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: ledger_io_guard_value_errors_not_caught"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "special: ledger_header_not_written"
+    }
+  ],
+  "survivors": [
+    "ast@L954: drop clause 1 of post_readback[\"object_hash\"] == fwd[\"object_hash\"] or post_r",
+    "ast@L342: drop clause 1 of isinstance(key, tuple) and len(key) == 2 and all(isinstance(",
+    "ast@L827: drop clause 1 of mid is not None and mid in tx[\"mutation_ids\"]",
+    "ast@L239: flip time.time() - start > timeout",
+    "ast@L376: drop clause 1 of isinstance(a, str) and isinstance(m_, str) and c == self._cr",
+    "ast@L376: drop clause 2 of isinstance(a, str) and isinstance(m_, str) and c == self._cr"
+  ],
+  "unexplained_survivors": []
+}

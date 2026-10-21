@@ -56,6 +56,11 @@ SPECIAL = [
     ("unknown_predicate_never_degrades", '            result = "UNKNOWN" if result != "FAIL" else result', "            result = result"),
     ("go_token_not_required", "        if _tok is not _TOKEN:", "        if False:"),
     ("thread_lock_removed", "        with self._lock:                              # one guard call at a time per Mission (re-entrant)", "        if True:                                      # lock removed"),
+    ("ledger_thread_lock_body_removed", "        with self._tlock:\n            return fn(self, *a, **k)", "        if True:\n            return fn(self, *a, **k)"),
+    ("ledger_has_not_thread_locked", "    @_tlocked\n    def has(self, key):", "    def has(self, key):"),
+    ("ledger_for_authority_not_thread_locked", "    @_tlocked\n    def for_authority(self, authority_hash):", "    def for_authority(self, authority_hash):"),
+    ("ledger_consume_not_thread_locked", "    @_tlocked\n    def consume(self, key, limit=None):", "    def consume(self, key, limit=None):"),
+    ("ledger_io_guard_value_errors_not_caught", "        except (OSError, ValueError, TypeError) as exc:", "        except OSError as exc:"),
     ("ledger_header_not_written", "            data = self._header_line(lid)\n            fh.seek(0, 2)\n            fh.write(data)\n", "            data = b''\n            fh.seek(0, 2)\n            fh.write(data)\n"),
 ]
 
@@ -167,7 +172,8 @@ def build_mutants(src):
         if new in seen:                      # identical to a guard/relation mutant already generated
             continue
         seen.add(new)
-        muts.append((name, new, True))
+        taken = sum(1 for m_ in muts if m_[0] == name or m_[0].startswith(name + " #"))
+        muts.append((name if not taken else "%s #%d" % (name, taken + 1), new, True))   # names must be unique
     for name, old, rep in SPECIAL:
         ok = src.count(old) == 1
         muts.append(("special: " + name, src.replace(old, rep, 1) if ok else None, ok))

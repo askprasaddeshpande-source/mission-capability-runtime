@@ -1508,6 +1508,147 @@ def run():
     t(g, "resume_without_a_lease_mutation_id_uses_the_first_sorted_ledger_key", r3x.ev["mutation_id"] == "MUT-1")
     t(g, "resume_records_an_audit_entry_in_the_history", r3x.history[-1] == ("RESUMED_AS_COMMIT_STATE_UNKNOWN", lease3["object_hash"]))
 
+    # ---- HARDENING_R2_0N (independent review 6: lock regression, path validation, R51 empty tail, failed compensation)
+    g = "HARDENING_R2_0N"
+
+    class SpySet(set):
+        """A set that records any overlap between two threads' operations on it. Every operation pauses mid-way, so an
+        unserialized caller overlaps reliably instead of depending on GIL timing."""
+        def __init__(self, *a):
+            super().__init__(*a)
+            self.guard, self.inflight, self.overlaps = threading.Lock(), 0, 0
+
+        def _enter(self):
+            with self.guard:
+                self.inflight += 1
+                if self.inflight > 1:
+                    self.overlaps += 1
+
+        def _leave(self):
+            with self.guard:
+                self.inflight -= 1
+
+        def __contains__(self, k):
+            self._enter(); time.sleep(0.0005); r = set.__contains__(self, k); self._leave(); return r
+
+        def __iter__(self):
+            self._enter()
+            try:
+                for k in list(set.__iter__(self)):
+                    time.sleep(0.0002)
+                    yield k
+            finally:
+                self._leave()
+
+        def add(self, k):
+            self._enter(); time.sleep(0.0005); set.add(self, k); self._leave()
+
+        def __ior__(self, other):
+            self._enter(); time.sleep(0.0005); set.__ior__(self, other); self._leave(); return self
+
+    def spy_run(lg_, ops):
+        spy = SpySet()
+        lg_._keys = spy
+        errs = []
+        barrier = threading.Barrier(len(ops))
+        def work(op):
+            barrier.wait()
+            for r in range(6):
+                try:
+                    op(r)
+                except MODEL.GuardError:
+                    pass
+                except Exception as exc:
+                    errs.append(type(exc).__name__)
+        ths = [threading.Thread(target=work, args=(op,)) for op in ops]
+        [th_.start() for th_ in ths]; [th_.join() for th_ in ths]
+        return spy, errs
+
+    A64 = "A" * 64
+    spy_v, errs_v = spy_run(MODEL.ReplayLedger(), [
+        lambda r: None, lambda r: None])                                                          # control: no overlap without work
+    t(g, "the_spy_set_reports_no_overlap_when_nothing_runs_concurrently", spy_v.overlaps == 0 and not errs_v)
+    lgv = MODEL.ReplayLedger()
+    spy_v, errs_v = spy_run(lgv, [
+        lambda r: lgv.consume((A64, "W%d" % r)), lambda r: lgv.consume((A64, "X%d" % r)),
+        lambda r: lgv.for_authority(A64), lambda r: lgv.has((A64, "W1")), lambda r: lgv.for_authority(A64)])
+    t(g, "volatile_ledger_operations_never_overlap_on_the_shared_set", spy_v.overlaps == 0 and not errs_v)
+    t(g, "volatile_ledger_loses_no_consume_under_the_spy", len(spy_v) == 12)
+    lgf = MODEL.ReplayLedger(os.path.join(ld2, "spy_file_ledger.txt"))
+    spy_f, errs_f = spy_run(lgf, [
+        lambda r: lgf.consume((A64, "F%d" % r)), lambda r: lgf.consume((A64, "G%d" % r)),
+        lambda r: lgf.for_authority(A64), lambda r: lgf.has((A64, "F1")),
+        lambda r: lgf._sync(), lambda r: lgf._consume_file((A64, "H%d" % r), None)])
+    t(g, "file_ledger_operations_never_overlap_on_the_shared_set", spy_f.overlaps == 0 and not errs_f)
+    t(g, "file_ledger_records_every_consume_under_the_spy", len(spy_f) == 18 and len(MODEL.ReplayLedger(lgf.path).for_authority(A64)) == 18)
+    spy_m = SpySet(); spy_m.add(("x", "y"))
+    t(g, "the_spy_set_detects_an_overlap_when_it_is_used_unserialized", (lambda: (
+        [th_.join() for th_ in [(lambda th_: (th_.start(), th_)[1])(threading.Thread(target=lambda: [spy_m.add(("a", str(i))) for i in range(5)])) for _ in range(3)]],
+        spy_m.overlaps > 0)[1])())
+
+    class RvSet(set):
+        """Deterministic overlap detector: a writer pauses inside add() until a second thread reaches the set (or 0.4 s
+        pass). If the second thread gets in while the first is paused, the two were not serialized."""
+        def __init__(self):
+            super().__init__()
+            self.inside, self.other, self.overlap = threading.Event(), threading.Event(), False
+
+        def _reach(self):
+            if self.inside.is_set():
+                self.overlap = True
+                self.other.set()
+
+        def __contains__(self, k):
+            self._reach(); return set.__contains__(self, k)
+
+        def __iter__(self):
+            self._reach(); return set.__iter__(self)
+
+        def add(self, k):
+            self.inside.set(); self.other.wait(0.4); set.add(self, k); self.inside.clear()
+
+    def rendezvous(second):
+        lg_ = MODEL.ReplayLedger()
+        rv = RvSet(); lg_._keys = rv
+        first = threading.Thread(target=lambda: lg_.consume((A64, "RV-1")))
+        first.start()
+        rv.inside.wait(2)
+        sec = threading.Thread(target=lambda: safe(lambda: second(lg_)))
+        sec.start(); sec.join(); first.join()
+        return rv.overlap, len(rv)
+    t(g, "a_second_consume_cannot_enter_the_set_while_the_first_is_inside", rendezvous(lambda l_: l_.consume((A64, "RV-2"))) == (False, 2))
+    t(g, "has_cannot_read_the_set_while_a_consume_is_inside", rendezvous(lambda l_: l_.has((A64, "RV-1"))) == (False, 1))
+    t(g, "for_authority_cannot_iterate_the_set_while_a_consume_is_inside", rendezvous(lambda l_: l_.for_authority(A64)) == (False, 1))
+    ov_, n_ = rendezvous(lambda l_: l_._keys.__contains__((A64, "RV-1")))
+    t(g, "the_rendezvous_detects_an_unserialized_reader", ov_ is True)
+
+    # N2: ledger path validation
+    for label, bad in (("nul_character", "led\x00ger.txt"), ("bare_con", "CON"), ("lower_case_con_with_extension", "con.txt"),
+                       ("nul_device_in_a_directory", os.path.join(ld2, "NUL")), ("lpt1_in_the_middle", ld2 + "/LPT1/x.txt"),
+                       ("com3_with_extension", "COM3.log"), ("device_name_with_trailing_space", "CON ")):
+        t(g, "ledger_path_" + label + "_is_a_guard_error", raises(lambda b=bad: MODEL.ReplayLedger(b), "ledger path"))
+    t(g, "similar_but_legal_names_are_accepted", all(safe(lambda n=n: MODEL.ReplayLedger(os.path.join(ld2, n)) is not None) for n in ("console.txt", "CONFIG", "aux_ledger.txt", "com10.txt")))
+    t(g, "ledger_io_value_errors_become_guard_errors", raises(lambda: MODEL._io_guard(lambda: (_ for _ in ()).throw(ValueError("embedded null byte")))(), "ledger I/O error: ValueError"))
+
+    # N4: R51 is a literal prefix test; an empty tail and an empty provider id are accepted by design (contract R6 section 4)
+    mm_, ff_ = at_bound()
+    rc_e = remake(ff_["rc"], provider_ref="SYN::")
+    cp_e = remake(ff_["cp"], readback_contract_hash=rc_e["object_hash"])
+    t(g, "r51_accepts_an_empty_tail_after_the_separator", safe(lambda: (mm_.prewrite_validate(ff_["tx"], ff_["oc"], rc_e, cp_e), mm_.state)[1] == "PREWRITE_VALIDATED"))
+
+    # N5: after begin_compensation a failed compensating call report is refused and changes nothing; the model does not gate a second provider call (contract R7 section 3)
+    fail_classes = sorted(c for c in CALL_CLASSES if c != "PROVIDER_RESPONSE_SUCCESS")
+    mm_, ff_, gg_ = comp_unbegun(); mm_.begin_compensation(); post_ = rb_receipt(ff_, "ABSENT", obs={"exists": False})
+    refused_all = True
+    for cls_ in fail_classes:
+        refused_all = refused_all and raises(lambda c=cls_: mm_.record_compensation(comp_receipt_for(gg_, post_), post_, comp_exec(gg_, cls=c)), "") and mm_.state == "COMPENSATION_AUTHORIZED"
+    t(g, "every_non_success_compensating_call_class_is_refused_and_leaves_the_state", refused_all and len(fail_classes) >= 1)
+    t(g, "a_compensation_cannot_be_begun_again_after_a_failed_call", raises(lambda: mm_.begin_compensation(), "replay: compensation already started"))
+    t(g, "the_only_exits_of_compensation_authorized_are_compensated_and_unrecoverable", TRANSITIONS["COMPENSATION_AUTHORIZED"] == {"COMPENSATED", "UNRECOVERABLE"})
+    mm_, ff_, gg_ = comp_unbegun(); mm_.begin_compensation(); post_ = rb_receipt(ff_, "ABSENT", obs={"exists": False})
+    raises(lambda: mm_.record_compensation(comp_receipt_for(gg_, post_), post_, comp_exec(gg_, cls=fail_classes[0])), "")
+    t(g, "a_later_success_report_after_a_failed_call_is_accepted_the_model_does_not_gate_a_second_provider_call", safe(lambda: (mm_.record_compensation(comp_receipt_for(gg_, post_), post_, comp_exec(gg_)), mm_.state)[1] == "COMPENSATED"))
+
     # ---- NO_ENTERPRISE_WRITES (structural)
     g = "NO_ENTERPRISE_WRITES"
     src = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "mcr_r2_model.py")).read()

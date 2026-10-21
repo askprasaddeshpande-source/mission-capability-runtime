@@ -95,10 +95,10 @@ PIN_H_ERA_b5cca1f = {
 # SHA-256 (CRLF-insensitive) of the model-side files at the revision submitted for independent review. Changing any of
 # them requires editing this table in the same commit, which makes the change visible; it is not an external anchor.
 PIN_REVIEWED_REVISION = {
-    "tools/r2.0/mcr_r2_model.py": "D2AE1575493542822E4DA54ABF8ED98ED96B7D9E6BE2737F841442EF5CE324B0",
+    "tools/r2.0/mcr_r2_model.py": "E70F2ACC79BB668232CE3F844770A063F73E1BB8C2742EEB9AD1482B81DDD8CF",
     "tools/r2.0/run_r2_local_scenarios.py": "B19B549776C17D7919F494B3C4C6A362542E3ED4628020B501FD0A56258AB955",
-    "tools/r2.0/run_r2_mutation_check.py": "F63E604C1318304129D1502CBCD678307E434F321AC59AECE5B7FA56562B6C80",
-    "tools/r2.0/validate_r2_outcome_model.py": "3E56FA0964047FB47E25CC6CD263008E71A296D857D59892F4B6C20FBC30EE84"
+    "tools/r2.0/run_r2_mutation_check.py": "69F7CC5F4F7DBBA3B101F2552743CB5FE435041AB8CD9EA1D5BC089AE8F5BFF6",
+    "tools/r2.0/validate_r2_outcome_model.py": "8ACAE628959BD1352250E8A4C5636DC9D85FBB90E3B68204CC59DD3191430686"
 }
 PIN_I_ERA_a381a22 = {
     "architecture/r2.0/MCR_R2_0_EVIDENCE_CHAIN_CONTRACT_R3.md": "EF291CB6529A0DE1F71C6477D3B05889D466A6D20336DF9D4C9F4552CDF03872",
@@ -132,7 +132,16 @@ PIN_L_ERA_681f77a = {
     "reports/r2.0/MCR_R2_0_INDEPENDENT_QUALIFICATION_R4_FINDINGS.md": "1E6F594CE0F4680E8C20DF2B140F86EF80B204B9DCFEE68B56DF8DDF723D9961",
     "reports/r2.0/MCR_R2_0_L_HARDENING_REPORT_R1.md": "F7F25FDD1394C0C5A63296E1364BE5995CF45BF061B7A1287450EB9E5DF65475"
 }
-FROZEN_HISTORICAL = dict(PIN_BASELINE_6f992c6, **PIN_G_ERA_8a383b6, **PIN_H_ERA_b5cca1f, **PIN_I_ERA_a381a22, **PIN_J_ERA_f6e79a4, **PIN_L_ERA_681f77a)
+PIN_M_ERA_212804f = {
+    "architecture/r2.0/MCR_R2_0_EVIDENCE_CHAIN_CONTRACT_R6.md": "527641D8A7619B67852DCEF4D0B69FEC602579C54057847B1E6AE1F5F1C6161E",
+    "evidence/r2.0/MCR_R2_0_A_VALIDATION_RESULT_R7.json": "DF2BA0A4A877A2A2059546225273A954A57116687F960AEA93C8CAAA6BCADBEA",
+    "evidence/r2.0/MCR_R2_0_DE_LOCAL_SCENARIOS_RESULT_R6.json": "DEC7879247D0EA7A6DAD4A9F463AB81C50F41BAB8F9D95ED2AC6BAF7B4F7CB4A",
+    "evidence/r2.0/MCR_R2_0_HYPOTHESIS_STATUS_R8.md": "E9AE84BC2B91713F6597570178D3DE38B93351502C16B12397E15E9A23881FB7",
+    "evidence/r2.0/MCR_R2_0_M_MUTATION_CHECK_R6.json": "B937FD7F7490DE6E3A267522D59EA37C377DDADA0075E89522E85B13CDAB2D1A",
+    "evidence/r2.0/MCR_R2_0_M_TEST_MATRIX_R1.json": "02C1E160406D2B1239BA08AB84540B7A8FDC189F258BD943E2B6337C0FCC6B85",
+    "reports/r2.0/MCR_R2_0_M_HARDENING_REPORT_R1.md": "B39457E61A1FC2350111AA63FA6D6E5739257DEF1F3A75B561A9CFA8C9EC16B6"
+}
+FROZEN_HISTORICAL = dict(PIN_BASELINE_6f992c6, **PIN_G_ERA_8a383b6, **PIN_H_ERA_b5cca1f, **PIN_I_ERA_a381a22, **PIN_J_ERA_f6e79a4, **PIN_L_ERA_681f77a, **PIN_M_ERA_212804f)
 ROOTS = ["tools/r2.0", "architecture/r2.0", "evidence/r2.0", "reports/r2.0", "research-package/r2.0"]
 SKIP = {SUMS, "__pycache__", "tools/r2.0/make_adt_auth_context.py"}   # local credential helper, git-ignored
 TEXT = (".py", ".md", ".json", ".txt")
@@ -150,6 +159,11 @@ SECRET = re.compile(
     r"|(?<![A-Za-z0-9])gh[pousr]_[A-Za-z0-9]{36,}"
     r"|(?<![A-Za-z0-9])AK" "IA[0-9A-Z]{16}"
     r"|(?<![A-Za-z0-9])xox[baprs]-[A-Za-z0-9-]{10,}"
+    r"|(?<![A-Za-z0-9])github_pat_[A-Za-z0-9_]{22,}"
+    r"|(?<![A-Za-z0-9])npm_[A-Za-z0-9]{36}"
+    r"|(?<![A-Za-z0-9])AIza[0-9A-Za-z_-]{35}"
+    r"|(?<![A-Za-z0-9])[sr]k_live_[A-Za-z0-9]{16,}"
+    r"|AccountKey=[A-Za-z0-9+/=]{40,}"
     r"|://[^/\s:@]+:[^/\s@]{3,}@"
     r"|(?P<name>[A-Za-z0-9_.-]*(?i:secret|token|password|passwd|api[_-]?key|authorization)[A-Za-z0-9_.-]*)[\"']?\s*[:=]\s*[\"']?(?P<val>[A-Za-z0-9+/=_.-]{16,}+)(?!\()"
     r"|(?P<sname>[A-Za-z0-9_.-]*(?i:password|passwd|secret|api[_-]?key|private[_-]?key)[A-Za-z0-9_.-]*)[\"']?\s*[:=]\s*[\"']?(?P<sval>[^\s\"']{8,15})(?![^\s\"'])")
@@ -291,13 +305,13 @@ def main(argv):
     t = tempfile.mkdtemp(prefix="r2out_")
     a = run(root, "tools/r2.0/validate_r2_outcome_model.py", "--out", os.path.join(t, "a.json"), "--emit-schemas", os.path.join(t, "schemas"))
     res["validator_passes"] = a.returncode == 0
-    res["validator_result_reproduces"] = open(os.path.join(t, "a.json"), "rb").read() == open(os.path.join(root, "evidence/r2.0/MCR_R2_0_A_VALIDATION_RESULT_R7.json"), "rb").read().replace(b"\r\n", b"\n")
+    res["validator_result_reproduces"] = open(os.path.join(t, "a.json"), "rb").read() == open(os.path.join(root, "evidence/r2.0/MCR_R2_0_A_VALIDATION_RESULT_R8.json"), "rb").read().replace(b"\r\n", b"\n")
     sch = sorted(os.listdir(os.path.join(t, "schemas")))
     res["schemas_reproduce"] = sch == sorted(os.listdir(os.path.join(root, "architecture/r2.0/schemas"))) and all(
         open(os.path.join(t, "schemas", s), "rb").read() == open(os.path.join(root, "architecture/r2.0/schemas", s), "rb").read().replace(b"\r\n", b"\n") for s in sch)
     d = run(root, "tools/r2.0/run_r2_local_scenarios.py", "--out", os.path.join(t, "d.json"))
     res["scenarios_pass"] = d.returncode == 0
-    res["scenarios_result_reproduces"] = open(os.path.join(t, "d.json"), "rb").read() == open(os.path.join(root, "evidence/r2.0/MCR_R2_0_DE_LOCAL_SCENARIOS_RESULT_R6.json"), "rb").read().replace(b"\r\n", b"\n")
+    res["scenarios_result_reproduces"] = open(os.path.join(t, "d.json"), "rb").read() == open(os.path.join(root, "evidence/r2.0/MCR_R2_0_DE_LOCAL_SCENARIOS_RESULT_R7.json"), "rb").read().replace(b"\r\n", b"\n")
     res["reviewed_revision_pins_match"] = all(os.path.exists(os.path.join(root, p_)) and sha(os.path.join(root, p_)) == h_ for p_, h_ in PIN_REVIEWED_REVISION.items())
     sums_sha = sha(os.path.join(root, SUMS))
     if "--expect-sums-sha256" in argv:
@@ -321,7 +335,7 @@ def main(argv):
         m = run(root, "tools/r2.0/run_r2_mutation_check.py", "--jobs", "4", "--out", os.path.join(t, "m.json"))
         res["mutation_check_passes"] = m.returncode == 0
         got = json.load(open(os.path.join(t, "m.json"), encoding="utf-8"))
-        ref = json.load(open(os.path.join(root, "evidence/r2.0/MCR_R2_0_M_MUTATION_CHECK_R6.json"), encoding="utf-8"))
+        ref = json.load(open(os.path.join(root, "evidence/r2.0/MCR_R2_0_N_MUTATION_CHECK_R7.json"), encoding="utf-8"))
         stable = lambda d: (d["mutants"], d["by_kind"], d["not_applied"], d["survivors"], d["unexplained_survivors"], d["MUTATION_CHECK"],
                             [(r["mutant"], r["applied"], r["detected"]) for r in d["results"]])
         res["mutation_result_reproduces"] = stable(got) == stable(ref)

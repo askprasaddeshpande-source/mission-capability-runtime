@@ -1,0 +1,38 @@
+# MCR R2.0 Hypothesis Status R9
+
+Date: 2026-10-21. **Supersedes** `MCR_R2_0_HYPOTHESIS_REGISTER_R1.md` and status R2 to R8 (all retained as history, not edited). Where they disagree with this file and with `reports/r2.0/MCR_R2_0_C_REPORT_ERRATUM_R1.md`, those govern. **No live evidence was added since R5; no hypothesis was promoted; none is PROVEN.** Four independent reviews returned HOLD (`8a383b6`, `b5cca1f`, `a381a22`, `f6e79a4`); review 5 of `681f77a` returned PASS_WITH_GAPS and review 6 of `212804f` returned GO_WITH_DOCUMENTED_GAPS. The five findings of review 6 are addressed in R2.0N (`reports/r2.0/MCR_R2_0_N_HARDENING_REPORT_R1.md`); the R2.0N diff is reviewed separately after its commit.
+
+## Corrections to R8 wording
+- R8 and the M report counted mutants by a per-mutant name that collided for two mutants on one line, so the crash count was one too low in later runs; names are now unique and the counts reconcile.
+- R8 gave the ledger as thread-safe per Mission object and per ledger object but did not say how that is tested. Contract R7 section 5 now states the deterministic rendezvous method and that the `_consume_file` and `_sync` decorators have no mutant or test.
+- R8 and the research summary did not list the A13a to A13f gap or the owner-accepted token-rotation risk in the current qualification statement; both are listed below.
+- Contract R7 corrects the review-6 description of failed compensating calls: a failed report is refused, a later success report is accepted, and a second provider call is not limited by the model.
+
+## Standing accepted gaps (current)
+- The A13a to A13f verifier attack scenarios are unverified (stopped twice for low memory; not repeated without authorization).
+- ADT bearer token rotation was declined by the owner (accepted risk); the leftover test CDS view `ZC_MCR20C_7A3F91D2` remains; no provenance signatures (declined).
+
+## Corrections to R7 wording
+- R7 and its model-qualification paragraph said all 589 mutants were "all detected" and listed 6 survivors in the same breath. Accurate: 607 mutants now; 298 detected by an assertion; 302 detected only because the validator's own fixtures could no longer run; 1 detected because the mutant makes the validator hang (reported separately); 6 survive as justified equivalents; 0 unexplained; 0 inconclusive.
+- R7 and contract R5 implied a compensation goal that already holds is the only way to a cosmetic compensation. Contract R6 section 3 states the remaining case: a post readback equal to the forward state plus a new field the goal is written on is accepted (no-provenance class).
+- R7 said thread safety was per Mission object; the in-memory ledger shared by several Mission objects was not thread-safe. Fixed in R2.0M (11 of 300 double-send trials before).
+
+## Corrections to R6 wording
+- R6 H44 described the ledger as covering a stale lease without saying that deleting or restoring the ledger file defeats it. R2.0L adds a ledger identity (header id carried by leases, optional pinned `expected_id`) and refuses leases the ledger does not back, and states the remaining limits: deletion without a pinned id and without a lease is not detected for a fresh mission; restore of an older copy is not detected; one local filesystem; POSIX locking untested.
+- R6 H45 said compensation needs a distinct authoritative post readback. Review 4 showed the distinctness was only syntactic and that a no-response compensating receipt completed it. R2.0L requires the goal not to hold already on the forward readback and the compensating call to report success.
+- R6 said "513 all detected (267+240)" and listed 6 survivors in the same breath. Accurate statement now: 589 mutants; 293 detected by an assertion; 290 detected because the validator's own fixtures could no longer run (reported separately, weaker evidence); 6 survive as justified equivalents; 0 unexplained.
+- R6 did not mention that thread safety was absent: R2.0L adds a per-Mission lock (one Mission object only).
+
+| ID | Status | Wording constraint now in force |
+|---|---|---|
+| H41 Authoritative Commit Observation | OBSERVED (scoped) | One DDLS on TRL_EN: baseline ABSENT, one create, then EXISTS from the DDLS endpoint of the owner's ADT-session read tool. "Authoritative" is the runner's own label, not independently attested; EXISTS was taken if either version was found; ABSENT did not check that the exception named the object; the source-integrity check compares hashes inside one response; a third-party creation between prewrite and readback would not have been distinguished |
+| H42 Outcome-Authoritative Completion | OBSERVED (scoped) | Four predicates passed on that readback; predicates exclude package and activation; the name predicate is a substring test |
+| H43 Transaction Correlation | PARTIAL | ids and hashes across receipts; fresh name; no provider correlation token |
+| H44 Replay-Safe Continuation | SYNTHETIC | offline: lease, checkpoint and budget integrity; a resumed mission re-runs the real guards and must be backed by the ledger; a stale lease cannot re-open a send recorded in the ledger. The ledger is a local file with an OS lock and an identity header, tested with real concurrent processes on Windows; POSIX locking untested; different ledger files, volatile ledgers, network filesystems, deletion or restore without a pinned id and power-loss durability are not covered; lease authenticity (signature) is not provided; no live interruption |
+| H45 Compensation Authority Separation | SYNTHETIC | offline: separate grant, no inheritance, capability outside the forward scope, preconditions evaluated on an authoritative forward readback, a goal that must not already hold, a begun compensation that consumes its own ledger entry, an execution receipt that reports success, a distinct authoritative post readback; no live compensation |
+| H46 Contract-Drift Fail-Closed | PARTIAL | live drift 20 to 29 tools observed; point-of-use fingerprint gate passed live and fails closed in synthetic tests |
+| H47 Evidence-Complete Mission Closure | PARTIAL | the live run emitted 13 of the 14 specified links; offline, COMPLETE re-verifies kind, hash and 50 named relations plus the predicate check over the whole chain and rejects the forgeries tested, but provenance is not authenticated (a self-consistent forged chain labelled authoritative is accepted) and some fields are not constrained (contract R5 section 6); link 14 never observed live |
+| H48 Bounded Governance Overhead | PARTIAL (descriptive) | single live run plus synthetic; no inference |
+
+## Model qualification status (not a hypothesis)
+Repository model: 510 checks; 619 generated mutants (422 syntax-tree, 119 guard, 50 relation, 28 special): 305 detected by an assertion, 307 because the validator's own fixtures could no longer run, 1 by hang, 6 survivors that are justified equivalents, 0 unexplained, 0 inconclusive; frozen-runner mock regression 6/6. Independent verdict on the last reviewed commit (`212804f`) was GO_WITH_DOCUMENTED_GAPS; the R2.0N changes are reviewed separately. The model verifies the consistency of presented evidence, not who produced it, is a single-send-per-mission library, and is thread-safe per Mission object and per ledger object.
