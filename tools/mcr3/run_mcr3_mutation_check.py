@@ -39,6 +39,7 @@ TARGETS = [
     ("mcr3_adapters.py", ["validate_mcr3_adapters.py"]),
     ("mcr3_lineage.py", ["validate_mcr3_adapters.py"]),
     ("mcr3_interop.py", ["validate_mcr3_adapters.py"]),
+    ("mcr3_chain.py", ["validate_mcr3_chain.py"]),
 ]
 
 # (name, old, new): applied once; old must occur exactly once.

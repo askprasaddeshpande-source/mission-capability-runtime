@@ -18,6 +18,7 @@ SUITES = [
     ("evidence_contract", "validate_mcr3_evc1.py"),
     ("provenance_authority", "validate_mcr3_authority.py"),
     ("adapters_interop", "validate_mcr3_adapters.py"),
+    ("evidence_chain", "validate_mcr3_chain.py"),
     ("readback", "validate_mcr3_readback.py"),
     ("scanner", "validate_mcr3_scan.py"),
 ]
