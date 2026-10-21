@@ -98,8 +98,8 @@ def build_schema():
         _claim("READBACK_CLAIM", "RECEIPT", {"source_level": {"enum": list(SOURCE_LEVELS)}, "claimed_authoritative": {"type": "boolean"},
                                              "existence": {"enum": ["EXISTS", "ABSENT", "UNKNOWN"]}, "activation": {"enum": ["ACTIVE", "INACTIVE", "UNKNOWN"]},
                                              "checks_satisfied": {"type": "boolean"}, "provenance_verified": {"type": "boolean"}}),
-        _claim("OUTCOME_EVALUATION", "BUSINESS_OUTCOME", {"expected_digest": _HASH, "observed_digest": _HASH, "readback_digest": _HASH,
-                                                          "predicates_digest": _HASH, "result": {"enum": list(TRI)}}),
+        _claim("OUTCOME_EVALUATION", "BUSINESS_OUTCOME", {"expected_digest": _NHASH, "observed_digest": _HASH, "readback_digest": _HASH,
+                                                          "predicates_digest": _NHASH, "result": {"enum": list(TRI)}}),
         _claim("COMPENSATION_ATTEMPT", "OCCURRENCE", {"attempt_number": {"type": "integer", "minimum": 1}, "call_class": {"enum": list(CALL_CLASSES)},
                                                       "resolved": {"type": "boolean"}}),
         _claim("MISSION_DISPOSITION", "BUSINESS_OUTCOME", {"disposition": {"enum": list(DISPOSITIONS)}, "outcome_class": {"enum": list(OUTCOME_CLASSES) + [None]},
@@ -302,6 +302,8 @@ def semantic_problems(e, full=None):
         p.append("provenance_verified needs SIGNED_TRUSTED evidence")
     if cl["kind"] == "OUTCOME_EVALUATION" and cl["result"] == "PASS" and ev["classification"] not in ("READBACK", "OBSERVED", "CORROBORATED", "SYNTHETIC", "HISTORICAL"):
         p.append("a PASS outcome needs readback/observed evidence, not %s" % ev["classification"])
+    if cl["kind"] == "OUTCOME_EVALUATION" and ev["classification"] != "HISTORICAL" and (cl["expected_digest"] is None or cl["predicates_digest"] is None):
+        p.append("expected_digest and predicates_digest may be null only for HISTORICAL evidence (nothing is back-filled)")
     if cl["kind"] == "MISSION_DISPOSITION":
         if cl["disposition"] == "COMPLETE" and cl["outcome_class"] != "COMPLETE":
             p.append("disposition COMPLETE needs outcome_class COMPLETE")

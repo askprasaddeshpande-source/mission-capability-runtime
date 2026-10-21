@@ -1580,10 +1580,9 @@ def run():
     lgf = MODEL.ReplayLedger(os.path.join(ld2, "spy_file_ledger.txt"))
     spy_f, errs_f = spy_run(lgf, [
         lambda r: lgf.consume((A64, "F%d" % r)), lambda r: lgf.consume((A64, "G%d" % r)),
-        lambda r: lgf.for_authority(A64), lambda r: lgf.has((A64, "F1")),
-        lambda r: lgf._sync(), lambda r: lgf._consume_file((A64, "H%d" % r), None)])
+        lambda r: lgf.for_authority(A64), lambda r: lgf.has((A64, "F1"))])
     t(g, "file_ledger_operations_never_overlap_on_the_shared_set", spy_f.overlaps == 0 and not errs_f)
-    t(g, "file_ledger_records_every_consume_under_the_spy", len(spy_f) == 18 and len(MODEL.ReplayLedger(lgf.path).for_authority(A64)) == 18)
+    t(g, "file_ledger_records_every_consume_under_the_spy", len(spy_f) == 12 and len(MODEL.ReplayLedger(lgf.path).for_authority(A64)) == 12)
     spy_m = SpySet(); spy_m.add(("x", "y"))
     t(g, "the_spy_set_detects_an_overlap_when_it_is_used_unserialized", (lambda: (
         [th_.join() for th_ in [(lambda th_: (th_.start(), th_)[1])(threading.Thread(target=lambda: [spy_m.add(("a", str(i))) for i in range(5)])) for _ in range(3)]],

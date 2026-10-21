@@ -216,6 +216,7 @@ def run():
     t(g, "attempt_two_must_name_attempt_two", raises(lambda: mm.record_compensation_failure(comp_exec(gg, cls="PROVIDER_ERROR", attempt=1)), "not bound to the grant"))
     t(g, "a_not_sent_failure_is_still_counted", mm.record_compensation_failure(comp_exec(gg, cls="CALL_NOT_SENT", attempt=2)) == "COMPENSATION_AUTHORIZED" and len(mm.ev["comp_log"]) == 2)
     t(g, "the_third_attempt_succeeds_with_a_distinct_authoritative_readback", mm.begin_compensation() == 3 and safe(lambda: (mm.record_compensation(comp_receipt(gg, post_receipt(ff)), post_receipt(ff), comp_exec(gg, attempt=3)), mm.state)[1] == "COMPENSATED"))
+    t(g, "the_compensation_evidence_is_persisted_after_success", all(k in mm.ev for k in ("comp_receipt", "comp_readback", "comp_execution")) and mm.ev["comp_receipt"]["grant_hash"] == gg["object_hash"])
     t(g, "three_ledger_entries_exist_for_the_grant", len(mm.ledger.for_authority(gg["object_hash"])) == 3)
     t(g, "comp_log_records_each_failed_attempt", [e["attempt"] for e in mm.ev["comp_log"]] == [1, 2] and [e["call_class"] for e in mm.ev["comp_log"]] == ["PROVIDER_ERROR", "CALL_NOT_SENT"])
 

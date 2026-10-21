@@ -1106,6 +1106,7 @@ class Mission:
             raise GuardError("compensation outcome predicate not satisfied")
         self.ev["comp_open"] = None
         self._go("COMPENSATED", comp_receipt["object_hash"], _tok=_TOKEN)
+        self.ev.update(comp_receipt=comp_receipt, comp_readback=post_readback, comp_execution=comp_execution)   # persisted only after every guard passed
 
     @atomic
     def declare_unrecoverable(self):
