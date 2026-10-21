@@ -1,5 +1,5 @@
 {
-  "MCR3_TESTS": "FAIL",
+  "MCR3_TESTS": "PASS",
   "SAP_WRITES": 0,
   "by_suite": {
     "adapters_interop": 99,
@@ -10,9 +10,7 @@
     "readback": 34,
     "scanner": 99
   },
-  "failed": [
-    "no_stray_file_was_created_by_a_refused_path"
-  ],
+  "failed": [],
   "network_calls": 0,
   "not_verified": [],
   "suites": 7,

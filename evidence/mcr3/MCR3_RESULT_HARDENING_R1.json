@@ -1,18 +1,16 @@
 {
   "evidence_class": "SYNTHETIC/LOCAL",
-  "failed": [
-    "no_stray_file_was_created_by_a_refused_path"
-  ],
+  "failed": [],
   "groups": {
     "BINDING_FIELDS": "PASS",
     "COMPENSATION_ATTEMPTS": "PASS",
     "EXPIRY": "PASS",
     "LEDGER_ANCHOR": "PASS",
-    "LEDGER_PATH_FORMS": "FAIL",
+    "LEDGER_PATH_FORMS": "PASS",
     "OUTCOME_CLASSIFICATION": "PASS"
   },
   "network_calls": 0,
   "stage": "MCR3_HARDENING",
   "tests": 140,
-  "tests_digest": "DD38BB6904BEC41DC980442B01567BE137107F2E6B8EA35884A802318C5FCE7A"
+  "tests_digest": "B359B0C1A30D619ACD87065BDA90D83A443ACE760DB14D4B160DE1C43B5E41DE"
 }

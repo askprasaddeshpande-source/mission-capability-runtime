@@ -67,7 +67,7 @@ def main(argv):
          {"adapter": AD.Mcr3NativeAdapter.declaration().declaration, "scenario": "synthetic complete mission (14 links)", "events": AD.Mcr3NativeAdapter().convert(m, now=NOW)})
     dump(os.path.join(out_dir, "MCR3_CONTRACT_DIGESTS_R1.json"),
          {"contract": evc1.CONTRACT, "schema_digest": evc1.SCHEMA_DIGEST, "event_types": sorted(evc1.TYPE_TABLE),
-          "example_digests": {t: VE.event_of(t)["integrity"]["event_digest"] for t in sorted(evc1.TYPE_TABLE)}})
+          "example_event_digests": [{"type": t, "event_digest": VE.event_of(t)["integrity"]["event_digest"]} for t in sorted(evc1.TYPE_TABLE)]})
     print("written to", out_dir)
     return 0
 

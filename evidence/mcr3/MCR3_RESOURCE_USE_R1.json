@@ -1,42 +1,42 @@
 {
-  "max_peak_bytes": 35856384,
+  "max_peak_bytes": 35454976,
   "note": "descriptive, machine-dependent",
   "suites": [
     {
-      "peak_bytes": 35856384,
+      "peak_bytes": 35454976,
       "suite": "inherited_r2",
-      "wall_seconds": 7.0
+      "wall_seconds": 6.66
     },
     {
-      "peak_bytes": 27697152,
+      "peak_bytes": 27570176,
       "suite": "hardening",
-      "wall_seconds": 0.47
+      "wall_seconds": 0.38
     },
     {
-      "peak_bytes": 28213248,
+      "peak_bytes": 28168192,
       "suite": "evidence_contract",
-      "wall_seconds": 1.5
+      "wall_seconds": 1.07
     },
     {
-      "peak_bytes": 28872704,
+      "peak_bytes": 28618752,
       "suite": "provenance_authority",
-      "wall_seconds": 0.73
+      "wall_seconds": 0.62
     },
     {
-      "peak_bytes": 24043520,
+      "peak_bytes": 23863296,
       "suite": "adapters_interop",
-      "wall_seconds": 0.33
+      "wall_seconds": 0.27
     },
     {
-      "peak_bytes": 21082112,
+      "peak_bytes": 21188608,
       "suite": "readback",
-      "wall_seconds": 0.15
+      "wall_seconds": 0.17
     },
     {
-      "peak_bytes": 30367744,
+      "peak_bytes": 30466048,
       "suite": "scanner",
-      "wall_seconds": 21.82
+      "wall_seconds": 20.57
     }
   ],
-  "total_wall_seconds": 32.0
+  "total_wall_seconds": 29.74
 }
