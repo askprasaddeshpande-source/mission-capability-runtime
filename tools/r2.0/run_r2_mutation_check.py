@@ -35,10 +35,10 @@ SPECIAL = [
     ("budget_not_decremented", "        self.remaining -= 1\n", "        pass\n"),
     ("completion_not_persisted", '        self.ev["completion"] = completion', "        pass"),
     ("completion_link_dropped_from_chain", '               ("completion", "COMPLETION_RECEIPT")]', "               ]"),
-    ("atomic_rollback_removed", "            self.state, self.history, self.ev, self.remaining, self.consumed, self.mutations_sent = snap\n            if isinstance(exc,", "            if isinstance(exc,"),
+    ("atomic_rollback_removed", "                self.state, self.history, self.ev, self.remaining, self.consumed, self.mutations_sent = snap\n                if isinstance(exc,", "                if isinstance(exc,"),
     ("ledger_not_written_on_send", '        self.ledger.consume(key, limit=self.ev["budget"]["max_mutations"])\n', "        pass\n"),
     ("mission_consumed_set_not_recorded", "        self.consumed.add(key)\n", "        pass\n"),
-    ("resume_ignores_ledger", "        consumed = lease_consumed | ledger.for_authority(auth)", "        consumed = lease_consumed"),
+    ("resume_ignores_ledger", "        consumed = lease_consumed | recorded\n", "        consumed = lease_consumed\n"),
     ("resume_state_inherited_from_lease", '        m.state = "COMMIT_STATE_UNKNOWN"\n        m.history.append(("RESUMED_AS_COMMIT_STATE_UNKNOWN"', '        m.state = lease["state_at_checkpoint"]\n        m.history.append(("RESUMED_AS_COMMIT_STATE_UNKNOWN"'),
     ("resume_budget_taken_from_lease_only", "        m.remaining = min(lease_rem, total - len(consumed))", "        m.remaining = lease_rem"),
     ("resume_evidence_not_verified", "        ev = {slot: _accept_obj(slot, o) for slot, o in evidence.items()}", "        ev = dict(evidence)"),
@@ -55,6 +55,8 @@ SPECIAL = [
     ("unknown_observed_value_treated_as_known", 'if p["field"] not in observed or observed[p["field"]] in (None, "UNKNOWN"):', 'if p["field"] not in observed:'),
     ("unknown_predicate_never_degrades", '            result = "UNKNOWN" if result != "FAIL" else result', "            result = result"),
     ("go_token_not_required", "        if _tok is not _TOKEN:", "        if False:"),
+    ("thread_lock_removed", "        with self._lock:                              # one guard call at a time per Mission (re-entrant)", "        if True:                                      # lock removed"),
+    ("ledger_header_not_written", "            data = self._header_line(lid)\n            fh.seek(0, 2)\n            fh.write(data)\n", "            data = b''\n            fh.seek(0, 2)\n            fh.write(data)\n"),
 ]
 
 # Survivors that are equivalent mutants (behaviour cannot differ), keyed by mutant name. Anything else that

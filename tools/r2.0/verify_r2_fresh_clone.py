@@ -95,10 +95,10 @@ PIN_H_ERA_b5cca1f = {
 # SHA-256 (CRLF-insensitive) of the model-side files at the revision submitted for independent review. Changing any of
 # them requires editing this table in the same commit, which makes the change visible; it is not an external anchor.
 PIN_REVIEWED_REVISION = {
-    "tools/r2.0/mcr_r2_model.py": "D84ED091CD9AC0BFE201194698B261F84E93C1FC3F126A36AD2BEDF23AC62088",
+    "tools/r2.0/mcr_r2_model.py": "C25C16303F01CEC4A6FEE56A2F230E514DC2BF81631FB0688A3132E08401E397",
     "tools/r2.0/run_r2_local_scenarios.py": "B19B549776C17D7919F494B3C4C6A362542E3ED4628020B501FD0A56258AB955",
-    "tools/r2.0/run_r2_mutation_check.py": "0BBAEACEADF9ACCA1F5887C8A0743654E8412C57A226B0D17F195B7792017320",
-    "tools/r2.0/validate_r2_outcome_model.py": "677481CAA28FC3E13FEBF83185A915F8B4679DB6C634DFA86E264B310695D005"
+    "tools/r2.0/run_r2_mutation_check.py": "233F391D4C6250B915EB3BD040AA70E39CCE4C4FF2E59B5DDD0D7728A37317A8",
+    "tools/r2.0/validate_r2_outcome_model.py": "17F0AC5C0955FD2F4714359E860AF1EABD7FC593EB138948852F443BC287D8DD"
 }
 PIN_I_ERA_a381a22 = {
     "architecture/r2.0/MCR_R2_0_EVIDENCE_CHAIN_CONTRACT_R3.md": "EF291CB6529A0DE1F71C6477D3B05889D466A6D20336DF9D4C9F4552CDF03872",
@@ -111,7 +111,18 @@ PIN_I_ERA_a381a22 = {
     "reports/r2.0/MCR_R2_0_INDEPENDENT_QUALIFICATION_R2_FINDINGS.md": "586BFED4DF9AD6FB6089D792EE3954E4E9162D6CE01673B7FC2CC9CFECE1FB55",
     "reports/r2.0/MCR_R2_0_I_HARDENING_REPORT_R1.md": "0653F822F8197B7567CE746B2C905A1ADF9051D208F2FD91854B47A69653586A"
 }
-FROZEN_HISTORICAL = dict(PIN_BASELINE_6f992c6, **PIN_G_ERA_8a383b6, **PIN_H_ERA_b5cca1f, **PIN_I_ERA_a381a22)
+PIN_J_ERA_f6e79a4 = {
+    "architecture/r2.0/MCR_R2_0_EVIDENCE_CHAIN_CONTRACT_R4.md": "05F813C6582CB8BD4C057B22BE56D01093DD44E1FA8072BEF2DE657D9563ED6B",
+    "evidence/r2.0/MCR_R2_0_A_VALIDATION_RESULT_R5.json": "83A107AAC5176892B1C3341898A42A26192FAD5208FF23E7B2400E9F25A24469",
+    "evidence/r2.0/MCR_R2_0_DE_LOCAL_SCENARIOS_RESULT_R4.json": "DEC7879247D0EA7A6DAD4A9F463AB81C50F41BAB8F9D95ED2AC6BAF7B4F7CB4A",
+    "evidence/r2.0/MCR_R2_0_HYPOTHESIS_STATUS_R6.md": "13A32B161B28F85D13595A715E6A1A15064216F662918FD3BF659205496DA837",
+    "evidence/r2.0/MCR_R2_0_J_MUTATION_CHECK_R4.json": "29DEA853669800E9ACD26A4DA5169A982B2528CF5A28716D24ADF4C27B7D6083",
+    "evidence/r2.0/MCR_R2_0_J_TEST_MATRIX_R1.json": "A40826FCAC8D18706CBF751A7134907A99C37CEF3575214DD8C1E42D6116A998",
+    "evidence/r2.0/MCR_R2_0_J_VERIFIER_ATTACKS_R2.json": "D8B6123290F43A3837B7C28ACFCE7F5BBF0C335AFE3425DC5B47AB5E2C18D34E",
+    "reports/r2.0/MCR_R2_0_INDEPENDENT_QUALIFICATION_R3_FINDINGS.md": "4305FA29474C87BBA939E99B18A43E755777C666A50579A657003A4694E45E1A",
+    "reports/r2.0/MCR_R2_0_J_HARDENING_REPORT_R1.md": "2209D6B89ECAF472219D53C71E64BEBB31CFF904390E407A6D87F4DC0ED3BDCE"
+}
+FROZEN_HISTORICAL = dict(PIN_BASELINE_6f992c6, **PIN_G_ERA_8a383b6, **PIN_H_ERA_b5cca1f, **PIN_I_ERA_a381a22, **PIN_J_ERA_f6e79a4)
 ROOTS = ["tools/r2.0", "architecture/r2.0", "evidence/r2.0", "reports/r2.0", "research-package/r2.0"]
 SKIP = {SUMS, "__pycache__", "tools/r2.0/make_adt_auth_context.py"}   # local credential helper, git-ignored
 TEXT = (".py", ".md", ".json", ".txt")
@@ -126,7 +137,27 @@ SECRET = re.compile(
     r"|BEGIN (RSA |EC |OPENSSH |DSA )?PRIVATE " "KEY"
     r"|eyJ[A-Za-z0-9_-]{15,}\.[A-Za-z0-9_-]{15,}\.[A-Za-z0-9_-]{5,}"
     r"|(?<![A-Za-z0-9])sk-[A-Za-z0-9]{20,}"
-    r"|(?i:x-api-key|api[_-]?key|token|secret|password|passwd|authorization)[\"']?\s*[:=]\s*[\"']?[A-Za-z0-9+/=_.-]{16,}")
+    r"|(?P<name>[A-Za-z0-9_.-]*(?i:secret|token|password|passwd|api[_-]?key|authorization)[A-Za-z0-9_.-]*)[\"']?\s*[:=]\s*[\"']?(?P<val>[A-Za-z0-9+/=_.-]{16,}+)(?!\()")
+HASHY = re.compile(r"(?i)hash|sha\d*|digest|checksum|count|len|id$")        # names of public digests are not secrets
+
+
+LABEL = re.compile(r"[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)+")                   # UPPER_SNAKE enumeration labels, e.g. DPAPI_PROTECTED_CURRENT_USER_CONTEXT
+FILENAME = re.compile(r"(?i)\.(md|json|py|txt|ps1|zip|yaml|yml)$")             # a key that is itself a file name (pin tables)
+
+
+def has_secret(txt):
+    """True if any secret-shaped value appears. Exempt: names denoting hashes/digests/counts, names that are file
+    names, and values that are UPPER_SNAKE enumeration labels. A hex or base64 value under a secret-like name is NOT exempt."""
+    for m in SECRET.finditer(txt):
+        nm = m.groupdict().get("name")
+        if nm is None:
+            return True
+        if HASHY.search(nm) or FILENAME.search(nm):
+            continue
+        if LABEL.fullmatch(m.groupdict().get("val") or ""):
+            continue
+        return True
+    return False
 
 
 def files(root):
@@ -148,17 +179,53 @@ def sha(path):
     return hashlib.sha256(b).hexdigest().upper()
 
 
+def text_variants(b):
+    """Every plausible text reading of the bytes, so an odd encoding cannot hide a secret. Wide encodings are tried at
+    every byte offset (a leading junk byte misaligns UTF-16/32) and decoded tolerantly (an odd length must not make a
+    variant disappear)."""
+    out = [b.decode("utf-8-sig", errors="replace")]
+    for enc, width in (("utf-16-le", 2), ("utf-16-be", 2), ("utf-32-le", 4), ("utf-32-be", 4)):
+        for offset in range(width):
+            out.append(b[offset:].decode(enc, errors="ignore"))
+    out.append(b.decode("latin-1"))
+    return out
+
+
 def read_text(path):
-    b = open(path, "rb").read()
-    if b.startswith((b"\xff\xfe", b"\xfe\xff")):
-        return b.decode("utf-16", errors="replace")
-    if b"\x00" in b[:400]:
-        for enc in ("utf-16-le", "utf-16-be"):
+    return text_variants(open(path, "rb").read())[0]
+
+
+BINARY_EXT = (".png", ".jpg", ".jpeg", ".gif", ".ico", ".pdf", ".woff", ".woff2", ".ttf", ".pyc", ".pyo")
+MAX_SCAN = 8 * 1024 * 1024
+
+
+def scan_bytes_for_secrets(b):
+    return any(has_secret(t) for t in text_variants(b))
+
+
+def scan_tracked_tree(root):
+    """Secret scan of EVERY tracked file (not only the R2.0 folders), including text members of zip archives."""
+    import zipfile
+    tr = subprocess.run(["git", "ls-files"], cwd=root, capture_output=True, text=True)
+    names = [x for x in tr.stdout.split("\n") if x] if tr.returncode == 0 else []
+    hits = []
+    for rel in names:
+        path = os.path.join(root, rel)
+        if not os.path.isfile(path) or rel.lower().endswith(BINARY_EXT) or os.path.getsize(path) > MAX_SCAN:
+            continue
+        if rel.lower().endswith(".zip"):
             try:
-                return b.decode(enc)
-            except UnicodeDecodeError:
+                with zipfile.ZipFile(path) as zf:
+                    for info in zf.infolist():
+                        if info.file_size <= MAX_SCAN and not info.filename.lower().endswith(BINARY_EXT + (".zip",)):
+                            if scan_bytes_for_secrets(zf.read(info)):
+                                hits.append(rel + "!" + info.filename)
+            except zipfile.BadZipFile:
                 pass
-    return b.decode("utf-8-sig", errors="replace")
+            continue
+        if scan_bytes_for_secrets(open(path, "rb").read()):
+            hits.append(rel)
+    return hits
 
 
 def run(root, *args):
@@ -189,13 +256,13 @@ def main(argv):
     t = tempfile.mkdtemp(prefix="r2out_")
     a = run(root, "tools/r2.0/validate_r2_outcome_model.py", "--out", os.path.join(t, "a.json"), "--emit-schemas", os.path.join(t, "schemas"))
     res["validator_passes"] = a.returncode == 0
-    res["validator_result_reproduces"] = open(os.path.join(t, "a.json"), "rb").read() == open(os.path.join(root, "evidence/r2.0/MCR_R2_0_A_VALIDATION_RESULT_R5.json"), "rb").read().replace(b"\r\n", b"\n")
+    res["validator_result_reproduces"] = open(os.path.join(t, "a.json"), "rb").read() == open(os.path.join(root, "evidence/r2.0/MCR_R2_0_A_VALIDATION_RESULT_R6.json"), "rb").read().replace(b"\r\n", b"\n")
     sch = sorted(os.listdir(os.path.join(t, "schemas")))
     res["schemas_reproduce"] = sch == sorted(os.listdir(os.path.join(root, "architecture/r2.0/schemas"))) and all(
         open(os.path.join(t, "schemas", s), "rb").read() == open(os.path.join(root, "architecture/r2.0/schemas", s), "rb").read().replace(b"\r\n", b"\n") for s in sch)
     d = run(root, "tools/r2.0/run_r2_local_scenarios.py", "--out", os.path.join(t, "d.json"))
     res["scenarios_pass"] = d.returncode == 0
-    res["scenarios_result_reproduces"] = open(os.path.join(t, "d.json"), "rb").read() == open(os.path.join(root, "evidence/r2.0/MCR_R2_0_DE_LOCAL_SCENARIOS_RESULT_R4.json"), "rb").read().replace(b"\r\n", b"\n")
+    res["scenarios_result_reproduces"] = open(os.path.join(t, "d.json"), "rb").read() == open(os.path.join(root, "evidence/r2.0/MCR_R2_0_DE_LOCAL_SCENARIOS_RESULT_R5.json"), "rb").read().replace(b"\r\n", b"\n")
     res["reviewed_revision_pins_match"] = all(os.path.exists(os.path.join(root, p_)) and sha(os.path.join(root, p_)) == h_ for p_, h_ in PIN_REVIEWED_REVISION.items())
     sums_sha = sha(os.path.join(root, SUMS))
     if "--expect-sums-sha256" in argv:
@@ -219,28 +286,31 @@ def main(argv):
         m = run(root, "tools/r2.0/run_r2_mutation_check.py", "--jobs", "4", "--out", os.path.join(t, "m.json"))
         res["mutation_check_passes"] = m.returncode == 0
         got = json.load(open(os.path.join(t, "m.json"), encoding="utf-8"))
-        ref = json.load(open(os.path.join(root, "evidence/r2.0/MCR_R2_0_J_MUTATION_CHECK_R4.json"), encoding="utf-8"))
+        ref = json.load(open(os.path.join(root, "evidence/r2.0/MCR_R2_0_L_MUTATION_CHECK_R5.json"), encoding="utf-8"))
         stable = lambda d: (d["mutants"], d["by_kind"], d["not_applied"], d["survivors"], d["unexplained_survivors"], d["MUTATION_CHECK"],
                             [(r["mutant"], r["applied"], r["detected"]) for r in d["results"]])
         res["mutation_result_reproduces"] = stable(got) == stable(ref)
     bad_abs, bad_sec = [], []
     for p in cur:
         if True:
-            txt = read_text(os.path.join(root, p))
+            raw_bytes = open(os.path.join(root, p), "rb").read()
+            txt = text_variants(raw_bytes)[0]
             if p.startswith("tools/"):
                 if p not in TOOLS_WITH_DEFAULT_PATHS and ABS.search(txt):
                     bad_abs.append(p)
             elif p not in LOCAL_EXEC_DOCS and ABS.search(txt):
                 bad_abs.append(p)
-            if SECRET.search(txt):
+            if scan_bytes_for_secrets(raw_bytes):
                 bad_sec.append(p)
     helper = os.path.join(root, "tools", "r2.0", "make_adt_auth_context.py")
     if os.path.exists(helper):
         htxt = read_text(helper)
-        if SECRET.search(htxt):
+        if scan_bytes_for_secrets(open(helper, "rb").read()):
             bad_sec.append("tools/r2.0/make_adt_auth_context.py")
         if ABS.search(htxt):
             bad_abs.append("tools/r2.0/make_adt_auth_context.py")
+    tree_hits = scan_tracked_tree(root) if "--no-git" not in argv else []
+    bad_sec.extend(h_ for h_ in tree_hits if h_ not in bad_sec)
     res["no_absolute_paths_in_docs"] = not bad_abs
     res["no_secret_like_strings"] = not bad_sec
     g = subprocess.run(["git", "rev-parse", "-q", "--verify", R1_9_TAG + "^{commit}"], cwd=root, capture_output=True, text=True)

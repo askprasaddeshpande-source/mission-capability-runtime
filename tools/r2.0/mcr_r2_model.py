@@ -10,7 +10,9 @@ import functools
 import hashlib
 import json
 import os
+import threading
 import time
+import uuid
 import zlib
 
 try:                                   # OS file locking for the replay ledger
@@ -200,12 +202,25 @@ def _hash_ok(obj):
         return False
 
 
+_STR_FIELDS = ("capability", "tool_name", "identity", "provider_ref", "provider_id", "target_system", "objective")
+
+
 def _accept_obj(slot, obj):
-    """Gate for every presented object: right kind, valid hash; returns a private deep copy."""
+    """Gate for every presented object: right kind, valid hash, string-typed ids/hashes/names and list-typed scopes;
+    returns a private deep copy."""
     if not isinstance(obj, dict) or obj.get("kind") != SLOT_KINDS[slot]:
         raise GuardError("%s absent, malformed or wrong kind" % slot)
     if not _hash_ok(obj):
         raise GuardError("%s hash invalid (tampered)" % slot)
+    for k, v in obj.items():
+        if k == "kind":
+            continue
+        if (k.endswith("_id") or k.endswith("_hash")) and not isinstance(v, str):
+            raise GuardError("%s field %s must be a string" % (slot, k))
+        if k in _STR_FIELDS and not isinstance(v, str):
+            raise GuardError("%s field %s must be a string" % (slot, k))
+        if k == "scope" and (not isinstance(v, (list, tuple)) or not all(isinstance(x, str) and x for x in v)):
+            raise GuardError("%s scope must be a list of non-empty strings" % slot)
     return copy.deepcopy(obj)
 
 
@@ -237,22 +252,44 @@ def _unlock(fh):
         pass
 
 
+def _io_guard(fn):
+    """File problems must block the send as a GuardError, never leak as an OSError."""
+    @functools.wraps(fn)
+    def wrapper(*a, **k):
+        try:
+            return fn(*a, **k)
+        except OSError as exc:
+            raise GuardError("ledger I/O error: %s" % type(exc).__name__) from exc
+    return wrapper
+
+
 class ReplayLedger:
-    """Append-only record of sends, kept OUTSIDE any lease: one JSON line per consumed (authority hash, mutation id)
-    with a CRC, so newlines or colons in ids cannot corrupt the format.
+    """Append-only record of sends, kept OUTSIDE any lease. File format: a header line carrying a random ledger id,
+    then one JSON line per consumed (authority hash, mutation id), each with a CRC, so newlines or colons in ids
+    cannot corrupt the format.
 
     With a `path` the ledger is DURABLE and MULTI-PROCESS SAFE on one local filesystem: every operation takes an OS
     file lock, re-reads the file (so entries written by other processes or ledger objects are seen), checks, appends,
     flushes and fsyncs before consume() returns. A torn final line (crash mid-write) is ignored and truncated, because
     consume() had not returned and so no send followed; a corrupt earlier line fails closed. consume(key, limit)
     also refuses a send once `limit` sends are recorded for the authority, across missions and processes.
-    NOT guaranteed: protection if callers use different ledger files, a volatile (path=None) ledger across processes,
-    network filesystems without working locks, or durability across power loss on hardware that ignores fsync.
+
+    IDENTITY: the header id is copied into every lease (`ledger_id`); resume() refuses a lease whose id differs from
+    the ledger's, so a deleted-and-recreated or replaced ledger is detected for resumed missions. A deployment that
+    pins the id (`expected_id`, e.g. recorded in the authorization) also detects a missing or replaced file for FRESH
+    missions: a missing file or a different id then raises.
+    NOT guaranteed: deletion or replacement of the file when no id is pinned and no lease is involved; RESTORE of an
+    older copy of the same file (same id, fewer entries); callers using different ledger files; a volatile
+    (path=None) ledger across processes; network filesystems without working locks; power-loss durability.
     Without a path the ledger is process-local (tests only); resume() refuses it unless explicitly allowed."""
 
-    def __init__(self, path=None):
+    HEADER = "R2LEDGER"
+
+    def __init__(self, path=None, expected_id=None):
         self.path = path
         self.is_durable = path is not None
+        self.expected_id = expected_id
+        self.ledger_id = None
         self._keys = set()
         if path:
             self._sync()
@@ -263,6 +300,8 @@ class ReplayLedger:
 
     @staticmethod
     def _as_key(key):
+        if isinstance(key, (str, bytes)):
+            raise GuardError("ledger key must be (authority hash, mutation id) non-empty strings")
         try:
             return tuple(key)
         except TypeError:
@@ -274,19 +313,35 @@ class ReplayLedger:
             raise GuardError("ledger key must be (authority hash, mutation id) non-empty strings")
         if any(ord(c) < 32 or ord(c) == 127 for c in key[0] + key[1]):
             raise GuardError("ledger key contains control characters")
+        try:
+            (key[0] + key[1]).encode("utf-8")
+        except UnicodeEncodeError:
+            raise GuardError("ledger key is not valid text")
+
+    def _header_line(self, lid):
+        return (json.dumps({"hdr": self.HEADER, "v": 1, "id": lid, "c": self._crc(lid, "HDR")}, separators=(",", ":")) + "\n").encode("utf-8")
 
     def _parse(self, data):
+        """Return (ledger id or None, keys). None means the file is empty or holds only a torn header."""
         try:
             text = data.decode("utf-8")
         except UnicodeDecodeError:
             raise GuardError("ledger corrupted (not UTF-8)")
-        lines = text.split("\n")
-        keys = set()
-        for n, line in enumerate(lines[:-1], 1):       # the last element is the (possibly empty) torn tail
-            if not line:
-                continue
+        complete = text.split("\n")[:-1]               # the last element is the (possibly empty) torn tail
+        lid, keys = None, set()
+        for n, line in enumerate(complete, 1):
             try:
                 rec = json.loads(line)
+            except Exception:
+                raise GuardError("ledger corrupted at line %d" % n)
+            if n == 1:
+                ok = isinstance(rec, dict) and rec.get("hdr") == self.HEADER and rec.get("v") == 1 and isinstance(rec.get("id"), str) \
+                    and rec.get("c") == self._crc(rec["id"], "HDR")
+                if not ok:
+                    raise GuardError("ledger corrupted: missing or invalid header")
+                lid = rec["id"]
+                continue
+            try:
                 a, m_, c = rec["a"], rec["m"], rec["c"]
                 ok = isinstance(a, str) and isinstance(m_, str) and c == self._crc(a, m_)
             except Exception:
@@ -294,14 +349,43 @@ class ReplayLedger:
             if not ok:
                 raise GuardError("ledger corrupted at line %d" % n)
             keys.add((a, m_))
-        return keys
+        return lid, keys
 
+    def _load(self, fh):
+        """Under the lock: read, validate identity, create the header of a new file. Returns the current bytes."""
+        fh.seek(0)
+        data = fh.read()
+        lid, keys = self._parse(data)
+        if lid is None:
+            if self.expected_id is not None:
+                raise GuardError("ledger is empty or missing (expected id %s)" % self.expected_id)
+            if data:
+                fh.truncate(0)
+            lid = uuid.uuid4().hex
+            data = self._header_line(lid)
+            fh.seek(0, 2)
+            fh.write(data)
+            fh.flush()
+            os.fsync(fh.fileno())
+        if self.ledger_id is not None and lid != self.ledger_id:
+            raise GuardError("ledger identity changed (file replaced?)")
+        if self.expected_id is not None and lid != self.expected_id:
+            raise GuardError("ledger identity differs from the expected id")
+        self.ledger_id = lid
+        self._keys |= keys
+        return data
+
+    def _require_present(self):
+        if self.expected_id is not None and not os.path.exists(self.path):
+            raise GuardError("ledger file missing (expected id %s)" % self.expected_id)
+
+    @_io_guard
     def _sync(self):
+        self._require_present()
         with open(self.path, "a+b") as fh:
             _lock(fh)
             try:
-                fh.seek(0)
-                self._keys |= self._parse(fh.read())
+                self._load(fh)
             finally:
                 _unlock(fh)
 
@@ -325,16 +409,21 @@ class ReplayLedger:
     def consume(self, key, limit=None):
         key = self._as_key(key)
         self._check_key(key)
+        if limit is not None and not _count(limit):
+            raise GuardError("ledger limit must be a non-negative integer or None")
         if not self.path:
             self._admit(key, limit)
             self._keys.add(key)
             return
+        self._consume_file(key, limit)
+
+    @_io_guard
+    def _consume_file(self, key, limit):
+        self._require_present()
         with open(self.path, "a+b") as fh:
             _lock(fh)
             try:
-                fh.seek(0)
-                data = fh.read()
-                self._keys |= self._parse(data)
+                data = self._load(fh)
                 self._admit(key, limit)
                 torn = data.split(b"\n")[-1]
                 if torn:                                  # discard a torn tail before appending
@@ -417,14 +506,15 @@ def atomic(fn):
     The external ReplayLedger is deliberately NOT rolled back: a consumed send stays consumed."""
     @functools.wraps(fn)
     def wrapper(self, *a, **k):
-        snap = (self.state, list(self.history), dict(self.ev), self.remaining, set(self.consumed), self.mutations_sent)
-        try:
-            return fn(self, *a, **k)
-        except BaseException as exc:
-            self.state, self.history, self.ev, self.remaining, self.consumed, self.mutations_sent = snap
-            if isinstance(exc, (KeyError, TypeError, AttributeError, ValueError, IndexError)):
-                raise GuardError("malformed argument: %s" % type(exc).__name__) from exc
-            raise
+        with self._lock:                              # one guard call at a time per Mission (re-entrant)
+            snap = (self.state, list(self.history), dict(self.ev), self.remaining, set(self.consumed), self.mutations_sent)
+            try:
+                return fn(self, *a, **k)
+            except BaseException as exc:
+                self.state, self.history, self.ev, self.remaining, self.consumed, self.mutations_sent = snap
+                if isinstance(exc, (KeyError, TypeError, AttributeError, ValueError, IndexError)):
+                    raise GuardError("malformed argument: %s" % type(exc).__name__) from exc
+                raise
     return wrapper
 
 
@@ -446,6 +536,7 @@ class Mission:
         self.mutations_sent = 0
         self.max_mutations = max_mutations
         self._resuming = False
+        self._lock = threading.RLock()
 
     # -- helpers
     def _go(self, to, ref=None, _tok=None):
@@ -502,7 +593,7 @@ class Mission:
             raise GuardError("authority must be single use")
         if budget["authority_hash"] != authority["object_hash"] or budget["max_mutations"] > authority["max_mutations"]:
             raise GuardError("budget not bounded by authority")
-        if budget["expansion_allowed"] is not False or budget["retries"] != 0 or isinstance(budget["retries"], bool):
+        if budget["expansion_allowed"] is not False or type(budget["retries"]) is not int or budget["retries"] != 0:
             raise GuardError("budget must forbid expansion and retries")
         if budget["max_mutations"] != self.max_mutations:
             raise GuardError("budget differs from mission limit")
@@ -687,7 +778,7 @@ class Mission:
         self._rel("R06", au["max_mutations"] <= dl["max_mutations"])
         self._rel("R07", bu["authority_hash"] == h("authority"))
         self._rel("R08", bu["max_mutations"] <= au["max_mutations"])
-        self._rel("R09", bu["retries"] == 0 and not isinstance(bu["retries"], bool) and bu["expansion_allowed"] is False)
+        self._rel("R09", type(bu["retries"]) is int and bu["retries"] == 0 and bu["expansion_allowed"] is False)
         self._rel("R10", bu["max_mutations"] == self.max_mutations)
         self._rel("R11", au["single_use"] is True)
         self._rel("R12", cb["authority_hash"] == h("authority"))
@@ -747,7 +838,7 @@ class Mission:
     # -- failure / compensation
     @atomic
     def fail_before_mutation(self):
-        if self.mutations_sent:
+        if self.mutations_sent or ("authority" in self.ev and self.ledger.for_authority(self.ev["authority"]["object_hash"])):
             raise GuardError("mutation possibly sent; use FAILED_AFTER_POSSIBLE_MUTATION")
         self._go("FAILED_BEFORE_MUTATION", _tok=_TOKEN)
 
@@ -781,6 +872,8 @@ class Mission:
             raise GuardError("compensation preconditions need an authoritative forward readback")
         if eval_predicates(grant["preconditions"], self.ev["readback"]["observed"]) != "PASS":
             raise GuardError("compensation precondition not satisfied")
+        if eval_predicates(grant["outcome_predicates"], self.ev["readback"]["observed"]) == "PASS":
+            raise GuardError("compensation goal already satisfied by the forward readback")
         self.ev["comp_grant"] = grant
         self._go("COMPENSATION_AUTHORIZED", grant["object_hash"], _tok=_TOKEN)
 
@@ -808,8 +901,8 @@ class Mission:
         self._corr(comp_execution)
         if comp_execution["mutation_id"] != "COMPENSATION:" + g["object_hash"]:
             raise GuardError("compensation execution receipt not bound to the grant")
-        if comp_execution["call_class"] not in POST_SEND_CLASSES:
-            raise GuardError("compensation execution receipt call class invalid")
+        if comp_execution["call_class"] != "PROVIDER_RESPONSE_SUCCESS":
+            raise GuardError("compensating call must report success")
         if comp_receipt["grant_hash"] != g["object_hash"]:
             raise GuardError("compensation receipt not bound to its grant")
         self._corr(post_readback)
@@ -834,17 +927,27 @@ class Mission:
 
     # -- continuation
     def checkpoint_lease(self):
-        cp = self._need("checkpoint")
-        er = self.ev.get("execution_receipt")
-        return make("ContinuationLease", lease_id="LEASE-" + chash([cp["object_hash"], sorted(map(str, self.consumed)), self.state])[:12],
-                    checkpoint_hash=cp["object_hash"], transaction_id=self.transaction_id,
-                    remaining_budget=self.remaining, state_at_checkpoint=self.state,
-                    mutation_id=self.ev.get("mutation_id"),
-                    execution_receipt_hash=er["object_hash"] if er else None,
-                    consumed_authority_ids=sorted(("%s:%s" % k) for k in self.consumed))
+        with self._lock:
+            cp = self._need("checkpoint")
+            er = self.ev.get("execution_receipt")
+            return make("ContinuationLease", lease_id="LEASE-" + chash([cp["object_hash"], sorted(map(str, self.consumed)), self.state])[:12],
+                        checkpoint_hash=cp["object_hash"], transaction_id=self.transaction_id,
+                        remaining_budget=self.remaining, state_at_checkpoint=self.state,
+                        mutation_id=self.ev.get("mutation_id"),
+                        execution_receipt_hash=er["object_hash"] if er else None,
+                        ledger_id=self.ledger.ledger_id,
+                        consumed_authority_ids=sorted(("%s:%s" % k) for k in self.consumed))
 
     @classmethod
-    def resume(cls, lease, checkpoint, original_budget, mission_id, evidence, ledger, allow_volatile_ledger=False):
+    def resume(cls, *args, **kwargs):
+        """See _resume. Any malformed argument becomes a GuardError."""
+        try:
+            return cls._resume(*args, **kwargs)
+        except (KeyError, TypeError, AttributeError, ValueError, IndexError) as exc:
+            raise GuardError("malformed argument: %s" % type(exc).__name__) from exc
+
+    @classmethod
+    def _resume(cls, lease, checkpoint, original_budget, mission_id, evidence, ledger, allow_volatile_ledger=False):
         """Rebuild a mission by re-running the REAL guard methods on re-presented evidence (so a resumed mission is
         held to exactly the checks a fresh one gets), then applying consumption. Lease, checkpoint and original budget
         must be hash-valid and agree with each other; consumption is the UNION of the lease and the external
@@ -863,6 +966,8 @@ class Mission:
                 raise GuardError("%s absent, wrong kind or hash invalid" % kind)
         if lease["checkpoint_hash"] != checkpoint["object_hash"]:
             raise GuardError("lease not bound to checkpoint")
+        if lease.get("ledger_id") is not None and lease["ledger_id"] != ledger.ledger_id:
+            raise GuardError("ledger identity differs from the lease (deleted, replaced or restored ledger?)")
         lease_rem = lease["remaining_budget"]
         if not _count(lease_rem):
             raise GuardError("lease remaining_budget invalid")
@@ -897,7 +1002,10 @@ class Mission:
             m.prewrite_validate(ev["tx"], ev["outcome_contract"], ev["readback_contract"], checkpoint)
         finally:
             m._resuming = False
-        consumed = lease_consumed | ledger.for_authority(auth)
+        recorded = ledger.for_authority(auth)
+        if not lease_consumed <= recorded:
+            raise GuardError("lease claims a send that the ledger does not record")
+        consumed = lease_consumed | recorded
         m.remaining = min(lease_rem, total - len(consumed))
         if m.remaining < 0:
             raise GuardError("consumed mutations exceed the original budget")

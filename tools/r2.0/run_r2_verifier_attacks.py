@@ -11,6 +11,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import zipfile
 
 SRC = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 TMP = os.path.join(tempfile.gettempdir(), "r2_vattack_scratch")
@@ -161,6 +162,30 @@ def main():
     for name, body in (("A12a_unc_path", "see " + UNC + "\n"), ("A12b_env_var_profile_path", "see " + PROFILE + "\n")):
         fresh(); write("reports/r2.0/zzp.md", body); sums()
         d = run(); results[name] = (d["R2_FRESH_CLONE_VERIFY"], d["no_absolute_paths_in_docs"])
+
+    # --- review 4 scanner evasions
+    evasions = {
+        "A13a_nul_prefixed_utf16": ("reports/r2.0/zz_n.txt", b"\x00" + ("to" + "ken=" + "q" * 24).encode("utf-16-le"), True),
+        "A13b_utf32_file": ("reports/r2.0/zz_u32.txt", ("pass" + "word=" + "k" * 20).encode("utf-32"), True),
+        "A13c_secret_key_assignment": ("reports/r2.0/zz_sk.md", ("secret" + "_key = " + "h" * 30 + "\n").encode(), True),
+        "A13d_secret_outside_the_r2_folders": ("zz_outside_the_roots.txt", ("api_" + "key=" + "ab12" * 8 + "\n").encode(), True),
+        "A13e_hex_value_under_a_secret_name": ("reports/r2.0/zz_hex.md", ("to" + "ken: " + "ab12" * 16 + "\n").encode(), True),
+    }
+    for name, (rel, body, stage) in evasions.items():
+        fresh()
+        full = os.path.join(TMP, rel)
+        os.makedirs(os.path.dirname(full), exist_ok=True)
+        with open(full, "wb") as fh:
+            fh.write(body)
+        subprocess.run(["git", "add", "-f", rel], cwd=TMP, capture_output=True)
+        sums()
+        d = run(); results[name] = (d["R2_FRESH_CLONE_VERIFY"], d["no_secret_like_strings"])
+    fresh()
+    with zipfile.ZipFile(os.path.join(TMP, "evidence", "zz_secret_in_zip.zip"), "w") as zf:
+        zf.writestr("inner/zz.txt", "to" + "ken=" + "w" * 24)
+    subprocess.run(["git", "add", "-f", "evidence/zz_secret_in_zip.zip"], cwd=TMP, capture_output=True)
+    sums()
+    d = run(); results["A13f_secret_inside_a_zip_member"] = (d["R2_FRESH_CLONE_VERIFY"], d["no_secret_like_strings"])
     rm(TMP)
     print(json.dumps(results, indent=1, sort_keys=True))
     if "--out" in sys.argv:

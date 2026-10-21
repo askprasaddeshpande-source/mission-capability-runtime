@@ -952,16 +952,16 @@ def run():
     reloaded.consume(("C" * 64, "MUT-9"))
     with open(lt, "rb") as fh:
         lines = fh.read().split(b"\n")
-    t(g, "torn_tail_is_truncated_before_the_next_append_and_all_lines_stay_valid", len(lines) == 3 and lines[2] == b"" and MODEL.ReplayLedger(lt).has(("C" * 64, "MUT-9")))
+    t(g, "torn_tail_is_truncated_before_the_next_append_and_all_lines_stay_valid", len(lines) == 4 and lines[3] == b"" and lines[0].startswith(b'{"hdr":"R2LEDGER"') and MODEL.ReplayLedger(lt).has(("C" * 64, "MUT-9")))
     lg_ = os.path.join(ldir2, "corrupt.txt"); le = MODEL.ReplayLedger(lg_); le.consume(("A" * 64, "MUT-1"))
     with open(lg_, "ab") as fh:
         fh.write(b"garbage line\n")
     le.consume  # noqa
-    t(g, "corrupt_complete_line_fails_closed", raises(lambda: MODEL.ReplayLedger(lg_), "corrupted at line 2"))
+    t(g, "corrupt_complete_line_fails_closed", raises(lambda: MODEL.ReplayLedger(lg_), "corrupted at line 3"))
     lh = os.path.join(ldir2, "crc.txt"); lf = MODEL.ReplayLedger(lh); lf.consume(("A" * 64, "MUT-1"))
     raw = open(lh, "rb").read().replace(b"MUT-1", b"MUT-2")
     open(lh, "wb").write(raw)
-    t(g, "checksum_mismatch_fails_closed", raises(lambda: MODEL.ReplayLedger(lh), "corrupted at line 1"))
+    t(g, "checksum_mismatch_fails_closed", raises(lambda: MODEL.ReplayLedger(lh), "corrupted at line 2"))
     t(g, "ledger_file_must_be_utf8", (open(os.path.join(ldir2, "bin.txt"), "wb").write(b"\xff\xfe\n"), raises(lambda: MODEL.ReplayLedger(os.path.join(ldir2, "bin.txt")), "not UTF-8"))[1])
     lj = MODEL.ReplayLedger(os.path.join(ldir2, "odd.txt")); odd = ("A" * 64, "MUT:1:é")
     lj.consume(odd)
@@ -978,7 +978,7 @@ def run():
         MODEL.os.fsync = real_fsync
     with open(os.path.join(ldir2, "fsync.txt"), "rb") as fh:
         content = fh.read()
-    t(g, "every_consume_is_fsynced_and_appended_never_truncating", len(calls) == 2 and content.count(b"\n") == 2 and b"MUT-1" in content and b"MUT-2" in content)
+    t(g, "every_consume_is_fsynced_and_appended_never_truncating", len(calls) == 3 and content.count(b"\n") == 3 and b"MUT-1" in content and b"MUT-2" in content)
     t(g, "volatile_ledger_works_in_process_but_is_not_durable", (lambda lv: (lv.consume(("A" * 64, "M")), lv.has(("A" * 64, "M")) and not lv.is_durable and raises(lambda: lv.consume(("A" * 64, "M")), "replay"))[1])(MODEL.ReplayLedger()))
     t(g, "other_authority_entries_do_not_block_a_send", (lambda lo: (lo.consume(("B" * 64, "MUT-1")), (lambda m_, f_: (to_prewrite(m_, f_), setattr(m_, "ledger", lo), safe(lambda: (m_.begin_execution("MUT-1", FP), m_.mutations_sent)[1] == 1))[2])(*fixture()))[1])(MODEL.ReplayLedger(os.path.join(ldir2, "otherauth.txt"))))
     t(g, "unparseable_ledger_key_types_become_guard_errors", raises(lambda: lj.consume(None), "non-empty strings"))
@@ -1001,7 +1001,7 @@ def run():
     fwd = mm.ev["readback"]
     cases = [
         ("compensation_rejects_execution_receipt_for_another_mutation", lambda: mm.record_compensation(comp_receipt_for(gg, post), post, comp_exec(gg, mut="MUT-1")), "not bound to the grant"),
-        ("compensation_rejects_execution_receipt_with_invalid_call_class", lambda: mm.record_compensation(comp_receipt_for(gg, post), post, comp_exec(gg, cls="CALL_NOT_SENT")), "call class invalid"),
+        ("compensation_rejects_execution_receipt_with_invalid_call_class", lambda: mm.record_compensation(comp_receipt_for(gg, post), post, comp_exec(gg, cls="CALL_NOT_SENT")), "compensating call must report success"),
         ("compensation_rejects_execution_receipt_from_another_transaction", lambda: mm.record_compensation(comp_receipt_for(gg, post), post, comp_exec(gg, tx="TX-OTHER")), "correlation"),
         ("compensation_rejects_tampered_execution_receipt", lambda: mm.record_compensation(comp_receipt_for(gg, post), post, stale(comp_exec(gg), call_class="PROVIDER_ERROR")), "hash invalid"),
         ("compensation_rejects_wrong_kind_execution_receipt", lambda: mm.record_compensation(comp_receipt_for(gg, post), post, ff["cp"]), "wrong kind"),
@@ -1011,8 +1011,10 @@ def run():
     ]
     for name, fn, text in cases:
         t(g, name, raises(fn, text) and mm.state == "COMPENSATION_AUTHORIZED")
-    mm, ff, gg = comp_authorized2(); post = rb_receipt(ff, "ABSENT", obs={"exists": False}); mm.record_compensation(comp_receipt_for(gg, post), post, comp_exec(gg, cls="PROVIDER_ERROR"))
-    t(g, "compensation_execution_error_is_recorded_but_the_readback_decides", mm.state == "COMPENSATED")
+    mm, ff, gg = comp_authorized2(); post = rb_receipt(ff, "ABSENT", obs={"exists": False})
+    t(g, "compensating_call_that_did_not_report_success_cannot_complete_the_compensation",
+      all(raises(lambda cls=cls: mm.record_compensation(comp_receipt_for(gg, post), post, comp_exec(gg, cls=cls)), "compensating call must report success")
+          for cls in ("PROVIDER_ERROR", "CALL_SENT_NO_RESPONSE", "COMMIT_UNKNOWN", "CALL_NOT_SENT")) and mm.state == "COMPENSATION_AUTHORIZED")
     m3_, f3_ = fixture(); to_prewrite(m3_, f3_); m3_.begin_execution("MUT-1", FP); m3_.record_execution(exec_receipt(f3_)); m3_.request_readback()
     weak = rb_receipt(f3_, "EXISTS", "PROVIDER_VALIDATION"); m3_.observe_readback(weak); m3_.decide_commit(commit_obs(weak, "COMMITTED"))
     m3_.fail_after_possible_mutation(); m3_.require_compensation()
@@ -1119,7 +1121,7 @@ def run():
     m2x, f2x = two_mutation_mission(2)
     lease2x = m2x.checkpoint_lease()
     t(g, "resume_rejects_a_mutation_id_in_the_transaction_that_was_never_consumed", raises(lambda: rsm(remake(lease2x, mutation_id="MUT-2"), f2x, m2x), "mutation id inconsistent"))
-    t(g, "resume_rejects_a_consumed_mutation_id_that_is_not_in_the_transaction", raises(lambda: rsm(remake(leaseR, consumed_authority_ids=["%s:MUT-X" % auth_R], mutation_id="MUT-X"), fR, mR, ledger=MODEL.ReplayLedger()), "mutation id inconsistent"))
+    t(g, "resume_rejects_a_consumed_mutation_id_that_is_not_in_the_transaction", raises(lambda: rsm(remake(leaseR, consumed_authority_ids=["%s:MUT-X" % auth_R], mutation_id="MUT-X"), fR, mR, ledger=(lambda lg_: (lg_.consume((auth_R, "MUT-X")), lg_)[1])(MODEL.ReplayLedger())), "mutation id inconsistent"))
     mX, fX = fixture(); to_prewrite(mX, fX); mX.begin_execution("MUT-1", FP); erX = exec_receipt(fX); mX.record_execution(erX)
     leaseX = mX.checkpoint_lease()
     t(g, "resume_accepts_a_matching_execution_receipt", safe(lambda: rsm(leaseX, fX, mX, evidence=dict(ev_upstream(mX), execution_receipt=erX)).state == "COMMIT_STATE_UNKNOWN"))
@@ -1146,6 +1148,242 @@ def run():
     t(g, "ledger_lock_waits_for_a_release_within_the_timeout", safe(lambda: (MODEL._lock(waiter, timeout=5.0), MODEL._unlock(waiter), True)[2]))
     th.join(); waiter.close()
 
+    # ---- HARDENING_R2_0L (independent review 4: thread safety, types, compensation goal, ledger identity, malformed input)
+    g = "HARDENING_R2_0L"
+    import threading
+    Zl = "0" * 64
+
+    # -- N1: one guard call at a time per Mission
+    def race(n_threads, fn_a, fn_b=None):
+        mm_, ff_ = fixture(); to_prewrite(mm_, ff_)
+        barrier = threading.Barrier(n_threads); results = []
+        def go(i):
+            barrier.wait()
+            fn = fn_a if (fn_b is None or i % 2 == 0) else fn_b
+            try:
+                fn(mm_); results.append("OK:" + getattr(fn, "__name__", "f"))
+            except MODEL.GuardError:
+                results.append("REFUSED:" + getattr(fn, "__name__", "f"))
+        ths = [threading.Thread(target=go, args=(i,)) for i in range(n_threads)]
+        [th_.start() for th_ in ths]; [th_.join() for th_ in ths]
+        return results, mm_, ff_
+    def send(mm_):
+        mm_.begin_execution("MUT-1", FP)
+    def fail(mm_):
+        mm_.fail_before_mutation()
+    ok = True
+    for _ in range(25):
+        res, mm_, ff_ = race(8, send)
+        ok = ok and sum(1 for r in res if r.startswith("OK")) == 1 and mm_.mutations_sent == 1 and mm_.state == "EXECUTION_STARTED" \
+            and len(mm_.ledger.for_authority(ff_["au"]["object_hash"])) == 1 and "mutation_id" in mm_.ev
+    t(g, "eight_threads_on_one_mission_exactly_one_send_and_the_state_agrees_with_the_ledger", ok)
+    ok = True
+    for _ in range(25):
+        res, mm_, ff_ = race(8, send, fail)
+        recorded = len(mm_.ledger.for_authority(ff_["au"]["object_hash"]))
+        consistent = (mm_.state == "EXECUTION_STARTED" and recorded == 1 and mm_.mutations_sent == 1) or (mm_.state == "FAILED_BEFORE_MUTATION" and recorded == 0 and mm_.mutations_sent == 0)
+        ok = ok and consistent
+    t(g, "concurrent_send_and_fail_before_mutation_never_disagree_with_the_ledger", ok)
+    mm_, ff_ = fixture(); to_prewrite(mm_, ff_)
+    mm_.ledger.consume((ff_["au"]["object_hash"], "MUT-1"))                       # a send is recorded although this object forgot it
+    t(g, "fail_before_mutation_consults_the_ledger", raises(lambda: mm_.fail_before_mutation(), "possibly sent") and mm_.state == "PREWRITE_VALIDATED")
+    mm_, ff_ = fixture(); to_prewrite(mm_, ff_)
+    t(g, "fail_before_mutation_is_allowed_when_nothing_was_sent", safe(lambda: (mm_.fail_before_mutation(), mm_.state)[1] == "FAILED_BEFORE_MUTATION"))
+    mm_, ff_ = fixture()
+    t(g, "fail_before_mutation_without_authority_evidence_still_works", safe(lambda: (mm_.fail_before_mutation(), mm_.state)[1] == "FAILED_BEFORE_MUTATION"))
+
+    # -- N2/N7: strict types for scopes, names, ids, hashes and retries
+    def authorize_with(dl_chg=None, au_chg=None, bu_chg=None):
+        m_, f_ = at_context()
+        d_ = remake(f_["dl"], **(dl_chg or {}))
+        a_ = remake(f_["au"], **dict({"delegation_hash": d_["object_hash"]}, **(au_chg or {})))
+        b_ = remake(f_["bu"], **dict({"authority_hash": a_["object_hash"]}, **(bu_chg or {})))
+        return m_, d_, a_, b_
+    for what, dl_c, au_c, text in (("string_scope", dict(scope="create_object"), dict(scope="create_object"), "scope must be a list"),
+                                   ("integer_in_scope", dict(scope=["create_object", 5]), dict(scope=["create_object"]), "scope must be a list"),
+                                   ("empty_string_in_scope", dict(scope=["create_object", ""]), dict(scope=["create_object"]), "scope must be a list"),
+                                   ("none_scope", dict(scope=None), dict(scope=["create_object"]), "scope must be a list")):
+        m_, d_, a_, b_ = authorize_with(dl_c, au_c)
+        t(g, "authorize_rejects_" + what, raises(lambda m_=m_, d_=d_, a_=a_, b_=b_: m_.authorize(d_, a_, b_), text) and m_.state == "CONTEXT_READY")
+    m_, f_ = at_context(); a_ = remake(f_["au"], scope="delete_everything"); b_ = remake(f_["bu"], authority_hash=a_["object_hash"])
+    t(g, "string_scope_substring_attack_is_refused_at_the_gate", raises(lambda: m_.authorize(f_["dl"], a_, b_), "scope must be a list"))
+    m_, f_ = at_authorized()
+    for what, chg in (("integer_capability", dict(capability=5)), ("none_capability", dict(capability=None))):
+        cb_ = remake(f_["cb"], **chg)
+        t(g, "bind_rejects_" + what, raises(lambda cb_=cb_: m_.bind(cb_, f_["pb"]), "must be a string") and m_.state == "AUTHORIZED")
+    for what, chg in (("integer_tool_name", dict(tool_name=5)), ("integer_identity", dict(identity=5))):
+        pb_ = remake(f_["pb"], **chg)
+        t(g, "bind_rejects_" + what, raises(lambda pb_=pb_: m_.bind(f_["cb"], pb_), "must be a string"))
+    for what, field in (("mission_id", "mission_id"), ("authority_hash", "authority_hash"), ("delegation_hash", "delegation_hash")):
+        m_, f_ = at_context(); a_ = remake(f_["au"], **{field: 0.0}); b_ = remake(f_["bu"], authority_hash=a_["object_hash"])
+        t(g, "authorize_rejects_a_non_string_" + what, raises(lambda m_=m_, f_=f_, a_=a_, b_=b_: m_.authorize(f_["dl"], a_, b_), "must be a string"))
+    m_ = Mission("M-SYN-1", "TX-SYN-1", 1); _, f_ = fixture()
+    t(g, "context_ready_rejects_a_float_mission_id", raises(lambda: m_.context_ready(remake(f_["intent"], mission_id=0.0), f_["pr"]), "must be a string"))
+    t(g, "context_ready_rejects_a_non_string_objective", raises(lambda: m_.context_ready(remake(f_["intent"], objective=5), f_["pr"]), "must be a string"))
+    mm_, ff_ = at_started()
+    t(g, "execution_receipt_with_a_non_string_mutation_id_is_refused", raises(lambda: mm_.record_execution(remake(exec_receipt(ff_), mutation_id=1)), "must be a string") and mm_.state == "EXECUTION_STARTED")
+    t(g, "execution_receipt_with_a_non_string_transaction_id_is_refused", raises(lambda: mm_.record_execution(remake(exec_receipt(ff_), transaction_id=0.0)), "must be a string"))
+    for what, rv in (("float_zero", 0.0), ("negative_zero", -0.0), ("boolean_false", False), ("true", True), ("one", 1), ("none", None), ("string_zero", "0")):
+        m_, d_, a_, b_ = authorize_with(bu_chg=dict(retries=rv))
+        t(g, "retries_must_be_exactly_the_integer_zero_" + what, raises(lambda m_=m_, d_=d_, a_=a_, b_=b_: m_.authorize(d_, a_, b_), "forbid expansion and retries"))
+    m_, d_, a_, b_ = authorize_with()
+    t(g, "retries_integer_zero_is_accepted", safe(lambda: (m_.authorize(d_, a_, b_), m_.state)[1] == "AUTHORIZED"))
+    mm_, ff_, er_, done_ = complete_ready(); mod(mm_, "budget", retries=0.0)
+    t(g, "relation_R09_rejects_a_float_zero_retries_in_the_chain", raises(lambda: mm_.complete(done_()), "[R09]"))
+
+    # -- N3: the compensation goal must not already hold, and a cosmetic clone does not satisfy it
+    mm_, ff_ = comp_ready()
+    t(g, "compensation_goal_already_satisfied_by_the_forward_readback_is_refused", raises(lambda: mm_.authorize_compensation(grant_of(outcome_predicates=[{"field": "package", "op": "eq", "expected": "WRONG"}])), "already satisfied") and mm_.state == "COMPENSATION_REQUIRED")
+    mm_, ff_ = comp_ready()
+    t(g, "tautological_compensation_goal_is_refused", raises(lambda: mm_.authorize_compensation(grant_of(outcome_predicates=[{"field": "exists", "op": "in", "expected": [True, False]}])), "already satisfied"))
+    mm_, ff_ = comp_ready()
+    t(g, "compensation_goal_that_holds_only_after_the_action_is_accepted", safe(lambda: (mm_.authorize_compensation(grant_of()), mm_.state)[1] == "COMPENSATION_AUTHORIZED"))
+    mm_, ff_, gg_ = comp_authorized2(); fwd_ = mm_.ev["readback"]
+    clone_ = remake(fwd_, receipt_id="clone", observed=dict(fwd_["observed"], extra_key=1))
+    t(g, "cosmetic_clone_of_the_forward_readback_does_not_complete_the_compensation", raises(lambda: mm_.record_compensation(comp_receipt_for(gg_, clone_), clone_, comp_exec(gg_)), "predicate not satisfied") and mm_.state == "COMPENSATION_AUTHORIZED")
+
+    # -- N4: ledger identity
+    ld2 = _tf.mkdtemp(prefix="r2ledger3_")
+    pa = os.path.join(ld2, "a.txt"); la = MODEL.ReplayLedger(pa); la.consume(("A" * 64, "MUT-1"))
+    t(g, "durable_ledger_has_a_random_identity_that_survives_reopening", isinstance(la.ledger_id, str) and len(la.ledger_id) == 32 and MODEL.ReplayLedger(pa).ledger_id == la.ledger_id
+      and MODEL.ReplayLedger(os.path.join(ld2, "b.txt")).ledger_id != la.ledger_id and MODEL.ReplayLedger().ledger_id is None)
+    mm_, ff_ = fixture(); mm_.ledger = MODEL.ReplayLedger(os.path.join(ld2, "lease.txt")); to_prewrite(mm_, ff_); lease_l = mm_.checkpoint_lease()
+    t(g, "lease_carries_the_ledger_identity", lease_l["ledger_id"] == mm_.ledger.ledger_id and mm_.checkpoint_lease() is not lease_l and fixture()[0].ledger.ledger_id is None)
+    mm_.begin_execution("MUT-1", FP)
+    os.remove(os.path.join(ld2, "lease.txt"))
+    recreated = MODEL.ReplayLedger(os.path.join(ld2, "lease.txt"))                  # deleted and recreated: new identity
+    t(g, "resume_refuses_a_lease_from_another_ledger_identity", raises(lambda: Mission.resume(lease_l, ff_["cp"], ff_["bu"], "M-SYN-1", ev_upstream(mm_), recreated), "ledger identity differs from the lease"))
+    pinned_id = la.ledger_id
+    t(g, "pinned_identity_with_the_right_file_works", MODEL.ReplayLedger(pa, expected_id=pinned_id).has(("A" * 64, "MUT-1")))
+    os.remove(pa)
+    t(g, "pinned_identity_detects_a_missing_file", raises(lambda: MODEL.ReplayLedger(pa, expected_id=pinned_id), "ledger file missing"))
+    open(pa, "wb").close()
+    t(g, "pinned_identity_detects_an_empty_file", raises(lambda: MODEL.ReplayLedger(pa, expected_id=pinned_id), "empty or missing"))
+    os.remove(pa); MODEL.ReplayLedger(pa)
+    t(g, "pinned_identity_detects_a_replaced_file", raises(lambda: MODEL.ReplayLedger(pa, expected_id=pinned_id), "differs from the expected id"))
+    ob = MODEL.ReplayLedger(os.path.join(ld2, "open.txt")); ob.consume(("A" * 64, "MUT-1"))
+    os.remove(os.path.join(ld2, "open.txt")); MODEL.ReplayLedger(os.path.join(ld2, "open.txt"))
+    t(g, "an_open_ledger_notices_when_its_file_is_replaced", raises(lambda: ob.has(("A" * 64, "MUT-1")), "identity changed"))
+    mm_, ff_ = fixture(); mm_.ledger = MODEL.ReplayLedger(os.path.join(ld2, "pin_fresh.txt")); fresh_id = mm_.ledger.ledger_id
+    to_prewrite(mm_, ff_); mm_.begin_execution("MUT-1", FP)
+    os.remove(os.path.join(ld2, "pin_fresh.txt"))
+    m2_, f2_ = fixture()
+    t(g, "documented_limit_deleted_ledger_without_a_pin_is_not_detected_for_a_fresh_mission", safe(lambda: (setattr(m2_, "ledger", MODEL.ReplayLedger(os.path.join(ld2, "pin_fresh.txt"))), to_prewrite(m2_, f2_), m2_.begin_execution("MUT-1", FP), m2_.mutations_sent)[3] == 1))
+    os.remove(os.path.join(ld2, "pin_fresh.txt"))
+    m3_, f3_ = fixture()
+    t(g, "with_a_pinned_identity_a_deleted_ledger_blocks_a_fresh_mission", raises(lambda: setattr(m3_, "ledger", MODEL.ReplayLedger(os.path.join(ld2, "pin_fresh.txt"), expected_id=fresh_id)), "ledger file missing"))
+    lh_ = os.path.join(ld2, "hdr.txt"); MODEL.ReplayLedger(lh_)
+    raw_ = open(lh_, "rb").read().replace(b"R2LEDGER", b"R2LEDGEX"); open(lh_, "wb").write(raw_)
+    t(g, "tampered_ledger_header_fails_closed", raises(lambda: MODEL.ReplayLedger(lh_), "missing or invalid header"))
+    open(lh_, "wb").write(b'{"a":"x","m":"y","c":"00000000"}\n')
+    t(g, "a_ledger_file_without_a_header_fails_closed", raises(lambda: MODEL.ReplayLedger(lh_), "missing or invalid header"))
+    open(lh_, "wb").write(b"\n")
+    t(g, "an_empty_first_line_fails_closed", raises(lambda: MODEL.ReplayLedger(lh_), "corrupted"))
+    open(lh_, "wb").write(b'{"hdr":"R2LEDG')
+    t(g, "a_torn_header_only_file_is_recreated_cleanly", safe(lambda: MODEL.ReplayLedger(lh_).ledger_id is not None and open(lh_, "rb").read().count(b"\n") == 1))
+
+    # lease claims must be recorded: a forged lease against an empty ledger is refused (review 4 N5)
+    mF, fF, leaseF = sent_mission()
+    t(g, "lease_claiming_a_send_the_ledger_does_not_record_is_refused", raises(lambda: rsm(leaseF, fF, mF, ledger=MODEL.ReplayLedger()), "does not record"))
+    t(g, "lease_claim_is_accepted_when_the_ledger_records_it", safe(lambda: rsm(leaseF, fF, mF).state == "COMMIT_STATE_UNKNOWN"))
+
+    # -- N6: malformed input becomes GuardError, never a raw exception
+    lease_missing = {k: v for k, v in leaseF.items() if k != "mutation_id"}
+    t(g, "resume_with_a_lease_missing_a_field_raises_guard_error", raises(lambda: rsm(lease_missing, fF, mF), None))
+    t(g, "resume_with_non_dict_evidence_values_raises_guard_error", raises(lambda: rsm(leaseF, fF, mF, evidence={"tx": 5}), None) and raises(lambda: rsm(leaseF, fF, mF, mission_id=None), None))
+    lbad = MODEL.ReplayLedger(os.path.join(ld2, "io.txt")); lbad.path = os.path.join(ld2, "missing_dir", "x.txt")
+    t(g, "ledger_io_errors_are_guard_errors", raises(lambda: lbad.consume(("A" * 64, "M")), "ledger I/O error") and raises(lambda: lbad.has(("A" * 64, "M")), "ledger I/O error")
+      and raises(lambda: lbad.for_authority("A" * 64), "ledger I/O error"))
+    lq = MODEL.ReplayLedger(os.path.join(ld2, "keys.txt"))
+    t(g, "ledger_rejects_string_and_bytes_keys", raises(lambda: lq.consume("ab"), "non-empty strings") and raises(lambda: lq.has("ab"), "non-empty strings") and raises(lambda: lq.consume(b"ab"), "non-empty strings"))
+    t(g, "ledger_rejects_unencodable_text", raises(lambda: lq.consume(("A" * 64, "m\ud800x")), "not valid text"))
+    t(g, "ledger_limit_must_be_a_non_negative_integer_or_none", all(raises(lambda lim=lim: lq.consume(("A" * 64, "L%d" % i), limit=lim), "non-negative integer or None") for i, lim in enumerate((float("nan"), -1, True, "1", 1.0))))
+    t(g, "ledger_limit_zero_refuses_every_send", raises(lambda: lq.consume(("Z" * 64, "M"), limit=0), "send count exhausted") and not lq.has(("Z" * 64, "M")))
+    t(g, "ledger_limit_none_means_unlimited", safe(lambda: (lq.consume(("U" * 64, "M1")), lq.consume(("U" * 64, "M2")), lq.consume(("U" * 64, "M3")), len(lq.for_authority("U" * 64)))[3] == 3))
+
+    # -- review 4 mutant-derived gaps
+    mG, fG = fixture(); to_prewrite(mG, fG); leaseG0 = mG.checkpoint_lease(); mG.begin_execution("MUT-1", FP)
+    rG = rsm(leaseG0, fG, mG)
+    rG.request_readback(); rbG = rb_receipt(fG); rG.observe_readback(rbG); rG.decide_commit(commit_obs(rbG, "COMMITTED")); rG.validate_outcome(outcome(fG, rbG, "PASS"))
+    crG = make("CompletionReceipt", receipt_id="done", transaction_id="TX-SYN-1", outcome_receipt_hash=rG.ev["outcome"]["object_hash"], commit_observation_hash=rG.ev["commit"]["object_hash"],
+               execution_receipt_hash=rG.ev["execution_receipt"]["object_hash"], authority_hash=fG["au"]["object_hash"])
+    t(g, "a_resumed_mission_reaches_complete_with_the_synthetic_commit_unknown_receipt_after_a_fresh_readback",
+      safe(lambda: (rG.complete(crG), rG.state)[1] == "COMPLETE") and rG.ev["execution_receipt"]["call_class"] == "COMMIT_UNKNOWN" and len(chain_hashes(rG)) == 14)
+    for slot in ("tx", "budget", "outcome_contract", "readback_contract", "authority"):
+        lease_, cp_, bu_, ev_ = world(); ev_.pop(slot)
+        t(g, "resume_requires_the_%s_evidence" % slot, raises(lambda lease_=lease_, cp_=cp_, bu_=bu_, ev_=ev_: Mission.resume(lease_, cp_, bu_, "M-SYN-1", ev_, MODEL.ReplayLedger(), allow_volatile_ledger=True), "missing %s" % slot))
+    m2x, f2x = two_mutation_mission(2)
+    m2x.ledger.consume((f2x["au"]["object_hash"], "MUT-2"))
+    lease2 = remake(m2x.checkpoint_lease(), consumed_authority_ids=sorted("%s:%s" % (f2x["au"]["object_hash"], x) for x in ("MUT-1", "MUT-2")), remaining_budget=0)
+    r2x = rsm(lease2, f2x, m2x)
+    t(g, "resume_with_two_consumed_keys_counts_both", r2x.mutations_sent == 2 and r2x.remaining == 0 and len(r2x.consumed) == 2)
+    seen_at_fsync = []
+    real_fsync2 = MODEL.os.fsync
+    def spy_fsync(fd):
+        seen_at_fsync.append(os.path.getsize(os.path.join(ld2, "flush.txt")))      # size query: the byte-range lock blocks reads
+        return real_fsync2(fd)
+    lf_ = MODEL.ReplayLedger(os.path.join(ld2, "flush.txt"))
+    MODEL.os.fsync = spy_fsync
+    try:
+        lf_.consume(("F" * 64, "MUT-1"))
+    finally:
+        MODEL.os.fsync = real_fsync2
+    t(g, "the_record_is_flushed_to_the_file_before_fsync_is_called", len(seen_at_fsync) == 1 and seen_at_fsync[0] > len(lf_._header_line(lf_.ledger_id)))
+
+    # -- review 4 mutation survivors, closed by tests
+    m_, f_ = fixture()
+    t(g, "none_valued_ids_and_hashes_are_refused", raises(lambda: Mission("M-SYN-1", "TX-SYN-1", 1).context_ready(remake(f_["intent"], mission_id=None), f_["pr"]), "must be a string")
+      and raises(lambda: Mission("M-SYN-1", "TX-SYN-1", 1).context_ready(f_["intent"], remake(f_["pr"], principal_id=None)), "must be a string"))
+    mm_, ff_ = fixture(); to_prewrite(mm_, ff_); mm_.begin_execution("MUT-1", FP)
+    mm_.ledger = MODEL.ReplayLedger()                                               # the object remembers the send; the replaced ledger does not
+    t(g, "fail_before_mutation_also_trusts_the_missions_own_send_counter", raises(lambda: mm_.fail_before_mutation(), "possibly sent") and mm_.state == "EXECUTION_STARTED")
+    hd = os.path.join(ld2, "header_variants.txt")
+    good_id = "a" * 32
+    variants = {
+        "not_a_dict": b"[1]\n",
+        "wrong_version": (json.dumps({"hdr": "R2LEDGER", "v": 2, "id": good_id, "c": MODEL.ReplayLedger._crc(good_id, "HDR")}) + "\n").encode(),
+        "integer_id": (json.dumps({"hdr": "R2LEDGER", "v": 1, "id": 5, "c": "00000000"}) + "\n").encode(),
+        "bad_crc": (json.dumps({"hdr": "R2LEDGER", "v": 1, "id": good_id, "c": "deadbeef"}) + "\n").encode(),
+        "wrong_marker": (json.dumps({"hdr": "OTHER", "v": 1, "id": good_id, "c": MODEL.ReplayLedger._crc(good_id, "HDR")}) + "\n").encode(),
+    }
+    for vname, body in variants.items():
+        open(hd, "wb").write(body)
+        t(g, "ledger_header_variant_is_refused_" + vname, raises(lambda: MODEL.ReplayLedger(hd), "missing or invalid header"))
+    open(hd, "wb").write((json.dumps({"hdr": "R2LEDGER", "v": 1, "id": good_id, "c": MODEL.ReplayLedger._crc(good_id, "HDR")}, separators=(",", ":")) + "\n").encode())
+    t(g, "a_valid_header_is_accepted_and_its_id_is_used", MODEL.ReplayLedger(hd).ledger_id == good_id)
+
+    # deterministic race: thread B is inside begin_execution (past its snapshot) while thread A completes a send
+    def deterministic_race():
+        mm2, ff2 = fixture(); to_prewrite(mm2, ff2)
+        a_done = threading.Event(); in_b = threading.Event(); out = {}
+        real_has = mm2.ledger.has
+        state = {"first": True}
+        def slow_has(key):
+            if state["first"] and threading.current_thread().name == "B":
+                state["first"] = False
+                in_b.set(); a_done.wait(timeout=1.0)                                  # with the lock A cannot finish: B proceeds after the timeout
+            return real_has(key)
+        mm2.ledger.has = slow_has
+        def run_b():
+            try:
+                mm2.begin_execution("MUT-1", FP); out["B"] = "SENT"
+            except MODEL.GuardError:
+                out["B"] = "REFUSED"
+        def run_a():
+            in_b.wait(timeout=2.0)
+            try:
+                mm2.begin_execution("MUT-1", FP); out["A"] = "SENT"
+            except MODEL.GuardError:
+                out["A"] = "REFUSED"
+            a_done.set()
+        tb = threading.Thread(target=run_b, name="B"); ta = threading.Thread(target=run_a, name="A")
+        tb.start(); ta.start(); tb.join(); ta.join()
+        recorded = len(mm2.ledger.for_authority(ff2["au"]["object_hash"]))
+        return out, mm2, recorded
+    out_, mm_, rec_ = deterministic_race()
+    t(g, "interleaved_threads_cannot_erase_a_send_the_ledger_recorded",
+      sum(1 for x in out_.values() if x == "SENT") == 1 and rec_ == 1 and mm_.mutations_sent == 1 and mm_.state == "EXECUTION_STARTED")
+
     # ---- NO_ENTERPRISE_WRITES (structural)
     g = "NO_ENTERPRISE_WRITES"
     src = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "mcr_r2_model.py")).read()
@@ -1159,7 +1397,7 @@ def _exec_only_complete():
 
 ACCEPT = ["STATE_MACHINE_VALID", "SCHEMA_VALIDATION", "AUTHORITY_INVARIANTS", "MUTATION_BUDGET_INVARIANTS",
           "REPLAY_GUARD_INVARIANTS", "CONTINUATION_INVARIANTS", "COMPENSATION_AUTHORITY_INVARIANTS",
-          "OUTCOME_PREDICATE_MODEL", "COMMIT_UNKNOWN_HANDLING", "COMPLETION_EVIDENCE", "HARDENING_R2_0H", "HARDENING_R2_0I", "HARDENING_R2_0J", "TELEMETRY_MODEL", "NO_ENTERPRISE_WRITES"]
+          "OUTCOME_PREDICATE_MODEL", "COMMIT_UNKNOWN_HANDLING", "COMPLETION_EVIDENCE", "HARDENING_R2_0H", "HARDENING_R2_0I", "HARDENING_R2_0J", "HARDENING_R2_0L", "TELEMETRY_MODEL", "NO_ENTERPRISE_WRITES"]
 
 
 def main(argv):
