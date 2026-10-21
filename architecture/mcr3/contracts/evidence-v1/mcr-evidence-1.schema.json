@@ -1,0 +1,1018 @@
+{
+  "$id": "mcr-evidence/1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "authority_effect": {
+      "const": "NONE"
+    },
+    "authorization_ref": {
+      "additionalProperties": false,
+      "properties": {
+        "approval_id_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "approver": {
+          "maxLength": 256,
+          "minLength": 1,
+          "type": "string"
+        },
+        "expires_at": {
+          "format": "date-time",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "scope_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "source": {
+          "const": "EXTERNAL_GOVERNOR"
+        }
+      },
+      "required": [
+        "approval_id_hash",
+        "approver",
+        "scope_digest",
+        "expires_at",
+        "source"
+      ],
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "budget": {
+      "additionalProperties": false,
+      "properties": {
+        "attempt_number": {
+          "minimum": 1,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "attempts_remaining": {
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "kind": {
+          "enum": [
+            "FORWARD",
+            "COMPENSATION"
+          ]
+        },
+        "mutation_budget": {
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "mutation_budget",
+        "attempt_number",
+        "attempts_remaining",
+        "kind"
+      ],
+      "type": "object"
+    },
+    "capability": {
+      "additionalProperties": false,
+      "properties": {
+        "capability_id": {
+          "maxLength": 256,
+          "minLength": 1,
+          "type": "string"
+        },
+        "operation": {
+          "maxLength": 256,
+          "minLength": 1,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "provider_id": {
+          "maxLength": 256,
+          "minLength": 1,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "qualification_status": {
+          "enum": [
+            "DISCOVERED",
+            "QUARANTINED",
+            "VERIFIED",
+            "QUALIFIED",
+            "APPROVED",
+            "SUSPENDED",
+            "REVOKED"
+          ]
+        },
+        "target_system": {
+          "maxLength": 256,
+          "minLength": 1,
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "capability_id",
+        "qualification_status"
+      ],
+      "type": "object"
+    },
+    "claim": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "intent_digest": {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            "kind": {
+              "const": "MISSION_STARTED"
+            },
+            "layer": {
+              "const": "OCCURRENCE"
+            },
+            "target_system": {
+              "maxLength": 256,
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "layer",
+            "intent_digest",
+            "target_system"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "AUTHORIZATION_REFERENCE"
+            },
+            "layer": {
+              "const": "AUTHORIZATION_REFERENCE"
+            },
+            "referenced": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "kind",
+            "layer",
+            "referenced"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "approval_required": {
+              "type": "boolean"
+            },
+            "from_state": {
+              "enum": [
+                "DISCOVERED",
+                "QUARANTINED",
+                "VERIFIED",
+                "QUALIFIED",
+                "APPROVED",
+                "SUSPENDED",
+                "REVOKED"
+              ]
+            },
+            "kind": {
+              "const": "CAPABILITY_STATE_CHANGED"
+            },
+            "layer": {
+              "const": "OCCURRENCE"
+            },
+            "reason": {
+              "maxLength": 256,
+              "minLength": 1,
+              "type": "string"
+            },
+            "to_state": {
+              "enum": [
+                "DISCOVERED",
+                "QUARANTINED",
+                "VERIFIED",
+                "QUALIFIED",
+                "APPROVED",
+                "SUSPENDED",
+                "REVOKED"
+              ]
+            }
+          },
+          "required": [
+            "kind",
+            "layer",
+            "from_state",
+            "to_state",
+            "reason",
+            "approval_required"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "attempt_id": {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$",
+              "type": "string"
+            },
+            "attempt_number": {
+              "minimum": 1,
+              "type": "integer"
+            },
+            "budget_kind": {
+              "enum": [
+                "FORWARD",
+                "COMPENSATION"
+              ]
+            },
+            "budget_remaining_after": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "kind": {
+              "const": "MUTATION_ATTEMPTED"
+            },
+            "layer": {
+              "const": "OCCURRENCE"
+            }
+          },
+          "required": [
+            "kind",
+            "layer",
+            "attempt_id",
+            "attempt_number",
+            "budget_remaining_after",
+            "budget_kind"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "call_class": {
+              "enum": [
+                "CALL_NOT_SENT",
+                "CALL_SENT_NO_RESPONSE",
+                "PROVIDER_ERROR",
+                "PROVIDER_RESPONSE_SUCCESS",
+                "COMMIT_UNKNOWN",
+                "COMMIT_CONFIRMED",
+                "OUTCOME_FAILED",
+                "OUTCOME_VALIDATED"
+              ]
+            },
+            "implies_commit": {
+              "const": false
+            },
+            "kind": {
+              "const": "EXECUTION_RECEIPT"
+            },
+            "layer": {
+              "const": "RECEIPT"
+            },
+            "provider_acknowledged": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "kind",
+            "layer",
+            "call_class",
+            "provider_acknowledged",
+            "implies_commit"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "commit_state": {
+              "enum": [
+                "COMMITTED",
+                "ABSENT",
+                "UNKNOWN"
+              ]
+            },
+            "implies_outcome": {
+              "const": false
+            },
+            "kind": {
+              "const": "COMMIT_OBSERVATION"
+            },
+            "layer": {
+              "const": "RECEIPT"
+            },
+            "readback_digest": {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "layer",
+            "commit_state",
+            "readback_digest",
+            "implies_outcome"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "activation": {
+              "enum": [
+                "ACTIVE",
+                "INACTIVE",
+                "UNKNOWN"
+              ]
+            },
+            "checks_satisfied": {
+              "type": "boolean"
+            },
+            "claimed_authoritative": {
+              "type": "boolean"
+            },
+            "existence": {
+              "enum": [
+                "EXISTS",
+                "ABSENT",
+                "UNKNOWN"
+              ]
+            },
+            "kind": {
+              "const": "READBACK_CLAIM"
+            },
+            "layer": {
+              "const": "RECEIPT"
+            },
+            "provenance_verified": {
+              "type": "boolean"
+            },
+            "source_level": {
+              "enum": [
+                "AUTHORITATIVE_REPOSITORY",
+                "PROVIDER_VALIDATION",
+                "PROVIDER_LOG",
+                "TRANSPORT_SUCCESS",
+                "CACHED_OUTPUT",
+                "LOCAL_RUNNER_STATE",
+                "INFERRED_OR_REGEX"
+              ]
+            }
+          },
+          "required": [
+            "kind",
+            "layer",
+            "source_level",
+            "claimed_authoritative",
+            "existence",
+            "activation",
+            "checks_satisfied",
+            "provenance_verified"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "expected_digest": {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            "kind": {
+              "const": "OUTCOME_EVALUATION"
+            },
+            "layer": {
+              "const": "BUSINESS_OUTCOME"
+            },
+            "observed_digest": {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            "predicates_digest": {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            "readback_digest": {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            "result": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "UNKNOWN"
+              ]
+            }
+          },
+          "required": [
+            "kind",
+            "layer",
+            "expected_digest",
+            "observed_digest",
+            "readback_digest",
+            "predicates_digest",
+            "result"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "attempt_number": {
+              "minimum": 1,
+              "type": "integer"
+            },
+            "call_class": {
+              "enum": [
+                "CALL_NOT_SENT",
+                "CALL_SENT_NO_RESPONSE",
+                "PROVIDER_ERROR",
+                "PROVIDER_RESPONSE_SUCCESS",
+                "COMMIT_UNKNOWN",
+                "COMMIT_CONFIRMED",
+                "OUTCOME_FAILED",
+                "OUTCOME_VALIDATED"
+              ]
+            },
+            "kind": {
+              "const": "COMPENSATION_ATTEMPT"
+            },
+            "layer": {
+              "const": "OCCURRENCE"
+            },
+            "resolved": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "kind",
+            "layer",
+            "attempt_number",
+            "call_class",
+            "resolved"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "chain_digests": {
+              "items": {
+                "pattern": "^[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "minItems": 1,
+              "type": "array"
+            },
+            "disposition": {
+              "enum": [
+                "COMPLETE",
+                "INCOMPLETE",
+                "COMMIT_UNKNOWN",
+                "OUTCOME_UNKNOWN",
+                "FAILED",
+                "COMPENSATED",
+                "COMPENSATION_REQUIRED",
+                "UNRECOVERABLE",
+                "NOT_APPLICABLE"
+              ]
+            },
+            "kind": {
+              "const": "MISSION_DISPOSITION"
+            },
+            "layer": {
+              "const": "BUSINESS_OUTCOME"
+            },
+            "outcome_class": {
+              "enum": [
+                "EXECUTED",
+                "PROVIDER_ACKNOWLEDGED",
+                "COMMIT_OBSERVED",
+                "OUTCOME_OBSERVED",
+                "OUTCOME_VALIDATED",
+                "COMPLETE",
+                "COMMIT_UNKNOWN",
+                "OUTCOME_UNKNOWN",
+                "COMPENSATION_REQUIRED",
+                "UNRECOVERABLE",
+                null
+              ]
+            }
+          },
+          "required": [
+            "kind",
+            "layer",
+            "disposition",
+            "outcome_class",
+            "chain_digests"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "claims_business_outcome": {
+              "const": false
+            },
+            "kind": {
+              "const": "EVIDENCE_VERIFICATION"
+            },
+            "layer": {
+              "const": "VERIFIED_FACT"
+            },
+            "result": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "UNKNOWN"
+              ]
+            },
+            "scope": {
+              "enum": [
+                "HASH",
+                "SIGNATURE",
+                "PRODUCER_IDENTITY",
+                "PROVIDER_TRUST",
+                "FRESHNESS"
+              ]
+            },
+            "subject_digest": {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            "verifier": {
+              "maxLength": 256,
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "layer",
+            "subject_digest",
+            "scope",
+            "result",
+            "verifier",
+            "claims_business_outcome"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "contract": {
+      "const": "mcr-evidence/1"
+    },
+    "contract_version": {
+      "pattern": "^1\\.[0-9]+\\.[0-9]+$",
+      "type": "string"
+    },
+    "correlation": {
+      "additionalProperties": false,
+      "properties": {
+        "causation_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "correlation_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "mission_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "mutation_attempt_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "transaction_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "mission_id",
+        "transaction_id",
+        "correlation_id",
+        "causation_id"
+      ],
+      "type": "object"
+    },
+    "critical": {
+      "items": {
+        "maxLength": 256,
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "digests": {
+      "additionalProperties": false,
+      "properties": {
+        "payload": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "policy": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "schema": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "schema",
+        "policy",
+        "payload"
+      ],
+      "type": "object"
+    },
+    "disposition": {
+      "enum": [
+        "COMPLETE",
+        "INCOMPLETE",
+        "COMMIT_UNKNOWN",
+        "OUTCOME_UNKNOWN",
+        "FAILED",
+        "COMPENSATED",
+        "COMPENSATION_REQUIRED",
+        "UNRECOVERABLE",
+        "NOT_APPLICABLE",
+        null
+      ]
+    },
+    "evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "classification": {
+          "enum": [
+            "OBSERVED",
+            "READBACK",
+            "CORROBORATED",
+            "CLAIMED",
+            "INFERRED",
+            "HISTORICAL",
+            "SYNTHETIC",
+            "UNKNOWN"
+          ]
+        },
+        "digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "provenance": {
+          "additionalProperties": false,
+          "properties": {
+            "freshness": {
+              "enum": [
+                "UNKNOWN",
+                "FRESH",
+                "EXPIRED"
+              ]
+            },
+            "hash_consistent": {
+              "type": "boolean"
+            },
+            "issuer_trust": {
+              "enum": [
+                "UNKNOWN",
+                "UNTRUSTED",
+                "TRUSTED",
+                "REVOKED"
+              ]
+            },
+            "replay": {
+              "enum": [
+                "UNKNOWN",
+                "NOT_SEEN",
+                "REPLAYED"
+              ]
+            },
+            "signature": {
+              "enum": [
+                "ABSENT",
+                "INVALID",
+                "VALID"
+              ]
+            },
+            "signer": {
+              "maxLength": 256,
+              "minLength": 1,
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "verified_by": {
+              "maxLength": 256,
+              "minLength": 1,
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "hash_consistent",
+            "signature",
+            "signer",
+            "issuer_trust",
+            "freshness",
+            "replay",
+            "verified_by"
+          ],
+          "type": "object"
+        },
+        "ref": {
+          "maxLength": 256,
+          "minLength": 1,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "trust": {
+          "enum": [
+            "UNTRUSTED_RESEARCH",
+            "SIGNATURE_INVALID",
+            "SIGNED_UNTRUSTED",
+            "SIGNED_TRUSTED",
+            "REVOKED",
+            "EXPIRED",
+            "REPLAYED"
+          ]
+        }
+      },
+      "required": [
+        "digest",
+        "ref",
+        "classification",
+        "trust",
+        "provenance"
+      ],
+      "type": "object"
+    },
+    "extensions": {
+      "type": "object"
+    },
+    "id": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{7,127}$",
+      "type": "string"
+    },
+    "integrity": {
+      "additionalProperties": false,
+      "properties": {
+        "event_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "event_digest"
+      ],
+      "type": "object"
+    },
+    "lineage": {
+      "additionalProperties": false,
+      "properties": {
+        "source_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "source_event_id": {
+          "maxLength": 256,
+          "minLength": 1,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "supersedes": {
+          "maxLength": 256,
+          "minLength": 1,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "transformations": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "from": {
+                "maxLength": 256,
+                "minLength": 1,
+                "type": "string"
+              },
+              "step": {
+                "maxLength": 256,
+                "minLength": 1,
+                "type": "string"
+              },
+              "to": {
+                "maxLength": 256,
+                "minLength": 1,
+                "type": "string"
+              },
+              "tool": {
+                "maxLength": 256,
+                "minLength": 1,
+                "type": "string"
+              },
+              "tool_version": {
+                "maxLength": 256,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "step",
+              "from",
+              "to",
+              "tool",
+              "tool_version"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "transformations",
+        "source_event_id",
+        "source_digest",
+        "supersedes"
+      ],
+      "type": "object"
+    },
+    "outcome_class": {
+      "enum": [
+        "EXECUTED",
+        "PROVIDER_ACKNOWLEDGED",
+        "COMMIT_OBSERVED",
+        "OUTCOME_OBSERVED",
+        "OUTCOME_VALIDATED",
+        "COMPLETE",
+        "COMMIT_UNKNOWN",
+        "OUTCOME_UNKNOWN",
+        "COMPENSATION_REQUIRED",
+        "UNRECOVERABLE",
+        null
+      ]
+    },
+    "principal": {
+      "additionalProperties": false,
+      "properties": {
+        "assurance": {
+          "enum": [
+            "SELF_REPORTED",
+            "UNKNOWN",
+            "VERIFIED"
+          ]
+        },
+        "delegation_ref": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "principal_ref": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "principal_ref",
+        "assurance",
+        "delegation_ref"
+      ],
+      "type": "object"
+    },
+    "producer": {
+      "additionalProperties": false,
+      "properties": {
+        "adapter_id": {
+          "maxLength": 256,
+          "minLength": 1,
+          "type": "string"
+        },
+        "adapter_version": {
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "type": "string"
+        },
+        "runtime": {
+          "const": "mcr"
+        },
+        "runtime_version": {
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "type": "string"
+        },
+        "source_runtime_version": {
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "runtime",
+        "runtime_version",
+        "adapter_id",
+        "adapter_version",
+        "source_runtime_version"
+      ],
+      "type": "object"
+    },
+    "source": {
+      "maxLength": 256,
+      "minLength": 1,
+      "pattern": "^[^\\s]+$",
+      "type": "string"
+    },
+    "time": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "type": {
+      "enum": [
+        "mcr.authorization.referenced",
+        "mcr.capability.state_changed",
+        "mcr.commit.observed",
+        "mcr.compensation.attempted",
+        "mcr.evidence.verified",
+        "mcr.execution.receipt",
+        "mcr.mission.disposition",
+        "mcr.mission.started",
+        "mcr.mutation.attempted",
+        "mcr.outcome.evaluated",
+        "mcr.readback.claimed"
+      ]
+    }
+  },
+  "required": [
+    "contract",
+    "contract_version",
+    "id",
+    "type",
+    "source",
+    "time",
+    "producer",
+    "correlation",
+    "claim",
+    "evidence",
+    "authority_effect",
+    "digests",
+    "lineage"
+  ],
+  "title": "MCR Evidence Contract v1 (version-independent canonical evidence envelope)",
+  "type": "object"
+}
