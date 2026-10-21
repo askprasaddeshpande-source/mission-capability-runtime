@@ -102,8 +102,8 @@ def run():
     for label, path in bad:
         t(g, "ledger_path_" + label + "_is_a_guard_error", raises(lambda p=path: MODEL.ReplayLedger(p)))
     good = ["console.txt", "CONFIG", "aux_ledger.txt", "com10.txt", "LPT10.log", "my.ledger.txt", "a b.txt", os.path.join(d, "ok.txt"), d.replace("\\", "/") + "/ok2.txt"]
-    for p in good:
-        t(g, "legal_ledger_path_accepted_" + hashlib.sha1(p.encode()).hexdigest()[:6], safe(lambda p=p: MODEL.ReplayLedger(os.path.join(d, os.path.basename(p)) if not os.path.isabs(p) else p) is not None))
+    for gi, p in enumerate(good):
+        t(g, "legal_ledger_path_accepted_%d" % gi, safe(lambda p=p: MODEL.ReplayLedger(os.path.join(d, os.path.basename(p)) if not os.path.isabs(p) else p) is not None))
     t(g, "no_stray_file_was_created_by_a_refused_path", lambda: (not [n for n in os.listdir(os.getcwd()) + os.listdir(d) if n.upper().split(".")[0] in ("CON", "NUL", "PRN", "AUX", "CONIN$", "CONOUT$", "COM0", "COM9", "LPT1") or ":" in n or n in ("ledger.", "x.txt:s")]))
     t(g, "io_guard_turns_value_and_type_errors_into_guard_errors",
       raises(lambda: MODEL._io_guard(lambda: (_ for _ in ()).throw(ValueError("embedded null byte")))(), "ledger I/O error: ValueError")
