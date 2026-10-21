@@ -252,6 +252,15 @@ def _unlock(fh):
         pass
 
 
+def _tlocked(fn):
+    """Serialize every operation on one ReplayLedger object across threads (a plain set is not thread-safe)."""
+    @functools.wraps(fn)
+    def wrapper(self, *a, **k):
+        with self._tlock:
+            return fn(self, *a, **k)
+    return wrapper
+
+
 def _io_guard(fn):
     """File problems must block the send as a GuardError, never leak as an OSError."""
     @functools.wraps(fn)
@@ -286,6 +295,11 @@ class ReplayLedger:
     HEADER = "R2LEDGER"
 
     def __init__(self, path=None, expected_id=None):
+        if path is not None and (not isinstance(path, str) or not path):
+            raise GuardError("ledger path must be a non-empty string or None")
+        if expected_id is not None and path is None:
+            raise GuardError("expected_id needs a file-backed ledger")
+        self._tlock = threading.RLock()
         self.path = path
         self.is_durable = path is not None
         self.expected_id = expected_id
@@ -379,6 +393,7 @@ class ReplayLedger:
         if self.expected_id is not None and not os.path.exists(self.path):
             raise GuardError("ledger file missing (expected id %s)" % self.expected_id)
 
+    @_tlocked
     @_io_guard
     def _sync(self):
         self._require_present()
@@ -389,12 +404,14 @@ class ReplayLedger:
             finally:
                 _unlock(fh)
 
+    @_tlocked
     def has(self, key):
         key = self._as_key(key)
         if self.path:
             self._sync()
         return key in self._keys
 
+    @_tlocked
     def for_authority(self, authority_hash):
         if self.path:
             self._sync()
@@ -406,6 +423,7 @@ class ReplayLedger:
         if limit is not None and sum(1 for k in self._keys if k[0] == key[0]) >= limit:
             raise GuardError("authority send count exhausted (ledger)")
 
+    @_tlocked
     def consume(self, key, limit=None):
         key = self._as_key(key)
         self._check_key(key)
@@ -417,6 +435,7 @@ class ReplayLedger:
             return
         self._consume_file(key, limit)
 
+    @_tlocked
     @_io_guard
     def _consume_file(self, key, limit):
         self._require_present()
@@ -484,7 +503,7 @@ RELATIONS = {
     "R14": "capability does not match provider tool", "R15": "capability provider_ref differs from provider identity",
     "R16": "transaction identity mismatch", "R17": "transaction mission mismatch", "R18": "mutation not in transaction",
     "R19": "mutation authority was never consumed", "R20": "outcome contract not frozen or not correlated",
-    "R22": "readback contract not authoritative", "R23": "checkpoint does not pin the transaction",
+    "R22": "readback contract not authoritative", "R51": "readback contract provider differs from the bound provider", "R23": "checkpoint does not pin the transaction",
     "R24": "checkpoint does not pin the budget", "R25": "checkpoint does not pin the outcome contract",
     "R26": "checkpoint does not pin the readback contract", "R27": "checkpoint budget differs from budget limit",
     "R28": "execution receipt transaction mismatch", "R29": "execution receipt mutation mismatch",
@@ -645,6 +664,8 @@ class Mission:
             raise GuardError("checkpoint budget differs from budget limit")
         if readback_contract["source_level_required"] != "AUTHORITATIVE_REPOSITORY":
             raise GuardError("readback contract is not authoritative")
+        if not readback_contract["provider_ref"].startswith(self._need("provider")["provider_id"] + "::"):
+            raise GuardError("readback contract provider differs from the bound provider")
         self.ev.update(tx=tx, outcome_contract=outcome_contract,
                        readback_contract=readback_contract, checkpoint=checkpoint)
         self._go("PREWRITE_VALIDATED", checkpoint["object_hash"], _tok=_TOKEN)
@@ -792,6 +813,7 @@ class Mission:
         self._rel("R20", oc["frozen"] is True and oc["transaction_id"] == T and oc["mission_id"] == self.mission_id)
         check_predicates(oc["predicates"])
         self._rel("R22", rc["source_level_required"] == "AUTHORITATIVE_REPOSITORY")
+        self._rel("R51", rc["provider_ref"].startswith(pv["provider_id"] + "::"))
         self._rel("R23", cp["transaction_hash"] == h("tx"))
         self._rel("R24", cp["budget_hash"] == h("budget"))
         self._rel("R25", cp["outcome_contract_hash"] == h("outcome_contract"))

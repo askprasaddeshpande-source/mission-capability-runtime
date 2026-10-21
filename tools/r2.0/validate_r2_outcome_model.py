@@ -833,6 +833,7 @@ def run():
         "R28": lambda mm_, d: mod(mm_, "execution_receipt", transaction_id="OTHER"), "R29": lambda mm_, d: mod(mm_, "execution_receipt", mutation_id="OTHER"),
         "R30": lambda mm_, d: mod(mm_, "execution_receipt", call_class="CALL_NOT_SENT"),
         "R50": lambda mm_, d: mod(mm_, "readback", observed=dict(GOOD_OBS, exists=False)),
+        "R51": lambda mm_, d: mod(mm_, "readback_contract", provider_ref="OTHER::x"),
         "R31": lambda mm_, d: mod(mm_, "readback", transaction_id="OTHER"), "R32": lambda mm_, d: mod(mm_, "readback", mutation_id="OTHER"),
         "R33": lambda mm_, d: mod(mm_, "readback", contract_hash=Z), "R34": lambda mm_, d: mod(mm_, "readback", source_level="INFERRED_OR_REGEX"),
         "R35": lambda mm_, d: mod(mm_, "readback", existence="UNKNOWN"),
@@ -1384,6 +1385,129 @@ def run():
     t(g, "interleaved_threads_cannot_erase_a_send_the_ledger_recorded",
       sum(1 for x in out_.values() if x == "SENT") == 1 and rec_ == 1 and mm_.mutations_sent == 1 and mm_.state == "EXECUTION_STARTED")
 
+    # ---- HARDENING_R2_0M (independent review 5: volatile ledger threads, path validation, readback provider, rollback history)
+    g = "HARDENING_R2_0M"
+
+    # F1: a shared in-memory ledger is safe across threads
+    def hammer(n_threads, key_fn, limit=None, rounds=1):
+        errors, wins = [], []
+        lg_ = MODEL.ReplayLedger()
+        barrier = threading.Barrier(n_threads)
+        def work(i):
+            barrier.wait()
+            for r in range(rounds):
+                try:
+                    lg_.consume(key_fn(i, r), limit=limit); wins.append(i)
+                except MODEL.GuardError:
+                    pass
+                except Exception as exc:                                   # a raw exception is the defect under test
+                    errors.append(type(exc).__name__)
+        ths = [threading.Thread(target=work, args=(i,)) for i in range(n_threads)]
+        [th_.start() for th_ in ths]; [th_.join() for th_ in ths]
+        return lg_, wins, errors
+    ok = True
+    for _ in range(60):
+        lg_, wins, errors = hammer(8, lambda i, r: ("A" * 64, "MUT-1"))
+        ok = ok and len(wins) == 1 and not errors and len(lg_.for_authority("A" * 64)) == 1
+    t(g, "eight_threads_on_one_volatile_ledger_exactly_one_consume_wins_the_same_key", ok)
+    ok = True
+    for _ in range(60):
+        lg_, wins, errors = hammer(8, lambda i, r: ("A" * 64, "MUT-%d" % i), limit=1)
+        ok = ok and len(wins) == 1 and not errors and len(lg_.for_authority("A" * 64)) == 1
+    t(g, "eight_threads_on_one_volatile_ledger_the_per_authority_limit_holds", ok)
+    errors2, lg2 = [], MODEL.ReplayLedger()
+    stop = threading.Event()
+    def writer():
+        for n in range(400):
+            try:
+                lg2.consume(("W" * 64, "M%d" % n))
+            except MODEL.GuardError:
+                pass
+        stop.set()
+    def reader():
+        while not stop.is_set():
+            try:
+                lg2.for_authority("W" * 64); lg2.has(("W" * 64, "M1"))
+            except Exception as exc:
+                errors2.append(type(exc).__name__)
+    ths2 = [threading.Thread(target=writer)] + [threading.Thread(target=reader) for _ in range(4)]
+    [th_.start() for th_ in ths2]; [th_.join() for th_ in ths2]
+    t(g, "readers_never_see_set_changed_size_while_writers_consume", not errors2 and len(lg2.for_authority("W" * 64)) == 400)
+    ok = True
+    for _ in range(40):
+        ms = []
+        lgm = MODEL.ReplayLedger()
+        for _k in range(8):
+            mm_, ff_ = fixture(); mm_.ledger = lgm; to_prewrite(mm_, ff_); ms.append(mm_)
+        res_ = []
+        barrier2 = threading.Barrier(8)
+        def go2(mm_):
+            barrier2.wait()
+            try:
+                mm_.begin_execution("MUT-1", FP); res_.append("SENT")
+            except MODEL.GuardError:
+                res_.append("REFUSED")
+            except Exception as exc:
+                res_.append("RAW:" + type(exc).__name__)
+        ths3 = [threading.Thread(target=go2, args=(mm_,)) for mm_ in ms]
+        [th_.start() for th_ in ths3]; [th_.join() for th_ in ths3]
+        ok = ok and res_.count("SENT") == 1 and not any(r.startswith("RAW") for r in res_)
+    t(g, "eight_missions_sharing_one_volatile_ledger_send_exactly_once", ok)
+
+    # F2: ledger construction arguments
+    t(g, "empty_ledger_path_is_refused", raises(lambda: MODEL.ReplayLedger(""), "non-empty string or None"))
+    t(g, "non_string_ledger_paths_are_refused", all(raises(lambda p_=p_: MODEL.ReplayLedger(p_), "non-empty string or None") for p_ in (5, b"x", ["a"], 0.0, False)))
+    t(g, "expected_id_needs_a_file_backed_ledger", raises(lambda: MODEL.ReplayLedger(None, expected_id="a" * 32), "needs a file-backed ledger"))
+    t(g, "volatile_ledger_is_not_durable_and_a_path_ledger_is", MODEL.ReplayLedger().is_durable is False and MODEL.ReplayLedger(os.path.join(ld2, "durable_flag.txt")).is_durable is True)
+
+    # F4: the readback contract must name the bound provider
+    mm_, ff_ = at_bound()
+    rc_x = remake(ff_["rc"], provider_ref="OTHER::repo_read")
+    cp_x = remake(ff_["cp"], readback_contract_hash=rc_x["object_hash"])
+    t(g, "prewrite_refuses_a_readback_contract_for_another_provider", raises(lambda: mm_.prewrite_validate(ff_["tx"], ff_["oc"], rc_x, cp_x), "differs from the bound provider") and mm_.state == "BOUND")
+    rc_y = remake(ff_["rc"], provider_ref="SYN")
+    cp_y = remake(ff_["cp"], readback_contract_hash=rc_y["object_hash"])
+    t(g, "a_provider_ref_without_the_separator_is_refused", raises(lambda: mm_.prewrite_validate(ff_["tx"], ff_["oc"], rc_y, cp_y), "differs from the bound provider"))
+    rc_z = remake(ff_["rc"], provider_ref="SYNX::repo_read")
+    cp_z = remake(ff_["cp"], readback_contract_hash=rc_z["object_hash"])
+    t(g, "a_provider_id_that_is_only_a_prefix_of_another_is_refused", raises(lambda: mm_.prewrite_validate(ff_["tx"], ff_["oc"], rc_z, cp_z), "differs from the bound provider"))
+    t(g, "resume_refuses_a_readback_contract_for_another_provider", raises(lambda: try_resume(rc_chg=dict(provider_ref="OTHER::x")), "differs from the bound provider"))
+    t(g, "the_matching_provider_prefix_is_accepted", safe(lambda: (mm_.prewrite_validate(ff_["tx"], ff_["oc"], ff_["rc"], ff_["cp"]), mm_.state)[1] == "PREWRITE_VALIDATED"))
+
+    # missing tests named by the reviewer: atomic history, lock contention with the default timeout, resume audit and fallback id
+    mm_, ff_ = fixture(); to_prewrite(mm_, ff_)
+    hist_before = list(mm_.history)
+    t(g, "a_refused_guard_call_leaves_the_history_unchanged", raises(lambda: mm_.begin_execution("MUT-1", "FP-DRIFTED"), "contract drift") and mm_.history == hist_before)
+    mm_.begin_execution("MUT-1", FP)
+    t(g, "a_successful_guard_call_appends_exactly_one_history_entry", len(mm_.history) == len(hist_before) + 1 and mm_.history[-1][0] == "EXECUTION_STARTED")
+    class FlakyMission(Mission):
+        """Fails AFTER the first history entry of validate_outcome was appended, to prove the rollback restores the history."""
+        def _go(self, to, ref=None, _tok=None):
+            if to == "OUTCOME_VALIDATED":
+                raise MODEL.GuardError("injected late failure")
+            return super()._go(to, ref, _tok=_tok)
+    mf_, ff_f = fixture()
+    mf_ = FlakyMission("M-SYN-1", "TX-SYN-1", 1)
+    mf_.context_ready(ff_f["intent"], ff_f["pr"]); mf_.authorize(ff_f["dl"], ff_f["au"], ff_f["bu"]); mf_.bind(ff_f["cb"], ff_f["pb"]); mf_.prewrite_validate(ff_f["tx"], ff_f["oc"], ff_f["rc"], ff_f["cp"])
+    mf_.begin_execution("MUT-1", FP); mf_.record_execution(exec_receipt(ff_f)); mf_.request_readback(); rbf_ = rb_receipt(ff_f); mf_.observe_readback(rbf_); mf_.decide_commit(commit_obs(rbf_, "COMMITTED"))
+    h_f = list(mf_.history); ev_f = dict(mf_.ev)
+    t(g, "a_call_that_fails_late_also_restores_history_state_and_evidence", raises(lambda: mf_.validate_outcome(outcome(ff_f, rbf_, "PASS")), "injected late failure")
+      and mf_.history == h_f and mf_.state == "COMMITTED" and set(mf_.ev) == set(ev_f) and "outcome" not in mf_.ev)
+    wp2 = os.path.join(ld2, "wait_default.txt"); open(wp2, "ab").close()
+    hold2 = open(wp2, "a+b"); MODEL._lock(hold2)
+    def release_later2():
+        __import__("time").sleep(0.35); MODEL._unlock(hold2); hold2.close()
+    th2 = threading.Thread(target=release_later2); th2.start()
+    waiter2 = open(wp2, "a+b")
+    t(g, "the_default_lock_timeout_outlasts_normal_contention", safe(lambda: (MODEL._lock(waiter2), MODEL._unlock(waiter2), True)[2]))
+    th2.join(); waiter2.close()
+    m3x, f3x = two_mutation_mission(2)
+    m3x.ledger.consume((f3x["au"]["object_hash"], "MUT-2"))
+    lease3 = remake(m3x.checkpoint_lease(), consumed_authority_ids=sorted("%s:%s" % (f3x["au"]["object_hash"], x) for x in ("MUT-1", "MUT-2")), remaining_budget=0, mutation_id=None)
+    r3x = rsm(lease3, f3x, m3x)
+    t(g, "resume_without_a_lease_mutation_id_uses_the_first_sorted_ledger_key", r3x.ev["mutation_id"] == "MUT-1")
+    t(g, "resume_records_an_audit_entry_in_the_history", r3x.history[-1] == ("RESUMED_AS_COMMIT_STATE_UNKNOWN", lease3["object_hash"]))
+
     # ---- NO_ENTERPRISE_WRITES (structural)
     g = "NO_ENTERPRISE_WRITES"
     src = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "mcr_r2_model.py")).read()
@@ -1397,7 +1521,7 @@ def _exec_only_complete():
 
 ACCEPT = ["STATE_MACHINE_VALID", "SCHEMA_VALIDATION", "AUTHORITY_INVARIANTS", "MUTATION_BUDGET_INVARIANTS",
           "REPLAY_GUARD_INVARIANTS", "CONTINUATION_INVARIANTS", "COMPENSATION_AUTHORITY_INVARIANTS",
-          "OUTCOME_PREDICATE_MODEL", "COMMIT_UNKNOWN_HANDLING", "COMPLETION_EVIDENCE", "HARDENING_R2_0H", "HARDENING_R2_0I", "HARDENING_R2_0J", "HARDENING_R2_0L", "TELEMETRY_MODEL", "NO_ENTERPRISE_WRITES"]
+          "OUTCOME_PREDICATE_MODEL", "COMMIT_UNKNOWN_HANDLING", "COMPLETION_EVIDENCE", "HARDENING_R2_0H", "HARDENING_R2_0I", "HARDENING_R2_0J", "HARDENING_R2_0L", "HARDENING_R2_0M", "TELEMETRY_MODEL", "NO_ENTERPRISE_WRITES"]
 
 
 def main(argv):

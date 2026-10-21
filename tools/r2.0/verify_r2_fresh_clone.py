@@ -95,10 +95,10 @@ PIN_H_ERA_b5cca1f = {
 # SHA-256 (CRLF-insensitive) of the model-side files at the revision submitted for independent review. Changing any of
 # them requires editing this table in the same commit, which makes the change visible; it is not an external anchor.
 PIN_REVIEWED_REVISION = {
-    "tools/r2.0/mcr_r2_model.py": "C25C16303F01CEC4A6FEE56A2F230E514DC2BF81631FB0688A3132E08401E397",
+    "tools/r2.0/mcr_r2_model.py": "D2AE1575493542822E4DA54ABF8ED98ED96B7D9E6BE2737F841442EF5CE324B0",
     "tools/r2.0/run_r2_local_scenarios.py": "B19B549776C17D7919F494B3C4C6A362542E3ED4628020B501FD0A56258AB955",
-    "tools/r2.0/run_r2_mutation_check.py": "233F391D4C6250B915EB3BD040AA70E39CCE4C4FF2E59B5DDD0D7728A37317A8",
-    "tools/r2.0/validate_r2_outcome_model.py": "17F0AC5C0955FD2F4714359E860AF1EABD7FC593EB138948852F443BC287D8DD"
+    "tools/r2.0/run_r2_mutation_check.py": "F63E604C1318304129D1502CBCD678307E434F321AC59AECE5B7FA56562B6C80",
+    "tools/r2.0/validate_r2_outcome_model.py": "3E56FA0964047FB47E25CC6CD263008E71A296D857D59892F4B6C20FBC30EE84"
 }
 PIN_I_ERA_a381a22 = {
     "architecture/r2.0/MCR_R2_0_EVIDENCE_CHAIN_CONTRACT_R3.md": "EF291CB6529A0DE1F71C6477D3B05889D466A6D20336DF9D4C9F4552CDF03872",
@@ -122,7 +122,17 @@ PIN_J_ERA_f6e79a4 = {
     "reports/r2.0/MCR_R2_0_INDEPENDENT_QUALIFICATION_R3_FINDINGS.md": "4305FA29474C87BBA939E99B18A43E755777C666A50579A657003A4694E45E1A",
     "reports/r2.0/MCR_R2_0_J_HARDENING_REPORT_R1.md": "2209D6B89ECAF472219D53C71E64BEBB31CFF904390E407A6D87F4DC0ED3BDCE"
 }
-FROZEN_HISTORICAL = dict(PIN_BASELINE_6f992c6, **PIN_G_ERA_8a383b6, **PIN_H_ERA_b5cca1f, **PIN_I_ERA_a381a22, **PIN_J_ERA_f6e79a4)
+PIN_L_ERA_681f77a = {
+    "architecture/r2.0/MCR_R2_0_EVIDENCE_CHAIN_CONTRACT_R5.md": "BAB6E4D8579473F77520C937FF9E38875EC227FE1C8C66C9E2795CD1B4C9A604",
+    "evidence/r2.0/MCR_R2_0_A_VALIDATION_RESULT_R6.json": "B906609B0BFC4FBFE7490DB08D72B5BD78A06C1EAACD09A886BAA7BC45F33A5F",
+    "evidence/r2.0/MCR_R2_0_DE_LOCAL_SCENARIOS_RESULT_R5.json": "DEC7879247D0EA7A6DAD4A9F463AB81C50F41BAB8F9D95ED2AC6BAF7B4F7CB4A",
+    "evidence/r2.0/MCR_R2_0_HYPOTHESIS_STATUS_R7.md": "C3F26550FC0D14767555DB1C05001BD72EAB56B0190633928724C6497C4DFE69",
+    "evidence/r2.0/MCR_R2_0_L_MUTATION_CHECK_R5.json": "5B701D8C4E2AA80735FBB294CCB0CF35320BE9C7ECAE9B523F4317A9234BF39B",
+    "evidence/r2.0/MCR_R2_0_L_TEST_MATRIX_R1.json": "F4844662F8AD02F503B67A03D26C18CE70085CAEB2CB5A007FF199EE882ACB6A",
+    "reports/r2.0/MCR_R2_0_INDEPENDENT_QUALIFICATION_R4_FINDINGS.md": "1E6F594CE0F4680E8C20DF2B140F86EF80B204B9DCFEE68B56DF8DDF723D9961",
+    "reports/r2.0/MCR_R2_0_L_HARDENING_REPORT_R1.md": "F7F25FDD1394C0C5A63296E1364BE5995CF45BF061B7A1287450EB9E5DF65475"
+}
+FROZEN_HISTORICAL = dict(PIN_BASELINE_6f992c6, **PIN_G_ERA_8a383b6, **PIN_H_ERA_b5cca1f, **PIN_I_ERA_a381a22, **PIN_J_ERA_f6e79a4, **PIN_L_ERA_681f77a)
 ROOTS = ["tools/r2.0", "architecture/r2.0", "evidence/r2.0", "reports/r2.0", "research-package/r2.0"]
 SKIP = {SUMS, "__pycache__", "tools/r2.0/make_adt_auth_context.py"}   # local credential helper, git-ignored
 TEXT = (".py", ".md", ".json", ".txt")
@@ -134,28 +144,53 @@ SECRET = re.compile(
     r"Bearer\s+[A-Za-z0-9+/=_.-]{16,}"
     r"|Basic\s+[A-Za-z0-9+/=]{16,}"
     r"|protected_token_b64[\"']?\s*[:=]\s*[\"']?[A-Za-z0-9+/=]{20,}"
-    r"|BEGIN (RSA |EC |OPENSSH |DSA )?PRIVATE " "KEY"
+    r"|BEGIN (RSA |EC |OPENSSH |DSA |ENCRYPTED |PGP )?PRIVATE " "KEY"
     r"|eyJ[A-Za-z0-9_-]{15,}\.[A-Za-z0-9_-]{15,}\.[A-Za-z0-9_-]{5,}"
     r"|(?<![A-Za-z0-9])sk-[A-Za-z0-9]{20,}"
-    r"|(?P<name>[A-Za-z0-9_.-]*(?i:secret|token|password|passwd|api[_-]?key|authorization)[A-Za-z0-9_.-]*)[\"']?\s*[:=]\s*[\"']?(?P<val>[A-Za-z0-9+/=_.-]{16,}+)(?!\()")
-HASHY = re.compile(r"(?i)hash|sha\d*|digest|checksum|count|len|id$")        # names of public digests are not secrets
+    r"|(?<![A-Za-z0-9])gh[pousr]_[A-Za-z0-9]{36,}"
+    r"|(?<![A-Za-z0-9])AK" "IA[0-9A-Z]{16}"
+    r"|(?<![A-Za-z0-9])xox[baprs]-[A-Za-z0-9-]{10,}"
+    r"|://[^/\s:@]+:[^/\s@]{3,}@"
+    r"|(?P<name>[A-Za-z0-9_.-]*(?i:secret|token|password|passwd|api[_-]?key|authorization)[A-Za-z0-9_.-]*)[\"']?\s*[:=]\s*[\"']?(?P<val>[A-Za-z0-9+/=_.-]{16,}+)(?!\()"
+    r"|(?P<sname>[A-Za-z0-9_.-]*(?i:password|passwd|secret|api[_-]?key|private[_-]?key)[A-Za-z0-9_.-]*)[\"']?\s*[:=]\s*[\"']?(?P<sval>[^\s\"']{8,15})(?![^\s\"'])")
+
+HASH_WORDS = {"hash", "sha", "sha1", "sha224", "sha256", "sha384", "sha512", "digest", "checksum", "fingerprint"}
+COUNT_WORDS = {"count", "len", "length", "id", "ids", "size"}
+LABEL = re.compile(r"(?:[A-Z]+[0-9]?|[0-9]+)(?:_(?:[A-Z]+[0-9]?|[0-9]+))+")       # UPPER_SNAKE enumeration labels
+FILENAME = re.compile(r"(?i)\.(md|json|py|txt|ps1|zip|yaml|yml)$")                 # a key that is itself a file name (pin tables)
+PLACEHOLDER = re.compile(r"(?i)^(changeme|redacted|example|placeholder|password|secret|required|optional|none|null|true|false|x{4,}|\*{3,}|<.*>|\$\{.*|\$\(.*|%.*%|\{\{.*)$")
 
 
-LABEL = re.compile(r"[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)+")                   # UPPER_SNAKE enumeration labels, e.g. DPAPI_PROTECTED_CURRENT_USER_CONTEXT
-FILENAME = re.compile(r"(?i)\.(md|json|py|txt|ps1|zip|yaml|yml)$")             # a key that is itself a file name (pin tables)
+def name_is_exempt(nm):
+    """Names that denote a public digest or a count/identifier: whole name SEGMENTS only (so account_password and
+    client_secret_silent are NOT exempt, while token_sha256, ExpectedTokenHash and token_id are)."""
+    seg = [x.lower() for x in re.split(r"[_.\-]+|(?<=[a-z0-9])(?=[A-Z])", nm) if x]
+    return bool(seg) and (any(x in HASH_WORDS for x in seg) or seg[-1] in COUNT_WORDS)
+
+
+def short_secret_like(val):
+    """An 8-15 character value under a strongly secret-like name: needs a digit with a letter, or a symbol."""
+    if PLACEHOLDER.match(val) or LABEL.fullmatch(val):
+        return False
+    has_digit, has_alpha = any(c.isdigit() for c in val), any(c.isalpha() for c in val)
+    has_symbol = any(c in "!@#$%^&*+=?~" for c in val)
+    return (has_digit and has_alpha) or has_symbol
 
 
 def has_secret(txt):
-    """True if any secret-shaped value appears. Exempt: names denoting hashes/digests/counts, names that are file
-    names, and values that are UPPER_SNAKE enumeration labels. A hex or base64 value under a secret-like name is NOT exempt."""
+    """True if any secret-shaped value appears. Exempt: names that denote hashes/digests/counts/ids (whole segments),
+    names that are file names, upper-snake enumeration labels, code calls, and placeholders. A hex or base64 value
+    under a secret-like name is NOT exempt."""
     for m in SECRET.finditer(txt):
-        nm = m.groupdict().get("name")
-        if nm is None:
+        g = m.groupdict()
+        if g.get("name") is not None:
+            if name_is_exempt(g["name"]) or FILENAME.search(g["name"]) or LABEL.fullmatch(g.get("val") or ""):
+                continue
             return True
-        if HASHY.search(nm) or FILENAME.search(nm):
-            continue
-        if LABEL.fullmatch(m.groupdict().get("val") or ""):
-            continue
+        if g.get("sname") is not None:
+            if name_is_exempt(g["sname"]) or FILENAME.search(g["sname"]) or not short_secret_like(g["sval"]):
+                continue
+            return True
         return True
     return False
 
@@ -256,13 +291,13 @@ def main(argv):
     t = tempfile.mkdtemp(prefix="r2out_")
     a = run(root, "tools/r2.0/validate_r2_outcome_model.py", "--out", os.path.join(t, "a.json"), "--emit-schemas", os.path.join(t, "schemas"))
     res["validator_passes"] = a.returncode == 0
-    res["validator_result_reproduces"] = open(os.path.join(t, "a.json"), "rb").read() == open(os.path.join(root, "evidence/r2.0/MCR_R2_0_A_VALIDATION_RESULT_R6.json"), "rb").read().replace(b"\r\n", b"\n")
+    res["validator_result_reproduces"] = open(os.path.join(t, "a.json"), "rb").read() == open(os.path.join(root, "evidence/r2.0/MCR_R2_0_A_VALIDATION_RESULT_R7.json"), "rb").read().replace(b"\r\n", b"\n")
     sch = sorted(os.listdir(os.path.join(t, "schemas")))
     res["schemas_reproduce"] = sch == sorted(os.listdir(os.path.join(root, "architecture/r2.0/schemas"))) and all(
         open(os.path.join(t, "schemas", s), "rb").read() == open(os.path.join(root, "architecture/r2.0/schemas", s), "rb").read().replace(b"\r\n", b"\n") for s in sch)
     d = run(root, "tools/r2.0/run_r2_local_scenarios.py", "--out", os.path.join(t, "d.json"))
     res["scenarios_pass"] = d.returncode == 0
-    res["scenarios_result_reproduces"] = open(os.path.join(t, "d.json"), "rb").read() == open(os.path.join(root, "evidence/r2.0/MCR_R2_0_DE_LOCAL_SCENARIOS_RESULT_R5.json"), "rb").read().replace(b"\r\n", b"\n")
+    res["scenarios_result_reproduces"] = open(os.path.join(t, "d.json"), "rb").read() == open(os.path.join(root, "evidence/r2.0/MCR_R2_0_DE_LOCAL_SCENARIOS_RESULT_R6.json"), "rb").read().replace(b"\r\n", b"\n")
     res["reviewed_revision_pins_match"] = all(os.path.exists(os.path.join(root, p_)) and sha(os.path.join(root, p_)) == h_ for p_, h_ in PIN_REVIEWED_REVISION.items())
     sums_sha = sha(os.path.join(root, SUMS))
     if "--expect-sums-sha256" in argv:
@@ -286,7 +321,7 @@ def main(argv):
         m = run(root, "tools/r2.0/run_r2_mutation_check.py", "--jobs", "4", "--out", os.path.join(t, "m.json"))
         res["mutation_check_passes"] = m.returncode == 0
         got = json.load(open(os.path.join(t, "m.json"), encoding="utf-8"))
-        ref = json.load(open(os.path.join(root, "evidence/r2.0/MCR_R2_0_L_MUTATION_CHECK_R5.json"), encoding="utf-8"))
+        ref = json.load(open(os.path.join(root, "evidence/r2.0/MCR_R2_0_M_MUTATION_CHECK_R6.json"), encoding="utf-8"))
         stable = lambda d: (d["mutants"], d["by_kind"], d["not_applied"], d["survivors"], d["unexplained_survivors"], d["MUTATION_CHECK"],
                             [(r["mutant"], r["applied"], r["detected"]) for r in d["results"]])
         res["mutation_result_reproduces"] = stable(got) == stable(ref)

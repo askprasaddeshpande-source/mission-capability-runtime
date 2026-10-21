@@ -81,6 +81,8 @@ def explanation(name):
 
 # Mutants detected only because the validator's OWN fixtures can no longer run (the mutant breaks a legitimate
 # flow the test setup depends on). Strong detection, but reported separately from assertion failures.
+DEFAULT_CRASH_REASON = ("the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant "
+                        "(detected, but not by a targeted assertion)")
 CRASH_REASONS = {
     "special: budget_not_decremented": "a legitimate resume is refused because the lease budget no longer adds up",
     "special: mission_consumed_set_not_recorded": "a genuine chain is refused by R19 because the replay set was never filled",
@@ -173,31 +175,42 @@ def build_mutants(src):
 
 
 def classify(r):
+    """assertion = the validator ran to completion and named failed tests; crash = it died with a Python traceback
+    (a legitimate flow its fixtures need was broken); inconclusive = killed, timed out or non-JSON WITHOUT a traceback
+    (for example a memory kill), which is NOT counted as detection; None = the mutant survived."""
     try:
         d = json.loads(r.stdout)
     except Exception:
-        return "crash" if r.returncode != 0 else None
+        if r.returncode != 0 and "Traceback" in (r.stderr or ""):
+            return "crash"
+        return "inconclusive"
     if d.get("failed"):
         return "assertion"
-    return "crash" if r.returncode != 0 else None
+    return "inconclusive" if r.returncode != 0 else None
 
 
 def run_one(item):
     name, new_src, applied = item
     if not applied or new_src is None:
         return {"mutant": name, "applied": False, "detected": None, "detected_by": None}
-    tmp = tempfile.mkdtemp(prefix="r2mut_")
-    try:
-        with open(os.path.join(tmp, "mcr_r2_model.py"), "w", encoding="utf-8", newline="\n") as fh:
-            fh.write(new_src)
-        shutil.copy(os.path.join(HERE, "validate_r2_outcome_model.py"), tmp)
-        r = subprocess.run([sys.executable, "validate_r2_outcome_model.py"], cwd=tmp, capture_output=True, text=True, timeout=300)
-        kind = classify(r)
-    except subprocess.TimeoutExpired:
-        kind = "crash"
-    finally:
-        shutil.rmtree(tmp, ignore_errors=True)
-    return {"mutant": name, "applied": True, "detected": kind is not None, "detected_by": kind}
+    kind = "inconclusive"
+    timed_out = False
+    for _attempt in range(2):                         # one retry: an inconclusive run must not decide the outcome
+        tmp = tempfile.mkdtemp(prefix="r2mut_")
+        try:
+            with open(os.path.join(tmp, "mcr_r2_model.py"), "w", encoding="utf-8", newline="\n") as fh:
+                fh.write(new_src)
+            shutil.copy(os.path.join(HERE, "validate_r2_outcome_model.py"), tmp)
+            r = subprocess.run([sys.executable, "validate_r2_outcome_model.py"], cwd=tmp, capture_output=True, text=True, timeout=300)
+            kind = classify(r)
+        except subprocess.TimeoutExpired:
+            kind = "hang" if timed_out else "inconclusive"   # the same mutant timing out twice is a deterministic hang
+            timed_out = True
+        finally:
+            shutil.rmtree(tmp, ignore_errors=True)
+        if kind != "inconclusive":
+            break
+    return {"mutant": name, "applied": True, "detected": kind in ("assertion", "crash", "hang"), "detected_by": kind}
 
 
 def main(argv):
@@ -206,7 +219,8 @@ def main(argv):
     mutants = build_mutants(src)
     with concurrent.futures.ThreadPoolExecutor(max_workers=jobs) as ex:
         results = list(ex.map(run_one, mutants))
-    survivors = [r["mutant"] for r in results if r["applied"] and not r["detected"]]
+    inconclusive = [r["mutant"] for r in results if r["detected_by"] == "inconclusive"]
+    survivors = [r["mutant"] for r in results if r["applied"] and not r["detected"] and r["detected_by"] != "inconclusive"]
     unexplained = [s_ for s_ in survivors if explanation(s_) is None]
     not_applied = [r["mutant"] for r in results if not r["applied"]]
     out = {"evidence_class": "SYNTHETIC/LOCAL", "mutants": len(results),
@@ -215,10 +229,12 @@ def main(argv):
                        "ast": sum(1 for r in results if r["mutant"].startswith("ast@")),
                        "special": sum(1 for r in results if r["mutant"].startswith("special:"))},
            "not_applied": not_applied, "detected_by_assertion": sum(1 for r in results if r["detected_by"] == "assertion"),
-           "detected_by_validator_crash": {r["mutant"]: CRASH_REASONS.get(r["mutant"], "UNEXPLAINED") for r in results if r["detected_by"] == "crash"},
+           "detected_by_validator_crash": {r["mutant"]: CRASH_REASONS.get(r["mutant"], DEFAULT_CRASH_REASON) for r in results if r["detected_by"] == "crash"},
+           "detected_by_hang": [r["mutant"] for r in results if r["detected_by"] == "hang"],
+           "inconclusive": inconclusive,
            "survivors": survivors, "explained_survivors": {s_: explanation(s_) for s_ in survivors if explanation(s_) is not None},
            "unexplained_survivors": unexplained, "results": results,
-           "MUTATION_CHECK": "PASS" if not not_applied and not unexplained else "FAIL"}
+           "MUTATION_CHECK": "PASS" if not not_applied and not unexplained and not inconclusive else "FAIL"}
     s = json.dumps(out, indent=2, sort_keys=True)
     if "--out" in argv:
         with open(argv[argv.index("--out") + 1], "w", newline="\n") as fh:
