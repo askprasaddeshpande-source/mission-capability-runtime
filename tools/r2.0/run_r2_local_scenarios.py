@@ -166,10 +166,11 @@ def compensation_semantics():
                  preconditions=[{"field": "exists", "op": "eq", "expected": True}], outcome_predicates=[{"field": "exists", "op": "eq", "expected": False}],
                  inherits_forward_authority=False, issued_by="OWNER-COMP")
     m.authorize_compensation(grant)
+    m.begin_compensation()
     r["compensation_budget_independent_of_forward"] = grant["max_mutations"] == 1 and m.remaining == 0
     post = rb_receipt(f, "ABSENT", obs={"exists": False})
     m.record_compensation(make("CompensationReceipt", receipt_id="c", grant_hash=grant["object_hash"],
-                               readback_receipt_hash=post["object_hash"], result="PASS"), post)
+                               readback_receipt_hash=post["object_hash"], result="PASS"), post, make("ExecutionReceipt", receipt_id="ce", transaction_id="TX-SYN-1", mutation_id="COMPENSATION:" + grant["object_hash"], call_class="PROVIDER_RESPONSE_SUCCESS"))
     r["final_state"] = m.state
     r["original_mission_reached_complete"] = False
     return r

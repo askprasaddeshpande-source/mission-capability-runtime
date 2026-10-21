@@ -20,6 +20,9 @@ SK = "sk" + "-" + "d" * 30
 BEARER = "Bearer" + " " + "e" * 30
 QUOTED = "to" + "ken" + ' = "' + "f" * 30 + '"'
 DRIVE_PATH = chr(68) + ":/work/secret/path"
+LONG = "g" * 24
+UNC = chr(92) * 2 + "fileserver" + chr(92) + "share"
+PROFILE = "%" + "USERPRO" + "FILE" + "%" + chr(92) + "x"
 
 
 def rm(path):
@@ -39,7 +42,7 @@ def fresh():
 
 
 def run(args=()):
-    r = subprocess.run([sys.executable, "tools/r2.0/verify_r2_fresh_clone.py", *args], cwd=TMP, capture_output=True, text=True)
+    r = subprocess.run([sys.executable, "tools/r2.0/verify_r2_fresh_clone.py", "--quick", *args], cwd=TMP, capture_output=True, text=True)
     try:
         return json.loads(r.stdout)
     except Exception:
@@ -93,6 +96,14 @@ def main():
     results["A5_new_file_plus_regenerated_sums"] = {"without_external_anchor": d1["R2_FRESH_CLONE_VERIFY"],
                                                     "with_external_anchor": d2["R2_FRESH_CLONE_VERIFY"], "anchor_matches": d2["sums_anchor_matches"]}
 
+
+    fresh(); write("reports/r2.0/zz_new_staged.md", "new staged file\n")
+    subprocess.run(["git", "add", "reports/r2.0/zz_new_staged.md"], cwd=TMP, capture_output=True)
+    sums()
+    d1 = run(); d2 = run(["--expect-sums-sha256", base_sha])
+    results["A5b_new_file_staged_plus_regenerated_sums"] = {"without_external_anchor": d1["R2_FRESH_CLONE_VERIFY"], "with_external_anchor": d2["R2_FRESH_CLONE_VERIFY"],
+                                                          "anchor_matches": d2["sums_anchor_matches"],
+                                                          "note": "documented limit: without an anchor from outside the repository an attacker who stages the file and regenerates the sums passes"}
     fresh(); subprocess.run(["git", "tag", "-d", "v1.9.0"], cwd=TMP, capture_output=True)
     d1 = run(); d2 = run(["--no-git"])
     results["A6_missing_r1_9_tag"] = {"default": d1["R2_FRESH_CLONE_VERIFY"], "tag_field": d1["r1_9_tag"], "with_no_git_flag": d2["R2_FRESH_CLONE_VERIFY"]}
@@ -111,6 +122,45 @@ def main():
         fh.write(" ")
     d = run(); results["A8_frozen_live_result_one_byte_changed_without_regenerating_sums"] = (d["R2_FRESH_CLONE_VERIFY"], d["hashes_match"], d["frozen_historical_unchanged"])
 
+
+    # --- review 3 verifier gaps
+    fresh()
+    pyc = os.path.join(TMP, "tools/r2.0/__pycache__/zz.cpython-313.pyc")
+    os.makedirs(os.path.dirname(pyc), exist_ok=True)
+    with open(pyc, "wb") as fh:
+        fh.write(b"\x00pyc")
+    subprocess.run(["git", "add", "-f", "tools/r2.0/__pycache__/zz.cpython-313.pyc"], cwd=TMP, capture_output=True)
+    d = run(["--expect-sums-sha256", base_sha]); results["A9_tracked_bytecode_even_with_the_anchor"] = (d["R2_FRESH_CLONE_VERIFY"], d["no_tracked_bytecode"])
+
+    fresh()
+    d = run(["--expect-sums-sha256", ""]); results["A10_empty_anchor_value"] = (d["R2_FRESH_CLONE_VERIFY"], d["sums_anchor_matches"])
+    fresh()
+    d = run(["--expect-sums-sha256", "not-a-hash"]); results["A10b_malformed_anchor_value"] = (d["R2_FRESH_CLONE_VERIFY"], d["sums_anchor_matches"])
+
+    payloads = {
+        "A11a_json_quoted_key": ("reports/r2.0/zz.json", '{"to' + 'ken": "' + LONG + '"}\n', "w"),
+        "A11b_yaml_file": ("evidence/r2.0/zz.yaml", "pass" + "word: " + LONG + "\n", "w"),
+        "A11c_extensionless_file": ("reports/r2.0/zznote", "api_" + "key=" + LONG + "\n", "w"),
+        "A11d_utf16_file": ("reports/r2.0/zz16.txt", ("Authori" + "zation: " + BEARER + "\n"), "utf16"),
+        "A11e_base64_bearer": ("reports/r2.0/zzb.md", "Bearer" + " " + "QUJDREVGR0hJSktMTU5PUA==" + "\n", "w"),
+        "A11f_basic_auth": ("reports/r2.0/zzc.md", "Basic" + " " + "dXNlcjpwYXNzd29yZDEyMzQ1Ng==" + "\n", "w"),
+        "A11g_unquoted_password": ("reports/r2.0/zzd.md", "pass" + "word=" + LONG + "\n", "w"),
+        "A11h_x_api_key_header": ("reports/r2.0/zze.md", "x-api" + "-key: " + LONG + "\n", "w"),
+    }
+    for name, (rel, body, mode) in payloads.items():
+        fresh()
+        full = os.path.join(TMP, rel)
+        os.makedirs(os.path.dirname(full), exist_ok=True)
+        if mode == "utf16":
+            with open(full, "wb") as fh:
+                fh.write(body.encode("utf-16"))
+        else:
+            write(rel, body)
+        sums()
+        d = run(); results[name] = (d["R2_FRESH_CLONE_VERIFY"], d["no_secret_like_strings"])
+    for name, body in (("A12a_unc_path", "see " + UNC + "\n"), ("A12b_env_var_profile_path", "see " + PROFILE + "\n")):
+        fresh(); write("reports/r2.0/zzp.md", body); sums()
+        d = run(); results[name] = (d["R2_FRESH_CLONE_VERIFY"], d["no_absolute_paths_in_docs"])
     rm(TMP)
     print(json.dumps(results, indent=1, sort_keys=True))
     if "--out" in sys.argv:

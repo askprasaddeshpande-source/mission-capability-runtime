@@ -10,6 +10,17 @@ import functools
 import hashlib
 import json
 import os
+import time
+import zlib
+
+try:                                   # OS file locking for the replay ledger
+    import msvcrt
+except ImportError:                    # pragma: no cover (POSIX)
+    msvcrt = None
+try:
+    import fcntl
+except ImportError:                    # pragma: no cover (Windows)
+    fcntl = None
 
 # ---------------------------------------------------------------- hashing
 def canon(obj):
@@ -198,38 +209,155 @@ def _accept_obj(slot, obj):
     return copy.deepcopy(obj)
 
 
+def _lock(fh, timeout=30.0):
+    """Exclusive advisory lock on the ledger file (byte 0), shared by every process that uses the file."""
+    start = time.time()
+    while True:
+        try:
+            if msvcrt is not None:
+                os.lseek(fh.fileno(), 0, os.SEEK_SET)
+                msvcrt.locking(fh.fileno(), msvcrt.LK_NBLCK, 1)
+            else:
+                fcntl.flock(fh.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+            return
+        except OSError:
+            if time.time() - start > timeout:
+                raise GuardError("ledger lock timeout")
+            time.sleep(0.01)
+
+
+def _unlock(fh):
+    try:
+        if msvcrt is not None:
+            os.lseek(fh.fileno(), 0, os.SEEK_SET)
+            msvcrt.locking(fh.fileno(), msvcrt.LK_UNLCK, 1)
+        else:
+            fcntl.flock(fh.fileno(), fcntl.LOCK_UN)
+    except OSError:
+        pass
+
+
 class ReplayLedger:
-    """Append-only record of consumed (authority hash, mutation id) pairs, kept OUTSIDE any lease.
-    Pass the same (ideally file-backed) ledger to every Mission and to resume(): a stale lease can then never
-    re-open a send that already left. With `path`, each consumption is flushed and fsynced before it is
-    reported; without it the ledger is process-local (tests only)."""
+    """Append-only record of sends, kept OUTSIDE any lease: one JSON line per consumed (authority hash, mutation id)
+    with a CRC, so newlines or colons in ids cannot corrupt the format.
+
+    With a `path` the ledger is DURABLE and MULTI-PROCESS SAFE on one local filesystem: every operation takes an OS
+    file lock, re-reads the file (so entries written by other processes or ledger objects are seen), checks, appends,
+    flushes and fsyncs before consume() returns. A torn final line (crash mid-write) is ignored and truncated, because
+    consume() had not returned and so no send followed; a corrupt earlier line fails closed. consume(key, limit)
+    also refuses a send once `limit` sends are recorded for the authority, across missions and processes.
+    NOT guaranteed: protection if callers use different ledger files, a volatile (path=None) ledger across processes,
+    network filesystems without working locks, or durability across power loss on hardware that ignores fsync.
+    Without a path the ledger is process-local (tests only); resume() refuses it unless explicitly allowed."""
 
     def __init__(self, path=None):
         self.path = path
+        self.is_durable = path is not None
         self._keys = set()
-        if path and os.path.exists(path):
-            with open(path, encoding="utf-8") as fh:
-                for line in fh:
-                    line = line.rstrip("\n")
-                    if line:
-                        self._keys.add(tuple(line.split(":", 1)))
+        if path:
+            self._sync()
+
+    @staticmethod
+    def _crc(auth, mut):
+        return "%08x" % (zlib.crc32((auth + "\x00" + mut).encode("utf-8")) & 0xFFFFFFFF)
+
+    @staticmethod
+    def _as_key(key):
+        try:
+            return tuple(key)
+        except TypeError:
+            raise GuardError("ledger key must be (authority hash, mutation id) non-empty strings")
+
+    @staticmethod
+    def _check_key(key):
+        if not (isinstance(key, tuple) and len(key) == 2 and all(isinstance(x, str) and x for x in key)):
+            raise GuardError("ledger key must be (authority hash, mutation id) non-empty strings")
+        if any(ord(c) < 32 or ord(c) == 127 for c in key[0] + key[1]):
+            raise GuardError("ledger key contains control characters")
+
+    def _parse(self, data):
+        try:
+            text = data.decode("utf-8")
+        except UnicodeDecodeError:
+            raise GuardError("ledger corrupted (not UTF-8)")
+        lines = text.split("\n")
+        keys = set()
+        for n, line in enumerate(lines[:-1], 1):       # the last element is the (possibly empty) torn tail
+            if not line:
+                continue
+            try:
+                rec = json.loads(line)
+                a, m_, c = rec["a"], rec["m"], rec["c"]
+                ok = isinstance(a, str) and isinstance(m_, str) and c == self._crc(a, m_)
+            except Exception:
+                ok = False
+            if not ok:
+                raise GuardError("ledger corrupted at line %d" % n)
+            keys.add((a, m_))
+        return keys
+
+    def _sync(self):
+        with open(self.path, "a+b") as fh:
+            _lock(fh)
+            try:
+                fh.seek(0)
+                self._keys |= self._parse(fh.read())
+            finally:
+                _unlock(fh)
 
     def has(self, key):
-        return tuple(key) in self._keys
-
-    def consume(self, key):
-        key = tuple(key)
-        if key in self._keys:
-            raise GuardError("replay: mutation authority already consumed (ledger)")
+        key = self._as_key(key)
         if self.path:
-            with open(self.path, "a", encoding="utf-8", newline="\n") as fh:
-                fh.write("%s:%s\n" % key)
-                fh.flush()
-                os.fsync(fh.fileno())
-        self._keys.add(key)
+            self._sync()
+        return key in self._keys
 
     def for_authority(self, authority_hash):
+        if self.path:
+            self._sync()
         return {k for k in self._keys if k[0] == authority_hash}
+
+    def _admit(self, key, limit):
+        if key in self._keys:
+            raise GuardError("replay: mutation authority already consumed (ledger)")
+        if limit is not None and sum(1 for k in self._keys if k[0] == key[0]) >= limit:
+            raise GuardError("authority send count exhausted (ledger)")
+
+    def consume(self, key, limit=None):
+        key = self._as_key(key)
+        self._check_key(key)
+        if not self.path:
+            self._admit(key, limit)
+            self._keys.add(key)
+            return
+        with open(self.path, "a+b") as fh:
+            _lock(fh)
+            try:
+                fh.seek(0)
+                data = fh.read()
+                self._keys |= self._parse(data)
+                self._admit(key, limit)
+                torn = data.split(b"\n")[-1]
+                if torn:                                  # discard a torn tail before appending
+                    fh.truncate(len(data) - len(torn))
+                fh.seek(0, 2)
+                fh.write((json.dumps({"a": key[0], "m": key[1], "c": self._crc(*key)}, separators=(",", ":")) + "\n").encode("utf-8"))
+                fh.flush()
+                os.fsync(fh.fileno())
+                self._keys.add(key)
+            finally:
+                _unlock(fh)
+
+
+def _count(x):
+    """A usable count: a real int (not bool, not float/NaN), non-negative."""
+    return isinstance(x, int) and not isinstance(x, bool) and x >= 0
+
+
+def _exists_consistent(rb):
+    o = rb["observed"]
+    if rb["existence"] == "UNKNOWN" or "exists" not in o:
+        return True
+    return o["exists"] is (rb["existence"] == "EXISTS")
 
 
 # Library trust boundary: guards protect against logic errors and malformed/forged EVIDENCE presented to a
@@ -245,13 +373,15 @@ SLOT_KINDS = {"intent": "MissionIntent", "principal": "PrincipalContext", "deleg
               "readback": "AuthoritativeReadbackReceipt", "outcome": "OutcomeReceipt",
               "outcome_contract": "ExpectedOutcomeContract", "readback_contract": "AuthoritativeReadbackContract",
               "completion": "CompletionReceipt", "comp_grant": "CompensationGrant",
-              "comp_receipt": "CompensationReceipt", "comp_readback": "AuthoritativeReadbackReceipt"}
+              "comp_receipt": "CompensationReceipt", "comp_readback": "AuthoritativeReadbackReceipt",
+              "comp_execution": "ExecutionReceipt"}
 POST_SEND_CLASSES = ("PROVIDER_RESPONSE_SUCCESS", "CALL_SENT_NO_RESPONSE", "PROVIDER_ERROR", "COMMIT_UNKNOWN")
 # Evidence a resumed mission may be given: pre-observation only. Readback, commit, outcome and completion must
 # be produced fresh by the guard methods after resume.
 RESUME_SLOTS = ("intent", "principal", "delegation", "capability", "provider", "tx", "budget", "outcome_contract",
                 "readback_contract", "authority", "execution_receipt")
-RESUME_REQUIRED = ("tx", "budget", "outcome_contract", "readback_contract", "authority")
+RESUME_REQUIRED = ("intent", "principal", "delegation", "capability", "provider", "tx", "budget", "outcome_contract",
+                   "readback_contract", "authority")
 
 # Relational checks run by COMPLETE. One id per relation; every id has a violation recipe in the validator
 # and an automatic mutant in the mutation harness (a new relation without both fails the tests).
@@ -270,7 +400,7 @@ RELATIONS = {
     "R26": "checkpoint does not pin the readback contract", "R27": "checkpoint budget differs from budget limit",
     "R28": "execution receipt transaction mismatch", "R29": "execution receipt mutation mismatch",
     "R30": "execution receipt call class invalid", "R31": "readback transaction mismatch",
-    "R32": "readback mutation mismatch", "R33": "readback not produced under the frozen contract",
+    "R32": "readback mutation mismatch", "R50": "readback existence contradicts observed.exists", "R33": "readback not produced under the frozen contract",
     "R34": "readback is not from an authoritative source", "R35": "readback is not EXISTS",
     "R36": "commit observation transaction mismatch", "R37": "commit observation mutation mismatch",
     "R38": "commit observation not bound to readback", "R39": "commit state is not COMMITTED",
@@ -290,8 +420,10 @@ def atomic(fn):
         snap = (self.state, list(self.history), dict(self.ev), self.remaining, set(self.consumed), self.mutations_sent)
         try:
             return fn(self, *a, **k)
-        except BaseException:
+        except BaseException as exc:
             self.state, self.history, self.ev, self.remaining, self.consumed, self.mutations_sent = snap
+            if isinstance(exc, (KeyError, TypeError, AttributeError, ValueError, IndexError)):
+                raise GuardError("malformed argument: %s" % type(exc).__name__) from exc
             raise
     return wrapper
 
@@ -313,7 +445,7 @@ class Mission:
         self.ledger = ledger if ledger is not None else ReplayLedger()
         self.mutations_sent = 0
         self.max_mutations = max_mutations
-        self.sap_writes_by_model = 0
+        self._resuming = False
 
     # -- helpers
     def _go(self, to, ref=None, _tok=None):
@@ -363,16 +495,19 @@ class Mission:
             raise GuardError("authority exceeds delegation (no attenuation)")
         if authority["max_mutations"] > delegation["max_mutations"]:
             raise GuardError("authority mutation count exceeds delegation")
+        for what, val in (("delegation", delegation["max_mutations"]), ("authority", authority["max_mutations"]), ("budget", budget["max_mutations"])):
+            if not _count(val):
+                raise GuardError("%s mutation count must be a non-negative integer" % what)
         if authority["single_use"] is not True:
             raise GuardError("authority must be single use")
         if budget["authority_hash"] != authority["object_hash"] or budget["max_mutations"] > authority["max_mutations"]:
             raise GuardError("budget not bounded by authority")
-        if budget["expansion_allowed"] or budget["retries"] != 0:
+        if budget["expansion_allowed"] is not False or budget["retries"] != 0 or isinstance(budget["retries"], bool):
             raise GuardError("budget must forbid expansion and retries")
         if budget["max_mutations"] != self.max_mutations:
             raise GuardError("budget differs from mission limit")
         if any((k[0] if isinstance(k, tuple) else k) == authority["object_hash"] for k in self.consumed) \
-                or self.ledger.for_authority(authority["object_hash"]):
+                or (not self._resuming and self.ledger.for_authority(authority["object_hash"])):
             raise GuardError("authority already consumed")
         self.ev.update(delegation=delegation, authority=authority, budget=budget)
         self._go("AUTHORIZED", authority["object_hash"], _tok=_TOKEN)
@@ -403,7 +538,7 @@ class Mission:
         ids = tx["mutation_ids"]
         if not isinstance(ids, list) or not ids or not all(isinstance(i, str) and i for i in ids):
             raise GuardError("transaction mutation ids must be a non-empty list of strings")
-        if not outcome_contract["frozen"]:
+        if outcome_contract["frozen"] is not True:
             raise GuardError("outcome contract not frozen before mutation")
         check_predicates(outcome_contract["predicates"])
         budget = self._need("budget")
@@ -415,7 +550,7 @@ class Mission:
             raise GuardError("checkpoint does not pin budget")
         if checkpoint["transaction_hash"] != tx["object_hash"]:
             raise GuardError("checkpoint does not pin transaction")
-        if checkpoint["remaining_budget"] != budget["max_mutations"]:
+        if not _count(checkpoint["remaining_budget"]) or checkpoint["remaining_budget"] != budget["max_mutations"]:
             raise GuardError("checkpoint budget differs from budget limit")
         if readback_contract["source_level_required"] != "AUTHORITATIVE_REPOSITORY":
             raise GuardError("readback contract is not authoritative")
@@ -426,7 +561,7 @@ class Mission:
     @atomic
     def begin_execution(self, mutation_id, contract_fingerprint_now):
         """Budget + replay guard are consumed BEFORE the call leaves the client (and only if the step is legal)."""
-        if not isinstance(mutation_id, str) or not mutation_id or "\n" in mutation_id:
+        if not isinstance(mutation_id, str) or not mutation_id or any(ord(c) < 32 or ord(c) == 127 for c in mutation_id):
             raise GuardError("invalid mutation id")
         if contract_fingerprint_now != self._need("provider")["contract_fingerprint"]:
             raise GuardError("contract drift at point of use: revalidate (fail closed)")
@@ -439,7 +574,7 @@ class Mission:
             raise GuardError("mutation budget exhausted")
         if "EXECUTION_STARTED" not in TRANSITIONS[self.state]:
             raise GuardError("illegal transition %s -> EXECUTION_STARTED" % self.state)
-        self.ledger.consume(key)
+        self.ledger.consume(key, limit=self.ev["budget"]["max_mutations"])
         self.consumed.add(key)
         self.remaining -= 1
         self.mutations_sent += 1
@@ -476,6 +611,8 @@ class Mission:
             raise GuardError("readback not produced under frozen contract")
         if rb["mutation_id"] != self.ev["mutation_id"]:
             raise GuardError("readback not correlated to mutation")
+        if not _exists_consistent(rb):
+            raise GuardError("readback existence contradicts observed.exists")
         self.ev["readback"] = rb
         self._go("AUTHORITATIVE_READBACK_OBSERVED", rb["object_hash"], _tok=_TOKEN)
 
@@ -550,7 +687,7 @@ class Mission:
         self._rel("R06", au["max_mutations"] <= dl["max_mutations"])
         self._rel("R07", bu["authority_hash"] == h("authority"))
         self._rel("R08", bu["max_mutations"] <= au["max_mutations"])
-        self._rel("R09", bu["retries"] == 0 and not bu["expansion_allowed"])
+        self._rel("R09", bu["retries"] == 0 and not isinstance(bu["retries"], bool) and bu["expansion_allowed"] is False)
         self._rel("R10", bu["max_mutations"] == self.max_mutations)
         self._rel("R11", au["single_use"] is True)
         self._rel("R12", cb["authority_hash"] == h("authority"))
@@ -577,6 +714,7 @@ class Mission:
         self._rel("R33", rb["contract_hash"] == h("readback_contract"))
         self._rel("R34", rb["source_level"] == "AUTHORITATIVE_REPOSITORY")
         self._rel("R35", rb["existence"] == "EXISTS")
+        self._rel("R50", _exists_consistent(rb))
         self._rel("R36", co["transaction_id"] == T)
         self._rel("R37", co["mutation_id"] == mid)
         self._rel("R38", co["readback_receipt_hash"] == h("readback"))
@@ -629,8 +767,7 @@ class Mission:
             raise GuardError("compensation may not inherit forward authority")
         if grant["issued_by"] == a["object_hash"]:
             raise GuardError("compensation grant must not be issued from forward authority")
-        if not isinstance(grant["max_mutations"], int) or isinstance(grant["max_mutations"], bool) or grant["max_mutations"] < 1 \
-                or not grant["preconditions"] or not grant["outcome_predicates"]:
+        if not _count(grant["max_mutations"]) or grant["max_mutations"] < 1 or not grant["preconditions"] or not grant["outcome_predicates"]:
             raise GuardError("compensation grant incomplete")
         if grant["capability"] in a["scope"]:
             raise GuardError("compensation capability lies within forward authority scope")
@@ -640,15 +777,39 @@ class Mission:
             raise GuardError("compensation target not tied to mission")
         if "readback" not in self.ev:
             raise GuardError("compensation preconditions need the forward readback")
+        if self.ev["readback"]["source_level"] != "AUTHORITATIVE_REPOSITORY":
+            raise GuardError("compensation preconditions need an authoritative forward readback")
         if eval_predicates(grant["preconditions"], self.ev["readback"]["observed"]) != "PASS":
             raise GuardError("compensation precondition not satisfied")
         self.ev["comp_grant"] = grant
         self._go("COMPENSATION_AUTHORIZED", grant["object_hash"], _tok=_TOKEN)
 
     @atomic
-    def record_compensation(self, comp_receipt, post_readback):
+    def begin_compensation(self):
+        """The compensating call is a send too: its own ledger entry (bound to the grant, limited to the grant's
+        budget) is consumed BEFORE the call leaves. It may happen once."""
+        grant = self._need("comp_grant")
+        if self.state != "COMPENSATION_AUTHORIZED":
+            raise GuardError("illegal transition %s -> compensation start" % self.state)
+        if self.ev.get("comp_started"):
+            raise GuardError("replay: compensation already started")
+        self.ledger.consume((grant["object_hash"], "COMPENSATION"), limit=grant["max_mutations"])
+        self.ev["comp_started"] = True
+
+    @atomic
+    def record_compensation(self, comp_receipt, post_readback, comp_execution):
+        """COMPENSATED needs: a begun compensation, an execution receipt for it, a receipt bound to the grant, and an
+        authoritative post-compensation readback that is distinct from the forward readback and satisfies the goal."""
         comp_receipt, post_readback = self._accept("comp_receipt", comp_receipt), self._accept("comp_readback", post_readback)
+        comp_execution = self._accept("comp_execution", comp_execution)
         g = self._need("comp_grant")
+        if not self.ev.get("comp_started"):
+            raise GuardError("compensation was not begun")
+        self._corr(comp_execution)
+        if comp_execution["mutation_id"] != "COMPENSATION:" + g["object_hash"]:
+            raise GuardError("compensation execution receipt not bound to the grant")
+        if comp_execution["call_class"] not in POST_SEND_CLASSES:
+            raise GuardError("compensation execution receipt call class invalid")
         if comp_receipt["grant_hash"] != g["object_hash"]:
             raise GuardError("compensation receipt not bound to its grant")
         self._corr(post_readback)
@@ -656,6 +817,11 @@ class Mission:
             raise GuardError("post-compensation readback not correlated to the mission")
         if post_readback["source_level"] != "AUTHORITATIVE_REPOSITORY":
             raise GuardError("post-compensation readback must be authoritative")
+        if not _exists_consistent(post_readback):
+            raise GuardError("readback existence contradicts observed.exists")
+        fwd = self._need("readback")
+        if post_readback["object_hash"] == fwd["object_hash"] or post_readback["observed"] == fwd["observed"]:
+            raise GuardError("post-compensation readback is not distinct from the forward readback")
         if comp_receipt["readback_receipt_hash"] != post_readback["object_hash"]:
             raise GuardError("compensation receipt not bound to post readback")
         if eval_predicates(g["outcome_predicates"], post_readback["observed"]) != "PASS" or comp_receipt["result"] != "PASS":
@@ -678,15 +844,18 @@ class Mission:
                     consumed_authority_ids=sorted(("%s:%s" % k) for k in self.consumed))
 
     @classmethod
-    def resume(cls, lease, checkpoint, original_budget, mission_id, evidence, ledger):
-        """Rebuild a mission. Lease, checkpoint, original budget and every re-presented object must be hash-valid
-        and of the right kind; the lease must agree with the checkpoint and the evidence; consumption is the UNION
-        of the lease and the external ReplayLedger, so a stale lease cannot re-open a send that already left.
-        After any possible send the mission restarts in COMMIT_STATE_UNKNOWN and needs a fresh readback; only
-        pre-observation evidence is accepted. Lease integrity (hash) is checked; authenticity (signature) is not
-        provided by this library."""
+    def resume(cls, lease, checkpoint, original_budget, mission_id, evidence, ledger, allow_volatile_ledger=False):
+        """Rebuild a mission by re-running the REAL guard methods on re-presented evidence (so a resumed mission is
+        held to exactly the checks a fresh one gets), then applying consumption. Lease, checkpoint and original budget
+        must be hash-valid and agree with each other; consumption is the UNION of the lease and the external
+        ReplayLedger, so a stale lease cannot re-open a send recorded there; after any possible send the mission
+        restarts in COMMIT_STATE_UNKNOWN and needs a fresh readback. Only pre-observation evidence is accepted.
+        A durable (file-backed) ledger is required unless allow_volatile_ledger is set (tests). Lease integrity
+        (hash) is checked; authenticity (signature) is not provided by this library."""
         if not isinstance(ledger, ReplayLedger):
-            raise GuardError("resume requires the durable ReplayLedger")
+            raise GuardError("resume requires the ReplayLedger")
+        if not ledger.is_durable and not allow_volatile_ledger:
+            raise GuardError("resume requires a durable (file-backed) ledger")
         if not isinstance(evidence, dict):
             raise GuardError("resume requires re-presented evidence")
         for o, kind in ((lease, "ContinuationLease"), (checkpoint, "PreMutationCheckpoint"), (original_budget, "MutationBudget")):
@@ -695,12 +864,12 @@ class Mission:
         if lease["checkpoint_hash"] != checkpoint["object_hash"]:
             raise GuardError("lease not bound to checkpoint")
         lease_rem = lease["remaining_budget"]
-        if not isinstance(lease_rem, int) or isinstance(lease_rem, bool) or lease_rem < 0:
+        if not _count(lease_rem):
             raise GuardError("lease remaining_budget invalid")
         ids = lease["consumed_authority_ids"]
-        if not isinstance(ids, list) or not all(isinstance(s, str) and ":" in s for s in ids) or len(ids) != len(set(ids)):
+        if not isinstance(ids, list) or not all(isinstance(s_, str) and ":" in s_ for s_ in ids) or len(ids) != len(set(ids)):
             raise GuardError("lease consumed ids invalid")
-        lease_consumed = {tuple(s.split(":", 1)) for s in ids}
+        lease_consumed = {tuple(s_.split(":", 1)) for s_ in ids}
         pre_send = lease["state_at_checkpoint"] == "PREWRITE_VALIDATED"
         if (lease_consumed and pre_send) or (not lease_consumed and not pre_send):
             raise GuardError("lease state inconsistent with consumed set")
@@ -711,41 +880,30 @@ class Mission:
             if slot not in evidence:
                 raise GuardError("resume evidence missing %s" % slot)
         ev = {slot: _accept_obj(slot, o) for slot, o in evidence.items()}
-        pins = {"tx": "transaction_hash", "budget": "budget_hash",
-                "outcome_contract": "outcome_contract_hash", "readback_contract": "readback_contract_hash"}
-        for slot, field in pins.items():
-            if ev[slot]["object_hash"] != checkpoint[field]:
-                raise GuardError("re-presented %s does not match checkpoint pin" % slot)
-        if ev["tx"]["transaction_id"] != lease["transaction_id"]:
-            raise GuardError("re-presented transaction does not match lease")
-        if ev["tx"]["mission_id"] != mission_id or ev["authority"]["mission_id"] != mission_id \
-                or ("intent" in ev and ev["intent"]["mission_id"] != mission_id):
-            raise GuardError("re-presented evidence belongs to another mission")
         if original_budget["object_hash"] != ev["budget"]["object_hash"]:
             raise GuardError("original budget does not match the re-presented budget")
-        if ev["budget"]["authority_hash"] != ev["authority"]["object_hash"]:
-            raise GuardError("re-presented authority does not match budget")
-        if "delegation" in ev and ev["authority"]["delegation_hash"] != ev["delegation"]["object_hash"]:
-            raise GuardError("re-presented delegation does not match authority")
-        if "capability" in ev and ev["capability"]["authority_hash"] != ev["authority"]["object_hash"]:
-            raise GuardError("re-presented capability binding does not match authority")
         auth = ev["authority"]["object_hash"]
         if any(k[0] != auth for k in lease_consumed):
             raise GuardError("consumed set does not belong to the re-presented authority")
         total = original_budget["max_mutations"]
         if lease_rem + len(lease_consumed) > min(checkpoint["remaining_budget"], total):
             raise GuardError("continuation may not enlarge budget")
-        consumed = lease_consumed | ledger.for_authority(auth)
         m = cls(mission_id, lease["transaction_id"], total, ledger=ledger)
+        m._resuming = True
+        try:
+            m.context_ready(ev["intent"], ev["principal"])
+            m.authorize(ev["delegation"], ev["authority"], ev["budget"])
+            m.bind(ev["capability"], ev["provider"])
+            m.prewrite_validate(ev["tx"], ev["outcome_contract"], ev["readback_contract"], checkpoint)
+        finally:
+            m._resuming = False
+        consumed = lease_consumed | ledger.for_authority(auth)
         m.remaining = min(lease_rem, total - len(consumed))
         if m.remaining < 0:
             raise GuardError("consumed mutations exceed the original budget")
         m.consumed = consumed
-        m.ev.update(ev)
-        m.ev["checkpoint"] = copy.deepcopy(checkpoint)
         m.mutations_sent = len(consumed)
         if not consumed:
-            m.state = "PREWRITE_VALIDATED"
             return m
         # a send may have happened: never silently restart or trust carried post-send state; reconcile
         mut = lease["mutation_id"] if lease["mutation_id"] else sorted(k[1] for k in consumed)[0]

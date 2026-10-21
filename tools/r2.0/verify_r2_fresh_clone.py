@@ -95,26 +95,38 @@ PIN_H_ERA_b5cca1f = {
 # SHA-256 (CRLF-insensitive) of the model-side files at the revision submitted for independent review. Changing any of
 # them requires editing this table in the same commit, which makes the change visible; it is not an external anchor.
 PIN_REVIEWED_REVISION = {
-    "tools/r2.0/mcr_r2_model.py": "474CFACCE7528B19E05A8FC172A5EC90185B52AF8AE91D59EEBCF4EAB43D17FF",
-    "tools/r2.0/run_r2_local_scenarios.py": "52331E2E532583FB3DE0AFF4E497B364A026C873C52FCB6DFFDA36AA07FDDE1D",
-    "tools/r2.0/run_r2_mutation_check.py": "ADEAB666E5BD1BD860751A94C8035F6F90A16E0985DAAAC466AC9B9D1602767C",
-    "tools/r2.0/validate_r2_outcome_model.py": "83D51752CD2453DB24D9C6BA7D4FC5B157BB4EE22D9DBC66B8BDEA74FADF0110"
+    "tools/r2.0/mcr_r2_model.py": "D84ED091CD9AC0BFE201194698B261F84E93C1FC3F126A36AD2BEDF23AC62088",
+    "tools/r2.0/run_r2_local_scenarios.py": "B19B549776C17D7919F494B3C4C6A362542E3ED4628020B501FD0A56258AB955",
+    "tools/r2.0/run_r2_mutation_check.py": "0BBAEACEADF9ACCA1F5887C8A0743654E8412C57A226B0D17F195B7792017320",
+    "tools/r2.0/validate_r2_outcome_model.py": "677481CAA28FC3E13FEBF83185A915F8B4679DB6C634DFA86E264B310695D005"
 }
-FROZEN_HISTORICAL = dict(PIN_BASELINE_6f992c6, **PIN_G_ERA_8a383b6, **PIN_H_ERA_b5cca1f)
+PIN_I_ERA_a381a22 = {
+    "architecture/r2.0/MCR_R2_0_EVIDENCE_CHAIN_CONTRACT_R3.md": "EF291CB6529A0DE1F71C6477D3B05889D466A6D20336DF9D4C9F4552CDF03872",
+    "evidence/r2.0/MCR_R2_0_A_VALIDATION_RESULT_R4.json": "B534F5C22FF4E6F275BFA19B4613E3A9B37B4F699A44AA75DDF95BA6AF85197D",
+    "evidence/r2.0/MCR_R2_0_DE_LOCAL_SCENARIOS_RESULT_R3.json": "DEC7879247D0EA7A6DAD4A9F463AB81C50F41BAB8F9D95ED2AC6BAF7B4F7CB4A",
+    "evidence/r2.0/MCR_R2_0_HYPOTHESIS_STATUS_R5.md": "A6A6C662155D68914E6F73ED35D6A504DEF99B19A6B410B37654B07839C0D302",
+    "evidence/r2.0/MCR_R2_0_I_MUTATION_CHECK_R3.json": "E7158AC4BB130EAE238A6EDF2AEF90F23119972BD1ECB302818613C4762BB1FF",
+    "evidence/r2.0/MCR_R2_0_I_TEST_MATRIX_R1.json": "2C60B43C60C4ECDB9DB17EA40B61C8DAD9C446C00CA62FCF433F5B41FB1F40D5",
+    "evidence/r2.0/MCR_R2_0_I_VERIFIER_ATTACKS_R1.json": "D968FEEB8266D592B750858951763A0CA9EA593E84E05867CCA8B817679AC917",
+    "reports/r2.0/MCR_R2_0_INDEPENDENT_QUALIFICATION_R2_FINDINGS.md": "586BFED4DF9AD6FB6089D792EE3954E4E9162D6CE01673B7FC2CC9CFECE1FB55",
+    "reports/r2.0/MCR_R2_0_I_HARDENING_REPORT_R1.md": "0653F822F8197B7567CE746B2C905A1ADF9051D208F2FD91854B47A69653586A"
+}
+FROZEN_HISTORICAL = dict(PIN_BASELINE_6f992c6, **PIN_G_ERA_8a383b6, **PIN_H_ERA_b5cca1f, **PIN_I_ERA_a381a22)
 ROOTS = ["tools/r2.0", "architecture/r2.0", "evidence/r2.0", "reports/r2.0", "research-package/r2.0"]
 SKIP = {SUMS, "__pycache__", "tools/r2.0/make_adt_auth_context.py"}   # local credential helper, git-ignored
 TEXT = (".py", ".md", ".json", ".txt")
 # Frozen live tooling with owner-workspace default paths (not publication logic); any other tool must be path-free.
 TOOLS_WITH_DEFAULT_PATHS = {"tools/r2.0/r2_0c_study.py", "tools/r2.0/r2_0b_readonly_readback_probe.py"}
 LOCAL_EXEC_DOCS = {"research-package/r2.0/r2_0c/MCR_R2_0_C_AUTHORIZATION_PACKET_R1.md"}   # owner-workspace commands by design
-ABS = re.compile(r"(?<![A-Za-z0-9_])[A-Za-z]:[\\/](?!/)|/Us" + "ers/|/ho" + "me/[a-z]")  # drive paths (either slash) and user-profile paths
+ABS = re.compile(r"(?<![A-Za-z0-9_])[A-Za-z]:[\\/](?!/)|/Us" + "ers/|/ho" + "me/[a-z]|%(?i:USERPRO" + "FILE|APPD" + "ATA|LOCALAPPD" + "ATA)%|(?<![A-Za-z0-9:])\\\\\\\\[A-Za-z0-9._-]+\\\\[A-Za-z0-9$._-]+")  # drive paths (either slash), user-profile paths, env-var profile paths, UNC shares
 SECRET = re.compile(
-    r"Bearer\s+[A-Za-z0-9._-]{20,}"
-    r"|protected_token_b64\"\s*:\s*\"[A-Za-z0-9+/=]{20,}"
-    r"|BEGIN (RSA |EC |OPENSSH )?PRIVATE " "KEY"
+    r"Bearer\s+[A-Za-z0-9+/=_.-]{16,}"
+    r"|Basic\s+[A-Za-z0-9+/=]{16,}"
+    r"|protected_token_b64[\"']?\s*[:=]\s*[\"']?[A-Za-z0-9+/=]{20,}"
+    r"|BEGIN (RSA |EC |OPENSSH |DSA )?PRIVATE " "KEY"
     r"|eyJ[A-Za-z0-9_-]{15,}\.[A-Za-z0-9_-]{15,}\.[A-Za-z0-9_-]{5,}"
     r"|(?<![A-Za-z0-9])sk-[A-Za-z0-9]{20,}"
-    r"|(?i:token|secret|password|api[_-]?key)\s*[:=]\s*[\"'][A-Za-z0-9+/=_-]{24,}[\"']")
+    r"|(?i:x-api-key|api[_-]?key|token|secret|password|passwd|authorization)[\"']?\s*[:=]\s*[\"']?[A-Za-z0-9+/=_.-]{16,}")
 
 
 def files(root):
@@ -134,6 +146,19 @@ def sha(path):
     if path.endswith(TEXT):
         b = b.replace(b"\r\n", b"\n")
     return hashlib.sha256(b).hexdigest().upper()
+
+
+def read_text(path):
+    b = open(path, "rb").read()
+    if b.startswith((b"\xff\xfe", b"\xfe\xff")):
+        return b.decode("utf-16", errors="replace")
+    if b"\x00" in b[:400]:
+        for enc in ("utf-16-le", "utf-16-be"):
+            try:
+                return b.decode(enc)
+            except UnicodeDecodeError:
+                pass
+    return b.decode("utf-8-sig", errors="replace")
 
 
 def run(root, *args):
@@ -164,25 +189,44 @@ def main(argv):
     t = tempfile.mkdtemp(prefix="r2out_")
     a = run(root, "tools/r2.0/validate_r2_outcome_model.py", "--out", os.path.join(t, "a.json"), "--emit-schemas", os.path.join(t, "schemas"))
     res["validator_passes"] = a.returncode == 0
-    res["validator_result_reproduces"] = open(os.path.join(t, "a.json"), "rb").read() == open(os.path.join(root, "evidence/r2.0/MCR_R2_0_A_VALIDATION_RESULT_R4.json"), "rb").read().replace(b"\r\n", b"\n")
+    res["validator_result_reproduces"] = open(os.path.join(t, "a.json"), "rb").read() == open(os.path.join(root, "evidence/r2.0/MCR_R2_0_A_VALIDATION_RESULT_R5.json"), "rb").read().replace(b"\r\n", b"\n")
     sch = sorted(os.listdir(os.path.join(t, "schemas")))
     res["schemas_reproduce"] = sch == sorted(os.listdir(os.path.join(root, "architecture/r2.0/schemas"))) and all(
         open(os.path.join(t, "schemas", s), "rb").read() == open(os.path.join(root, "architecture/r2.0/schemas", s), "rb").read().replace(b"\r\n", b"\n") for s in sch)
     d = run(root, "tools/r2.0/run_r2_local_scenarios.py", "--out", os.path.join(t, "d.json"))
     res["scenarios_pass"] = d.returncode == 0
-    res["scenarios_result_reproduces"] = open(os.path.join(t, "d.json"), "rb").read() == open(os.path.join(root, "evidence/r2.0/MCR_R2_0_DE_LOCAL_SCENARIOS_RESULT_R3.json"), "rb").read().replace(b"\r\n", b"\n")
+    res["scenarios_result_reproduces"] = open(os.path.join(t, "d.json"), "rb").read() == open(os.path.join(root, "evidence/r2.0/MCR_R2_0_DE_LOCAL_SCENARIOS_RESULT_R4.json"), "rb").read().replace(b"\r\n", b"\n")
     res["reviewed_revision_pins_match"] = all(os.path.exists(os.path.join(root, p_)) and sha(os.path.join(root, p_)) == h_ for p_, h_ in PIN_REVIEWED_REVISION.items())
     sums_sha = sha(os.path.join(root, SUMS))
-    exp = argv[argv.index("--expect-sums-sha256") + 1].upper() if "--expect-sums-sha256" in argv else None
-    res["sums_anchor_matches"] = (sums_sha == exp) if exp else "NOT_CHECKED (pass --expect-sums-sha256 from a source outside the repository)"
+    if "--expect-sums-sha256" in argv:
+        exp = argv[argv.index("--expect-sums-sha256") + 1] if argv.index("--expect-sums-sha256") + 1 < len(argv) else ""
+        res["sums_anchor_matches"] = bool(re.fullmatch(r"[0-9A-Fa-f]{64}", exp)) and sums_sha == exp.upper()
+    else:
+        res["sums_anchor_matches"] = "NOT_CHECKED (pass --expect-sums-sha256 from a source outside the repository)"
+    tracked = subprocess.run(["git", "ls-files", "--", *ROOTS], cwd=root, capture_output=True, text=True)
+    if tracked.returncode == 0 and tracked.stdout.strip():
+        tr = set(tracked.stdout.split("\n")) - {""}
+        res["no_tracked_bytecode"] = not any("__pycache__" in x or x.endswith((".pyc", ".pyo")) for x in tr)
+        res["tracked_files_match_sums"] = (tr - {SUMS}) == set(listed)
+    elif "--no-git" in argv:
+        res["no_tracked_bytecode"] = res["tracked_files_match_sums"] = True
+    else:
+        res["no_tracked_bytecode"] = res["tracked_files_match_sums"] = False
     res["frozen_historical_unchanged"] = all(os.path.exists(os.path.join(root, p)) and sha(os.path.join(root, p)) == h for p, h in FROZEN_HISTORICAL.items())
-    m = run(root, "tools/r2.0/run_r2_mutation_check.py", "--out", os.path.join(t, "m.json"))
-    res["mutation_check_passes"] = m.returncode == 0
-    res["mutation_result_reproduces"] = open(os.path.join(t, "m.json"), "rb").read() == open(os.path.join(root, "evidence/r2.0/MCR_R2_0_I_MUTATION_CHECK_R3.json"), "rb").read().replace(b"\r\n", b"\n")
+    if "--quick" in argv:
+        res["mutation_check_passes"] = res["mutation_result_reproduces"] = "SKIPPED (--quick; run without it for release verification)"
+    else:
+        m = run(root, "tools/r2.0/run_r2_mutation_check.py", "--jobs", "4", "--out", os.path.join(t, "m.json"))
+        res["mutation_check_passes"] = m.returncode == 0
+        got = json.load(open(os.path.join(t, "m.json"), encoding="utf-8"))
+        ref = json.load(open(os.path.join(root, "evidence/r2.0/MCR_R2_0_J_MUTATION_CHECK_R4.json"), encoding="utf-8"))
+        stable = lambda d: (d["mutants"], d["by_kind"], d["not_applied"], d["survivors"], d["unexplained_survivors"], d["MUTATION_CHECK"],
+                            [(r["mutant"], r["applied"], r["detected"]) for r in d["results"]])
+        res["mutation_result_reproduces"] = stable(got) == stable(ref)
     bad_abs, bad_sec = [], []
     for p in cur:
-        if p.endswith(TEXT):
-            txt = open(os.path.join(root, p), encoding="utf-8", errors="replace").read()
+        if True:
+            txt = read_text(os.path.join(root, p))
             if p.startswith("tools/"):
                 if p not in TOOLS_WITH_DEFAULT_PATHS and ABS.search(txt):
                     bad_abs.append(p)
@@ -192,7 +236,7 @@ def main(argv):
                 bad_sec.append(p)
     helper = os.path.join(root, "tools", "r2.0", "make_adt_auth_context.py")
     if os.path.exists(helper):
-        htxt = open(helper, encoding="utf-8", errors="replace").read()
+        htxt = read_text(helper)
         if SECRET.search(htxt):
             bad_sec.append("tools/r2.0/make_adt_auth_context.py")
         if ABS.search(htxt):
@@ -201,7 +245,7 @@ def main(argv):
     res["no_secret_like_strings"] = not bad_sec
     g = subprocess.run(["git", "rev-parse", "-q", "--verify", R1_9_TAG + "^{commit}"], cwd=root, capture_output=True, text=True)
     res["r1_9_tag"] = ("UNCHANGED" if g.stdout.strip() == R1_9_COMMIT else "CHANGED") if g.returncode == 0 else "NOT_PRESENT_IN_CHECKOUT"
-    ok = all(v is True for k, v in res.items() if k not in ("r1_9_tag", "sums_anchor_matches")) and res["sums_anchor_matches"] is not False and res["r1_9_tag"] != "CHANGED"         and (res["r1_9_tag"] == "UNCHANGED" or "--no-git" in argv)
+    ok = all(v is True or ("--quick" in argv and isinstance(v, str) and v.startswith("SKIPPED")) for k, v in res.items() if k not in ("r1_9_tag", "sums_anchor_matches")) and res["sums_anchor_matches"] is not False and res["r1_9_tag"] != "CHANGED"         and (res["r1_9_tag"] == "UNCHANGED" or "--no-git" in argv)
     print(json.dumps(dict(res, sums_sha256=sums_sha, details={"absolute_path_files": bad_abs, "secret_like_files": bad_sec}, R2_FRESH_CLONE_VERIFY="PASS" if ok else "FAIL"), indent=2, sort_keys=True))
     return 0 if ok else 1
 

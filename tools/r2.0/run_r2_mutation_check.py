@@ -2,15 +2,19 @@
 
 Usage: python tools/r2.0/run_r2_mutation_check.py [--out PATH] [--jobs N]
 
-Mutants are generated from the source, not hand-listed, so a new guard cannot silently escape:
+Mutants are generated from the source, not hand-listed, so a new guard or operator cannot silently escape:
   * GUARD: every `if <cond>: raise GuardError(...)` has its condition replaced by False;
   * RELATION: every `self._rel("Rnn", <cond>)` has its condition replaced by True;
+  * AST: every comparison operator is flipped (== != < <= > >= in/not in is/is not), every `and`/`or` operand is
+    dropped (replaced by True/False), every `not` is removed and every `+`/`-` is swapped, anywhere in the model
+    outside docstrings (clause-level and boundary mutants);
   * SPECIAL: targeted mutants for logic that is not an if-raise guard (state, budget, ledger, copy, strict compare...).
 Each mutant is applied to a temp copy and the validator must fail. The harness records HOW it was detected:
   assertion = the validator ran to completion and reported failed test names; crash = it died with an exception.
 PASS requires: every mutation applied exactly once, every mutant detected, and every survivor listed in EXPLAINED
 with a reason (an equivalent mutant). Crash-only detections are reported separately and also listed.
 """
+import ast
 import concurrent.futures
 import json
 import os
@@ -31,8 +35,8 @@ SPECIAL = [
     ("budget_not_decremented", "        self.remaining -= 1\n", "        pass\n"),
     ("completion_not_persisted", '        self.ev["completion"] = completion', "        pass"),
     ("completion_link_dropped_from_chain", '               ("completion", "COMPLETION_RECEIPT")]', "               ]"),
-    ("atomic_rollback_removed", "            self.state, self.history, self.ev, self.remaining, self.consumed, self.mutations_sent = snap\n            raise", "            raise"),
-    ("ledger_not_written_on_send", "        self.ledger.consume(key)\n", "        pass\n"),
+    ("atomic_rollback_removed", "            self.state, self.history, self.ev, self.remaining, self.consumed, self.mutations_sent = snap\n            if isinstance(exc,", "            if isinstance(exc,"),
+    ("ledger_not_written_on_send", '        self.ledger.consume(key, limit=self.ev["budget"]["max_mutations"])\n', "        pass\n"),
     ("mission_consumed_set_not_recorded", "        self.consumed.add(key)\n", "        pass\n"),
     ("resume_ignores_ledger", "        consumed = lease_consumed | ledger.for_authority(auth)", "        consumed = lease_consumed"),
     ("resume_state_inherited_from_lease", '        m.state = "COMMIT_STATE_UNKNOWN"\n        m.history.append(("RESUMED_AS_COMMIT_STATE_UNKNOWN"', '        m.state = lease["state_at_checkpoint"]\n        m.history.append(("RESUMED_AS_COMMIT_STATE_UNKNOWN"'),
@@ -55,7 +59,23 @@ SPECIAL = [
 
 # Survivors that are equivalent mutants (behaviour cannot differ), keyed by mutant name. Anything else that
 # survives fails the check.
-EXPLAINED = {}
+EXPLAINED = {
+    # key = distinctive fragment that must appear in the (line-number-free) mutant name -> reason it is equivalent
+    'drop clause 1 of post_readback["object_hash"] == fwd': "equivalent: an identical object hash implies identical content, so the observed-state clause already covers it",
+    "drop clause 1 of isinstance(key, tuple) and len(key) == 2": "equivalent: _as_key() always returns a tuple before _check_key() runs",
+    'drop clause 1 of mid is not None and mid in tx': "equivalent: None is never a member of a list of non-empty strings",
+    "drop clause 1 of isinstance(a, str) and isinstance(m_, str)": "equivalent: _crc() raises TypeError for non-strings, which the surrounding except turns into 'corrupted'",
+    "drop clause 2 of isinstance(a, str) and isinstance(m_, str)": "equivalent: _crc() raises TypeError for non-strings, which the surrounding except turns into 'corrupted'",
+    "flip time.time() - start > timeout": "equivalent: > versus >= on a float clock difference changes nothing observable",
+}
+
+
+def explanation(name):
+    n = norm(name)
+    for key, why in EXPLAINED.items():
+        if key in n:
+            return why
+    return None
 
 # Mutants detected only because the validator's OWN fixtures can no longer run (the mutant breaks a legitimate
 # flow the test setup depends on). Strong detection, but reported separately from assertion failures.
@@ -64,6 +84,64 @@ CRASH_REASONS = {
     "special: mission_consumed_set_not_recorded": "a genuine chain is refused by R19 because the replay set was never filled",
     "special: predicate_eq_always_true": "the compensation fixture reaches an illegal transition because an eq predicate passes wrongly",
 }
+
+
+
+SWAP = {ast.Eq: "!=", ast.NotEq: "==", ast.Lt: "<=", ast.LtE: "<", ast.Gt: ">=", ast.GtE: ">", ast.In: "not in",
+        ast.NotIn: "in", ast.Is: "is not", ast.IsNot: "is"}
+
+
+def ast_mutants(src):
+    """Yield (name, mutated source) for every clause/operator mutation in the model (docstrings excluded)."""
+    tree = ast.parse(src)
+    data = src.encode("utf-8")
+    starts = [0]
+    for line in data.split(b"\n")[:-1]:
+        starts.append(starts[-1] + len(line) + 1)
+
+    def off(lineno, col):
+        return starts[lineno - 1] + col
+
+    def span(n):
+        return off(n.lineno, n.col_offset), off(n.end_lineno, n.end_col_offset)
+
+    docstrings = set()
+    for n in ast.walk(tree):
+        if isinstance(n, (ast.FunctionDef, ast.ClassDef, ast.Module)) and n.body and isinstance(n.body[0], ast.Expr) \
+                and isinstance(n.body[0].value, ast.Constant) and isinstance(n.body[0].value.value, str):
+            docstrings.add(id(n.body[0].value))
+    skip = set()
+    for n in ast.walk(tree):
+        if id(n) in docstrings:
+            for c in ast.walk(n):
+                skip.add(id(c))
+
+    def mutated(s, e, text):
+        return (data[:s] + text.encode("utf-8") + data[e:]).decode("utf-8")
+
+    for n in ast.walk(tree):
+        if id(n) in skip or not hasattr(n, "lineno"):
+            continue
+        snippet = data[span(n)[0]:span(n)[1]].decode("utf-8").replace("\n", " ")[:60]
+        if isinstance(n, ast.Compare) and len(n.ops) == 1 and type(n.ops[0]) in SWAP:
+            s_, e_ = span(n.left)[1], span(n.comparators[0])[0]
+            yield "ast@L%d: flip %s" % (n.lineno, snippet), mutated(s_, e_, " %s " % SWAP[type(n.ops[0])])
+        elif isinstance(n, ast.BoolOp) and len(n.values) >= 2:
+            repl = "True" if isinstance(n.op, ast.And) else "False"
+            for i, v in enumerate(n.values):
+                s_, e_ = span(v)
+                yield "ast@L%d: drop clause %d of %s" % (n.lineno, i + 1, snippet), mutated(s_, e_, repl)
+        elif isinstance(n, ast.UnaryOp) and isinstance(n.op, ast.Not):
+            s_, e_ = span(n)
+            vs, ve = span(n.operand)
+            yield "ast@L%d: remove not in %s" % (n.lineno, snippet), mutated(s_, e_, data[vs:ve].decode("utf-8"))
+        elif isinstance(n, ast.BinOp) and isinstance(n.op, (ast.Add, ast.Sub)):
+            s_, e_ = span(n.left)[1], span(n.right)[0]
+            yield "ast@L%d: swap +/- in %s" % (n.lineno, snippet), mutated(s_, e_, " - " if isinstance(n.op, ast.Add) else " + ")
+
+def norm(name):
+    """Mutant name without its line number, so explanations survive harmless line shifts."""
+    return re.sub(r"@L\d+", "", name)
 
 
 def build_mutants(src):
@@ -76,6 +154,16 @@ def build_mutants(src):
     for m in REL_RE.finditer(src):
         new = src[:m.start(3)] + "True" + src[m.end(3):]
         muts.append(("relation %s" % m.group(2), new, True))
+    seen = {m[1] for m in muts}
+    for name, new in ast_mutants(src):
+        try:
+            ast.parse(new)
+        except SyntaxError:
+            continue
+        if new in seen:                      # identical to a guard/relation mutant already generated
+            continue
+        seen.add(new)
+        muts.append((name, new, True))
     for name, old, rep in SPECIAL:
         ok = src.count(old) == 1
         muts.append(("special: " + name, src.replace(old, rep, 1) if ok else None, ok))
@@ -117,15 +205,16 @@ def main(argv):
     with concurrent.futures.ThreadPoolExecutor(max_workers=jobs) as ex:
         results = list(ex.map(run_one, mutants))
     survivors = [r["mutant"] for r in results if r["applied"] and not r["detected"]]
-    unexplained = [s for s in survivors if s not in EXPLAINED]
+    unexplained = [s_ for s_ in survivors if explanation(s_) is None]
     not_applied = [r["mutant"] for r in results if not r["applied"]]
     out = {"evidence_class": "SYNTHETIC/LOCAL", "mutants": len(results),
            "by_kind": {"guard": sum(1 for r in results if r["mutant"].startswith("guard@")),
                        "relation": sum(1 for r in results if r["mutant"].startswith("relation ")),
+                       "ast": sum(1 for r in results if r["mutant"].startswith("ast@")),
                        "special": sum(1 for r in results if r["mutant"].startswith("special:"))},
            "not_applied": not_applied, "detected_by_assertion": sum(1 for r in results if r["detected_by"] == "assertion"),
-           "detected_by_crash_only": {r["mutant"]: CRASH_REASONS.get(r["mutant"], "UNEXPLAINED") for r in results if r["detected_by"] == "crash"},
-           "survivors": survivors, "explained_survivors": {s: EXPLAINED[s] for s in survivors if s in EXPLAINED},
+           "detected_by_validator_crash": {r["mutant"]: CRASH_REASONS.get(r["mutant"], "UNEXPLAINED") for r in results if r["detected_by"] == "crash"},
+           "survivors": survivors, "explained_survivors": {s_: explanation(s_) for s_ in survivors if explanation(s_) is not None},
            "unexplained_survivors": unexplained, "results": results,
            "MUTATION_CHECK": "PASS" if not not_applied and not unexplained else "FAIL"}
     s = json.dumps(out, indent=2, sort_keys=True)
