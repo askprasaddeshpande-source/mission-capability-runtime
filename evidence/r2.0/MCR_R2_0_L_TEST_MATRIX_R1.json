@@ -1,0 +1,199 @@
+{
+  "chain_relations": {
+    "count": 50,
+    "note": "49 _rel relations (R01-R50 without R21) plus the predicate-validity check; each has its own violation recipe and an automatic mutant"
+  },
+  "evidence_class": "SYNTHETIC/LOCAL",
+  "frozen_runner_mock_regression": {
+    "error_not_persisted": {
+      "chain_links_emitted": 11,
+      "last_link": "AUTHORITATIVE_READBACK_RECEIPT",
+      "outcome_matches_frozen_R1": true
+    },
+    "outcome_fail": {
+      "chain_links_emitted": 13,
+      "last_link": "OUTCOME_RECEIPT",
+      "outcome_matches_frozen_R1": true
+    },
+    "persisted_error_response": {
+      "chain_links_emitted": 14,
+      "last_link": "COMPLETION_RECEIPT",
+      "outcome_matches_frozen_R1": true
+    },
+    "readback_error": {
+      "chain_links_emitted": 11,
+      "last_link": "AUTHORITATIVE_READBACK_RECEIPT",
+      "outcome_matches_frozen_R1": true
+    },
+    "success": {
+      "chain_links_emitted": 14,
+      "last_link": "COMPLETION_RECEIPT",
+      "outcome_matches_frozen_R1": true
+    },
+    "timeout_persisted": {
+      "chain_links_emitted": 14,
+      "last_link": "COMPLETION_RECEIPT",
+      "outcome_matches_frozen_R1": true
+    }
+  },
+  "local_scenarios_D_E": {
+    "checks": {
+      "absent_is_fail_closed": true,
+      "compensation_separate_and_not_completion": true,
+      "every_fault_case_blocks_second_send": true,
+      "every_post_send_crash_blocks_replay": true,
+      "every_post_send_resume_restarts_in_unknown": true,
+      "forged_lease_state_not_inherited": true,
+      "no_crash_point_restores_budget": true,
+      "pre_send_crash_keeps_full_budget": true,
+      "recovery_blocks_replay": true,
+      "recovery_reaches_complete_with_one_mutation": true,
+      "stale_lease_cannot_replay_the_send": true,
+      "tampering_rejected": true,
+      "unknown_or_nonauthoritative_never_complete": true
+    },
+    "local_scenarios": "PASS",
+    "result_file": "MCR_R2_0_DE_LOCAL_SCENARIOS_RESULT_R5.json"
+  },
+  "model_validator": {
+    "R2_0_A_FOUNDATION": "PASS",
+    "failed": [],
+    "group_sizes": {
+      "AUTHORITY_INVARIANTS": 7,
+      "COMMIT_UNKNOWN_HANDLING": 16,
+      "COMPENSATION_AUTHORITY_INVARIANTS": 9,
+      "COMPLETION_EVIDENCE": 22,
+      "CONTINUATION_INVARIANTS": 6,
+      "HARDENING_R2_0H": 36,
+      "HARDENING_R2_0I": 153,
+      "HARDENING_R2_0J": 105,
+      "HARDENING_R2_0L": 75,
+      "MUTATION_BUDGET_INVARIANTS": 6,
+      "NO_ENTERPRISE_WRITES": 1,
+      "OUTCOME_PREDICATE_MODEL": 10,
+      "REPLAY_GUARD_INVARIANTS": 3,
+      "SCHEMA_VALIDATION": 6,
+      "STATE_MACHINE_VALID": 10,
+      "TELEMETRY_MODEL": 1
+    },
+    "groups": {
+      "AUTHORITY_INVARIANTS": "PASS",
+      "COMMIT_UNKNOWN_HANDLING": "PASS",
+      "COMPENSATION_AUTHORITY_INVARIANTS": "PASS",
+      "COMPLETION_EVIDENCE": "PASS",
+      "CONTINUATION_INVARIANTS": "PASS",
+      "HARDENING_R2_0H": "PASS",
+      "HARDENING_R2_0I": "PASS",
+      "HARDENING_R2_0J": "PASS",
+      "HARDENING_R2_0L": "PASS",
+      "MUTATION_BUDGET_INVARIANTS": "PASS",
+      "NO_ENTERPRISE_WRITES": "PASS",
+      "OUTCOME_PREDICATE_MODEL": "PASS",
+      "REPLAY_GUARD_INVARIANTS": "PASS",
+      "SCHEMA_VALIDATION": "PASS",
+      "STATE_MACHINE_VALID": "PASS",
+      "TELEMETRY_MODEL": "PASS"
+    },
+    "history": {
+      "R1": 74,
+      "after_R2_0G": 96,
+      "after_R2_0H": 133,
+      "after_R2_0I": 283,
+      "after_R2_0J": 391,
+      "after_R2_0L": 466
+    },
+    "result_file": "MCR_R2_0_A_VALIDATION_RESULT_R6.json",
+    "tests": 466
+  },
+  "mutation_check": {
+    "by_kind": {
+      "ast": 403,
+      "guard": 114,
+      "relation": 49,
+      "special": 23
+    },
+    "detected_by_assertion": 293,
+    "detected_by_validator_crash": 290,
+    "explained_survivors": {
+      "ast@L239: flip time.time() - start > timeout": "equivalent: > versus >= on a float clock difference changes nothing observable",
+      "ast@L312: drop clause 1 of isinstance(key, tuple) and len(key) == 2 and all(isinstance(": "equivalent: _as_key() always returns a tuple before _check_key() runs",
+      "ast@L346: drop clause 1 of isinstance(a, str) and isinstance(m_, str) and c == self._cr": "equivalent: _crc() raises TypeError for non-strings, which the surrounding except turns into 'corrupted'",
+      "ast@L346: drop clause 2 of isinstance(a, str) and isinstance(m_, str) and c == self._cr": "equivalent: _crc() raises TypeError for non-strings, which the surrounding except turns into 'corrupted'",
+      "ast@L790: drop clause 1 of mid is not None and mid in tx[\"mutation_ids\"]": "equivalent: None is never a member of a list of non-empty strings",
+      "ast@L916: drop clause 1 of post_readback[\"object_hash\"] == fwd[\"object_hash\"] or post_r": "equivalent: an identical object hash implies identical content, so the observed-state clause already covers it"
+    },
+    "generated_from_source": true,
+    "mutants": 589,
+    "not_applied": [],
+    "note": "validator-crash = the validator could not run to completion because the mutant broke a legitimate flow its own fixtures depend on; counted as detected, reported separately from assertion failures",
+    "result_file": "MCR_R2_0_L_MUTATION_CHECK_R5.json",
+    "survivors": [
+      "ast@L916: drop clause 1 of post_readback[\"object_hash\"] == fwd[\"object_hash\"] or post_r",
+      "ast@L312: drop clause 1 of isinstance(key, tuple) and len(key) == 2 and all(isinstance(",
+      "ast@L790: drop clause 1 of mid is not None and mid in tx[\"mutation_ids\"]",
+      "ast@L239: flip time.time() - start > timeout",
+      "ast@L346: drop clause 1 of isinstance(a, str) and isinstance(m_, str) and c == self._cr",
+      "ast@L346: drop clause 2 of isinstance(a, str) and isinstance(m_, str) and c == self._cr"
+    ],
+    "unexplained_survivors": []
+  },
+  "network_calls": 0,
+  "runner_file_changed_since_baseline": false,
+  "sap_writes": 0,
+  "verifier_attacks": {
+    "all_fail_the_verifier": true,
+    "archived_scenarios": 26,
+    "documented_limit": "A5b: a staged new file plus regenerated sums passes without an external --expect-sums-sha256 and fails with one",
+    "last_archived_full_run": "MCR_R2_0_J_VERIFIER_ATTACKS_R2.json",
+    "new_scenarios_not_archived": "A13a-A13f were added to the attack script in R2.0L; their full-verifier run was stopped by the machine (low system memory) and has NOT been run or archived",
+    "scanner_payload_checks": {
+      "A13a_nul_prefixed_utf16": {
+        "expected_flagged": true,
+        "flagged": true,
+        "ok": true
+      },
+      "A13b_utf32_file": {
+        "expected_flagged": true,
+        "flagged": true,
+        "ok": true
+      },
+      "A13c_secret_key_assignment": {
+        "expected_flagged": true,
+        "flagged": true,
+        "ok": true
+      },
+      "A13e_hex_value_under_a_secret_name": {
+        "expected_flagged": true,
+        "flagged": true,
+        "ok": true
+      },
+      "exempt_code_call": {
+        "expected_flagged": false,
+        "flagged": false,
+        "ok": true
+      },
+      "exempt_file_name_key": {
+        "expected_flagged": false,
+        "flagged": false,
+        "ok": true
+      },
+      "exempt_hash_named_field": {
+        "expected_flagged": false,
+        "flagged": false,
+        "ok": true
+      },
+      "exempt_upper_snake_label": {
+        "expected_flagged": false,
+        "flagged": false,
+        "ok": true
+      },
+      "jwt": {
+        "expected_flagged": true,
+        "flagged": true,
+        "ok": true
+      }
+    },
+    "scanner_payload_checks_all_ok": true,
+    "tracked_tree_secret_hits": []
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "kind": {
+      "const": "ContractFingerprint"
+    },
+    "object_hash": {
+      "pattern": "^[0-9A-F]{64}$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "kind",
+    "object_hash",
+    "provider_ref",
+    "tool_name",
+    "schema_hash",
+    "description_hash"
+  ],
+  "title": "ContractFingerprint",
+  "type": "object"
+}

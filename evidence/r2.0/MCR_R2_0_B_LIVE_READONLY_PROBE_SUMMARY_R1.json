@@ -1,0 +1,242 @@
+{
+  "destination": "TRL_EN",
+  "evidence_class": "OBSERVED",
+  "findings": {
+    "atc_run_positive_and_negative_control": "both isError with identical generic text 'Error executing tool: null' -> UNKNOWN; ATC did not discriminate in this run (input shape against the changed schema not diagnosed)",
+    "capella_adt_class_read_source": "refused by provider scope gate on TRL_EN ('destination outside DF-P1 class scope'); not circumvented",
+    "capella_adt_repository_read_metadata": "queries the DDLS endpoint only; returns isError=false, found=false, status 404 'Data definition ... does not exist' for BOTH an existing class (positive control) and a random name -> a 404 from this tool is not evidence of absence for non-DDLS objects; its sourceHash is a hash of the error body",
+    "class_readback_on_TRL_EN": "NOT_ESTABLISHED",
+    "ddls_readback_on_TRL_EN": "UNTESTED: no existing DDLS positive control supplied yet",
+    "destination_TRL_EN_listed": true
+  },
+  "provider": {
+    "added_since_r1_8": [
+      "capella_adt_class_preflight",
+      "capella_adt_class_read_source",
+      "capella_adt_class_save_inactive",
+      "capella_adt_ddls_activate",
+      "capella_adt_ddls_preflight",
+      "capella_adt_ddls_read_source",
+      "capella_adt_ddls_save_inactive",
+      "capella_adt_repository_read_metadata",
+      "capella_adt_repository_uri_probe"
+    ],
+    "existing_tools_with_changed_description": [
+      "abap_atc_run"
+    ],
+    "existing_tools_with_changed_inputSchema": [
+      "abap_atc_run",
+      "abap_activate_objects",
+      "abap_run_unit_tests"
+    ],
+    "r1_8_tool_count": 20,
+    "tool_count": 29,
+    "tool_fingerprints_sha256_name_plus_inputSchema": {
+      "abap_activate_objects": "4DC51AF7DF7FD118059F3F7DB9D95995412FA5236EDC0C753210529710F10DE2",
+      "abap_atc_apply_ai_fix": "7CF0CF809ED1190848D00665C2C6DFAF60E9DCAAA5F3B7D7605ACEF1D7FA82BF",
+      "abap_atc_execute_deterministic_quickfixes": "9D81766F9A28A8D5364A74729CEB3121855064176837591695538B6322C43BE2",
+      "abap_atc_get_ai_fix_result": "B516E82654B7F3DEE17FA1FA4E56929B103E1EABF5977C5063E3911CA82CCDC5",
+      "abap_atc_get_result": "E79BDEE5AC204959B273E437F7B5939B25C06D50CBFE30D6DAB55F78B548A34A",
+      "abap_atc_run": "C05FC0D6D2297071B12E139250A430D3D5F68270998DB764340FF148F3C7D528",
+      "abap_business_services-fetch_service_information": "CE07F034A95A5FE9FE860105C407EF711EEA1F2EC352C14FEBE7454618A2853E",
+      "abap_business_services-fetch_services": "F54BC09B5D14B264EEB6C051452952056F57B688F779857CC620F4157F1F2F63",
+      "abap_creation-create_object": "CB99759628F2258BFB8E13082ED4675E6B6A8F4A348C0BF30D259D2CFA1A0271",
+      "abap_creation-get_all_creatable_objects": "320248D1F7545D70A12C4D1EE79E3E248B379E1C9A2B6E370B55D12A78B78952",
+      "abap_creation-get_object_type_details": "D6A1FACD78DCA31E07B9AF39A219AE61A91D723F70676CF0B9D5A4C1DE271A09",
+      "abap_creation-run_validation": "710F7FED4E4BBA9FBC020E1A7DD880712297E2A75BCB330C3D675C102A3763E2",
+      "abap_generators-generate_objects": "4CD8CC10F56FBD26ED13FDFE6DC137553E9AFF7F3C3EE371D2B8E3F13FA928DB",
+      "abap_generators-get_schema": "B97D959B373581F4009384933292679DEA4A2AD2ED4FB2492497380FFDAB4094",
+      "abap_generators-list_generators": "D8C7F1122D47279C228038C7469E68F5C1AFDE1BC00234C1DCD464BB17CFBAB2",
+      "abap_list_destinations": "B45D1135E76D51C5959763B2B5C2A0637731EAAD6472106D4D0F85AC44CBFFF9",
+      "abap_run_unit_tests": "7F1554BDA46C7D47F024AA0DB454CAF841B922BF09E9F74DFB0BFC2ED438CD8E",
+      "abap_transport-create": "7134A1705882A19589FC98B7E253594150624D62761C0E6C38A6EBBB05EC34EF",
+      "abap_transport-get": "6B9A34D3755809700B66AA8F483B0D7F9F1409AA2625D1448507C5E786624656",
+      "abap_transport-unifiedDifference": "11F1C4611938BA5410D87989ECD08D040698745DEC256D83E17EDA46D313BEB0",
+      "capella_adt_class_preflight": "9D763E270DF48A0C9B71EE26B0FE87BDF2949D8F61B959A747777F5EA1AAA3B5",
+      "capella_adt_class_read_source": "34B7F872091960729D672CBAD052EE8AEBF364D41EDA060FBCC9C6C955F2BE5D",
+      "capella_adt_class_save_inactive": "34E0979ED36835857C5001149765EDEBCF40FC6CC52B909CA73DF250117C3C7F",
+      "capella_adt_ddls_activate": "C0B5653EFFD1653B66403705664645F5C2AE0BD33535B728A93BC39C1A8FC72C",
+      "capella_adt_ddls_preflight": "C9C109FDB71681EBDAFFFF9D4BCF95467FFC9241F300C57EEC0652A17C849029",
+      "capella_adt_ddls_read_source": "211C3895C3F4DC7151D5D3B35A9C2CE34DA81A6EDF9046524D67575418309860",
+      "capella_adt_ddls_save_inactive": "FD75E7A5DC195C46E4918003F90EA02542E796325916BEB01357BFB8FD11AADA",
+      "capella_adt_repository_read_metadata": "6993F78FAF77C639F6DF9458A5EFD00912B7ECACB3377020B99411F9D5A963A3",
+      "capella_adt_repository_uri_probe": "B0295987AAD2D998080178F46663606C43F7CC90E371A188FD29CDF45054D784"
+    },
+    "tool_names": [
+      "abap_activate_objects",
+      "abap_atc_apply_ai_fix",
+      "abap_atc_execute_deterministic_quickfixes",
+      "abap_atc_get_ai_fix_result",
+      "abap_atc_get_result",
+      "abap_atc_run",
+      "abap_business_services-fetch_service_information",
+      "abap_business_services-fetch_services",
+      "abap_creation-create_object",
+      "abap_creation-get_all_creatable_objects",
+      "abap_creation-get_object_type_details",
+      "abap_creation-run_validation",
+      "abap_generators-generate_objects",
+      "abap_generators-get_schema",
+      "abap_generators-list_generators",
+      "abap_list_destinations",
+      "abap_run_unit_tests",
+      "abap_transport-create",
+      "abap_transport-get",
+      "abap_transport-unifiedDifference",
+      "capella_adt_class_preflight",
+      "capella_adt_class_read_source",
+      "capella_adt_class_save_inactive",
+      "capella_adt_ddls_activate",
+      "capella_adt_ddls_preflight",
+      "capella_adt_ddls_read_source",
+      "capella_adt_ddls_save_inactive",
+      "capella_adt_repository_read_metadata",
+      "capella_adt_repository_uri_probe"
+    ]
+  },
+  "raw_evidence_location": "owner workspace, outside Git (contains provider responses; not published)",
+  "runs": {
+    "run1": {
+      "call_log": [
+        {
+          "bytes": 231,
+          "label": "01_initialize",
+          "sha256": "E1CE48D38B0FCFC21959291881A797D3412E5585DE70F548857631927F820FCC",
+          "status": 200
+        },
+        {
+          "bytes": 0,
+          "label": "02_notifications_initialized",
+          "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+          "status": 202
+        },
+        {
+          "bytes": 42791,
+          "label": "03_tools_list",
+          "sha256": "9590B36432CD50BFF56D97FCA766FC24127E36D2ED20B0BE98EB86B83856E43E",
+          "status": 200
+        },
+        {
+          "bytes": 161,
+          "label": "04_tools_call_abap_list_destinations",
+          "sha256": "AA141B585D2B0E5ED5F20A70F979AB71A1602A30B837387AB01C121C6AD89E3C",
+          "status": 200
+        },
+        {
+          "bytes": 178,
+          "label": "05_tools_call_abap_atc_run",
+          "sha256": "ECDC1E22FAE9CD63F86CEBC95D93D1149E08D54E83C2BB3DB8133CF437892485",
+          "status": 200
+        },
+        {
+          "bytes": 178,
+          "label": "06_tools_call_abap_atc_run",
+          "sha256": "B2CF14FF73C7662481BF16614F63386AC664BD00DABAE458CB58A07FCBD16E2A",
+          "status": 200
+        }
+      ],
+      "calls": 6,
+      "raw_files_sha256": {
+        "01_initialize.raw.txt": "E1CE48D38B0FCFC21959291881A797D3412E5585DE70F548857631927F820FCC",
+        "02_notifications_initialized.raw.txt": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "03_tools_list.raw.txt": "9590B36432CD50BFF56D97FCA766FC24127E36D2ED20B0BE98EB86B83856E43E",
+        "04_tools_call_abap_list_destinations.raw.txt": "AA141B585D2B0E5ED5F20A70F979AB71A1602A30B837387AB01C121C6AD89E3C",
+        "05_tools_call_abap_atc_run.raw.txt": "ECDC1E22FAE9CD63F86CEBC95D93D1149E08D54E83C2BB3DB8133CF437892485",
+        "06_tools_call_abap_atc_run.raw.txt": "B2CF14FF73C7662481BF16614F63386AC664BD00DABAE458CB58A07FCBD16E2A"
+      }
+    },
+    "run2": {
+      "call_log": [
+        {
+          "bytes": 231,
+          "label": "01_initialize",
+          "sha256": "E1CE48D38B0FCFC21959291881A797D3412E5585DE70F548857631927F820FCC",
+          "status": 200
+        },
+        {
+          "bytes": 0,
+          "label": "02_notifications_initialized",
+          "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+          "status": 202
+        },
+        {
+          "bytes": 42791,
+          "label": "03_tools_list",
+          "sha256": "95A3B510B9E37C1B1BBE0BE159CA58D96BACBDFD496E4B5B48DFD8E7823549B5",
+          "status": 200
+        },
+        {
+          "bytes": 161,
+          "label": "04_tools_call_abap_list_destinations",
+          "sha256": "F5A7DE10C5BF371CE6545877BBE501D7E654E2FE6BD00225BFF0C76F4C42805A",
+          "status": 200
+        },
+        {
+          "bytes": 2043,
+          "label": "05_tools_call_capella_adt_repository_read_metadata",
+          "sha256": "58A6CCB97406CB9473805A035D7A35C708773A0D8064E2882DDD16A386899280",
+          "status": 200
+        },
+        {
+          "bytes": 2043,
+          "label": "06_tools_call_capella_adt_repository_read_metadata",
+          "sha256": "355ED7C758FB07868E20FEBB43E4BA7B24D4106565B7AB4677A062C9BE07D6A5",
+          "status": 200
+        },
+        {
+          "bytes": 246,
+          "label": "07_tools_call_capella_adt_class_read_source",
+          "sha256": "E32957B8EC73BA9358FEAE75A5FF1FEDD34BFC2F3552CDFBA4E4386DED472180",
+          "status": 200
+        },
+        {
+          "bytes": 246,
+          "label": "08_tools_call_capella_adt_class_read_source",
+          "sha256": "E6B5A9C4AE84EBE4C4E479F151A6CF37F0898CB9617E48EC37604FFCBDE311C7",
+          "status": 200
+        },
+        {
+          "bytes": 2067,
+          "label": "09_tools_call_capella_adt_repository_read_metadata",
+          "sha256": "7FB95FDEDDC02CF76FBC68C5777158451519D8D91D5D2B1163805DC6DB4FB5F0",
+          "status": 200
+        },
+        {
+          "bytes": 2068,
+          "label": "10_tools_call_capella_adt_repository_read_metadata",
+          "sha256": "7CF60B176319F66F02DCE402D741D20B493EB4BECE590706D7A4F058C4F63655",
+          "status": 200
+        },
+        {
+          "bytes": 247,
+          "label": "11_tools_call_capella_adt_class_read_source",
+          "sha256": "402E6E653928BAC44AFBD63752369EF181D179E9DC6FCCEECB55786A56EDA458",
+          "status": 200
+        },
+        {
+          "bytes": 247,
+          "label": "12_tools_call_capella_adt_class_read_source",
+          "sha256": "EF3EEC4CA8BE1D019C6D45FCC6EEC8CC5E1140BCA6EFB73249E1F16F2A245F41",
+          "status": 200
+        }
+      ],
+      "calls": 12,
+      "raw_files_sha256": {
+        "01_initialize.raw.txt": "E1CE48D38B0FCFC21959291881A797D3412E5585DE70F548857631927F820FCC",
+        "02_notifications_initialized.raw.txt": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "03_tools_list.raw.txt": "95A3B510B9E37C1B1BBE0BE159CA58D96BACBDFD496E4B5B48DFD8E7823549B5",
+        "04_tools_call_abap_list_destinations.raw.txt": "F5A7DE10C5BF371CE6545877BBE501D7E654E2FE6BD00225BFF0C76F4C42805A",
+        "05_tools_call_capella_adt_repository_read_metadata.raw.txt": "58A6CCB97406CB9473805A035D7A35C708773A0D8064E2882DDD16A386899280",
+        "06_tools_call_capella_adt_repository_read_metadata.raw.txt": "355ED7C758FB07868E20FEBB43E4BA7B24D4106565B7AB4677A062C9BE07D6A5",
+        "07_tools_call_capella_adt_class_read_source.raw.txt": "E32957B8EC73BA9358FEAE75A5FF1FEDD34BFC2F3552CDFBA4E4386DED472180",
+        "08_tools_call_capella_adt_class_read_source.raw.txt": "E6B5A9C4AE84EBE4C4E479F151A6CF37F0898CB9617E48EC37604FFCBDE311C7",
+        "09_tools_call_capella_adt_repository_read_metadata.raw.txt": "7FB95FDEDDC02CF76FBC68C5777158451519D8D91D5D2B1163805DC6DB4FB5F0",
+        "10_tools_call_capella_adt_repository_read_metadata.raw.txt": "7CF60B176319F66F02DCE402D741D20B493EB4BECE590706D7A4F058C4F63655",
+        "11_tools_call_capella_adt_class_read_source.raw.txt": "402E6E653928BAC44AFBD63752369EF181D179E9DC6FCCEECB55786A56EDA458",
+        "12_tools_call_capella_adt_class_read_source.raw.txt": "EF3EEC4CA8BE1D019C6D45FCC6EEC8CC5E1140BCA6EFB73249E1F16F2A245F41"
+      }
+    }
+  },
+  "sap_writes": 0,
+  "stage": "R2_0_B_LIVE_READONLY_PROBE"
+}

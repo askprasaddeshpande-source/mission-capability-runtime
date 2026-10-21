@@ -1,0 +1,172 @@
+{
+  "RESULT": "COMMITTED_AND_OUTCOME_VALIDATED",
+  "call_log": [
+    {
+      "bytes": 231,
+      "label": "01_initialize",
+      "sha256": "E1CE48D38B0FCFC21959291881A797D3412E5585DE70F548857631927F820FCC",
+      "status": 200
+    },
+    {
+      "bytes": 0,
+      "label": "02_notifications_initialized",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "status": 202
+    },
+    {
+      "bytes": 42791,
+      "label": "03_tools_list",
+      "sha256": "30AAC4F36B3FB5113AC1EED07FC46F8672A20B3D11642DEA69F6D8BA76AA28CD",
+      "status": 200
+    },
+    {
+      "bytes": 161,
+      "label": "04_tools_call_abap_list_destinations",
+      "sha256": "6A5709DCB1B01EFA723090B9194B485EDE35D349758BD795940DEDDFD7FD8857",
+      "status": 200
+    },
+    {
+      "bytes": 2027,
+      "label": "05_tools_call_capella_adt_repository_read_metadata",
+      "sha256": "4ED5D4377EB34C54BBF84EA56BDF2AF297B59F5F17078B875E0EA2200EAC2E58",
+      "status": 200
+    },
+    {
+      "bytes": 2027,
+      "label": "06_tools_call_capella_adt_repository_read_metadata",
+      "sha256": "92DAA9D72580E6CC2009B7A06BBFFA5F885F2A8603444D56CDD4EEA029218C08",
+      "status": 200
+    },
+    {
+      "bytes": 472,
+      "label": "07_tools_call_abap_creation-create_object",
+      "sha256": "191BE505D8E4DBE54043FDDD77640D09E8E71A5DAA14A2C8C055BC43F9A80C87",
+      "status": 200
+    },
+    {
+      "bytes": 1351,
+      "label": "08_tools_call_capella_adt_repository_read_metadata",
+      "sha256": "F9C2BD151064DE9A57E15D811E9E03DA2E31F2D5C806447B45E791BF76F8B120",
+      "status": 200
+    },
+    {
+      "bytes": 1351,
+      "label": "09_tools_call_capella_adt_repository_read_metadata",
+      "sha256": "FE2BFC446EE2DEA55FAEF9F69C66FFD89257B34CFF1C28D0D4272BC38FF74CC4",
+      "status": 200
+    }
+  ],
+  "chain": [
+    [
+      "MISSION_INTENT",
+      "8CD9E5B681EFCD7124FC6B1180DDF343CD5FFF04B0894020A6376E1149BD1DF4"
+    ],
+    [
+      "PRINCIPAL_CONTEXT",
+      "04A7434A4D141CC0B5EB8A3D78EF3097103459BD4C9437CDF06ED62FA86397CB"
+    ],
+    [
+      "DELEGATION",
+      "F5EAD2AF0BA1B7709A372034AC823493ACA9CFFA72D6C6C06B8E92630070AA1C"
+    ],
+    [
+      "AUTHORITY",
+      "A06F8DDF8079081A67B840A57C558B12D0A84AC260F55E520FC6B88DF16D0042"
+    ],
+    [
+      "CAPABILITY_BINDING",
+      "1E88B4A393E4A693674F0B354C70B40BAB7EEE465D045582C5420722DF9B83F6"
+    ],
+    [
+      "PROVIDER_CONTRACT",
+      "3C18AEE342167076B17DE488CEBB4E51437077D67E781FD1279449657B40C511"
+    ],
+    [
+      "MUTATION_BUDGET",
+      "183C1554D2BF20038C2651352712ECC7F64D281DE2FF7D12C0AE96DEA2EA6A6E"
+    ],
+    [
+      "TRANSACTION",
+      "46F1D16D8B9B2CDA8AE4A576A4069C5B08F1E93E9BDC79A1359465E750AD624E"
+    ],
+    [
+      "PREWRITE_CHECKPOINT",
+      "D4C3415F650957ECAFEBC315CF236DE925C1F93247846CAC6829F63EE9477E79"
+    ],
+    [
+      "EXECUTION_RECEIPT",
+      "5B23CD8995C83E9A28C29F7E8FC7D1AEB479ED78724EBCB78A7797073707579C"
+    ],
+    [
+      "COMMIT_OBSERVATION",
+      "285B5A6375F7AB5E5389B31801037ED6A95AFC86B5011811609E264710A71CEB"
+    ],
+    [
+      "AUTHORITATIVE_READBACK_RECEIPT",
+      "D6C7E9E6ECF0DECAEFA3E0CF4A9541EC7F033A12B1DDE6F5360A3B6B96B9E704"
+    ],
+    [
+      "OUTCOME_RECEIPT",
+      "9B450A253C28BFB7E87699F9FCEEFEB3F0A56225026E670795CC9F29963D4024"
+    ]
+  ],
+  "create_response": {
+    "isError": false,
+    "message": "Data Definition created successfully",
+    "semanticFilePath": "/TRL_EN/.adt/ddic/ddlsources/zc_mcr20c_7a3f91d2/zc_mcr20c_7a3f91d2.asddls"
+  },
+  "created_source_template_head": "ABAP CDS define view entity ZC_MCR20C_7A3F91D2 as select from DATA_SOURCE_NAME (generated placeholder template)",
+  "events": [],
+  "evidence_class": "OBSERVED",
+  "execution_call_class": "PROVIDER_RESPONSE_SUCCESS",
+  "final_state": "COMPLETE",
+  "freeze_sha256": "8CCC5B949245638BF518776E3694BB8A6FC85A289B7B93BEBCC4D97591DAE951",
+  "live": true,
+  "lock_file_written_before_send": true,
+  "mode": "LIVE_EXECUTE",
+  "mutations_sent": 1,
+  "prewrite": {
+    "PREWRITE_OK": true,
+    "baseline_existence": "ABSENT",
+    "baseline_observation_only": {
+      "active_read": "ABSENT",
+      "inactive_read": "ABSENT"
+    },
+    "create_fingerprint_now": "CB99759628F2258BFB8E13082ED4675E6B6A8F4A348C0BF30D259D2CFA1A0271",
+    "create_fingerprint_ok": true,
+    "destination_listed": true,
+    "read_tool_present": true,
+    "tool_count": 29,
+    "tool_count_ok": true
+  },
+  "raw_files_sha256": {
+    "01_initialize.raw.txt": "E1CE48D38B0FCFC21959291881A797D3412E5585DE70F548857631927F820FCC",
+    "02_notifications_initialized.raw.txt": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "03_tools_list.raw.txt": "30AAC4F36B3FB5113AC1EED07FC46F8672A20B3D11642DEA69F6D8BA76AA28CD",
+    "04_tools_call_abap_list_destinations.raw.txt": "6A5709DCB1B01EFA723090B9194B485EDE35D349758BD795940DEDDFD7FD8857",
+    "05_tools_call_capella_adt_repository_read_metadata.raw.txt": "4ED5D4377EB34C54BBF84EA56BDF2AF297B59F5F17078B875E0EA2200EAC2E58",
+    "06_tools_call_capella_adt_repository_read_metadata.raw.txt": "92DAA9D72580E6CC2009B7A06BBFFA5F885F2A8603444D56CDD4EEA029218C08",
+    "07_tools_call_abap_creation-create_object.raw.txt": "191BE505D8E4DBE54043FDDD77640D09E8E71A5DAA14A2C8C055BC43F9A80C87",
+    "08_tools_call_capella_adt_repository_read_metadata.raw.txt": "F9C2BD151064DE9A57E15D811E9E03DA2E31F2D5C806447B45E791BF76F8B120",
+    "09_tools_call_capella_adt_repository_read_metadata.raw.txt": "FE2BFC446EE2DEA55FAEF9F69C66FFD89257B34CFF1C28D0D4272BC38FF74CC4",
+    "LOCK_8CCC5B949245638B.json": "5827782AFBAC18AD976AD289002B3883190233CBE01E5E5DB98E22D38826878A"
+  },
+  "readback_existence": "EXISTS",
+  "readback_observed": {
+    "exists": true,
+    "local_source_sha256": "544F9D192845694FD38788AC765451AFB33A4FD615268209B71836FC88085AF0",
+    "object_type": "DDLS",
+    "observation_only": {
+      "active_read": "EXISTS",
+      "inactive_read": "EXISTS"
+    },
+    "source_contains_object_name": true,
+    "source_hash_integrity": true
+  },
+  "runner_sha256": "A73F4647E0AC9B672284A4A4D4A87AE031CBC6AFB7707362C9050ED632C3DDC9",
+  "telemetry": {
+    "governance_ns": 69300,
+    "provider_ns": 3677223700
+  },
+  "telemetry_note": "governance_ns excludes provider/readback network; single run, descriptive only"
+}

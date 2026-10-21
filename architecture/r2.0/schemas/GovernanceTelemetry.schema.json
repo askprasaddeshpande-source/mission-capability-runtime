@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "kind": {
+      "const": "GovernanceTelemetry"
+    },
+    "object_hash": {
+      "pattern": "^[0-9A-F]{64}$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "kind",
+    "object_hash",
+    "mission_id",
+    "governance_ns",
+    "provider_ns"
+  ],
+  "title": "GovernanceTelemetry",
+  "type": "object"
+}

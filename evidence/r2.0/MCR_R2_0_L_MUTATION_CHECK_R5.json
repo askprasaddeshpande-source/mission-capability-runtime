@@ -1,0 +1,3858 @@
+{
+  "MUTATION_CHECK": "PASS",
+  "by_kind": {
+    "ast": 403,
+    "guard": 114,
+    "relation": 49,
+    "special": 23
+  },
+  "detected_by_assertion": 293,
+  "detected_by_validator_crash": {
+    "ast@L1006: flip lease_consumed <= recorded": "UNEXPLAINED",
+    "ast@L1006: remove not in not lease_consumed <= recorded": "UNEXPLAINED",
+    "ast@L1010: flip m.remaining < 0": "UNEXPLAINED",
+    "ast@L1014: remove not in not consumed": "UNEXPLAINED",
+    "ast@L1018: flip (auth, mut) not in consumed": "UNEXPLAINED",
+    "ast@L1018: flip mut not in ev[\"tx\"][\"mutation_ids\"]": "UNEXPLAINED",
+    "ast@L1022: flip er is not None": "UNEXPLAINED",
+    "ast@L1026: swap +/- in \"resume-\" + lease[\"lease_id\"]": "UNEXPLAINED",
+    "ast@L1047: flip slot in m.ev": "UNEXPLAINED",
+    "ast@L135: flip f not in fields": "UNEXPLAINED",
+    "ast@L139: flip fields[f] not in allowed": "UNEXPLAINED",
+    "ast@L146: flip k != \"object_hash\"": "UNEXPLAINED",
+    "ast@L147: flip obj.get(\"object_hash\") == chash(body)": "UNEXPLAINED",
+    "ast@L160: drop clause 2 of type(a) is type(b) and a == b": "UNEXPLAINED",
+    "ast@L160: flip a == b": "UNEXPLAINED",
+    "ast@L160: flip type(a) is type(b)": "UNEXPLAINED",
+    "ast@L165: remove not in not isinstance(predicates, (list, tuple))": "UNEXPLAINED",
+    "ast@L165: remove not in not predicates": "UNEXPLAINED",
+    "ast@L168: flip {\"field\", \"op\", \"expected\"} <= set(p)": "UNEXPLAINED",
+    "ast@L168: remove not in not isinstance(p, dict)": "UNEXPLAINED",
+    "ast@L168: remove not in not {\"field\", \"op\", \"expected\"} <= set(p)": "UNEXPLAINED",
+    "ast@L170: flip p[\"op\"] not in PRED_OPS": "UNEXPLAINED",
+    "ast@L172: drop clause 1 of p[\"op\"] == \"in\" and (not isinstance(p[\"expected\"], (list, tu": "UNEXPLAINED",
+    "ast@L172: drop clause 2 of p[\"op\"] == \"in\" and (not isinstance(p[\"expected\"], (list, tu": "UNEXPLAINED",
+    "ast@L172: flip p[\"op\"] == \"in\"": "UNEXPLAINED",
+    "ast@L172: remove not in not isinstance(p[\"expected\"], (list, tuple, set, frozenset))": "UNEXPLAINED",
+    "ast@L172: remove not in not p[\"expected\"]": "UNEXPLAINED",
+    "ast@L183: drop clause 1 of p[\"field\"] not in observed or observed[p[\"field\"]] in (None,": "UNEXPLAINED",
+    "ast@L183: flip observed[p[\"field\"]] in (None, \"UNKNOWN\")": "UNEXPLAINED",
+    "ast@L183: flip p[\"field\"] not in observed": "UNEXPLAINED",
+    "ast@L187: flip op == \"eq\"": "UNEXPLAINED",
+    "ast@L187: flip op == \"ne\"": "UNEXPLAINED",
+    "ast@L188: remove not in not ok": "UNEXPLAINED",
+    "ast@L195: flip set(child_scope) <= set(parent_scope)": "UNEXPLAINED",
+    "ast@L211: flip obj.get(\"kind\") != SLOT_KINDS[slot]": "UNEXPLAINED",
+    "ast@L211: remove not in not isinstance(obj, dict)": "UNEXPLAINED",
+    "ast@L213: remove not in not _hash_ok(obj)": "UNEXPLAINED",
+    "ast@L218: drop clause 1 of (k.endswith(\"_id\") or k.endswith(\"_hash\")) and not isinstanc": "UNEXPLAINED",
+    "ast@L218: drop clause 2 of (k.endswith(\"_id\") or k.endswith(\"_hash\")) and not isinstanc": "UNEXPLAINED",
+    "ast@L218: remove not in not isinstance(v, str)": "UNEXPLAINED",
+    "ast@L220: drop clause 1 of k in _STR_FIELDS and not isinstance(v, str)": "UNEXPLAINED",
+    "ast@L220: drop clause 2 of k in _STR_FIELDS and not isinstance(v, str)": "UNEXPLAINED",
+    "ast@L220: flip k in _STR_FIELDS": "UNEXPLAINED",
+    "ast@L220: remove not in not isinstance(v, str)": "UNEXPLAINED",
+    "ast@L222: drop clause 1 of k == \"scope\" and (not isinstance(v, (list, tuple)) or not al": "UNEXPLAINED",
+    "ast@L222: drop clause 2 of k == \"scope\" and (not isinstance(v, (list, tuple)) or not al": "UNEXPLAINED",
+    "ast@L222: flip k == \"scope\"": "UNEXPLAINED",
+    "ast@L222: remove not in not all(isinstance(x, str) and x for x in v)": "UNEXPLAINED",
+    "ast@L222: remove not in not isinstance(v, (list, tuple))": "UNEXPLAINED",
+    "ast@L232: flip msvcrt is not None": "UNEXPLAINED",
+    "ast@L246: flip msvcrt is not None": "UNEXPLAINED",
+    "ast@L290: flip path is not None": "UNEXPLAINED",
+    "ast@L299: swap +/- in auth + \"\\x00\"": "UNEXPLAINED",
+    "ast@L299: swap +/- in auth + \"\\x00\" + mut": "UNEXPLAINED",
+    "ast@L312: flip len(key) == 2": "UNEXPLAINED",
+    "ast@L312: remove not in not (isinstance(key, tuple) and len(key) == 2 and all(isinst": "UNEXPLAINED",
+    "ast@L314: flip ord(c) == 127": "UNEXPLAINED",
+    "ast@L314: swap +/- in key[0] + key[1]": "UNEXPLAINED",
+    "ast@L317: swap +/- in key[0] + key[1]": "UNEXPLAINED",
+    "ast@L322: swap +/- in json.dumps({\"hdr\": self.HEADER, \"v\": 1, \"id\": lid, \"c\": self": "UNEXPLAINED",
+    "ast@L337: flip n == 1": "UNEXPLAINED",
+    "ast@L338: flip rec.get(\"hdr\") == self.HEADER": "UNEXPLAINED",
+    "ast@L338: flip rec.get(\"v\") == 1": "UNEXPLAINED",
+    "ast@L339: flip rec.get(\"c\") == self._crc(rec[\"id\"], \"HDR\")": "UNEXPLAINED",
+    "ast@L340: remove not in not ok": "UNEXPLAINED",
+    "ast@L346: flip c == self._crc(a, m_)": "UNEXPLAINED",
+    "ast@L349: remove not in not ok": "UNEXPLAINED",
+    "ast@L359: flip lid is None": "UNEXPLAINED",
+    "ast@L360: flip self.expected_id is not None": "UNEXPLAINED",
+    "ast@L370: drop clause 1 of self.ledger_id is not None and lid != self.ledger_id": "UNEXPLAINED",
+    "ast@L370: drop clause 2 of self.ledger_id is not None and lid != self.ledger_id": "UNEXPLAINED",
+    "ast@L370: flip lid != self.ledger_id": "UNEXPLAINED",
+    "ast@L370: flip self.ledger_id is not None": "UNEXPLAINED",
+    "ast@L372: drop clause 1 of self.expected_id is not None and lid != self.expected_id": "UNEXPLAINED",
+    "ast@L372: drop clause 2 of self.expected_id is not None and lid != self.expected_id": "UNEXPLAINED",
+    "ast@L372: flip lid != self.expected_id": "UNEXPLAINED",
+    "ast@L372: flip self.expected_id is not None": "UNEXPLAINED",
+    "ast@L379: drop clause 1 of self.expected_id is not None and not os.path.exists(self.pat": "UNEXPLAINED",
+    "ast@L379: drop clause 2 of self.expected_id is not None and not os.path.exists(self.pat": "UNEXPLAINED",
+    "ast@L379: flip self.expected_id is not None": "UNEXPLAINED",
+    "ast@L379: remove not in not os.path.exists(self.path)": "UNEXPLAINED",
+    "ast@L396: flip key in self._keys": "UNEXPLAINED",
+    "ast@L401: flip k[0] == authority_hash": "UNEXPLAINED",
+    "ast@L404: flip key in self._keys": "UNEXPLAINED",
+    "ast@L406: drop clause 1 of limit is not None and sum(1 for k in self._keys if k[0] == k": "UNEXPLAINED",
+    "ast@L406: drop clause 2 of limit is not None and sum(1 for k in self._keys if k[0] == k": "UNEXPLAINED",
+    "ast@L406: flip k[0] == key[0]": "UNEXPLAINED",
+    "ast@L406: flip limit is not None": "UNEXPLAINED",
+    "ast@L412: drop clause 1 of limit is not None and not _count(limit)": "UNEXPLAINED",
+    "ast@L412: drop clause 2 of limit is not None and not _count(limit)": "UNEXPLAINED",
+    "ast@L412: flip limit is not None": "UNEXPLAINED",
+    "ast@L412: remove not in not _count(limit)": "UNEXPLAINED",
+    "ast@L414: remove not in not self.path": "UNEXPLAINED",
+    "ast@L430: swap +/- in len(data) - len(torn)": "UNEXPLAINED",
+    "ast@L432: swap +/- in json.dumps({\"a\": key[0], \"m\": key[1], \"c\": self._crc(*key)},": "UNEXPLAINED",
+    "ast@L442: flip x >= 0": "UNEXPLAINED",
+    "ast@L442: remove not in not isinstance(x, bool)": "UNEXPLAINED",
+    "ast@L449: flip rb[\"existence\"] == \"EXISTS\"": "UNEXPLAINED",
+    "ast@L526: flip max_mutations < 0": "UNEXPLAINED",
+    "ast@L526: remove not in not isinstance(max_mutations, int)": "UNEXPLAINED",
+    "ast@L535: flip ledger is not None": "UNEXPLAINED",
+    "ast@L543: flip _tok is not _TOKEN": "UNEXPLAINED",
+    "ast@L545: flip to not in TRANSITIONS[self.state]": "UNEXPLAINED",
+    "ast@L551: flip slot not in self.ev": "UNEXPLAINED",
+    "ast@L559: flip obj.get(\"transaction_id\") != self.transaction_id": "UNEXPLAINED",
+    "ast@L563: remove not in not ok": "UNEXPLAINED",
+    "ast@L570: flip intent[\"mission_id\"] != self.mission_id": "UNEXPLAINED",
+    "ast@L579: flip delegation[\"principal_hash\"] != self._need(\"principal\")[\"obj": "UNEXPLAINED",
+    "ast@L581: flip authority[\"delegation_hash\"] != delegation[\"object_hash\"]": "UNEXPLAINED",
+    "ast@L583: flip authority[\"mission_id\"] != self.mission_id": "UNEXPLAINED",
+    "ast@L585: remove not in not attenuated(authority[\"scope\"], delegation[\"scope\"])": "UNEXPLAINED",
+    "ast@L587: flip authority[\"max_mutations\"] > delegation[\"max_mutations\"]": "UNEXPLAINED",
+    "ast@L590: remove not in not _count(val)": "UNEXPLAINED",
+    "ast@L592: flip authority[\"single_use\"] is not True": "UNEXPLAINED",
+    "ast@L594: flip budget[\"authority_hash\"] != authority[\"object_hash\"]": "UNEXPLAINED",
+    "ast@L594: flip budget[\"max_mutations\"] > authority[\"max_mutations\"]": "UNEXPLAINED",
+    "ast@L596: flip budget[\"expansion_allowed\"] is not False": "UNEXPLAINED",
+    "ast@L596: flip budget[\"retries\"] != 0": "UNEXPLAINED",
+    "ast@L596: flip type(budget[\"retries\"]) is not int": "UNEXPLAINED",
+    "ast@L598: flip budget[\"max_mutations\"] != self.max_mutations": "UNEXPLAINED",
+    "ast@L601: drop clause 1 of not self._resuming and self.ledger.for_authority(authority[\"": "UNEXPLAINED",
+    "ast@L601: drop clause 2 of not self._resuming and self.ledger.for_authority(authority[\"": "UNEXPLAINED",
+    "ast@L601: remove not in not self._resuming": "UNEXPLAINED",
+    "ast@L610: flip capability_binding[\"authority_hash\"] != a[\"object_hash\"]": "UNEXPLAINED",
+    "ast@L612: flip capability_binding[\"capability\"] not in a[\"scope\"]": "UNEXPLAINED",
+    "ast@L614: flip capability_binding[\"capability\"] != provider_binding[\"tool_n": "UNEXPLAINED",
+    "ast@L616: flip capability_binding[\"provider_ref\"] != provider_binding[\"iden": "UNEXPLAINED",
+    "ast@L627: flip outcome_contract[\"mission_id\"] != self.mission_id": "UNEXPLAINED",
+    "ast@L627: flip tx[\"mission_id\"] != self.mission_id": "UNEXPLAINED",
+    "ast@L630: remove not in not all(isinstance(i, str) and i for i in ids)": "UNEXPLAINED",
+    "ast@L630: remove not in not ids": "UNEXPLAINED",
+    "ast@L630: remove not in not isinstance(ids, list)": "UNEXPLAINED",
+    "ast@L632: flip outcome_contract[\"frozen\"] is not True": "UNEXPLAINED",
+    "ast@L636: flip checkpoint[\"outcome_contract_hash\"] != outcome_contract[\"obj": "UNEXPLAINED",
+    "ast@L638: flip checkpoint[\"readback_contract_hash\"] != readback_contract[\"o": "UNEXPLAINED",
+    "ast@L640: flip checkpoint[\"budget_hash\"] != budget[\"object_hash\"]": "UNEXPLAINED",
+    "ast@L642: flip checkpoint[\"transaction_hash\"] != tx[\"object_hash\"]": "UNEXPLAINED",
+    "ast@L644: flip checkpoint[\"remaining_budget\"] != budget[\"max_mutations\"]": "UNEXPLAINED",
+    "ast@L644: remove not in not _count(checkpoint[\"remaining_budget\"])": "UNEXPLAINED",
+    "ast@L646: flip readback_contract[\"source_level_required\"] != \"AUTHORITATIVE": "UNEXPLAINED",
+    "ast@L655: flip ord(c) == 127": "UNEXPLAINED",
+    "ast@L655: remove not in not isinstance(mutation_id, str)": "UNEXPLAINED",
+    "ast@L655: remove not in not mutation_id": "UNEXPLAINED",
+    "ast@L657: flip contract_fingerprint_now != self._need(\"provider\")[\"contract": "UNEXPLAINED",
+    "ast@L659: flip mutation_id not in self._need(\"tx\")[\"mutation_ids\"]": "UNEXPLAINED",
+    "ast@L662: flip key in self.consumed": "UNEXPLAINED",
+    "ast@L666: flip \"EXECUTION_STARTED\" not in TRANSITIONS[self.state]": "UNEXPLAINED",
+    "ast@L680: flip receipt.get(\"mutation_id\") != self.ev.get(\"mutation_id\")": "UNEXPLAINED",
+    "ast@L683: flip c not in POST_SEND_CLASSES": "UNEXPLAINED",
+    "ast@L701: flip rb[\"contract_hash\"] != contract[\"object_hash\"]": "UNEXPLAINED",
+    "ast@L703: flip rb[\"mutation_id\"] != self.ev[\"mutation_id\"]": "UNEXPLAINED",
+    "ast@L705: remove not in not _exists_consistent(rb)": "UNEXPLAINED",
+    "ast@L711: flip rb[\"source_level\"] == \"AUTHORITATIVE_REPOSITORY\"": "UNEXPLAINED",
+    "ast@L717: flip observation[\"readback_receipt_hash\"] != rb[\"object_hash\"]": "UNEXPLAINED",
+    "ast@L720: flip observation[\"mutation_id\"] != self.ev[\"mutation_id\"]": "UNEXPLAINED",
+    "ast@L722: drop clause 1 of not self._readback_authoritative(rb) or rb[\"existence\"] == \"": "UNEXPLAINED",
+    "ast@L722: drop clause 2 of not self._readback_authoritative(rb) or rb[\"existence\"] == \"": "UNEXPLAINED",
+    "ast@L722: flip rb[\"existence\"] == \"UNKNOWN\"": "UNEXPLAINED",
+    "ast@L722: remove not in not self._readback_authoritative(rb)": "UNEXPLAINED",
+    "ast@L725: flip rb[\"existence\"] == \"ABSENT\"": "UNEXPLAINED",
+    "ast@L729: flip observation[\"commit_state\"] != \"COMMITTED\"": "UNEXPLAINED",
+    "ast@L740: flip outcome[\"outcome_contract_hash\"] != oc[\"object_hash\"]": "UNEXPLAINED",
+    "ast@L740: flip outcome[\"readback_receipt_hash\"] != rb[\"object_hash\"]": "UNEXPLAINED",
+    "ast@L744: flip outcome[\"result\"] != recomputed": "UNEXPLAINED",
+    "ast@L748: flip recomputed == \"PASS\"": "UNEXPLAINED",
+    "ast@L750: flip recomputed == \"FAIL\"": "UNEXPLAINED",
+    "ast@L757: swap +/- in [s for s, _ in CHAIN_SLOTS[:-1]] + [\"outcome_contract\", \"rea": "UNEXPLAINED",
+    "ast@L758: flip s not in self.ev": "UNEXPLAINED",
+    "ast@L764: flip o.get(\"kind\") != SLOT_KINDS[slot]": "UNEXPLAINED",
+    "ast@L764: remove not in not isinstance(o, dict)": "UNEXPLAINED",
+    "ast@L766: remove not in not _hash_ok(o)": "UNEXPLAINED",
+    "ast@L773: flip dl[\"principal_hash\"] == h(\"principal\")": "UNEXPLAINED",
+    "ast@L774: flip au[\"delegation_hash\"] == h(\"delegation\")": "UNEXPLAINED",
+    "ast@L775: flip au[\"mission_id\"] == self.mission_id": "UNEXPLAINED",
+    "ast@L776: flip e[\"intent\"][\"mission_id\"] == self.mission_id": "UNEXPLAINED",
+    "ast@L779: flip bu[\"authority_hash\"] == h(\"authority\")": "UNEXPLAINED",
+    "ast@L780: flip bu[\"max_mutations\"] <= au[\"max_mutations\"]": "UNEXPLAINED",
+    "ast@L781: flip bu[\"expansion_allowed\"] is False": "UNEXPLAINED",
+    "ast@L781: flip bu[\"retries\"] == 0": "UNEXPLAINED",
+    "ast@L781: flip type(bu[\"retries\"]) is int": "UNEXPLAINED",
+    "ast@L782: flip bu[\"max_mutations\"] == self.max_mutations": "UNEXPLAINED",
+    "ast@L783: flip au[\"single_use\"] is True": "UNEXPLAINED",
+    "ast@L784: flip cb[\"authority_hash\"] == h(\"authority\")": "UNEXPLAINED",
+    "ast@L785: flip cb[\"capability\"] in au[\"scope\"]": "UNEXPLAINED",
+    "ast@L786: flip cb[\"capability\"] == pv[\"tool_name\"]": "UNEXPLAINED",
+    "ast@L787: flip cb[\"provider_ref\"] == pv[\"identity\"]": "UNEXPLAINED",
+    "ast@L788: flip tx[\"transaction_id\"] == T": "UNEXPLAINED",
+    "ast@L789: flip tx[\"mission_id\"] == self.mission_id": "UNEXPLAINED",
+    "ast@L790: flip mid in tx[\"mutation_ids\"]": "UNEXPLAINED",
+    "ast@L790: flip mid is not None": "UNEXPLAINED",
+    "ast@L791: flip (h(\"authority\"), mid) in self.consumed": "UNEXPLAINED",
+    "ast@L792: flip oc[\"frozen\"] is True": "UNEXPLAINED",
+    "ast@L792: flip oc[\"mission_id\"] == self.mission_id": "UNEXPLAINED",
+    "ast@L792: flip oc[\"transaction_id\"] == T": "UNEXPLAINED",
+    "ast@L794: flip rc[\"source_level_required\"] == \"AUTHORITATIVE_REPOSITORY\"": "UNEXPLAINED",
+    "ast@L795: flip cp[\"transaction_hash\"] == h(\"tx\")": "UNEXPLAINED",
+    "ast@L796: flip cp[\"budget_hash\"] == h(\"budget\")": "UNEXPLAINED",
+    "ast@L797: flip cp[\"outcome_contract_hash\"] == h(\"outcome_contract\")": "UNEXPLAINED",
+    "ast@L798: flip cp[\"readback_contract_hash\"] == h(\"readback_contract\")": "UNEXPLAINED",
+    "ast@L799: flip cp[\"remaining_budget\"] == bu[\"max_mutations\"]": "UNEXPLAINED",
+    "ast@L800: flip er[\"transaction_id\"] == T": "UNEXPLAINED",
+    "ast@L801: flip er[\"mutation_id\"] == mid": "UNEXPLAINED",
+    "ast@L802: flip er[\"call_class\"] in POST_SEND_CLASSES": "UNEXPLAINED",
+    "ast@L803: flip rb[\"transaction_id\"] == T": "UNEXPLAINED",
+    "ast@L804: flip rb[\"mutation_id\"] == mid": "UNEXPLAINED",
+    "ast@L805: flip rb[\"contract_hash\"] == h(\"readback_contract\")": "UNEXPLAINED",
+    "ast@L806: flip rb[\"source_level\"] == \"AUTHORITATIVE_REPOSITORY\"": "UNEXPLAINED",
+    "ast@L807: flip rb[\"existence\"] == \"EXISTS\"": "UNEXPLAINED",
+    "ast@L809: flip co[\"transaction_id\"] == T": "UNEXPLAINED",
+    "ast@L810: flip co[\"mutation_id\"] == mid": "UNEXPLAINED",
+    "ast@L811: flip co[\"readback_receipt_hash\"] == h(\"readback\")": "UNEXPLAINED",
+    "ast@L812: flip co[\"commit_state\"] == \"COMMITTED\"": "UNEXPLAINED",
+    "ast@L813: flip oo[\"transaction_id\"] == T": "UNEXPLAINED",
+    "ast@L814: flip oo[\"readback_receipt_hash\"] == h(\"readback\")": "UNEXPLAINED",
+    "ast@L815: flip oo[\"outcome_contract_hash\"] == h(\"outcome_contract\")": "UNEXPLAINED",
+    "ast@L816: flip oo[\"result\"] == \"PASS\"": "UNEXPLAINED",
+    "ast@L817: flip eval_predicates(oc[\"predicates\"], rb[\"observed\"]) == \"PASS\"": "UNEXPLAINED",
+    "ast@L818: flip completion.get(\"authority_hash\") == h(\"authority\")": "UNEXPLAINED",
+    "ast@L819: flip completion.get(\"execution_receipt_hash\") == h(\"execution_rec": "UNEXPLAINED",
+    "ast@L820: flip completion.get(\"commit_observation_hash\") == h(\"commit\")": "UNEXPLAINED",
+    "ast@L821: flip completion.get(\"outcome_receipt_hash\") == h(\"outcome\")": "UNEXPLAINED",
+    "ast@L822: flip completion.get(\"transaction_id\") == T": "UNEXPLAINED",
+    "ast@L829: flip self.state != \"OUTCOME_VALIDATED\"": "UNEXPLAINED",
+    "ast@L859: flip grant[\"issued_by\"] == a[\"object_hash\"]": "UNEXPLAINED",
+    "ast@L861: flip grant[\"max_mutations\"] < 1": "UNEXPLAINED",
+    "ast@L861: remove not in not _count(grant[\"max_mutations\"])": "UNEXPLAINED",
+    "ast@L861: remove not in not grant[\"outcome_predicates\"]": "UNEXPLAINED",
+    "ast@L861: remove not in not grant[\"preconditions\"]": "UNEXPLAINED",
+    "ast@L863: flip grant[\"capability\"] in a[\"scope\"]": "UNEXPLAINED",
+    "ast@L867: flip grant[\"target\"] not in (self.ev[\"intent\"][\"target_system\"], ": "UNEXPLAINED",
+    "ast@L869: flip \"readback\" not in self.ev": "UNEXPLAINED",
+    "ast@L871: flip self.ev[\"readback\"][\"source_level\"] != \"AUTHORITATIVE_REPOSI": "UNEXPLAINED",
+    "ast@L873: flip eval_predicates(grant[\"preconditions\"], self.ev[\"readback\"][": "UNEXPLAINED",
+    "ast@L875: flip eval_predicates(grant[\"outcome_predicates\"], self.ev[\"readba": "UNEXPLAINED",
+    "ast@L885: flip self.state != \"COMPENSATION_AUTHORIZED\"": "UNEXPLAINED",
+    "ast@L899: remove not in not self.ev.get(\"comp_started\")": "UNEXPLAINED",
+    "ast@L902: flip comp_execution[\"mutation_id\"] != \"COMPENSATION:\" + g[\"object": "UNEXPLAINED",
+    "ast@L902: swap +/- in \"COMPENSATION:\" + g[\"object_hash\"]": "UNEXPLAINED",
+    "ast@L904: flip comp_execution[\"call_class\"] != \"PROVIDER_RESPONSE_SUCCESS\"": "UNEXPLAINED",
+    "ast@L906: flip comp_receipt[\"grant_hash\"] != g[\"object_hash\"]": "UNEXPLAINED",
+    "ast@L909: flip post_readback[\"contract_hash\"] != self._need(\"readback_contr": "UNEXPLAINED",
+    "ast@L909: flip post_readback[\"mutation_id\"] != self.ev[\"mutation_id\"]": "UNEXPLAINED",
+    "ast@L911: flip post_readback[\"source_level\"] != \"AUTHORITATIVE_REPOSITORY\"": "UNEXPLAINED",
+    "ast@L913: remove not in not _exists_consistent(post_readback)": "UNEXPLAINED",
+    "ast@L916: flip post_readback[\"object_hash\"] == fwd[\"object_hash\"]": "UNEXPLAINED",
+    "ast@L916: flip post_readback[\"observed\"] == fwd[\"observed\"]": "UNEXPLAINED",
+    "ast@L918: flip comp_receipt[\"readback_receipt_hash\"] != post_readback[\"obje": "UNEXPLAINED",
+    "ast@L920: flip comp_receipt[\"result\"] != \"PASS\"": "UNEXPLAINED",
+    "ast@L920: flip eval_predicates(g[\"outcome_predicates\"], post_readback[\"obse": "UNEXPLAINED",
+    "ast@L933: swap +/- in \"LEASE-\" + chash([cp[\"object_hash\"], sorted(map(str, self.co": "UNEXPLAINED",
+    "ast@L958: remove not in not isinstance(ledger, ReplayLedger)": "UNEXPLAINED",
+    "ast@L960: drop clause 1 of not ledger.is_durable and not allow_volatile_ledger": "UNEXPLAINED",
+    "ast@L960: drop clause 2 of not ledger.is_durable and not allow_volatile_ledger": "UNEXPLAINED",
+    "ast@L960: remove not in not allow_volatile_ledger": "UNEXPLAINED",
+    "ast@L960: remove not in not ledger.is_durable": "UNEXPLAINED",
+    "ast@L962: remove not in not isinstance(evidence, dict)": "UNEXPLAINED",
+    "ast@L965: flip o.get(\"kind\") != kind": "UNEXPLAINED",
+    "ast@L965: remove not in not _hash_ok(o)": "UNEXPLAINED",
+    "ast@L965: remove not in not isinstance(o, dict)": "UNEXPLAINED",
+    "ast@L967: flip lease[\"checkpoint_hash\"] != checkpoint[\"object_hash\"]": "UNEXPLAINED",
+    "ast@L969: drop clause 1 of lease.get(\"ledger_id\") is not None and lease[\"ledger_id\"] !=": "UNEXPLAINED",
+    "ast@L969: drop clause 2 of lease.get(\"ledger_id\") is not None and lease[\"ledger_id\"] !=": "UNEXPLAINED",
+    "ast@L969: flip lease.get(\"ledger_id\") is not None": "UNEXPLAINED",
+    "ast@L969: flip lease[\"ledger_id\"] != ledger.ledger_id": "UNEXPLAINED",
+    "ast@L972: remove not in not _count(lease_rem)": "UNEXPLAINED",
+    "ast@L975: flip \":\" in s_": "UNEXPLAINED",
+    "ast@L975: flip len(ids) != len(set(ids))": "UNEXPLAINED",
+    "ast@L975: remove not in not all(isinstance(s_, str) and \":\" in s_ for s_ in ids)": "UNEXPLAINED",
+    "ast@L975: remove not in not isinstance(ids, list)": "UNEXPLAINED",
+    "ast@L978: flip lease[\"state_at_checkpoint\"] == \"PREWRITE_VALIDATED\"": "UNEXPLAINED",
+    "ast@L979: drop clause 1 of lease_consumed and pre_send": "UNEXPLAINED",
+    "ast@L979: drop clause 1 of not lease_consumed and not pre_send": "UNEXPLAINED",
+    "ast@L979: drop clause 2 of lease_consumed and pre_send": "UNEXPLAINED",
+    "ast@L979: drop clause 2 of not lease_consumed and not pre_send": "UNEXPLAINED",
+    "ast@L979: remove not in not lease_consumed": "UNEXPLAINED",
+    "ast@L979: remove not in not pre_send": "UNEXPLAINED",
+    "ast@L981: swap +/- in set(evidence) - set(RESUME_SLOTS)": "UNEXPLAINED",
+    "ast@L985: flip slot not in evidence": "UNEXPLAINED",
+    "ast@L988: flip original_budget[\"object_hash\"] != ev[\"budget\"][\"object_hash\"": "UNEXPLAINED",
+    "ast@L991: flip k[0] != auth": "UNEXPLAINED",
+    "ast@L994: flip lease_rem + len(lease_consumed) > min(checkpoint[\"remaining_": "UNEXPLAINED",
+    "guard@L239: time.time() - start > timeout": "UNEXPLAINED",
+    "special: budget_not_decremented": "a legitimate resume is refused because the lease budget no longer adds up",
+    "special: ledger_header_not_written": "UNEXPLAINED",
+    "special: ledger_not_written_on_send": "UNEXPLAINED",
+    "special: mission_consumed_set_not_recorded": "a genuine chain is refused by R19 because the replay set was never filled",
+    "special: predicate_eq_always_true": "the compensation fixture reaches an illegal transition because an eq predicate passes wrongly",
+    "special: readback_authority_helper_always_true": "UNEXPLAINED",
+    "special: resume_ignores_ledger": "UNEXPLAINED",
+    "special: resume_state_inherited_from_lease": "UNEXPLAINED"
+  },
+  "evidence_class": "SYNTHETIC/LOCAL",
+  "explained_survivors": {
+    "ast@L239: flip time.time() - start > timeout": "equivalent: > versus >= on a float clock difference changes nothing observable",
+    "ast@L312: drop clause 1 of isinstance(key, tuple) and len(key) == 2 and all(isinstance(": "equivalent: _as_key() always returns a tuple before _check_key() runs",
+    "ast@L346: drop clause 1 of isinstance(a, str) and isinstance(m_, str) and c == self._cr": "equivalent: _crc() raises TypeError for non-strings, which the surrounding except turns into 'corrupted'",
+    "ast@L346: drop clause 2 of isinstance(a, str) and isinstance(m_, str) and c == self._cr": "equivalent: _crc() raises TypeError for non-strings, which the surrounding except turns into 'corrupted'",
+    "ast@L790: drop clause 1 of mid is not None and mid in tx[\"mutation_ids\"]": "equivalent: None is never a member of a list of non-empty strings",
+    "ast@L916: drop clause 1 of post_readback[\"object_hash\"] == fwd[\"object_hash\"] or post_r": "equivalent: an identical object hash implies identical content, so the observed-state clause already covers it"
+  },
+  "mutants": 589,
+  "not_applied": [],
+  "results": [
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L165: not isinstance(predicates, (list, tuple)) or not predicates"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L168: not isinstance(p, dict) or not {\"field\", \"op\", \"expected\"} <= set(p)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L170: p[\"op\"] not in PRED_OPS"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L172: p[\"op\"] == \"in\" and (not isinstance(p[\"expected\"], (list, tuple, set, "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L211: not isinstance(obj, dict) or obj.get(\"kind\") != SLOT_KINDS[slot]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L213: not _hash_ok(obj)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L218: (k.endswith(\"_id\") or k.endswith(\"_hash\")) and not isinstance(v, str)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L220: k in _STR_FIELDS and not isinstance(v, str)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L222: k == \"scope\" and (not isinstance(v, (list, tuple)) or not all(isinstan"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "guard@L239: time.time() - start > timeout"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L303: isinstance(key, (str, bytes))"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L312: not (isinstance(key, tuple) and len(key) == 2 and all(isinstance(x, st"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L314: any(ord(c) < 32 or ord(c) == 127 for c in key[0] + key[1])"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L340: not ok"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L349: not ok"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L360: self.expected_id is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L370: self.ledger_id is not None and lid != self.ledger_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L372: self.expected_id is not None and lid != self.expected_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L379: self.expected_id is not None and not os.path.exists(self.path)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L404: key in self._keys"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L406: limit is not None and sum(1 for k in self._keys if k[0] == key[0]) >= "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L412: limit is not None and not _count(limit)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L515: isinstance(exc, (KeyError, TypeError, AttributeError, ValueError, Inde"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L526: not isinstance(max_mutations, int) or isinstance(max_mutations, bool) "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L543: _tok is not _TOKEN"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L545: to not in TRANSITIONS[self.state]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L551: slot not in self.ev"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L559: obj.get(\"transaction_id\") != self.transaction_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L563: not ok"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L570: intent[\"mission_id\"] != self.mission_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L579: delegation[\"principal_hash\"] != self._need(\"principal\")[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L581: authority[\"delegation_hash\"] != delegation[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L583: authority[\"mission_id\"] != self.mission_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L585: not attenuated(authority[\"scope\"], delegation[\"scope\"])"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L587: authority[\"max_mutations\"] > delegation[\"max_mutations\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L590: not _count(val)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L592: authority[\"single_use\"] is not True"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L594: budget[\"authority_hash\"] != authority[\"object_hash\"] or budget[\"max_mu"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L596: budget[\"expansion_allowed\"] is not False or type(budget[\"retries\"]) is"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L598: budget[\"max_mutations\"] != self.max_mutations"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L600: any((k[0] if isinstance(k, tuple) else k) == authority[\"object_hash\"] "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L610: capability_binding[\"authority_hash\"] != a[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L612: capability_binding[\"capability\"] not in a[\"scope\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L614: capability_binding[\"capability\"] != provider_binding[\"tool_name\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L616: capability_binding[\"provider_ref\"] != provider_binding[\"identity\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L627: tx[\"mission_id\"] != self.mission_id or outcome_contract[\"mission_id\"] "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L630: not isinstance(ids, list) or not ids or not all(isinstance(i, str) and"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L632: outcome_contract[\"frozen\"] is not True"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L636: checkpoint[\"outcome_contract_hash\"] != outcome_contract[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L638: checkpoint[\"readback_contract_hash\"] != readback_contract[\"object_hash"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L640: checkpoint[\"budget_hash\"] != budget[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L642: checkpoint[\"transaction_hash\"] != tx[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L644: not _count(checkpoint[\"remaining_budget\"]) or checkpoint[\"remaining_bu"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L646: readback_contract[\"source_level_required\"] != \"AUTHORITATIVE_REPOSITOR"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L655: not isinstance(mutation_id, str) or not mutation_id or any(ord(c) < 32"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L657: contract_fingerprint_now != self._need(\"provider\")[\"contract_fingerpri"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L659: mutation_id not in self._need(\"tx\")[\"mutation_ids\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L662: key in self.consumed or self.ledger.has(key)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L664: self.remaining <= 0"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L666: \"EXECUTION_STARTED\" not in TRANSITIONS[self.state]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L680: receipt.get(\"mutation_id\") != self.ev.get(\"mutation_id\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L683: c not in POST_SEND_CLASSES"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L701: rb[\"contract_hash\"] != contract[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L703: rb[\"mutation_id\"] != self.ev[\"mutation_id\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L705: not _exists_consistent(rb)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L717: observation[\"readback_receipt_hash\"] != rb[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L720: observation[\"mutation_id\"] != self.ev[\"mutation_id\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L729: observation[\"commit_state\"] != \"COMMITTED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L740: outcome[\"outcome_contract_hash\"] != oc[\"object_hash\"] or outcome[\"read"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L744: outcome[\"result\"] != recomputed"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L759: missing"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L764: not isinstance(o, dict) or o.get(\"kind\") != SLOT_KINDS[slot]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L766: not _hash_ok(o)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L829: self.state != \"OUTCOME_VALIDATED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L841: self.mutations_sent or (\"authority\" in self.ev and self.ledger.for_aut"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L857: grant[\"inherits_forward_authority\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L859: grant[\"issued_by\"] == a[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L861: not _count(grant[\"max_mutations\"]) or grant[\"max_mutations\"] < 1 or no"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L863: grant[\"capability\"] in a[\"scope\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L867: grant[\"target\"] not in (self.ev[\"intent\"][\"target_system\"], self._need"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L869: \"readback\" not in self.ev"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L871: self.ev[\"readback\"][\"source_level\"] != \"AUTHORITATIVE_REPOSITORY\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L873: eval_predicates(grant[\"preconditions\"], self.ev[\"readback\"][\"observed\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L875: eval_predicates(grant[\"outcome_predicates\"], self.ev[\"readback\"][\"obse"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L885: self.state != \"COMPENSATION_AUTHORIZED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L887: self.ev.get(\"comp_started\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L899: not self.ev.get(\"comp_started\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L902: comp_execution[\"mutation_id\"] != \"COMPENSATION:\" + g[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L904: comp_execution[\"call_class\"] != \"PROVIDER_RESPONSE_SUCCESS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L906: comp_receipt[\"grant_hash\"] != g[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L909: post_readback[\"mutation_id\"] != self.ev[\"mutation_id\"] or post_readbac"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L911: post_readback[\"source_level\"] != \"AUTHORITATIVE_REPOSITORY\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L913: not _exists_consistent(post_readback)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L916: post_readback[\"object_hash\"] == fwd[\"object_hash\"] or post_readback[\"o"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L918: comp_receipt[\"readback_receipt_hash\"] != post_readback[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L920: eval_predicates(g[\"outcome_predicates\"], post_readback[\"observed\"]) !="
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L958: not isinstance(ledger, ReplayLedger)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L960: not ledger.is_durable and not allow_volatile_ledger"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L962: not isinstance(evidence, dict)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L965: not isinstance(o, dict) or o.get(\"kind\") != kind or not _hash_ok(o)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L967: lease[\"checkpoint_hash\"] != checkpoint[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L969: lease.get(\"ledger_id\") is not None and lease[\"ledger_id\"] != ledger.le"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L972: not _count(lease_rem)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L975: not isinstance(ids, list) or not all(isinstance(s_, str) and \":\" in s_"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L979: (lease_consumed and pre_send) or (not lease_consumed and not pre_send)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L982: extra"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L985: slot not in evidence"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L988: original_budget[\"object_hash\"] != ev[\"budget\"][\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L991: any(k[0] != auth for k in lease_consumed)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L994: lease_rem + len(lease_consumed) > min(checkpoint[\"remaining_budget\"], "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L1006: not lease_consumed <= recorded"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L1010: m.remaining < 0"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L1018: mut not in ev[\"tx\"][\"mutation_ids\"] or (auth, mut) not in consumed"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L1023: er[\"object_hash\"] != lease[\"execution_receipt_hash\"] or er.get(\"mutati"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R01"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R02"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R03"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R04"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R05"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R06"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R07"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R08"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R09"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R10"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R11"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R12"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R13"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R14"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R15"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R16"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R17"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R18"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R19"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R20"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R22"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R23"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R24"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R25"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R26"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R27"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R28"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R29"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R30"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R31"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R32"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R33"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R34"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R35"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R50"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R36"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R37"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R38"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R39"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R40"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R41"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R42"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R43"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R44"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R45"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R46"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R47"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R48"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R49"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L147: flip obj.get(\"object_hash\") == chash(body)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L160: drop clause 1 of type(a) is type(b) and a == b"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L160: drop clause 2 of type(a) is type(b) and a == b"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L165: drop clause 1 of not isinstance(predicates, (list, tuple)) or not predicates"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L165: drop clause 2 of not isinstance(predicates, (list, tuple)) or not predicates"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L195: flip set(child_scope) <= set(parent_scope)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L211: drop clause 1 of not isinstance(obj, dict) or obj.get(\"kind\") != SLOT_KINDS[s"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L211: drop clause 2 of not isinstance(obj, dict) or obj.get(\"kind\") != SLOT_KINDS[s"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L213: remove not in not _hash_ok(obj)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L442: drop clause 1 of isinstance(x, int) and not isinstance(x, bool) and x >= 0"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L442: drop clause 2 of isinstance(x, int) and not isinstance(x, bool) and x >= 0"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L442: drop clause 3 of isinstance(x, int) and not isinstance(x, bool) and x >= 0"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L447: drop clause 1 of rb[\"existence\"] == \"UNKNOWN\" or \"exists\" not in o"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L447: drop clause 2 of rb[\"existence\"] == \"UNKNOWN\" or \"exists\" not in o"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L139: flip fields[f] not in allowed"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L160: flip type(a) is type(b)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L160: flip a == b"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L165: remove not in not isinstance(predicates, (list, tuple))"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L165: remove not in not predicates"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L168: drop clause 1 of not isinstance(p, dict) or not {\"field\", \"op\", \"expected\"} <"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L168: drop clause 2 of not isinstance(p, dict) or not {\"field\", \"op\", \"expected\"} <"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L170: flip p[\"op\"] not in PRED_OPS"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L172: drop clause 1 of p[\"op\"] == \"in\" and (not isinstance(p[\"expected\"], (list, tu"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L172: drop clause 2 of p[\"op\"] == \"in\" and (not isinstance(p[\"expected\"], (list, tu"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L183: drop clause 1 of p[\"field\"] not in observed or observed[p[\"field\"]] in (None,"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L183: drop clause 2 of p[\"field\"] not in observed or observed[p[\"field\"]] in (None,"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L188: remove not in not ok"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L211: remove not in not isinstance(obj, dict)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L211: flip obj.get(\"kind\") != SLOT_KINDS[slot]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L216: flip k == \"kind\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L218: drop clause 1 of (k.endswith(\"_id\") or k.endswith(\"_hash\")) and not isinstanc"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L218: drop clause 2 of (k.endswith(\"_id\") or k.endswith(\"_hash\")) and not isinstanc"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L220: drop clause 1 of k in _STR_FIELDS and not isinstance(v, str)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L220: drop clause 2 of k in _STR_FIELDS and not isinstance(v, str)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L222: drop clause 1 of k == \"scope\" and (not isinstance(v, (list, tuple)) or not al"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L222: drop clause 2 of k == \"scope\" and (not isinstance(v, (list, tuple)) or not al"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L246: flip msvcrt is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L290: flip path is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L312: remove not in not (isinstance(key, tuple) and len(key) == 2 and all(isinst"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L359: flip lid is None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L370: drop clause 1 of self.ledger_id is not None and lid != self.ledger_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L370: drop clause 2 of self.ledger_id is not None and lid != self.ledger_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L372: drop clause 1 of self.expected_id is not None and lid != self.expected_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L372: drop clause 2 of self.expected_id is not None and lid != self.expected_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L379: drop clause 1 of self.expected_id is not None and not os.path.exists(self.pat"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L379: drop clause 2 of self.expected_id is not None and not os.path.exists(self.pat"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L396: flip key in self._keys"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L404: flip key in self._keys"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L406: drop clause 1 of limit is not None and sum(1 for k in self._keys if k[0] == k"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L406: drop clause 2 of limit is not None and sum(1 for k in self._keys if k[0] == k"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L412: drop clause 1 of limit is not None and not _count(limit)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L412: drop clause 2 of limit is not None and not _count(limit)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L414: remove not in not self.path"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L442: remove not in not isinstance(x, bool)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L442: flip x >= 0"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L447: flip rb[\"existence\"] == \"UNKNOWN\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L447: flip \"exists\" not in o"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L449: flip rb[\"existence\"] == \"EXISTS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L526: drop clause 1 of not isinstance(max_mutations, int) or isinstance(max_mutatio"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L526: drop clause 2 of not isinstance(max_mutations, int) or isinstance(max_mutatio"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L526: drop clause 3 of not isinstance(max_mutations, int) or isinstance(max_mutatio"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L543: flip _tok is not _TOKEN"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L545: flip to not in TRANSITIONS[self.state]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L551: flip slot not in self.ev"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L559: flip obj.get(\"transaction_id\") != self.transaction_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L563: remove not in not ok"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L570: flip intent[\"mission_id\"] != self.mission_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L579: flip delegation[\"principal_hash\"] != self._need(\"principal\")[\"obj"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L581: flip authority[\"delegation_hash\"] != delegation[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L583: flip authority[\"mission_id\"] != self.mission_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L585: remove not in not attenuated(authority[\"scope\"], delegation[\"scope\"])"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L587: flip authority[\"max_mutations\"] > delegation[\"max_mutations\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L592: flip authority[\"single_use\"] is not True"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L594: drop clause 1 of budget[\"authority_hash\"] != authority[\"object_hash\"] or budg"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L594: drop clause 2 of budget[\"authority_hash\"] != authority[\"object_hash\"] or budg"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L596: drop clause 1 of budget[\"expansion_allowed\"] is not False or type(budget[\"ret"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L596: drop clause 2 of budget[\"expansion_allowed\"] is not False or type(budget[\"ret"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L596: drop clause 3 of budget[\"expansion_allowed\"] is not False or type(budget[\"ret"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L598: flip budget[\"max_mutations\"] != self.max_mutations"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L600: drop clause 1 of any((k[0] if isinstance(k, tuple) else k) == authority[\"obje"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L600: drop clause 2 of any((k[0] if isinstance(k, tuple) else k) == authority[\"obje"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L610: flip capability_binding[\"authority_hash\"] != a[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L612: flip capability_binding[\"capability\"] not in a[\"scope\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L614: flip capability_binding[\"capability\"] != provider_binding[\"tool_n"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L616: flip capability_binding[\"provider_ref\"] != provider_binding[\"iden"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L627: drop clause 1 of tx[\"mission_id\"] != self.mission_id or outcome_contract[\"mis"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L627: drop clause 2 of tx[\"mission_id\"] != self.mission_id or outcome_contract[\"mis"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L630: drop clause 1 of not isinstance(ids, list) or not ids or not all(isinstance(i"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L630: drop clause 2 of not isinstance(ids, list) or not ids or not all(isinstance(i"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L630: drop clause 3 of not isinstance(ids, list) or not ids or not all(isinstance(i"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L632: flip outcome_contract[\"frozen\"] is not True"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L636: flip checkpoint[\"outcome_contract_hash\"] != outcome_contract[\"obj"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L638: flip checkpoint[\"readback_contract_hash\"] != readback_contract[\"o"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L640: flip checkpoint[\"budget_hash\"] != budget[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L642: flip checkpoint[\"transaction_hash\"] != tx[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L644: drop clause 1 of not _count(checkpoint[\"remaining_budget\"]) or checkpoint[\"re"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L644: drop clause 2 of not _count(checkpoint[\"remaining_budget\"]) or checkpoint[\"re"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L646: flip readback_contract[\"source_level_required\"] != \"AUTHORITATIVE"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L655: drop clause 1 of not isinstance(mutation_id, str) or not mutation_id or any(o"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L655: drop clause 2 of not isinstance(mutation_id, str) or not mutation_id or any(o"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L655: drop clause 3 of not isinstance(mutation_id, str) or not mutation_id or any(o"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L657: flip contract_fingerprint_now != self._need(\"provider\")[\"contract"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L659: flip mutation_id not in self._need(\"tx\")[\"mutation_ids\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L662: drop clause 1 of key in self.consumed or self.ledger.has(key)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L662: drop clause 2 of key in self.consumed or self.ledger.has(key)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L664: flip self.remaining <= 0"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L666: flip \"EXECUTION_STARTED\" not in TRANSITIONS[self.state]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L680: flip receipt.get(\"mutation_id\") != self.ev.get(\"mutation_id\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L683: flip c not in POST_SEND_CLASSES"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L686: flip c == \"PROVIDER_RESPONSE_SUCCESS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L701: flip rb[\"contract_hash\"] != contract[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L703: flip rb[\"mutation_id\"] != self.ev[\"mutation_id\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L705: remove not in not _exists_consistent(rb)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L711: flip rb[\"source_level\"] == \"AUTHORITATIVE_REPOSITORY\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L717: flip observation[\"readback_receipt_hash\"] != rb[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L720: flip observation[\"mutation_id\"] != self.ev[\"mutation_id\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L722: drop clause 1 of not self._readback_authoritative(rb) or rb[\"existence\"] == \""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L722: drop clause 2 of not self._readback_authoritative(rb) or rb[\"existence\"] == \""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L725: flip rb[\"existence\"] == \"ABSENT\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L729: flip observation[\"commit_state\"] != \"COMMITTED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L740: drop clause 1 of outcome[\"outcome_contract_hash\"] != oc[\"object_hash\"] or out"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L740: drop clause 2 of outcome[\"outcome_contract_hash\"] != oc[\"object_hash\"] or out"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L744: flip outcome[\"result\"] != recomputed"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L748: flip recomputed == \"PASS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L757: swap +/- in [s for s, _ in CHAIN_SLOTS[:-1]] + [\"outcome_contract\", \"rea"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L829: flip self.state != \"OUTCOME_VALIDATED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L841: drop clause 1 of self.mutations_sent or (\"authority\" in self.ev and self.ledg"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L841: drop clause 2 of self.mutations_sent or (\"authority\" in self.ev and self.ledg"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L859: flip grant[\"issued_by\"] == a[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L861: drop clause 1 of not _count(grant[\"max_mutations\"]) or grant[\"max_mutations\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L861: drop clause 2 of not _count(grant[\"max_mutations\"]) or grant[\"max_mutations\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L861: drop clause 3 of not _count(grant[\"max_mutations\"]) or grant[\"max_mutations\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L861: drop clause 4 of not _count(grant[\"max_mutations\"]) or grant[\"max_mutations\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L863: flip grant[\"capability\"] in a[\"scope\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L867: flip grant[\"target\"] not in (self.ev[\"intent\"][\"target_system\"], "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L869: flip \"readback\" not in self.ev"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L871: flip self.ev[\"readback\"][\"source_level\"] != \"AUTHORITATIVE_REPOSI"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L873: flip eval_predicates(grant[\"preconditions\"], self.ev[\"readback\"]["
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L875: flip eval_predicates(grant[\"outcome_predicates\"], self.ev[\"readba"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L885: flip self.state != \"COMPENSATION_AUTHORIZED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L899: remove not in not self.ev.get(\"comp_started\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L902: flip comp_execution[\"mutation_id\"] != \"COMPENSATION:\" + g[\"object"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L904: flip comp_execution[\"call_class\"] != \"PROVIDER_RESPONSE_SUCCESS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L906: flip comp_receipt[\"grant_hash\"] != g[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L909: drop clause 1 of post_readback[\"mutation_id\"] != self.ev[\"mutation_id\"] or po"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L909: drop clause 2 of post_readback[\"mutation_id\"] != self.ev[\"mutation_id\"] or po"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L911: flip post_readback[\"source_level\"] != \"AUTHORITATIVE_REPOSITORY\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L913: remove not in not _exists_consistent(post_readback)"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "ast@L916: drop clause 1 of post_readback[\"object_hash\"] == fwd[\"object_hash\"] or post_r"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L916: drop clause 2 of post_readback[\"object_hash\"] == fwd[\"object_hash\"] or post_r"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L918: flip comp_receipt[\"readback_receipt_hash\"] != post_readback[\"obje"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L920: drop clause 1 of eval_predicates(g[\"outcome_predicates\"], post_readback[\"obse"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L920: drop clause 2 of eval_predicates(g[\"outcome_predicates\"], post_readback[\"obse"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L958: remove not in not isinstance(ledger, ReplayLedger)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L960: drop clause 1 of not ledger.is_durable and not allow_volatile_ledger"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L960: drop clause 2 of not ledger.is_durable and not allow_volatile_ledger"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L962: remove not in not isinstance(evidence, dict)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L967: flip lease[\"checkpoint_hash\"] != checkpoint[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L969: drop clause 1 of lease.get(\"ledger_id\") is not None and lease[\"ledger_id\"] !="
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L969: drop clause 2 of lease.get(\"ledger_id\") is not None and lease[\"ledger_id\"] !="
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L972: remove not in not _count(lease_rem)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L975: drop clause 1 of not isinstance(ids, list) or not all(isinstance(s_, str) and"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L975: drop clause 2 of not isinstance(ids, list) or not all(isinstance(s_, str) and"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L975: drop clause 3 of not isinstance(ids, list) or not all(isinstance(s_, str) and"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L978: flip lease[\"state_at_checkpoint\"] == \"PREWRITE_VALIDATED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L979: drop clause 1 of (lease_consumed and pre_send) or (not lease_consumed and not"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L979: drop clause 2 of (lease_consumed and pre_send) or (not lease_consumed and not"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L988: flip original_budget[\"object_hash\"] != ev[\"budget\"][\"object_hash\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L994: flip lease_rem + len(lease_consumed) > min(checkpoint[\"remaining_"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1006: remove not in not lease_consumed <= recorded"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1010: flip m.remaining < 0"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1014: remove not in not consumed"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L1018: drop clause 1 of mut not in ev[\"tx\"][\"mutation_ids\"] or (auth, mut) not in co"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L1018: drop clause 2 of mut not in ev[\"tx\"][\"mutation_ids\"] or (auth, mut) not in co"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1022: flip er is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L135: flip f not in fields"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L146: flip k != \"object_hash\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L168: remove not in not isinstance(p, dict)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L168: remove not in not {\"field\", \"op\", \"expected\"} <= set(p)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L172: flip p[\"op\"] == \"in\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L172: drop clause 1 of not isinstance(p[\"expected\"], (list, tuple, set, frozenset))"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L172: drop clause 2 of not isinstance(p[\"expected\"], (list, tuple, set, frozenset))"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L183: flip p[\"field\"] not in observed"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L183: flip observed[p[\"field\"]] in (None, \"UNKNOWN\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L187: flip op == \"eq\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L218: drop clause 1 of k.endswith(\"_id\") or k.endswith(\"_hash\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L218: drop clause 2 of k.endswith(\"_id\") or k.endswith(\"_hash\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L218: remove not in not isinstance(v, str)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L220: flip k in _STR_FIELDS"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L220: remove not in not isinstance(v, str)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L222: flip k == \"scope\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L222: drop clause 1 of not isinstance(v, (list, tuple)) or not all(isinstance(x, st"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L222: drop clause 2 of not isinstance(v, (list, tuple)) or not all(isinstance(x, st"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L232: flip msvcrt is not None"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "ast@L312: drop clause 1 of isinstance(key, tuple) and len(key) == 2 and all(isinstance("
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L312: drop clause 2 of isinstance(key, tuple) and len(key) == 2 and all(isinstance("
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L312: drop clause 3 of isinstance(key, tuple) and len(key) == 2 and all(isinstance("
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L337: flip n == 1"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L349: remove not in not ok"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L360: flip self.expected_id is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L370: flip self.ledger_id is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L370: flip lid != self.ledger_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L372: flip self.expected_id is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L372: flip lid != self.expected_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L379: flip self.expected_id is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L379: remove not in not os.path.exists(self.path)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L406: flip limit is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L406: flip sum(1 for k in self._keys if k[0] == key[0]) >= limit"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L412: flip limit is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L412: remove not in not _count(limit)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L526: remove not in not isinstance(max_mutations, int)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L526: flip max_mutations < 0"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L535: flip ledger is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L590: remove not in not _count(val)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L594: flip budget[\"authority_hash\"] != authority[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L594: flip budget[\"max_mutations\"] > authority[\"max_mutations\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L596: flip budget[\"expansion_allowed\"] is not False"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L596: flip type(budget[\"retries\"]) is not int"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L596: flip budget[\"retries\"] != 0"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L601: drop clause 1 of not self._resuming and self.ledger.for_authority(authority[\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L601: drop clause 2 of not self._resuming and self.ledger.for_authority(authority[\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L627: flip tx[\"mission_id\"] != self.mission_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L627: flip outcome_contract[\"mission_id\"] != self.mission_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L630: remove not in not isinstance(ids, list)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L630: remove not in not ids"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L630: remove not in not all(isinstance(i, str) and i for i in ids)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L644: remove not in not _count(checkpoint[\"remaining_budget\"])"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L644: flip checkpoint[\"remaining_budget\"] != budget[\"max_mutations\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L655: remove not in not isinstance(mutation_id, str)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L655: remove not in not mutation_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L662: flip key in self.consumed"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L722: remove not in not self._readback_authoritative(rb)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L722: flip rb[\"existence\"] == \"UNKNOWN\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L740: flip outcome[\"outcome_contract_hash\"] != oc[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L740: flip outcome[\"readback_receipt_hash\"] != rb[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L750: flip recomputed == \"FAIL\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L764: drop clause 1 of not isinstance(o, dict) or o.get(\"kind\") != SLOT_KINDS[slot]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L764: drop clause 2 of not isinstance(o, dict) or o.get(\"kind\") != SLOT_KINDS[slot]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L766: remove not in not _hash_ok(o)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L773: flip dl[\"principal_hash\"] == h(\"principal\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L774: flip au[\"delegation_hash\"] == h(\"delegation\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L775: flip au[\"mission_id\"] == self.mission_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L776: flip e[\"intent\"][\"mission_id\"] == self.mission_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L778: flip au[\"max_mutations\"] <= dl[\"max_mutations\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L779: flip bu[\"authority_hash\"] == h(\"authority\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L780: flip bu[\"max_mutations\"] <= au[\"max_mutations\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L781: drop clause 1 of type(bu[\"retries\"]) is int and bu[\"retries\"] == 0 and bu[\"ex"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L781: drop clause 2 of type(bu[\"retries\"]) is int and bu[\"retries\"] == 0 and bu[\"ex"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L781: drop clause 3 of type(bu[\"retries\"]) is int and bu[\"retries\"] == 0 and bu[\"ex"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L782: flip bu[\"max_mutations\"] == self.max_mutations"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L783: flip au[\"single_use\"] is True"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L784: flip cb[\"authority_hash\"] == h(\"authority\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L785: flip cb[\"capability\"] in au[\"scope\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L786: flip cb[\"capability\"] == pv[\"tool_name\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L787: flip cb[\"provider_ref\"] == pv[\"identity\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L788: flip tx[\"transaction_id\"] == T"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L789: flip tx[\"mission_id\"] == self.mission_id"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "ast@L790: drop clause 1 of mid is not None and mid in tx[\"mutation_ids\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L790: drop clause 2 of mid is not None and mid in tx[\"mutation_ids\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L791: flip (h(\"authority\"), mid) in self.consumed"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L792: drop clause 1 of oc[\"frozen\"] is True and oc[\"transaction_id\"] == T and oc[\"m"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L792: drop clause 2 of oc[\"frozen\"] is True and oc[\"transaction_id\"] == T and oc[\"m"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L792: drop clause 3 of oc[\"frozen\"] is True and oc[\"transaction_id\"] == T and oc[\"m"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L794: flip rc[\"source_level_required\"] == \"AUTHORITATIVE_REPOSITORY\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L795: flip cp[\"transaction_hash\"] == h(\"tx\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L796: flip cp[\"budget_hash\"] == h(\"budget\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L797: flip cp[\"outcome_contract_hash\"] == h(\"outcome_contract\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L798: flip cp[\"readback_contract_hash\"] == h(\"readback_contract\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L799: flip cp[\"remaining_budget\"] == bu[\"max_mutations\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L800: flip er[\"transaction_id\"] == T"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L801: flip er[\"mutation_id\"] == mid"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L802: flip er[\"call_class\"] in POST_SEND_CLASSES"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L803: flip rb[\"transaction_id\"] == T"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L804: flip rb[\"mutation_id\"] == mid"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L805: flip rb[\"contract_hash\"] == h(\"readback_contract\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L806: flip rb[\"source_level\"] == \"AUTHORITATIVE_REPOSITORY\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L807: flip rb[\"existence\"] == \"EXISTS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L809: flip co[\"transaction_id\"] == T"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L810: flip co[\"mutation_id\"] == mid"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L811: flip co[\"readback_receipt_hash\"] == h(\"readback\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L812: flip co[\"commit_state\"] == \"COMMITTED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L813: flip oo[\"transaction_id\"] == T"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L814: flip oo[\"readback_receipt_hash\"] == h(\"readback\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L815: flip oo[\"outcome_contract_hash\"] == h(\"outcome_contract\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L816: flip oo[\"result\"] == \"PASS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L817: flip eval_predicates(oc[\"predicates\"], rb[\"observed\"]) == \"PASS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L818: flip completion.get(\"authority_hash\") == h(\"authority\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L819: flip completion.get(\"execution_receipt_hash\") == h(\"execution_rec"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L820: flip completion.get(\"commit_observation_hash\") == h(\"commit\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L821: flip completion.get(\"outcome_receipt_hash\") == h(\"outcome\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L822: flip completion.get(\"transaction_id\") == T"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L841: drop clause 1 of \"authority\" in self.ev and self.ledger.for_authority(self.ev"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L841: drop clause 2 of \"authority\" in self.ev and self.ledger.for_authority(self.ev"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L861: remove not in not _count(grant[\"max_mutations\"])"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L861: flip grant[\"max_mutations\"] < 1"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L861: remove not in not grant[\"preconditions\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L861: remove not in not grant[\"outcome_predicates\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L902: swap +/- in \"COMPENSATION:\" + g[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L909: flip post_readback[\"mutation_id\"] != self.ev[\"mutation_id\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L909: flip post_readback[\"contract_hash\"] != self._need(\"readback_contr"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L916: flip post_readback[\"object_hash\"] == fwd[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L916: flip post_readback[\"observed\"] == fwd[\"observed\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L920: flip eval_predicates(g[\"outcome_predicates\"], post_readback[\"obse"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L920: flip comp_receipt[\"result\"] != \"PASS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L960: remove not in not ledger.is_durable"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L960: remove not in not allow_volatile_ledger"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L965: drop clause 1 of not isinstance(o, dict) or o.get(\"kind\") != kind or not _has"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L965: drop clause 2 of not isinstance(o, dict) or o.get(\"kind\") != kind or not _has"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L965: drop clause 3 of not isinstance(o, dict) or o.get(\"kind\") != kind or not _has"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L969: flip lease.get(\"ledger_id\") is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L969: flip lease[\"ledger_id\"] != ledger.ledger_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L975: remove not in not isinstance(ids, list)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L975: remove not in not all(isinstance(s_, str) and \":\" in s_ for s_ in ids)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L975: flip len(ids) != len(set(ids))"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L979: drop clause 1 of lease_consumed and pre_send"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L979: drop clause 2 of lease_consumed and pre_send"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L979: drop clause 1 of not lease_consumed and not pre_send"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L979: drop clause 2 of not lease_consumed and not pre_send"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L981: swap +/- in set(evidence) - set(RESUME_SLOTS)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L985: flip slot not in evidence"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L994: swap +/- in lease_rem + len(lease_consumed)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1006: flip lease_consumed <= recorded"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L1009: swap +/- in total - len(consumed)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1018: flip mut not in ev[\"tx\"][\"mutation_ids\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1018: flip (auth, mut) not in consumed"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L1023: drop clause 1 of er[\"object_hash\"] != lease[\"execution_receipt_hash\"] or er.g"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L1023: drop clause 2 of er[\"object_hash\"] != lease[\"execution_receipt_hash\"] or er.g"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L1023: drop clause 3 of er[\"object_hash\"] != lease[\"execution_receipt_hash\"] or er.g"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1047: flip slot in m.ev"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L168: flip {\"field\", \"op\", \"expected\"} <= set(p)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L172: remove not in not isinstance(p[\"expected\"], (list, tuple, set, frozenset))"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L172: remove not in not p[\"expected\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L184: flip result != \"FAIL\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L187: flip op == \"ne\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L187: remove not in not _same(v, e)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L222: remove not in not isinstance(v, (list, tuple))"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L222: remove not in not all(isinstance(x, str) and x for x in v)"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "ast@L239: flip time.time() - start > timeout"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L312: flip len(key) == 2"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L314: drop clause 1 of ord(c) < 32 or ord(c) == 127"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L314: drop clause 2 of ord(c) < 32 or ord(c) == 127"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L322: swap +/- in json.dumps({\"hdr\": self.HEADER, \"v\": 1, \"id\": lid, \"c\": self"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L338: drop clause 1 of isinstance(rec, dict) and rec.get(\"hdr\") == self.HEADER and "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L338: drop clause 2 of isinstance(rec, dict) and rec.get(\"hdr\") == self.HEADER and "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L338: drop clause 3 of isinstance(rec, dict) and rec.get(\"hdr\") == self.HEADER and "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L338: drop clause 4 of isinstance(rec, dict) and rec.get(\"hdr\") == self.HEADER and "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L338: drop clause 5 of isinstance(rec, dict) and rec.get(\"hdr\") == self.HEADER and "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L340: remove not in not ok"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "ast@L346: drop clause 1 of isinstance(a, str) and isinstance(m_, str) and c == self._cr"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "ast@L346: drop clause 2 of isinstance(a, str) and isinstance(m_, str) and c == self._cr"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L346: drop clause 3 of isinstance(a, str) and isinstance(m_, str) and c == self._cr"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L401: flip k[0] == authority_hash"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L601: remove not in not self._resuming"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L758: flip s not in self.ev"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L764: remove not in not isinstance(o, dict)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L764: flip o.get(\"kind\") != SLOT_KINDS[slot]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L781: flip type(bu[\"retries\"]) is int"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L781: flip bu[\"retries\"] == 0"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L781: flip bu[\"expansion_allowed\"] is False"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L790: flip mid is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L790: flip mid in tx[\"mutation_ids\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L792: flip oc[\"frozen\"] is True"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L792: flip oc[\"transaction_id\"] == T"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L792: flip oc[\"mission_id\"] == self.mission_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L841: flip \"authority\" in self.ev"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L965: remove not in not isinstance(o, dict)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L965: flip o.get(\"kind\") != kind"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L965: remove not in not _hash_ok(o)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L979: remove not in not lease_consumed"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L979: remove not in not pre_send"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L991: flip k[0] != auth"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L1023: flip er[\"object_hash\"] != lease[\"execution_receipt_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L1023: flip er.get(\"mutation_id\") != mut"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L1023: flip er.get(\"transaction_id\") != lease[\"transaction_id\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L239: swap +/- in time.time() - start"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L314: flip ord(c) < 32"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L314: flip ord(c) == 127"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L314: swap +/- in key[0] + key[1]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L317: swap +/- in key[0] + key[1]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L338: flip rec.get(\"hdr\") == self.HEADER"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L338: flip rec.get(\"v\") == 1"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L339: flip rec.get(\"c\") == self._crc(rec[\"id\"], \"HDR\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L346: flip c == self._crc(a, m_)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L655: drop clause 1 of ord(c) < 32 or ord(c) == 127"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L655: drop clause 2 of ord(c) < 32 or ord(c) == 127"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L933: swap +/- in \"LEASE-\" + chash([cp[\"object_hash\"], sorted(map(str, self.co"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L1026: swap +/- in \"resume-\" + lease[\"lease_id\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L312: drop clause 1 of isinstance(x, str) and x"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L312: drop clause 2 of isinstance(x, str) and x"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L430: swap +/- in len(data) - len(torn)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L630: drop clause 1 of isinstance(i, str) and i"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L630: drop clause 2 of isinstance(i, str) and i"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L655: flip ord(c) < 32"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L655: flip ord(c) == 127"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L975: drop clause 1 of isinstance(s_, str) and \":\" in s_"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L975: drop clause 2 of isinstance(s_, str) and \":\" in s_"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L222: drop clause 1 of isinstance(x, str) and x"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "ast@L222: drop clause 2 of isinstance(x, str) and x"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L299: swap +/- in auth + \"\\x00\" + mut"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L406: flip k[0] == key[0]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L432: swap +/- in json.dumps({\"a\": key[0], \"m\": key[1], \"c\": self._crc(*key)},"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L975: flip \":\" in s_"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "ast@L299: swap +/- in auth + \"\\x00\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "special: readback_authority_helper_always_true"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "special: budget_not_decremented"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: completion_not_persisted"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: completion_link_dropped_from_chain"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: atomic_rollback_removed"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "special: ledger_not_written_on_send"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "special: mission_consumed_set_not_recorded"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "special: resume_ignores_ledger"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "special: resume_state_inherited_from_lease"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: resume_budget_taken_from_lease_only"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: resume_evidence_not_verified"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: resume_consumed_set_not_restored"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: resume_sent_counter_not_restored"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: accepted_objects_not_copied"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: predicates_not_type_strict"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: predicate_ne_always_true"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: predicate_in_always_true"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "special: predicate_eq_always_true"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: unknown_observed_value_treated_as_known"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: unknown_predicate_never_degrades"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: go_token_not_required"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: thread_lock_removed"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "special: ledger_header_not_written"
+    }
+  ],
+  "survivors": [
+    "ast@L916: drop clause 1 of post_readback[\"object_hash\"] == fwd[\"object_hash\"] or post_r",
+    "ast@L312: drop clause 1 of isinstance(key, tuple) and len(key) == 2 and all(isinstance(",
+    "ast@L790: drop clause 1 of mid is not None and mid in tx[\"mutation_ids\"]",
+    "ast@L239: flip time.time() - start > timeout",
+    "ast@L346: drop clause 1 of isinstance(a, str) and isinstance(m_, str) and c == self._cr",
+    "ast@L346: drop clause 2 of isinstance(a, str) and isinstance(m_, str) and c == self._cr"
+  ],
+  "unexplained_survivors": []
+}

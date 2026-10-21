@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "kind": {
+      "const": "MutationBudget"
+    },
+    "object_hash": {
+      "pattern": "^[0-9A-F]{64}$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "kind",
+    "object_hash",
+    "budget_id",
+    "authority_hash",
+    "max_mutations",
+    "retries",
+    "expansion_allowed"
+  ],
+  "title": "MutationBudget",
+  "type": "object"
+}

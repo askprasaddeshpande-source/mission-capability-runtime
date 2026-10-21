@@ -1,0 +1,111 @@
+{
+ "A10_empty_anchor_value": [
+  "FAIL",
+  false
+ ],
+ "A10b_malformed_anchor_value": [
+  "FAIL",
+  false
+ ],
+ "A11a_json_quoted_key": [
+  "FAIL",
+  false
+ ],
+ "A11b_yaml_file": [
+  "FAIL",
+  false
+ ],
+ "A11c_extensionless_file": [
+  "FAIL",
+  false
+ ],
+ "A11d_utf16_file": [
+  "FAIL",
+  false
+ ],
+ "A11e_base64_bearer": [
+  "FAIL",
+  false
+ ],
+ "A11f_basic_auth": [
+  "FAIL",
+  false
+ ],
+ "A11g_unquoted_password": [
+  "FAIL",
+  false
+ ],
+ "A11h_x_api_key_header": [
+  "FAIL",
+  false
+ ],
+ "A12a_unc_path": [
+  "FAIL",
+  false
+ ],
+ "A12b_env_var_profile_path": [
+  "FAIL",
+  false
+ ],
+ "A1_forward_slash_drive_path_in_new_tool": [
+  "FAIL",
+  false
+ ],
+ "A2a_jwt": [
+  "FAIL",
+  false
+ ],
+ "A2b_sk_token": [
+  "FAIL",
+  false
+ ],
+ "A2c_quoted_secret": [
+  "FAIL",
+  false
+ ],
+ "A2d_bearer": [
+  "FAIL",
+  false
+ ],
+ "A3_pinned_frozen_file_edited_and_sums_regenerated": [
+  "FAIL",
+  false
+ ],
+ "A4_model_relation_replaced_by_True_and_sums_regenerated": [
+  "FAIL",
+  false,
+  false
+ ],
+ "A5_new_file_plus_regenerated_sums": {
+  "anchor_matches": false,
+  "with_external_anchor": "FAIL",
+  "without_external_anchor": "FAIL"
+ },
+ "A5b_new_file_staged_plus_regenerated_sums": {
+  "anchor_matches": false,
+  "note": "documented limit: without an anchor from outside the repository an attacker who stages the file and regenerates the sums passes",
+  "with_external_anchor": "FAIL",
+  "without_external_anchor": "PASS"
+ },
+ "A6_missing_r1_9_tag": {
+  "default": "FAIL",
+  "tag_field": "NOT_PRESENT_IN_CHECKOUT",
+  "with_no_git_flag": "PASS"
+ },
+ "A7_secret_inside_git_ignored_credential_helper": [
+  "FAIL",
+  [
+   "tools/r2.0/make_adt_auth_context.py"
+  ]
+ ],
+ "A8_frozen_live_result_one_byte_changed_without_regenerating_sums": [
+  "FAIL",
+  false,
+  false
+ ],
+ "A9_tracked_bytecode_even_with_the_anchor": [
+  "FAIL",
+  false
+ ],
+ "baseline_clean_copy": "PASS"
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "kind": {
+      "const": "ContractLease"
+    },
+    "object_hash": {
+      "pattern": "^[0-9A-F]{64}$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "kind",
+    "object_hash",
+    "lease_id",
+    "provider_ref",
+    "contract_fingerprint",
+    "mission_relevant_fields"
+  ],
+  "title": "ContractLease",
+  "type": "object"
+}

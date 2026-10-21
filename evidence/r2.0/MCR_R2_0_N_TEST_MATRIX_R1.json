@@ -1,0 +1,323 @@
+{
+  "chain_relations": {
+    "count": 51,
+    "note": "50 _rel relations (R01-R51 without R21) plus the predicate-validity check; each has its own violation recipe and an automatic mutant"
+  },
+  "evidence_class": "SYNTHETIC/LOCAL",
+  "frozen_runner_mock_regression": {
+    "error_not_persisted": {
+      "chain_links_emitted": 11,
+      "last_link": "AUTHORITATIVE_READBACK_RECEIPT",
+      "outcome_matches_frozen_R1": true
+    },
+    "outcome_fail": {
+      "chain_links_emitted": 13,
+      "last_link": "OUTCOME_RECEIPT",
+      "outcome_matches_frozen_R1": true
+    },
+    "persisted_error_response": {
+      "chain_links_emitted": 14,
+      "last_link": "COMPLETION_RECEIPT",
+      "outcome_matches_frozen_R1": true
+    },
+    "readback_error": {
+      "chain_links_emitted": 11,
+      "last_link": "AUTHORITATIVE_READBACK_RECEIPT",
+      "outcome_matches_frozen_R1": true
+    },
+    "success": {
+      "chain_links_emitted": 14,
+      "last_link": "COMPLETION_RECEIPT",
+      "outcome_matches_frozen_R1": true
+    },
+    "timeout_persisted": {
+      "chain_links_emitted": 14,
+      "last_link": "COMPLETION_RECEIPT",
+      "outcome_matches_frozen_R1": true
+    }
+  },
+  "local_scenarios_D_E": {
+    "checks": {
+      "absent_is_fail_closed": true,
+      "compensation_separate_and_not_completion": true,
+      "every_fault_case_blocks_second_send": true,
+      "every_post_send_crash_blocks_replay": true,
+      "every_post_send_resume_restarts_in_unknown": true,
+      "forged_lease_state_not_inherited": true,
+      "no_crash_point_restores_budget": true,
+      "pre_send_crash_keeps_full_budget": true,
+      "recovery_blocks_replay": true,
+      "recovery_reaches_complete_with_one_mutation": true,
+      "stale_lease_cannot_replay_the_send": true,
+      "tampering_rejected": true,
+      "unknown_or_nonauthoritative_never_complete": true
+    },
+    "local_scenarios": "PASS",
+    "result_file": "MCR_R2_0_DE_LOCAL_SCENARIOS_RESULT_R7.json"
+  },
+  "model_validator": {
+    "R2_0_A_FOUNDATION": "PASS",
+    "failed": [],
+    "group_sizes": {
+      "AUTHORITY_INVARIANTS": 7,
+      "COMMIT_UNKNOWN_HANDLING": 16,
+      "COMPENSATION_AUTHORITY_INVARIANTS": 9,
+      "COMPLETION_EVIDENCE": 22,
+      "CONTINUATION_INVARIANTS": 6,
+      "HARDENING_R2_0H": 36,
+      "HARDENING_R2_0I": 154,
+      "HARDENING_R2_0J": 105,
+      "HARDENING_R2_0L": 75,
+      "HARDENING_R2_0M": 19,
+      "HARDENING_R2_0N": 24,
+      "MUTATION_BUDGET_INVARIANTS": 6,
+      "NO_ENTERPRISE_WRITES": 1,
+      "OUTCOME_PREDICATE_MODEL": 10,
+      "REPLAY_GUARD_INVARIANTS": 3,
+      "SCHEMA_VALIDATION": 6,
+      "STATE_MACHINE_VALID": 10,
+      "TELEMETRY_MODEL": 1
+    },
+    "groups": {
+      "AUTHORITY_INVARIANTS": "PASS",
+      "COMMIT_UNKNOWN_HANDLING": "PASS",
+      "COMPENSATION_AUTHORITY_INVARIANTS": "PASS",
+      "COMPLETION_EVIDENCE": "PASS",
+      "CONTINUATION_INVARIANTS": "PASS",
+      "HARDENING_R2_0H": "PASS",
+      "HARDENING_R2_0I": "PASS",
+      "HARDENING_R2_0J": "PASS",
+      "HARDENING_R2_0L": "PASS",
+      "HARDENING_R2_0M": "PASS",
+      "MUTATION_BUDGET_INVARIANTS": "PASS",
+      "NO_ENTERPRISE_WRITES": "PASS",
+      "OUTCOME_PREDICATE_MODEL": "PASS",
+      "REPLAY_GUARD_INVARIANTS": "PASS",
+      "SCHEMA_VALIDATION": "PASS",
+      "STATE_MACHINE_VALID": "PASS",
+      "TELEMETRY_MODEL": "PASS"
+    },
+    "history": {
+      "R1": 74,
+      "after_R2_0G": 96,
+      "after_R2_0H": 133,
+      "after_R2_0I": 283,
+      "after_R2_0J": 391,
+      "after_R2_0L": 466,
+      "after_R2_0M": 486,
+      "after_R2_0N": 510
+    },
+    "result_file": "MCR_R2_0_A_VALIDATION_RESULT_R8.json",
+    "tests": 510
+  },
+  "mutation_check": {
+    "by_kind": {
+      "ast": 422,
+      "guard": 119,
+      "relation": 50,
+      "special": 28
+    },
+    "detected_by_assertion": 305,
+    "detected_by_hang": [
+      "guard@L239: time.time() - start > timeout"
+    ],
+    "detected_by_validator_crash": 307,
+    "explained_survivors": {
+      "ast@L239: flip time.time() - start > timeout": "equivalent: > versus >= on a float clock difference changes nothing observable",
+      "ast@L342: drop clause 1 of isinstance(key, tuple) and len(key) == 2 and all(isinstance(": "equivalent: _as_key() always returns a tuple before _check_key() runs",
+      "ast@L376: drop clause 1 of isinstance(a, str) and isinstance(m_, str) and c == self._cr": "equivalent: _crc() raises TypeError for non-strings, which the surrounding except turns into 'corrupted'",
+      "ast@L376: drop clause 2 of isinstance(a, str) and isinstance(m_, str) and c == self._cr": "equivalent: _crc() raises TypeError for non-strings, which the surrounding except turns into 'corrupted'",
+      "ast@L827: drop clause 1 of mid is not None and mid in tx[\"mutation_ids\"]": "equivalent: None is never a member of a list of non-empty strings",
+      "ast@L954: drop clause 1 of post_readback[\"object_hash\"] == fwd[\"object_hash\"] or post_r": "equivalent: an identical object hash implies identical content, so the observed-state clause already covers it"
+    },
+    "generated_from_source": true,
+    "inconclusive": [],
+    "mutants": 619,
+    "not_applied": [],
+    "note": "validator-crash = the validator could not run to completion because the mutant broke a legitimate flow its own fixtures depend on; counted as detected, reported separately from assertion failures",
+    "result_file": "MCR_R2_0_N_MUTATION_CHECK_R7.json",
+    "survivors": [
+      "ast@L954: drop clause 1 of post_readback[\"object_hash\"] == fwd[\"object_hash\"] or post_r",
+      "ast@L342: drop clause 1 of isinstance(key, tuple) and len(key) == 2 and all(isinstance(",
+      "ast@L827: drop clause 1 of mid is not None and mid in tx[\"mutation_ids\"]",
+      "ast@L239: flip time.time() - start > timeout",
+      "ast@L376: drop clause 1 of isinstance(a, str) and isinstance(m_, str) and c == self._cr",
+      "ast@L376: drop clause 2 of isinstance(a, str) and isinstance(m_, str) and c == self._cr"
+    ],
+    "unexplained_survivors": []
+  },
+  "network_calls": 0,
+  "runner_file_changed_since_baseline": false,
+  "sap_writes": 0,
+  "verifier_attacks": {
+    "all_fail_the_verifier": true,
+    "archived_scenarios": 26,
+    "documented_limit": "A5b: a staged new file plus regenerated sums passes without an external --expect-sums-sha256 and fails with one",
+    "last_archived_full_run": "MCR_R2_0_J_VERIFIER_ATTACKS_R2.json",
+    "new_scenarios_not_archived": "A13a-A13f were added to the attack script in R2.0L; their full-verifier run was stopped by the machine (low system memory) and has NOT been run or archived",
+    "scanner_documented_unsupported": [
+      "documented_unsupported_base64_wrapped_bearer",
+      "documented_unsupported_quoted_password_with_spaces",
+      "documented_unsupported_short_token_value"
+    ],
+    "scanner_payload_checks": {
+      "A13a_nul_prefixed_utf16": {
+        "expected_flagged": true,
+        "flagged": true,
+        "ok": true
+      },
+      "A13b_utf32_file": {
+        "expected_flagged": true,
+        "flagged": true,
+        "ok": true
+      },
+      "A13c_secret_key_assignment": {
+        "expected_flagged": true,
+        "flagged": true,
+        "ok": true
+      },
+      "A13e_hex_value_under_a_secret_name": {
+        "expected_flagged": true,
+        "flagged": true,
+        "ok": true
+      },
+      "F7_account_password": {
+        "expected_flagged": true,
+        "flagged": true,
+        "ok": true
+      },
+      "F7_aws_access_key_shape": {
+        "expected_flagged": true,
+        "flagged": true,
+        "ok": true
+      },
+      "F7_client_secret_silent": {
+        "expected_flagged": true,
+        "flagged": true,
+        "ok": true
+      },
+      "F7_encrypted_private_key_marker": {
+        "expected_flagged": true,
+        "flagged": true,
+        "ok": true
+      },
+      "F7_github_token_shape": {
+        "expected_flagged": true,
+        "flagged": true,
+        "ok": true
+      },
+      "F7_password_valid": {
+        "expected_flagged": true,
+        "flagged": true,
+        "ok": true
+      },
+      "F7_pgp_private_key_marker": {
+        "expected_flagged": true,
+        "flagged": true,
+        "ok": true
+      },
+      "F7_short_password_with_symbol": {
+        "expected_flagged": true,
+        "flagged": true,
+        "ok": true
+      },
+      "F7_short_secret_digit_and_letter": {
+        "expected_flagged": true,
+        "flagged": true,
+        "ok": true
+      },
+      "F7_slack_token_shape": {
+        "expected_flagged": true,
+        "flagged": true,
+        "ok": true
+      },
+      "F7_url_userinfo": {
+        "expected_flagged": true,
+        "flagged": true,
+        "ok": true
+      },
+      "N3_azure_account_key": {
+        "expected_flagged": true,
+        "flagged": true,
+        "ok": true
+      },
+      "N3_github_pat_shape": {
+        "expected_flagged": true,
+        "flagged": true,
+        "ok": true
+      },
+      "N3_google_api_key_shape": {
+        "expected_flagged": true,
+        "flagged": true,
+        "ok": true
+      },
+      "N3_npm_token_shape": {
+        "expected_flagged": true,
+        "flagged": true,
+        "ok": true
+      },
+      "N3_stripe_live_key_shape": {
+        "expected_flagged": true,
+        "flagged": true,
+        "ok": true
+      },
+      "documented_unsupported_base64_wrapped_bearer": {
+        "expected_flagged": false,
+        "flagged": false,
+        "ok": true
+      },
+      "documented_unsupported_quoted_password_with_spaces": {
+        "expected_flagged": false,
+        "flagged": false,
+        "ok": true
+      },
+      "documented_unsupported_short_token_value": {
+        "expected_flagged": false,
+        "flagged": false,
+        "ok": true
+      },
+      "exempt_bracket_placeholder": {
+        "expected_flagged": false,
+        "flagged": false,
+        "ok": true
+      },
+      "exempt_code_call": {
+        "expected_flagged": false,
+        "flagged": false,
+        "ok": true
+      },
+      "exempt_file_name_key": {
+        "expected_flagged": false,
+        "flagged": false,
+        "ok": true
+      },
+      "exempt_hash_named_field": {
+        "expected_flagged": false,
+        "flagged": false,
+        "ok": true
+      },
+      "exempt_placeholder": {
+        "expected_flagged": false,
+        "flagged": false,
+        "ok": true
+      },
+      "exempt_token_id": {
+        "expected_flagged": false,
+        "flagged": false,
+        "ok": true
+      },
+      "exempt_upper_snake_label": {
+        "expected_flagged": false,
+        "flagged": false,
+        "ok": true
+      },
+      "jwt": {
+        "expected_flagged": true,
+        "flagged": true,
+        "ok": true
+      }
+    },
+    "scanner_payload_checks_all_ok": true,
+    "tracked_tree_secret_hits": []
+  }
+}

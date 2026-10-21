@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "kind": {
+      "const": "CapabilityBinding"
+    },
+    "object_hash": {
+      "pattern": "^[0-9A-F]{64}$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "kind",
+    "object_hash",
+    "binding_id",
+    "authority_hash",
+    "capability",
+    "provider_ref"
+  ],
+  "title": "CapabilityBinding",
+  "type": "object"
+}

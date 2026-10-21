@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "kind": {
+      "const": "CompletionReceipt"
+    },
+    "object_hash": {
+      "pattern": "^[0-9A-F]{64}$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "kind",
+    "object_hash",
+    "receipt_id",
+    "transaction_id",
+    "outcome_receipt_hash",
+    "commit_observation_hash",
+    "execution_receipt_hash",
+    "authority_hash"
+  ],
+  "title": "CompletionReceipt",
+  "type": "object"
+}

@@ -1,0 +1,59 @@
+{
+  "call_log": [
+    {
+      "bytes": 231,
+      "label": "01_initialize",
+      "sha256": "E1CE48D38B0FCFC21959291881A797D3412E5585DE70F548857631927F820FCC",
+      "status": 200
+    },
+    {
+      "bytes": 0,
+      "label": "02_notifications_initialized",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "status": 202
+    },
+    {
+      "bytes": 42791,
+      "label": "03_tools_list",
+      "sha256": "91C61535A5969206E24E3543922584D587F22C7FAD847463F7336CA1803F81E9",
+      "status": 200
+    },
+    {
+      "bytes": 161,
+      "label": "04_tools_call_abap_list_destinations",
+      "sha256": "EC96B22E15C4AE66FB8398698E55E68C97CBEE3CD274446EC50C9870E3CD2F41",
+      "status": 200
+    },
+    {
+      "bytes": 2027,
+      "label": "05_tools_call_capella_adt_repository_read_metadata",
+      "sha256": "3455E281ACF20B363F3791EBE2C064BCD5A3416ACC44B201A13B30935EBAA79D",
+      "status": 200
+    },
+    {
+      "bytes": 2027,
+      "label": "06_tools_call_capella_adt_repository_read_metadata",
+      "sha256": "69C5F8A0E3E78DCF9D409EAB758BB2EE1FA5E2E5C1D1CF2BC476C5A3B8DF76AF",
+      "status": 200
+    }
+  ],
+  "evidence_class": "OBSERVED",
+  "freeze_sha256": "8CCC5B949245638BF518776E3694BB8A6FC85A289B7B93BEBCC4D97591DAE951",
+  "mode": "LIVE_PREWRITE_READ_ONLY",
+  "mutations_sent": 0,
+  "prewrite": {
+    "PREWRITE_OK": true,
+    "baseline_existence": "ABSENT",
+    "baseline_observation_only": {
+      "active_read": "ABSENT",
+      "inactive_read": "ABSENT"
+    },
+    "create_fingerprint_now": "CB99759628F2258BFB8E13082ED4675E6B6A8F4A348C0BF30D259D2CFA1A0271",
+    "create_fingerprint_ok": true,
+    "destination_listed": true,
+    "read_tool_present": true,
+    "tool_count": 29,
+    "tool_count_ok": true
+  },
+  "sap_writes": 0
+}

@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "kind": {
+      "const": "ExecutionAuthority"
+    },
+    "object_hash": {
+      "pattern": "^[0-9A-F]{64}$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "kind",
+    "object_hash",
+    "authority_id",
+    "delegation_hash",
+    "mission_id",
+    "scope",
+    "max_mutations",
+    "single_use"
+  ],
+  "title": "ExecutionAuthority",
+  "type": "object"
+}

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "commit_state": {
+      "enum": [
+        "COMMITTED",
+        "ABSENT",
+        "UNKNOWN"
+      ]
+    },
+    "kind": {
+      "const": "CommitObservation"
+    },
+    "object_hash": {
+      "pattern": "^[0-9A-F]{64}$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "kind",
+    "object_hash",
+    "observation_id",
+    "transaction_id",
+    "mutation_id",
+    "readback_receipt_hash",
+    "commit_state"
+  ],
+  "title": "CommitObservation",
+  "type": "object"
+}

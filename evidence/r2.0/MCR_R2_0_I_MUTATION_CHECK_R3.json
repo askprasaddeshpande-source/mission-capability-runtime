@@ -1,0 +1,976 @@
+{
+  "MUTATION_CHECK": "PASS",
+  "by_kind": {
+    "guard": 90,
+    "relation": 48,
+    "special": 21
+  },
+  "detected_by_assertion": 156,
+  "detected_by_crash_only": {
+    "special: budget_not_decremented": "a legitimate resume is refused because the lease budget no longer adds up",
+    "special: mission_consumed_set_not_recorded": "a genuine chain is refused by R19 because the replay set was never filled",
+    "special: predicate_eq_always_true": "the compensation fixture reaches an illegal transition because an eq predicate passes wrongly"
+  },
+  "evidence_class": "SYNTHETIC/LOCAL",
+  "explained_survivors": {},
+  "mutants": 159,
+  "not_applied": [],
+  "results": [
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L152: not isinstance(predicates, (list, tuple)) or not predicates"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L155: not isinstance(p, dict) or not {\"field\", \"op\", \"expected\"} <= set(p)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L157: p[\"op\"] not in PRED_OPS"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L159: p[\"op\"] == \"in\" and (not isinstance(p[\"expected\"], (list, tuple, set, "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L194: not isinstance(obj, dict) or obj.get(\"kind\") != SLOT_KINDS[slot]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L196: not _hash_ok(obj)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L222: key in self._keys"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L304: not isinstance(max_mutations, int) or isinstance(max_mutations, bool) "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L320: _tok is not _TOKEN"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L322: to not in TRANSITIONS[self.state]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L328: slot not in self.ev"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L336: obj.get(\"transaction_id\") != self.transaction_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L340: not ok"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L347: intent[\"mission_id\"] != self.mission_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L356: delegation[\"principal_hash\"] != self._need(\"principal\")[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L358: authority[\"delegation_hash\"] != delegation[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L360: authority[\"mission_id\"] != self.mission_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L362: not attenuated(authority[\"scope\"], delegation[\"scope\"])"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L364: authority[\"max_mutations\"] > delegation[\"max_mutations\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L366: authority[\"single_use\"] is not True"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L368: budget[\"authority_hash\"] != authority[\"object_hash\"] or budget[\"max_mu"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L370: budget[\"expansion_allowed\"] or budget[\"retries\"] != 0"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L372: budget[\"max_mutations\"] != self.max_mutations"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L374: any((k[0] if isinstance(k, tuple) else k) == authority[\"object_hash\"] "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L384: capability_binding[\"authority_hash\"] != a[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L386: capability_binding[\"capability\"] not in a[\"scope\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L388: capability_binding[\"capability\"] != provider_binding[\"tool_name\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L390: capability_binding[\"provider_ref\"] != provider_binding[\"identity\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L401: tx[\"mission_id\"] != self.mission_id or outcome_contract[\"mission_id\"] "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L404: not isinstance(ids, list) or not ids or not all(isinstance(i, str) and"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L406: not outcome_contract[\"frozen\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L410: checkpoint[\"outcome_contract_hash\"] != outcome_contract[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L412: checkpoint[\"readback_contract_hash\"] != readback_contract[\"object_hash"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L414: checkpoint[\"budget_hash\"] != budget[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L416: checkpoint[\"transaction_hash\"] != tx[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L418: checkpoint[\"remaining_budget\"] != budget[\"max_mutations\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L420: readback_contract[\"source_level_required\"] != \"AUTHORITATIVE_REPOSITOR"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L429: not isinstance(mutation_id, str) or not mutation_id or \"\\n\" in mutatio"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L431: contract_fingerprint_now != self._need(\"provider\")[\"contract_fingerpri"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L433: mutation_id not in self._need(\"tx\")[\"mutation_ids\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L436: key in self.consumed or self.ledger.has(key)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L438: self.remaining <= 0"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L440: \"EXECUTION_STARTED\" not in TRANSITIONS[self.state]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L454: receipt.get(\"mutation_id\") != self.ev.get(\"mutation_id\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L457: c not in POST_SEND_CLASSES"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L475: rb[\"contract_hash\"] != contract[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L477: rb[\"mutation_id\"] != self.ev[\"mutation_id\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L489: observation[\"readback_receipt_hash\"] != rb[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L492: observation[\"mutation_id\"] != self.ev[\"mutation_id\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L501: observation[\"commit_state\"] != \"COMMITTED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L512: outcome[\"outcome_contract_hash\"] != oc[\"object_hash\"] or outcome[\"read"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L516: outcome[\"result\"] != recomputed"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L531: missing"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L536: not isinstance(o, dict) or o.get(\"kind\") != SLOT_KINDS[slot]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L538: not _hash_ok(o)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L600: self.state != \"OUTCOME_VALIDATED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L612: self.mutations_sent"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L628: grant[\"inherits_forward_authority\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L630: grant[\"issued_by\"] == a[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L632: not isinstance(grant[\"max_mutations\"], int) or isinstance(grant[\"max_m"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L635: grant[\"capability\"] in a[\"scope\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L639: grant[\"target\"] not in (self.ev[\"intent\"][\"target_system\"], self._need"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L641: \"readback\" not in self.ev"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L643: eval_predicates(grant[\"preconditions\"], self.ev[\"readback\"][\"observed\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L652: comp_receipt[\"grant_hash\"] != g[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L655: post_readback[\"mutation_id\"] != self.ev[\"mutation_id\"] or post_readbac"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L657: post_readback[\"source_level\"] != \"AUTHORITATIVE_REPOSITORY\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L659: comp_receipt[\"readback_receipt_hash\"] != post_readback[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L661: eval_predicates(g[\"outcome_predicates\"], post_readback[\"observed\"]) !="
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L688: not isinstance(ledger, ReplayLedger)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L690: not isinstance(evidence, dict)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L693: not isinstance(o, dict) or o.get(\"kind\") != kind or not _hash_ok(o)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L695: lease[\"checkpoint_hash\"] != checkpoint[\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L698: not isinstance(lease_rem, int) or isinstance(lease_rem, bool) or lease"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L701: not isinstance(ids, list) or not all(isinstance(s, str) and \":\" in s f"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L705: (lease_consumed and pre_send) or (not lease_consumed and not pre_send)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L708: extra"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L711: slot not in evidence"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L717: ev[slot][\"object_hash\"] != checkpoint[field]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L719: ev[\"tx\"][\"transaction_id\"] != lease[\"transaction_id\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L721: ev[\"tx\"][\"mission_id\"] != mission_id or ev[\"authority\"][\"mission_id\"] "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L724: original_budget[\"object_hash\"] != ev[\"budget\"][\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L726: ev[\"budget\"][\"authority_hash\"] != ev[\"authority\"][\"object_hash\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L728: \"delegation\" in ev and ev[\"authority\"][\"delegation_hash\"] != ev[\"deleg"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L730: \"capability\" in ev and ev[\"capability\"][\"authority_hash\"] != ev[\"autho"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L733: any(k[0] != auth for k in lease_consumed)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L736: lease_rem + len(lease_consumed) > min(checkpoint[\"remaining_budget\"], "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L741: m.remaining < 0"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L752: mut not in ev[\"tx\"][\"mutation_ids\"] or (auth, mut) not in consumed"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "guard@L757: er[\"object_hash\"] != lease[\"execution_receipt_hash\"] or er.get(\"mutati"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R01"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R02"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R03"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R04"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R05"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R06"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R07"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R08"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R09"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R10"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R11"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R12"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R13"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R14"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R15"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R16"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R17"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R18"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R19"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R20"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R22"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R23"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R24"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R25"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R26"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R27"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R28"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R29"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R30"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R31"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R32"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R33"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R34"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R35"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R36"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R37"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R38"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R39"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R40"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R41"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R42"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R43"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R44"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R45"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R46"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R47"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R48"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "relation R49"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: readback_authority_helper_always_true"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "special: budget_not_decremented"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: completion_not_persisted"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: completion_link_dropped_from_chain"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: atomic_rollback_removed"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: ledger_not_written_on_send"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "special: mission_consumed_set_not_recorded"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: resume_ignores_ledger"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: resume_state_inherited_from_lease"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: resume_budget_taken_from_lease_only"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: resume_evidence_not_verified"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: resume_consumed_set_not_restored"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: resume_sent_counter_not_restored"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: accepted_objects_not_copied"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: predicates_not_type_strict"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: predicate_ne_always_true"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: predicate_in_always_true"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "special: predicate_eq_always_true"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: unknown_observed_value_treated_as_known"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: unknown_predicate_never_degrades"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "special: go_token_not_required"
+    }
+  ],
+  "survivors": [],
+  "unexplained_survivors": []
+}

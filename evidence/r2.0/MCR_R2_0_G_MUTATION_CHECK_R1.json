@@ -1,0 +1,84 @@
+{
+  "MUTATION_CHECK": "PASS",
+  "all_applied": true,
+  "all_detected": true,
+  "evidence_class": "SYNTHETIC/LOCAL",
+  "mutants": 15,
+  "results": [
+    {
+      "applied": true,
+      "detected": true,
+      "mutant": "readback_source_level_ignored"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "mutant": "replay_guard_disabled"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "mutant": "compensation_inheritance_allowed"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "mutant": "outcome_recomputation_skipped"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "mutant": "completion_not_persisted"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "mutant": "completion_hash_unchecked"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "mutant": "missing_upstream_links_allowed"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "mutant": "upstream_tamper_unchecked"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "mutant": "completion_link_dropped_from_chain"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "mutant": "completion_correlation_unchecked"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "mutant": "completion_link_hash_unchecked"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "mutant": "budget_not_consumed_before_send"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "mutant": "point_of_use_drift_unchecked"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "mutant": "compensation_post_readback_not_authoritative"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "mutant": "continuation_budget_inflation_allowed"
+    }
+  ]
+}

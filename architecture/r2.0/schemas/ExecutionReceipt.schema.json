@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "call_class": {
+      "enum": [
+        "CALL_NOT_SENT",
+        "CALL_SENT_NO_RESPONSE",
+        "PROVIDER_ERROR",
+        "PROVIDER_RESPONSE_SUCCESS",
+        "COMMIT_UNKNOWN",
+        "COMMIT_CONFIRMED",
+        "OUTCOME_FAILED",
+        "OUTCOME_VALIDATED"
+      ]
+    },
+    "kind": {
+      "const": "ExecutionReceipt"
+    },
+    "object_hash": {
+      "pattern": "^[0-9A-F]{64}$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "kind",
+    "object_hash",
+    "receipt_id",
+    "transaction_id",
+    "mutation_id",
+    "call_class"
+  ],
+  "title": "ExecutionReceipt",
+  "type": "object"
+}
