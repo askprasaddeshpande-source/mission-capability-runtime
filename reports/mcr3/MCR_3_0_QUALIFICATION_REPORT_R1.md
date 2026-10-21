@@ -2,6 +2,9 @@
 
 Release line 3.0.0, an **offline engineering release candidate**. Baseline `main` at `fd865c67c053431dc33297a0df2a3c9a02fd51fe` (MCR R2.0, PR #4). Everything here is SYNTHETIC/LOCAL evidence. No SAP write, no live run, no network call, no production signing key, no capability promoted to production trust.
 
+## 0. Which commit each result belongs to
+The mutation run (section 3) and the verifier attack run (section 6) were executed on commit `bec9a3a`. The only code change after it is one test name made deterministic in `tools/mcr3/validate_mcr3_hardening.py` (a temporary-path hash made that suite's result differ between runs); the other later changes are evidence files, sums and these reports. The full test run, the fresh-clone verification with the external sums anchor and the independent review refer to the final commit named in the pull request.
+
 ## 1. What was built
 See `architecture/mcr3/MCR_3_0_ARCHITECTURE_AND_DECISION_RECORD_R1.md` (decision and module map), `MCR_3_0_SECURITY_AND_AUTHORITY_CONTRACT_R1.md`, `contracts/evidence-v1/README.md`, `CLAUDE_MODS_CHANGE_PACKET_R1.md` and `reports/mcr3/MCR_3_0_GAP_CLOSURE_MATRIX_R1.md`.
 
