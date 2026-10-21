@@ -20,6 +20,7 @@ SUITES = [
     ("adapters_interop", "validate_mcr3_adapters.py"),
     ("evidence_chain", "validate_mcr3_chain.py"),
     ("readback", "validate_mcr3_readback.py"),
+    ("mutation_gap_tests", "validate_mcr3_gaps.py"),
     ("scanner", "validate_mcr3_scan.py"),
 ]
 WRAPPER = r'''

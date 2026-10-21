@@ -29,16 +29,16 @@ GUARD_RE = re.compile(r"^( +)if ((?:[^\n]*\\\n)*[^\n]*):\n( +)raise GuardError\(
 REL_RE = re.compile(r'^( +self\._rel\("(R\d+)", )(.+)(\))$', re.M)
 
 TARGETS = [
-    ("mcr3_model.py", ["validate_mcr3_inherited.py", "validate_mcr3_hardening.py"]),
-    ("evc1.py", ["validate_mcr3_evc1.py"]),
-    ("mini_jsonschema.py", ["validate_mcr3_evc1.py"]),
-    ("mcr3_provenance.py", ["validate_mcr3_authority.py"]),
-    ("mcr3_authority.py", ["validate_mcr3_authority.py"]),
-    ("mcr3_scan.py", ["validate_mcr3_scan.py"]),
-    ("mcr3_readback.py", ["validate_mcr3_readback.py"]),
-    ("mcr3_adapters.py", ["validate_mcr3_adapters.py"]),
-    ("mcr3_lineage.py", ["validate_mcr3_adapters.py"]),
-    ("mcr3_interop.py", ["validate_mcr3_adapters.py"]),
+    ("mcr3_model.py", ["validate_mcr3_inherited.py", "validate_mcr3_hardening.py", "validate_mcr3_gaps.py"]),
+    ("evc1.py", ["validate_mcr3_evc1.py", "validate_mcr3_gaps.py"]),
+    ("mini_jsonschema.py", ["validate_mcr3_evc1.py", "validate_mcr3_gaps.py"]),
+    ("mcr3_provenance.py", ["validate_mcr3_authority.py", "validate_mcr3_gaps.py"]),
+    ("mcr3_authority.py", ["validate_mcr3_authority.py", "validate_mcr3_gaps.py"]),
+    ("mcr3_scan.py", ["validate_mcr3_scan.py", "validate_mcr3_gaps.py"]),
+    ("mcr3_readback.py", ["validate_mcr3_readback.py", "validate_mcr3_gaps.py"]),
+    ("mcr3_adapters.py", ["validate_mcr3_adapters.py", "validate_mcr3_gaps.py"]),
+    ("mcr3_lineage.py", ["validate_mcr3_adapters.py", "validate_mcr3_gaps.py"]),
+    ("mcr3_interop.py", ["validate_mcr3_adapters.py", "validate_mcr3_gaps.py"]),
     ("mcr3_chain.py", ["validate_mcr3_chain.py"]),
 ]
 

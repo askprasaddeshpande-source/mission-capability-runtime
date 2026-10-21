@@ -119,7 +119,10 @@ MAX_SCAN = 8 * 1024 * 1024
 def scan_tracked_tree(root):
     """Scan every tracked file and the text members of zip archives. Returns [(path, shape, fingerprint)]."""
     import zipfile
-    tr = subprocess.run(["git", "ls-files"], cwd=root, capture_output=True, text=True)
+    try:
+        tr = subprocess.run(["git", "ls-files"], cwd=root, capture_output=True, text=True)
+    except OSError:                                    # missing folder or no git: nothing to scan
+        return []
     names = [x for x in tr.stdout.split("\n") if x] if tr.returncode == 0 else []
     found = []
     import os

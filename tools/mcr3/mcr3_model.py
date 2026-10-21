@@ -332,7 +332,7 @@ def _check_ledger_path(path):
         raise GuardError("ledger path contains a character Windows reserves")
     rest = path
     if len(path) >= 2 and path[1] == ":" and path[0].isalpha() and path[0].isascii():
-        if len(path) > 2 and path[2] not in "/\\":
+        if len(path) == 2 or path[2] not in "/\\":
             raise GuardError("ledger path has a drive-relative form")
         rest = path[2:]
     if ":" in rest:

@@ -367,8 +367,8 @@ def migrate(event, target_version, *, tool="evc1.migrate", tool_version="3.0.0")
     tmaj, tmin, _ = _split_version(target_version)
     if tmaj != smaj:
         raise ContractError("migration across major versions needs a new contract, not a relabel")
-    if tmin < smin and unknown:
-        raise ContractError("downgrade would drop unrecognized fields")
+    if unknown:
+        raise ContractError("migration would drop unrecognized fields (they are retained only when the event is left as it is)")
     out = copy.deepcopy(known)
     out["contract_version"] = target_version
     out["lineage"]["transformations"].append({"step": "migrate", "from": known["contract_version"], "to": target_version, "tool": tool, "tool_version": tool_version})
