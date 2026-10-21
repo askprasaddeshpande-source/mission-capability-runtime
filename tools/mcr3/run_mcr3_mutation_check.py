@@ -95,7 +95,7 @@ EXPLAINED = {
     'mcr3_provenance.py::ast: drop clause 2 of prov["hash_consistent"] and content is not None': "equivalent: content is None only when digesting failed, and an attestation digest can never equal None",
     'evc1.py::ast: drop clause 2 of e["claim"]["kind"] != kind or e["claim"]["layer"] != layer': "equivalent: the schema pins the layer to a constant per claim kind, so a wrong layer fails the schema first",
     'evc1.py::ast: drop clause 1 of known.get("integrity", {}).get("event_digest") or digest_of': "equivalent: for any event that passed parse, integrity.event_digest equals digest_of(body)",
-    'evc1.py::ast: drop clause 1 of isinstance(v, bool) or v is None or isinstance(v, (str, int))': "equivalent: bool is a subclass of int",
+    'evc1.py::ast: drop clause 1 of isinstance(v, bool) or v is None': "equivalent: bool is a subclass of int",
     'evc1.py::ast: drop clause 2 of name in unknown or name not in KNOWN_CRITICAL': "equivalent: semantic_problems rejects the same case, so the event is rejected either way",
     'mcr3_authority.py::ast: drop clause 1 of require_unexpired and self.clock() >= exp': "equivalent: require_unexpired is always True at the only call site",
     'mcr3_authority.py::ast: drop clause 1 of a is not None and all(a[k]': "equivalent: an APPROVED capability always holds its approval record",
@@ -111,7 +111,7 @@ EXPLAINED = {
     'mcr3_adapters.py::ast: drop clause 1 of mission.mutations_sent or 1': "equivalent: a mutation event exists only after a send, so mutations_sent is at least 1",
     'mcr3_adapters.py::ast: drop clause 2 of mission.mutations_sent or 1': "equivalent: a mutation event exists only after a send, so mutations_sent is at least 1",
     'mcr3_chain.py::ast: drop clause 1 of len(disp) > 1 or (disp and disp[0] != len(parsed) - 1)': "equivalent: with two dispositions the first can never be the last event",
-    'mcr3_chain.py::ast: drop clause 2 of rb and rb["claim"]["claimed_authoritative"] and rb["claim"]["source_level"]': "equivalent: the event contract rejects an authoritative claim from a weak level before this check runs",
+    'mcr3_chain.py::ast: drop clause 2 of rb and rb["claim"]["claimed_authoritative"]': "equivalent: the event contract rejects an authoritative claim from a weak level before this check runs",
 }
 
 

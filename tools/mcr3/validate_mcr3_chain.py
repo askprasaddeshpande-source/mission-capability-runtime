@@ -129,6 +129,15 @@ def run():
     t(g, "validated_class_without_an_outcome_event_is_reported", has(CH.check_mission_events(rl(part, lambda es: es.pop(5))), "OUTCOME_VALIDATED needs"))
     ack = nb.convert(m1, now=NOW)
     t(g, "acknowledged_class_without_an_execution_receipt_is_reported", has(CH.check_mission_events(rl(ack, lambda es: es.pop(2))), "PROVIDER_ACKNOWLEDGED needs"))
+    def unknown_commit_chain(es):
+        es[3]["claim"].update(existence="ABSENT")
+        es[4]["claim"].update(commit_state="UNKNOWN")
+        es[5]["claim"].update(result="UNKNOWN")
+        es[6]["claim"].update(disposition="INCOMPLETE", outcome_class="OUTCOME_UNKNOWN")
+        es[6].update(disposition="INCOMPLETE", outcome_class="OUTCOME_UNKNOWN")
+    ucc = reseal_all(hist, unknown_commit_chain)
+    t(g, "a_consistent_chain_with_an_absent_readback_an_unknown_commit_and_an_unknown_outcome_has_no_problems", CH.check_mission_events(ucc) == [])
+    t(g, "complete_with_an_unknown_commit_reading_is_reported", has(CH.check_mission_events(reseal_all(full, lambda es: es[4]["claim"].update(commit_state="UNKNOWN"))), "COMPLETE needs a PASS outcome and a COMMITTED"))
     t(g, "every_problem_message_is_a_string", all(isinstance(p, str) for p in CH.check_mission_events(full[:1] + full[2:3])))
     t(g, "a_hostile_list_never_raises", all(isinstance(CH.check_mission_events(x), list) for x in ([None], [1], ["a"], [[]], [{}], [full[0], None], [{"contract": "mcr-evidence/1"}])))
 
