@@ -21,8 +21,8 @@ See `architecture/mcr3/MCR_3_0_ARCHITECTURE_AND_DECISION_RECORD_R1.md` (decision
 Not verified on the qualifying machine: nothing optional was missing (the `cryptography` package and `ssh-keygen` were present, so the Ed25519 and SSHSIG back-ends ran). On a machine without them those checks are recorded NOT_VERIFIED by the suites themselves.
 
 ## 3. Mutation qualification (reproduce with `python tools/mcr3/run_mcr3_mutation_check.py --jobs 3`, about 25 minutes; `evidence/mcr3/MCR3_MUTATION_CHECK_R1.json`)
-**1,559 mutants generated from the source of 11 modules** (1,337 syntax-tree clause/operator, 141 guard, 53 chain relation, 28 targeted). Every mutant applied. Classification kept separate:
-- **880 detected by an assertion** (a validator ran to completion and named failed checks);
+**1,564 mutants generated from the source of 11 modules** (1342 syntax-tree clause/operator, 141 guard, 53 chain relation, 28 targeted). Every mutant applied. Classification kept separate:
+- **885 detected by an assertion** (a validator ran to completion and named failed checks);
 - **646 detected by validator crash** (a validator died with a traceback because the mutant broke a flow its own fixtures need): weaker evidence, counted but reported as such (42% of detections; 353 of the 765 runtime-model detections);
 - **1 detected by hang** (removing the lock-wait timeout);
 - **32 survivors, each an explained equivalent mutant** with a stated reason in the harness (for example a clause made redundant by an earlier check, or a default that cannot differ); **0 unexplained; 0 inconclusive**.
@@ -40,7 +40,7 @@ A hazard found on the way: a mutant that lets a device name through created real
 MCR 3.0 is an independently qualified **offline capability release candidate / bounded research runtime**. It does not show production behaviour for SAP or any provider. R2.0's single live observation is unchanged, its link 14 was never emitted live, its readback did not establish activation or package membership, and its evidence was not cryptographically authenticated; the 3.0 R2.0 adapter labels it HISTORICAL, unsigned and INCOMPLETE and invents nothing. No hypothesis H41 to H48 is promoted. The portable readback rules and the SAP-style provider are NOT verified live; a new SAP activation, package, independent-readback or failure-path study needs a separate live-study authorization.
 
 ## 6. Verifier attack run
-{{ATTACK_SUMMARY}}
+22 scenarios, strictly one at a time, each in a throwaway clone of the committed HEAD, `--fast` profile (`evidence/mcr3/MCR3_VERIFIER_ATTACKS_R1.json`). **All 22 were detected for the intended reason** (the named check failed), except S07, which behaves as documented: a new unlisted file with regenerated sums passes without an external anchor and fails with one. The suite covers the six scanner attacks the R2.0 release could not finish (A13a NUL-prefixed UTF-16, A13b UTF-32, A13c `secret_key` assignment, A13d a secret outside the 3.0 folders, A13e a hex value under a secret name, A13f a secret inside a zip member), nine integrity attacks (edited file, unlisted file, edited and deleted frozen R2.0 files, a file outside the 3.0 folders, a moved `v1.9.0` tag, the documented self-attestation limit, a machine-specific path, tracked bytecode) and seven further token shapes. Resource use: one verifier process at a time, peak working set about 31 MB, 20 to 27 s per scenario. **The first run of this suite found two real scanner gaps** (A13b and A13c: letters-only values of 16 or more characters under a strong secret name were not flagged). They were fixed in `mcr3_scan.py` with regression tests, the scanner module was re-mutated, and the whole suite was re-run against the fixed commit (all 22 detected). The frozen R2.0 verifier's own A13a-f suite remains unrun (NOT_VERIFIED); this suite replaces it for the 3.0 verifier.
 
 ## 7. Independent review
 {{REVIEW_SUMMARY}}
