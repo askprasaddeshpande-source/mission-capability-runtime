@@ -567,7 +567,7 @@ SLOT_KINDS = {"intent": "MissionIntent", "principal": "PrincipalContext", "deleg
               "readback": "AuthoritativeReadbackReceipt", "outcome": "OutcomeReceipt",
               "outcome_contract": "ExpectedOutcomeContract", "readback_contract": "AuthoritativeReadbackContract",
               "completion": "CompletionReceipt", "comp_grant": "CompensationGrant",
-              "comp_receipt": "CompensationReceipt", "comp_readback": "AuthoritativeReadbackReceipt",
+              "comp_receipt": "CompensationReceipt", "comp_readback": "AuthoritativeReadbackReceipt", "comp_resolution": "AuthoritativeReadbackReceipt",
               "comp_execution": "ExecutionReceipt"}
 POST_SEND_CLASSES = ("PROVIDER_RESPONSE_SUCCESS", "CALL_SENT_NO_RESPONSE", "PROVIDER_ERROR", "COMMIT_UNKNOWN")
 # compensating calls: a failure may also be "never sent"; an unknown outcome needs a readback before another attempt
