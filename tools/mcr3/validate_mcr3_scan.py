@@ -29,6 +29,14 @@ def names_for(text):
 
 def run():
     g = "SHAPES_DETECTED"
+    # attacks A13b and A13c: letters-only values of 16+ characters under a strong secret name must be flagged
+    t("ATTACK_REGRESSIONS", "a_long_letters_only_value_under_a_password_name_is_flagged", lambda: "secret_named_assignment" in names_for("pass" + "word=" + "k" * 20))
+    t("ATTACK_REGRESSIONS", "a_long_letters_only_value_under_a_secret_key_name_is_flagged", lambda: "secret_named_assignment" in names_for("secret" + "_key = " + "h" * 30))
+    t("ATTACK_REGRESSIONS", "the_utf32_form_of_the_password_attack_is_flagged", lambda: bool(S.scan_bytes(("pass" + "word=" + "k" * 20).encode("utf-32"))))
+    t("ATTACK_REGRESSIONS", "a_15_character_letters_only_value_under_a_strong_name_is_not_flagged", lambda: not names_for("pass" + "word=" + "k" * 15))
+    t("ATTACK_REGRESSIONS", "trailing_code_punctuation_is_not_part_of_the_value", lambda: not names_for("make(pass" + "word=abc123);;") and "secret_named_assignment" in names_for("make(pass" + "word=abc123xy);"))
+    t("ATTACK_REGRESSIONS", "a_long_placeholder_under_a_strong_name_is_not_flagged", lambda: not names_for("pass" + "word=${DB_SECRET_VALUE_FROM_VAULT}") and not names_for("sec" + "ret = " + "x" * 20))
+    t("ATTACK_REGRESSIONS", "a_16_character_letters_only_value_is_the_threshold", lambda: "secret_named_assignment" in names_for("pass" + "word=" + "k" * 16))
     t(g, "every_shape_has_a_synthetic_fixture", lambda: (set(S.fixture_names()) == {n for n, _ in S.SHAPES} | {"secret_named_assignment", "token_named_assignment"}))
     t(g, "shape_names_are_unique", lambda: (len({n for n, _ in S.SHAPES}) == len(S.SHAPES)))
     for name in S.fixture_names():
@@ -73,6 +81,9 @@ def run():
         "ordinary_url": "https://example.org/path?x=1",
         "url_with_port": "http://127.0.0.1:2234/mcp",
         "keyword_argument_passthrough": "make(authorization_ref=authorization_ref)",
+        "strong_name_with_an_attribute_path": "make(password=self.settings.password_field)",
+        "strong_name_with_a_label_value": "password_mode: ENABLED_WITH_MFA_REQUIRED",
+        "strong_name_with_a_hash_field": "secret_sha256: " + "ab" * 32,
         "attribute_path_value": "make(authorization=self.authorization_ref)",
     }
     for label, text in benign.items():

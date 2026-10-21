@@ -10,11 +10,11 @@
     "mutation_gap_tests": 231,
     "provenance_authority": 115,
     "readback": 34,
-    "scanner": 99
+    "scanner": 109
   },
   "failed": [],
   "network_calls": 0,
   "not_verified": [],
   "suites": 9,
-  "tests": 1498
+  "tests": 1508
 }

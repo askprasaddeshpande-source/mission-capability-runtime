@@ -93,7 +93,12 @@ def scan_text(txt):
         for m in rx.finditer(txt):
             hits.append((name, _fp(m.group(0))))
     for m in _STRONG.finditer(txt):
-        if not (_exempt_name(m.group("n")) or not _short_secret_like(m.group("v"))):
+        v = m.group("v").rstrip("),;]}")                 # trailing code punctuation is not part of a value
+        if len(v) < 8 or _exempt_name(m.group("n")) or _PLACEHOLDER.match(v) or _LABEL.fullmatch(v) or _ATTR_PATH.fullmatch(v):
+            continue
+        # a value of 16 or more characters under a strong secret name is flagged whatever it looks like (found by the A13b/A13c
+        # attacks: letters-only values slipped through); 8 to 15 characters need a digit with a letter, or a symbol
+        if len(v) >= 16 or _short_secret_like(v):
             hits.append(("secret_named_assignment", _fp(m.group(0))))
     for m in _WEAK.finditer(txt):
         v = m.group("v")

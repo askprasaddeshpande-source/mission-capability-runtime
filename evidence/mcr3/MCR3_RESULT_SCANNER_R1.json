@@ -2,6 +2,7 @@
   "evidence_class": "SYNTHETIC/LOCAL",
   "failed": [],
   "groups": {
+    "ATTACK_REGRESSIONS": "PASS",
     "DOCUMENTED_UNSUPPORTED": "PASS",
     "ENCODINGS": "PASS",
     "FALSE_POSITIVES": "PASS",
@@ -11,6 +12,6 @@
   },
   "network_calls": 0,
   "stage": "MCR3_SCANNER",
-  "tests": 99,
-  "tests_digest": "2166F6836839A42BFC3EBF7066A718A159F801922213E3F0DDBB5052DD79CE6E"
+  "tests": 109,
+  "tests_digest": "8506FADE19168640E5BCEB0EBAB4C0A663785004F841483F773027177EAE528B"
 }
