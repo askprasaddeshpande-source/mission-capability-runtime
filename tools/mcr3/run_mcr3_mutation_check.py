@@ -1,18 +1,17 @@
-"""Mutation check for the R2.0 model. Local/synthetic; no network.
+"""Mutation check for the MCR 3.0 modules. Local/synthetic; no network.
 
-Usage: python tools/r2.0/run_r2_mutation_check.py [--out PATH] [--jobs N]
+Usage: python tools/mcr3/run_mcr3_mutation_check.py [--out PATH] [--jobs N] [--only MODULE.py]
 
-Mutants are generated from the source, not hand-listed, so a new guard or operator cannot silently escape:
-  * GUARD: every `if <cond>: raise GuardError(...)` has its condition replaced by False;
-  * RELATION: every `self._rel("Rnn", <cond>)` has its condition replaced by True;
-  * AST: every comparison operator is flipped (== != < <= > >= in/not in is/is not), every `and`/`or` operand is
-    dropped (replaced by True/False), every `not` is removed and every `+`/`-` is swapped, anywhere in the model
-    outside docstrings (clause-level and boundary mutants);
-  * SPECIAL: targeted mutants for logic that is not an if-raise guard (state, budget, ledger, copy, strict compare...).
-Each mutant is applied to a temp copy and the validator must fail. The harness records HOW it was detected:
-  assertion = the validator ran to completion and reported failed test names; crash = it died with an exception.
-PASS requires: every mutation applied exactly once, every mutant detected, and every survivor listed in EXPLAINED
-with a reason (an equivalent mutant). Crash-only detections are reported separately and also listed.
+Targets (module -> the validators that must fail when the module is mutated): see TARGETS. Mutants are generated from the
+source: for the runtime model, every `if <cond>: raise GuardError(...)` guard, every chain relation and targeted SPECIAL
+mutants; for every module, clause/operator mutants (comparison flips, dropped and/or clauses, removed `not`, +/- swaps).
+A mutated module shadows the real one through MCR3_OVERRIDE_DIR; the tree-wide secret scan is skipped (MCR3_SKIP_TREE).
+The harness records HOW each mutant was detected:
+  assertion    a validator ran to completion and named failed tests
+  crash        a validator died with a Python traceback (a legitimate flow its fixtures need was broken) - weaker evidence
+  hang         the same mutant timed out twice
+  inconclusive killed or timed out without a traceback (for example a memory kill), retried once, never counted as detection
+PASS requires: every mutation applied, none inconclusive, every survivor listed in EXPLAINED with a reason.
 """
 import ast
 import concurrent.futures
@@ -28,6 +27,19 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 
 GUARD_RE = re.compile(r"^( +)if ((?:[^\n]*\\\n)*[^\n]*):\n( +)raise GuardError\(", re.M)
 REL_RE = re.compile(r'^( +self\._rel\("(R\d+)", )(.+)(\))$', re.M)
+
+TARGETS = [
+    ("mcr3_model.py", ["validate_mcr3_inherited.py", "validate_mcr3_hardening.py"]),
+    ("evc1.py", ["validate_mcr3_evc1.py"]),
+    ("mini_jsonschema.py", ["validate_mcr3_evc1.py"]),
+    ("mcr3_provenance.py", ["validate_mcr3_authority.py"]),
+    ("mcr3_authority.py", ["validate_mcr3_authority.py"]),
+    ("mcr3_scan.py", ["validate_mcr3_scan.py"]),
+    ("mcr3_readback.py", ["validate_mcr3_readback.py"]),
+    ("mcr3_adapters.py", ["validate_mcr3_adapters.py"]),
+    ("mcr3_lineage.py", ["validate_mcr3_adapters.py"]),
+    ("mcr3_interop.py", ["validate_mcr3_adapters.py"]),
+]
 
 # (name, old, new): applied once; old must occur exactly once.
 SPECIAL = [
@@ -153,14 +165,14 @@ def norm(name):
     return re.sub(r"@L\d+", "", name)
 
 
-def build_mutants(src):
+def build_mutants(src, is_model=True):
     muts = []
-    for m in GUARD_RE.finditer(src):
+    for m in (GUARD_RE.finditer(src) if is_model else ()):
         cond = " ".join(m.group(2).replace("\\\n", " ").split())
         line = src.count("\n", 0, m.start()) + 1
         new = src[:m.start(2)] + "False" + src[m.end(2):]
         muts.append(("guard@L%d: %s" % (line, cond[:70]), new, src.count(m.group(0)) == 1 or True))
-    for m in REL_RE.finditer(src):
+    for m in (REL_RE.finditer(src) if is_model else ()):
         new = src[:m.start(3)] + "True" + src[m.end(3):]
         muts.append(("relation %s" % m.group(2), new, True))
     seen = {m[1] for m in muts}
@@ -174,7 +186,7 @@ def build_mutants(src):
         seen.add(new)
         taken = sum(1 for m_ in muts if m_[0] == name or m_[0].startswith(name + " #"))
         muts.append((name if not taken else "%s #%d" % (name, taken + 1), new, True))   # names must be unique
-    for name, old, rep in SPECIAL:
+    for name, old, rep in (SPECIAL if is_model else ()):
         ok = src.count(old) == 1
         muts.append(("special: " + name, src.replace(old, rep, 1) if ok else None, ok))
     return muts
@@ -196,19 +208,24 @@ def classify(r):
 
 
 def run_one(item):
-    name, new_src, applied = item
+    target, validators, name, new_src, applied = item
+    full = "%s::%s" % (target, name)
     if not applied or new_src is None:
-        return {"mutant": name, "applied": False, "detected": None, "detected_by": None}
+        return {"mutant": full, "applied": False, "detected": None, "detected_by": None}
     kind = "inconclusive"
     timed_out = False
     for _attempt in range(2):                         # one retry: an inconclusive run must not decide the outcome
-        tmp = tempfile.mkdtemp(prefix="r2mut_")
+        tmp = tempfile.mkdtemp(prefix="m3mut_")
         try:
-            with open(os.path.join(tmp, "mcr3_model.py"), "w", encoding="utf-8", newline="\n") as fh:
+            with open(os.path.join(tmp, target), "w", encoding="utf-8", newline="\n") as fh:
                 fh.write(new_src)
-            shutil.copy(os.path.join(HERE, "validate_mcr3_inherited.py"), tmp)
-            r = subprocess.run([sys.executable, "validate_mcr3_inherited.py"], cwd=tmp, capture_output=True, text=True, timeout=300)
-            kind = classify(r)
+            env = dict(os.environ, MCR3_OVERRIDE_DIR=tmp, MCR3_SKIP_TREE="1", PYTHONDONTWRITEBYTECODE="1")
+            kind = None
+            for v in validators:
+                r = subprocess.run([sys.executable, v], cwd=HERE, capture_output=True, text=True, timeout=300, env=env)
+                kind = classify(r)
+                if kind is not None:
+                    break
         except subprocess.TimeoutExpired:
             kind = "hang" if timed_out else "inconclusive"   # the same mutant timing out twice is a deterministic hang
             timed_out = True
@@ -216,26 +233,39 @@ def run_one(item):
             shutil.rmtree(tmp, ignore_errors=True)
         if kind != "inconclusive":
             break
-    return {"mutant": name, "applied": True, "detected": kind in ("assertion", "crash", "hang"), "detected_by": kind}
+    return {"mutant": full, "applied": True, "detected": kind in ("assertion", "crash", "hang"), "detected_by": kind}
 
 
 def main(argv):
     jobs = int(argv[argv.index("--jobs") + 1]) if "--jobs" in argv else 4
-    src = open(os.path.join(HERE, "mcr3_model.py"), encoding="utf-8").read().replace("\r\n", "\n")
-    mutants = build_mutants(src)
+    only = argv[argv.index("--only") + 1] if "--only" in argv else None
+    items = []
+    for target, validators in TARGETS:
+        if only and target != only:
+            continue
+        src = open(os.path.join(HERE, target), encoding="utf-8").read().replace("\r\n", "\n")
+        for name, new_src, applied in build_mutants(src, is_model=(target == "mcr3_model.py")):
+            items.append((target, validators, name, new_src, applied))
     with concurrent.futures.ThreadPoolExecutor(max_workers=jobs) as ex:
-        results = list(ex.map(run_one, mutants))
+        results = list(ex.map(run_one, items))
     inconclusive = [r["mutant"] for r in results if r["detected_by"] == "inconclusive"]
     survivors = [r["mutant"] for r in results if r["applied"] and not r["detected"] and r["detected_by"] != "inconclusive"]
     unexplained = [s_ for s_ in survivors if explanation(s_) is None]
     not_applied = [r["mutant"] for r in results if not r["applied"]]
     out = {"evidence_class": "SYNTHETIC/LOCAL", "mutants": len(results),
-           "by_kind": {"guard": sum(1 for r in results if r["mutant"].startswith("guard@")),
-                       "relation": sum(1 for r in results if r["mutant"].startswith("relation ")),
-                       "ast": sum(1 for r in results if r["mutant"].startswith("ast@")),
-                       "special": sum(1 for r in results if r["mutant"].startswith("special:"))},
+           "by_kind": {"guard": sum(1 for r in results if "::guard@" in r["mutant"]),
+                       "relation": sum(1 for r in results if "::relation " in r["mutant"]),
+                       "ast": sum(1 for r in results if "::ast@" in r["mutant"]),
+                       "special": sum(1 for r in results if "::special:" in r["mutant"])},
+           "by_module": {t_: {"mutants": sum(1 for r in results if r["mutant"].startswith(t_ + "::")),
+                              "detected": sum(1 for r in results if r["mutant"].startswith(t_ + "::") and r["detected"]),
+                              "assertion": sum(1 for r in results if r["mutant"].startswith(t_ + "::") and r["detected_by"] == "assertion"),
+                              "crash": sum(1 for r in results if r["mutant"].startswith(t_ + "::") and r["detected_by"] == "crash"),
+                              "hang": sum(1 for r in results if r["mutant"].startswith(t_ + "::") and r["detected_by"] == "hang"),
+                              "survivors": sum(1 for r in results if r["mutant"].startswith(t_ + "::") and r["applied"] and not r["detected"] and r["detected_by"] != "inconclusive")}
+                         for t_, _ in TARGETS if any(r["mutant"].startswith(t_ + "::") for r in results)},
            "not_applied": not_applied, "detected_by_assertion": sum(1 for r in results if r["detected_by"] == "assertion"),
-           "detected_by_validator_crash": {r["mutant"]: CRASH_REASONS.get(r["mutant"], DEFAULT_CRASH_REASON) for r in results if r["detected_by"] == "crash"},
+           "detected_by_validator_crash": {r["mutant"]: CRASH_REASONS.get(r["mutant"].split("::", 1)[1], DEFAULT_CRASH_REASON) for r in results if r["detected_by"] == "crash"},
            "detected_by_hang": [r["mutant"] for r in results if r["detected_by"] == "hang"],
            "inconclusive": inconclusive,
            "survivors": survivors, "explained_survivors": {s_: explanation(s_) for s_ in survivors if explanation(s_) is not None},

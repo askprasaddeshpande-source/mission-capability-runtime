@@ -52,6 +52,7 @@ _WEAK = re.compile(r"(?P<n>[A-Za-z0-9_.-]*(?i:token|authorization)[A-Za-z0-9_.-]
 _HASHY = {"hash", "sha", "sha1", "sha224", "sha256", "sha384", "sha512", "digest", "checksum", "fingerprint"}
 _COUNTY = {"count", "len", "length", "id", "ids", "size", "name", "type", "source", "kind", "path", "file"}
 _LABEL = re.compile(r"(?:[A-Z]+[0-9]?|[0-9]+)(?:_(?:[A-Z]+[0-9]?|[0-9]+))+")
+_ATTR_PATH = re.compile(r"[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)+")      # self.some_attribute (code, not a secret)
 _PLACEHOLDER = re.compile(r"(?i)^(changeme|redacted|example|placeholder|password|secret|required|optional|none|null|true|false|x{4,}|\*{3,}|<.*>|\$\{.*|\$\(.*|%.*%|\{\{.*)$")
 
 
@@ -96,7 +97,7 @@ def scan_text(txt):
             hits.append(("secret_named_assignment", _fp(m.group(0))))
     for m in _WEAK.finditer(txt):
         v = m.group("v")
-        if not (_exempt_name(m.group("n")) or _LABEL.fullmatch(v) or _PLACEHOLDER.match(v)):
+        if not (_exempt_name(m.group("n")) or _LABEL.fullmatch(v) or _PLACEHOLDER.match(v) or v == m.group("n") or _ATTR_PATH.fullmatch(v)):
             hits.append(("token_named_assignment", _fp(m.group(0))))
     return hits
 

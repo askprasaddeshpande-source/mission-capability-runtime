@@ -7,12 +7,18 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
+if os.environ.get("MCR3_OVERRIDE_DIR"):          # mutation harness: a mutated module shadows the real one
+    sys.path.insert(0, os.environ["MCR3_OVERRIDE_DIR"])
 import mcr3_scan as S  # noqa: E402
 
 T, G = {}, {}
 
 
 def t(group, name, ok):
+    try:
+        ok = ok() if callable(ok) else ok
+    except Exception:
+        ok = False
     T[name] = bool(ok)
     G.setdefault(group, []).append(name)
 
@@ -23,8 +29,8 @@ def names_for(text):
 
 def run():
     g = "SHAPES_DETECTED"
-    t(g, "every_shape_has_a_synthetic_fixture", set(S.fixture_names()) == {n for n, _ in S.SHAPES} | {"secret_named_assignment", "token_named_assignment"})
-    t(g, "shape_names_are_unique", len({n for n, _ in S.SHAPES}) == len(S.SHAPES))
+    t(g, "every_shape_has_a_synthetic_fixture", lambda: (set(S.fixture_names()) == {n for n, _ in S.SHAPES} | {"secret_named_assignment", "token_named_assignment"}))
+    t(g, "shape_names_are_unique", lambda: (len({n for n, _ in S.SHAPES}) == len(S.SHAPES)))
     for name in S.fixture_names():
         fx = S.fixture(name)
         t(g, "fixture_%s_is_detected_as_its_own_shape" % name, name in names_for(fx))
@@ -66,6 +72,8 @@ def run():
         "stripe_prefix_only": "use sk_live_ keys only in production",
         "ordinary_url": "https://example.org/path?x=1",
         "url_with_port": "http://127.0.0.1:2234/mcp",
+        "keyword_argument_passthrough": "make(authorization_ref=authorization_ref)",
+        "attribute_path_value": "make(authorization=self.authorization_ref)",
     }
     for label, text in benign.items():
         t(g, "benign_" + label + "_is_not_flagged", not names_for(text))
@@ -83,16 +91,16 @@ def run():
     for label, text in unsupported.items():
         t(g, "unsupported_" + label + "_is_documented_and_not_detected", not names_for(text))
     doc = open(os.path.join(HERE, "..", "..", "architecture", "mcr3", "MCR_3_0_SECURITY_AND_AUTHORITY_CONTRACT_R1.md"), encoding="utf-8").read() if os.path.exists(os.path.join(HERE, "..", "..", "architecture", "mcr3", "MCR_3_0_SECURITY_AND_AUTHORITY_CONTRACT_R1.md")) else ""
-    t(g, "the_security_contract_lists_the_unsupported_patterns", (not doc) or all(w in doc for w in ("zero-width", "homoglyph", "split across")))
+    t(g, "the_security_contract_lists_the_unsupported_patterns", lambda: ((not doc) or all(w in doc for w in ("zero-width", "homoglyph", "split across"))))
 
     g = "REPOSITORY_TREE"
     root = os.path.abspath(os.path.join(HERE, "..", ".."))
-    if os.path.isdir(os.path.join(root, ".git")):
+    if os.path.isdir(os.path.join(root, ".git")) and not os.environ.get("MCR3_SKIP_TREE"):
         hits = S.scan_tracked_tree(root)
         # the fixtures live only as fragments; a hit anywhere in the tracked tree is a finding
-        t(g, "tracked_tree_has_no_secret_shaped_content", not hits)
-    t(g, "scanner_source_is_clean", not S.scan_bytes(open(os.path.join(HERE, "mcr3_scan.py"), "rb").read()))
-    t(g, "validator_source_is_clean", not S.scan_bytes(open(os.path.join(HERE, "validate_mcr3_scan.py"), "rb").read()))
+        t(g, "tracked_tree_has_no_secret_shaped_content", lambda: (not hits))
+    t(g, "scanner_source_is_clean", lambda: (not S.scan_bytes(open(os.path.join(HERE, "mcr3_scan.py"), "rb").read())))
+    t(g, "validator_source_is_clean", lambda: (not S.scan_bytes(open(os.path.join(HERE, "validate_mcr3_scan.py"), "rb").read())))
 
 
 def main(argv):
