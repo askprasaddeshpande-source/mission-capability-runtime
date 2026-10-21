@@ -883,7 +883,8 @@ def run():
         cp = make("PreMutationCheckpoint", **dict(dict(checkpoint_id="cp1", transaction_hash=tx["object_hash"], budget_hash=bu["object_hash"], outcome_contract_hash=oc["object_hash"],
                                                       readback_contract_hash=rc["object_hash"], remaining_budget=1), **(cp_chg or {})))
         lease = make("ContinuationLease", lease_id="L1", checkpoint_hash=cp["object_hash"], transaction_id="TX-SYN-1", remaining_budget=1, state_at_checkpoint="PREWRITE_VALIDATED",
-                     mutation_id=None, execution_receipt_hash=None, consumed_authority_ids=[])
+                     mutation_id=None, execution_receipt_hash=None, consumed_authority_ids=[],
+                     ledger_anchor=MODEL.ReplayLedger().anchor())
         ev = dict(intent=intent, principal=ff["pr"], delegation=dl, capability=cb, provider=pb, tx=tx, budget=bu, outcome_contract=oc, readback_contract=rc, authority=au)
         return lease, cp, bu, ev
 
@@ -1131,7 +1132,7 @@ def run():
     m2x, f2x = two_mutation_mission(2)
     lease2x = m2x.checkpoint_lease()
     t(g, "resume_rejects_a_mutation_id_in_the_transaction_that_was_never_consumed", lambda: (raises(lambda: rsm(remake(lease2x, mutation_id="MUT-2"), f2x, m2x), "mutation id inconsistent")))
-    t(g, "resume_rejects_a_consumed_mutation_id_that_is_not_in_the_transaction", lambda: (raises(lambda: rsm(remake(leaseR, consumed_authority_ids=["%s:MUT-X" % auth_R], mutation_id="MUT-X"), fR, mR, ledger=(lambda lg_: (lg_.consume((auth_R, "MUT-X")), lg_)[1])(MODEL.ReplayLedger())), "mutation id inconsistent")))
+    t(g, "resume_rejects_a_consumed_mutation_id_that_is_not_in_the_transaction", lambda: ((lambda lg_: (lg_.consume((auth_R, "MUT-X")), raises(lambda: rsm(remake(leaseR, consumed_authority_ids=["%s:MUT-X" % auth_R], mutation_id="MUT-X", ledger_anchor=lg_.anchor()), fR, mR, ledger=lg_), "mutation id inconsistent"))[1])(MODEL.ReplayLedger())))
     mX, fX = fixture(); to_prewrite(mX, fX); mX.begin_execution("MUT-1", FP); erX = exec_receipt(fX); mX.record_execution(erX)
     leaseX = mX.checkpoint_lease()
     t(g, "resume_accepts_a_matching_execution_receipt", lambda: (safe(lambda: rsm(leaseX, fX, mX, evidence=dict(ev_upstream(mX), execution_receipt=erX)).state == "COMMIT_STATE_UNKNOWN")))

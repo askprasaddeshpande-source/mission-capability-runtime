@@ -384,6 +384,7 @@ class ReplayLedger:
         self.expected_id = expected_id
         self.ledger_id = None
         self._keys = set()
+        self._order = []                              # entries in append order (the anchor chain depends on it)
         if path:
             self._sync()
 
@@ -415,13 +416,13 @@ class ReplayLedger:
         return (json.dumps({"hdr": self.HEADER, "v": 1, "id": lid, "c": self._crc(lid, "HDR")}, separators=(",", ":")) + "\n").encode("utf-8")
 
     def _parse(self, data):
-        """Return (ledger id or None, keys). None means the file is empty or holds only a torn header."""
+        """Return (ledger id or None, keys, entries in file order). None means the file is empty or holds only a torn header."""
         try:
             text = data.decode("utf-8")
         except UnicodeDecodeError:
             raise GuardError("ledger corrupted (not UTF-8)")
         complete = text.split("\n")[:-1]               # the last element is the (possibly empty) torn tail
-        lid, keys = None, set()
+        lid, keys, order = None, set(), []
         for n, line in enumerate(complete, 1):
             try:
                 rec = json.loads(line)
@@ -442,13 +443,14 @@ class ReplayLedger:
             if not ok:
                 raise GuardError("ledger corrupted at line %d" % n)
             keys.add((a, m_))
-        return lid, keys
+            order.append((a, m_))
+        return lid, keys, order
 
     def _load(self, fh):
         """Under the lock: read, validate identity, create the header of a new file. Returns the current bytes."""
         fh.seek(0)
         data = fh.read()
-        lid, keys = self._parse(data)
+        lid, keys, order = self._parse(data)
         if lid is None:
             if self.expected_id is not None:
                 raise GuardError("ledger is empty or missing (expected id %s)" % self.expected_id)
@@ -466,6 +468,7 @@ class ReplayLedger:
             raise GuardError("ledger identity differs from the expected id")
         self.ledger_id = lid
         self._keys |= keys
+        self._order = order                           # the file is the source of truth for the entry order
         return data
 
     def _require_present(self):
@@ -481,6 +484,32 @@ class ReplayLedger:
                 self._load(fh)
             finally:
                 _unlock(fh)
+
+    @_tlocked
+    def anchor(self):
+        """{ledger_id, count, head}: store it SOMEWHERE THE LEDGER'S HOST CANNOT REWRITE (a lease, an authorization record,
+        a separate system). check_anchor() then detects a restored older copy or rewritten history; without an
+        independently held anchor these cannot be detected."""
+        if self.path:
+            self._sync()
+        lid = self.ledger_id or "VOLATILE"
+        return {"ledger_id": lid, "count": len(self._order), "head": _chain(lid, self._order)[-1]}
+
+    @_tlocked
+    def check_anchor(self, anchor):
+        if not isinstance(anchor, dict) or not isinstance(anchor.get("ledger_id"), str) or not _count(anchor.get("count")) \
+                or not isinstance(anchor.get("head"), str) or len(anchor["head"]) != 64:
+            raise GuardError("ledger anchor is malformed")
+        if self.path:
+            self._sync()
+        lid = self.ledger_id or "VOLATILE"
+        if anchor["ledger_id"] != lid:
+            raise GuardError("ledger identity differs from the anchor")
+        if len(self._order) < anchor["count"]:
+            raise GuardError("ledger has fewer entries than the anchor (an older copy may have been restored)")
+        if _chain(lid, self._order)[anchor["count"]] != anchor["head"]:
+            raise GuardError("ledger history differs from the anchor")
+        return True
 
     @_tlocked
     def has(self, key):
@@ -510,6 +539,7 @@ class ReplayLedger:
         if not self.path:
             self._admit(key, limit)
             self._keys.add(key)
+            self._order.append(key)
             return
         self._consume_file(key, limit)
 
@@ -529,8 +559,20 @@ class ReplayLedger:
                 fh.flush()
                 os.fsync(fh.fileno())
                 self._keys.add(key)
+                self._order.append(key)
             finally:
                 _unlock(fh)
+
+
+def _chain(ledger_id, order):
+    """Hash chain over the ledger: out[i] is the head after i entries. A copy that is older, shorter or rewritten has a
+    different head at the anchored position."""
+    h = hashlib.sha256(("MCR3-LEDGER|" + ledger_id).encode("utf-8")).hexdigest()
+    out = [h]
+    for a, m in order:
+        h = hashlib.sha256((h + "|" + a + "\x00" + m).encode("utf-8")).hexdigest()
+        out.append(h)
+    return out
 
 
 def _count(x):
@@ -1122,7 +1164,7 @@ class Mission:
                         remaining_budget=self.remaining, state_at_checkpoint=self.state,
                         mutation_id=self.ev.get("mutation_id"),
                         execution_receipt_hash=er["object_hash"] if er else None,
-                        ledger_id=self.ledger.ledger_id,
+                        ledger_id=self.ledger.ledger_id, ledger_anchor=self.ledger.anchor(),
                         consumed_authority_ids=sorted(("%s:%s" % k) for k in self.consumed))
 
     @classmethod
@@ -1192,6 +1234,9 @@ class Mission:
         recorded = ledger.for_authority(auth)
         if not lease_consumed <= recorded:
             raise GuardError("lease claims a send that the ledger does not record")
+        if not isinstance(lease.get("ledger_anchor"), dict):                  # 3.0: every lease carries an anchor of the ledger it was cut from
+            raise GuardError("lease carries no ledger anchor")
+        ledger.check_anchor(lease["ledger_anchor"])                           # detects a restored older copy or rewritten history
         consumed = lease_consumed | recorded
         m.remaining = min(lease_rem, total - len(consumed))
         if m.remaining < 0:

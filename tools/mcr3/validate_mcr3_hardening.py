@@ -271,6 +271,64 @@ def run():
     mm, ff = comp_ready()
     t(g, "a_grant_with_zero_attempts_is_refused", lambda: (raises(lambda: mm.authorize_compensation(grant_of(max_mutations=0)), "incomplete")))
 
+    # ---------------------------------------------------------------- ledger anchor (G08)
+    g = "LEDGER_ANCHOR"
+    import shutil
+    d_ = tempfile.mkdtemp(prefix="m3anchor_")
+    lp = os.path.join(d_, "ledger.txt")
+    lg = MODEL.ReplayLedger(lp)
+    a0 = lg.anchor()
+    t(g, "an_empty_ledger_has_a_count_of_zero_and_a_head", a0["count"] == 0 and len(a0["head"]) == 64 and a0["ledger_id"] == lg.ledger_id)
+    lg.consume(("A" * 64, "M-1"))
+    a1 = lg.anchor()
+    shutil.copyfile(lp, lp + ".copy1")
+    lg.consume(("A" * 64, "M-2"))
+    a2 = lg.anchor()
+    t(g, "each_consume_changes_the_head_and_raises_the_count", a1["count"] == 1 and a2["count"] == 2 and len({a0["head"], a1["head"], a2["head"]}) == 3)
+    t(g, "the_anchor_is_deterministic_for_the_same_content", MODEL.ReplayLedger(lp).anchor() == a2)
+    t(g, "an_anchor_of_a_prefix_is_still_valid_after_more_entries", lg.check_anchor(a1) is True and lg.check_anchor(a0) is True and lg.check_anchor(a2) is True)
+    shutil.copyfile(lp, lp + ".latest")
+    shutil.copyfile(lp + ".copy1", lp)                         # an attacker restores the older copy of the same file
+    older = MODEL.ReplayLedger(lp)
+    t(g, "a_restored_older_copy_is_detected_by_the_latest_anchor", raises(lambda: older.check_anchor(a2), "fewer entries"))
+    t(g, "a_restored_older_copy_still_satisfies_the_older_anchor", older.check_anchor(a1) is True)
+    lg_hist = MODEL.ReplayLedger(os.path.join(d_, "ledger2.txt"))
+    lg_hist.consume(("B" * 64, "M-1")); lg_hist.consume(("B" * 64, "M-2"))
+    ah = lg_hist.anchor()
+    other = MODEL.ReplayLedger(os.path.join(d_, "ledger3.txt"))
+    other.consume(("B" * 64, "M-1")); other.consume(("B" * 64, "M-X"))
+    t(g, "a_ledger_with_the_same_count_but_other_history_is_detected", raises(lambda: other.check_anchor(dict(ah, ledger_id=other.ledger_id)), "history differs"))
+    t(g, "an_anchor_from_another_ledger_is_detected", raises(lambda: other.check_anchor(ah), "identity differs"))
+    for label, bad in (("not_a_dict", "x"), ("missing_count", {"ledger_id": "a", "head": "0" * 64}), ("bool_count", dict(ah, count=True)), ("negative_count", dict(ah, count=-1)),
+                       ("short_head", dict(ah, head="abc")), ("int_id", dict(ah, ledger_id=5)), ("none", None)):
+        t(g, "malformed_anchor_%s_is_refused" % label, raises(lambda b=bad: lg_hist.check_anchor(b), "malformed"))
+    vol = MODEL.ReplayLedger()
+    va = vol.anchor()
+    vol.consume(("C" * 64, "M-1"))
+    t(g, "a_volatile_ledger_anchors_within_the_process", va["ledger_id"] == "VOLATILE" and vol.check_anchor(va) is True and vol.anchor()["count"] == 1)
+    t(g, "a_volatile_ledger_cannot_vouch_for_a_durable_one", raises(lambda: vol.check_anchor(ah), "identity differs"))
+    mm, ff = fixture(); to_prewrite(mm, ff); mm.begin_execution("MUT-1", FP)
+    lease = mm.checkpoint_lease()
+    t(g, "a_lease_carries_the_ledger_anchor", isinstance(lease.get("ledger_anchor"), dict) and lease["ledger_anchor"]["count"] == 1)
+    ev_up = {k: mm.ev[k] for k in ("intent", "principal", "delegation", "capability", "provider", "tx", "budget", "outcome_contract", "readback_contract", "authority")}
+    rs = Mission.resume(lease, ff["cp"], ff["bu"], "M-SYN-1", ev_up, mm.ledger, allow_volatile_ledger=True)
+    t(g, "resume_with_the_matching_ledger_and_anchor_works", rs.state == "COMMIT_STATE_UNKNOWN")
+    no_anchor = make("ContinuationLease", **{k: v for k, v in lease.items() if k not in ("kind", "object_hash", "ledger_anchor")})
+    t(g, "a_lease_without_an_anchor_is_refused", raises(lambda: Mission.resume(no_anchor, ff["cp"], ff["bu"], "M-SYN-1", ev_up, mm.ledger, allow_volatile_ledger=True), "no ledger anchor"))
+    bad_anchor = remake(lease, ledger_anchor=dict(lease["ledger_anchor"], head="f" * 64))
+    t(g, "a_lease_whose_anchor_head_is_wrong_is_refused", raises(lambda: Mission.resume(bad_anchor, ff["cp"], ff["bu"], "M-SYN-1", ev_up, mm.ledger, allow_volatile_ledger=True), "history differs"))
+    fresh_led = MODEL.ReplayLedger(os.path.join(d_, "restore.txt"))
+    mr, fr = fixture(); mr.ledger = fresh_led; to_prewrite(mr, fr); mr.begin_execution("MUT-1", FP)
+    shutil.copyfile(fresh_led.path, fresh_led.path + ".keep")
+    lease_r = mr.checkpoint_lease()
+    open(fresh_led.path, "wb").write(open(fresh_led.path + ".keep", "rb").read()[:0] + open(fresh_led.path + ".keep", "rb").read())   # same bytes: control
+    ev_r = {k: mr.ev[k] for k in ev_up}
+    t(g, "resume_control_with_an_untouched_ledger_works", Mission.resume(lease_r, fr["cp"], fr["bu"], "M-SYN-1", ev_r, MODEL.ReplayLedger(fresh_led.path)).state == "COMMIT_STATE_UNKNOWN")
+    header_only = open(fresh_led.path, "rb").read().split(b"\n")[0] + b"\n"
+    open(fresh_led.path, "wb").write(header_only)               # the send record is removed from the file, header (id) kept
+    t(g, "removing_the_send_record_from_a_durable_ledger_is_caught_on_resume", raises(lambda: Mission.resume(lease_r, fr["cp"], fr["bu"], "M-SYN-1", ev_r, MODEL.ReplayLedger(fresh_led.path)), "does not record"))
+    shutil.rmtree(d_, ignore_errors=True)
+
     # ---------------------------------------------------------------- outcome classification (the 3.0 distinction)
     g = "OUTCOME_CLASSIFICATION"
     oc_ = MODEL.outcome_classification
