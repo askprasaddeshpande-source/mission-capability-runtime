@@ -280,9 +280,8 @@ def scan_history(root):
         if nl < 0:
             break
         head = data[pos:nl].split()
-        if len(head) != 3:                                   # "<oid> missing"
-            pos = nl + 1
-            continue
+        if len(head) != 3:                                   # "<oid> missing": the history is incomplete, so the scan cannot be trusted
+            raise ScanError("a reachable object is missing from the repository (partial or damaged clone)")
         oid, typ, size = head[0].decode(), head[1], int(head[2])
         body = data[nl + 1:nl + 1 + size]
         pos = nl + 1 + size + 1

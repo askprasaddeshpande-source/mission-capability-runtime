@@ -156,7 +156,7 @@ def run():
 def main(argv):
     run()
     run_bounded_and_coverage()
-    run_bounded_and_coverage()
+    run_limits_and_names()
     failed = sorted(n for n, ok in T.items() if not ok)
     groups = {gk: "PASS" if all(T[n] for n in names) else "FAIL" for gk, names in G.items()}
     digest = hashlib.sha256(json.dumps(sorted(T), separators=(",", ":")).encode()).hexdigest().upper()
@@ -263,6 +263,94 @@ def run_bounded_and_coverage():
         shutil.rmtree(sd, ignore_errors=True)
     big = b"x" * (S.MAX_SCAN + 1)
     t(g, "content_beyond_the_scan_limit_is_reported_not_skipped", any(h[1] == "unscanned_oversize" for h in S.scan_blob("big.txt", big)))
+
+
+def run_limits_and_names():
+    import io
+    import shutil
+    import subprocess
+    import tempfile
+    import zipfile
+    g = "NAME_BOUNDS"
+    hexv = "ab" * 30
+    for off_label, pad in (("at_the_start", ""), ("after_200_characters", "x" * 200 + "\n")):
+        t(g, "a_hash_prefix_exempts_a_secret_name_%s" % off_label, not names_for(pad + "digest_" + "pass" + "word: " + hexv))
+        t(g, "a_hash_suffix_exempts_a_secret_name_%s" % off_label, not names_for(pad + "pass" + "word_sha256: " + hexv))
+        t(g, "an_ordinary_prefix_does_not_exempt_%s" % off_label, "secret_named_assignment" in names_for(pad + "mine_" + "pass" + "word: " + hexv))
+    t(g, "a_name_longer_than_the_span_is_not_a_name", not names_for("pass" + "word" + "a" * 400 + "=hunter2hunter2xyz"))
+    t(g, "a_keyword_starting_exactly_where_the_previous_name_was_cut_is_still_examined",
+      "secret_named_assignment" in names_for("pass" + "word" + "x" * 256 + "pass" + "word=hunter2hunter2xyz"))
+    t(g, "a_quoted_phrase_is_found_after_other_text", "secret_named_assignment" in names_for("x = 1\n" + "pass" + "word: \"correct horse battery staple\""))
+    t(g, "a_quoted_value_under_a_hash_named_secret_is_exempt", not names_for("digest_" + "sec" + "ret: \"a long sentence with spaces in it\""))
+    t(g, "a_quoted_placeholder_in_angle_brackets_is_exempt", not names_for("pass" + "word: \"<your pass" + "word goes here>\""))
+    t(g, "a_quoted_attribute_path_is_exempt", not names_for("sec" + "ret: \"config.database.sec" + "ret_value_x\""))
+    t(g, "a_quoted_upper_snake_label_is_exempt", not names_for("pass" + "word: \"SOME_LABEL_VALUE_HERE\""))
+
+    g = "SCAN_LIMITS"
+    saved = (S.MAX_SCAN, S.MAX_ZIP_TOTAL)
+    secret = S.fixture("github_classic_token")
+
+    def zipped(members):
+        b = io.BytesIO()
+        with zipfile.ZipFile(b, "w") as z:
+            for n_, data in members:
+                z.writestr(n_, data)
+        return b.getvalue()
+    try:
+        S.MAX_SCAN = 1000
+        t(g, "a_blob_of_exactly_the_limit_is_scanned", lambda: not [x for x in S.scan_blob("a.txt", b"x" * 1000) if x[1] == "unscanned_oversize"])
+        t(g, "a_blob_one_byte_over_the_limit_is_reported", lambda: [x for x in S.scan_blob("a.txt", b"x" * 1001) if x[1] == "unscanned_oversize"])
+        big_zip = zipped([("pad.txt", "x" * 1500), ("sec.txt", secret), ("exact.txt", (secret + "\n" * 1000)[:1000])])
+        res = S.scan_blob("z.zip", big_zip)
+        t(g, "a_zip_larger_than_the_limit_is_opened_not_reported_whole", lambda: len(big_zip) > 1000 and not [x for x in res if x[0] == "z.zip"])
+        t(g, "an_oversize_member_inside_a_zip_is_reported_by_name", lambda: [x for x in res if x[0] == "z.zip!pad.txt" and x[1] == "unscanned_oversize"])
+        t(g, "members_up_to_the_limit_are_scanned", lambda: [x for x in res if x[0] == "z.zip!sec.txt" and x[1] == "github_classic_token"] and [x for x in res if x[0] == "z.zip!exact.txt" and x[1] == "github_classic_token"])
+        S.MAX_SCAN = 4000
+        S.MAX_ZIP_TOTAL = 5000
+        over = zipped([("a.txt", "x" * 3000), ("b.txt", "y" * 3000)])
+        t(g, "a_zip_whose_members_exceed_the_total_limit_is_reported", lambda: [x for x in S.scan_blob("z.zip", over) if x[1] == "unscanned_oversize" and x[2] == "zip"])
+        at = zipped([("a.txt", secret + "x" * (2500 - len(secret))), ("b.txt", "y" * 2500)])
+        t(g, "a_zip_whose_members_total_exactly_the_limit_is_scanned", lambda: [x for x in S.scan_blob("z.zip", at) if x[1] == "github_classic_token"])
+        S.MAX_SCAN, S.MAX_ZIP_TOTAL = 1000, saved[1]
+        td = tempfile.mkdtemp(prefix="m3lim_")
+        try:
+            subprocess.run(["git", "init", "-q"], cwd=td, check=True, capture_output=True)
+            open(os.path.join(td, "exact.txt"), "wb").write((secret + "\n" * 1000)[:1000].encode())
+            open(os.path.join(td, "over.txt"), "wb").write(b"x" * 1001)
+            open(os.path.join(td, "z.zip"), "wb").write(zipped([("pad.txt", "x" * 900), ("sec.txt", secret)]))
+            subprocess.run(["git", "add", "-A"], cwd=td, check=True, capture_output=True)
+            hits = S.scan_tracked_tree(td)
+            t(g, "the_tree_scan_reads_a_file_of_exactly_the_limit_whole", lambda: [h for h in hits if h[0] == "exact.txt" and h[1] == "github_classic_token"] and not [h for h in hits if h[0] == "exact.txt" and h[1] == "unscanned_oversize"])
+            t(g, "the_tree_scan_reports_a_file_one_byte_over_the_limit", lambda: [h for h in hits if h[0] == "over.txt" and h[1] == "unscanned_oversize"])
+            t(g, "the_tree_scan_opens_a_zip_larger_than_the_limit", lambda: len(zipped([("pad.txt", "x" * 900), ("sec.txt", secret)])) > 1000 and [h for h in hits if h[0] == "z.zip!sec.txt" and h[1] == "github_classic_token"])
+        finally:
+            shutil.rmtree(td, ignore_errors=True)
+    finally:
+        S.MAX_SCAN, S.MAX_ZIP_TOTAL = saved
+
+    g = "HISTORY_PARSING"
+    hd = tempfile.mkdtemp(prefix="m3hist3_")
+
+    def git(*a):
+        return subprocess.run(["git", "-c", "user.name=t", "-c", "user.email=t@example.invalid", "-c", "commit.gpgsign=false"] + list(a), cwd=hd, capture_output=True, check=True, text=True)
+    try:
+        git("init", "-q")
+        for i, ch in enumerate("ABCDEFGH"):
+            open(os.path.join(hd, "f%d.txt" % i), "w").write("v = " + secret[:-1] + ch + "\n")
+            git("add", "-A")
+            git("commit", "-q", "-m", "c%d" % i)
+        found = S.scan_history(hd)
+        paths = {x[1] for x in found if x[2] == "github_classic_token"}
+        t(g, "a_secret_in_each_of_eight_objects_is_found_by_name", lambda: paths == {"f%d.txt" % i for i in range(8)})
+        t(g, "every_secret_is_reported_exactly_once", lambda: len([x for x in found if x[2] == "github_classic_token"]) == 8)
+        git("add", "-A")
+        oid = git("rev-parse", "HEAD:f3.txt").stdout.strip()
+        obj = os.path.join(hd, ".git", "objects", oid[:2], oid[2:])
+        os.chmod(obj, 0o666)
+        os.remove(obj)
+        t(g, "a_missing_history_object_makes_the_scan_fail_not_pass", lambda: refuses2(lambda: S.scan_history(hd)))
+    finally:
+        shutil.rmtree(hd, ignore_errors=True)
 
 if __name__ == "__main__":
     sys.exit(main(sys.argv[1:]))

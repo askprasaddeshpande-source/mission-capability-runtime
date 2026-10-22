@@ -3,7 +3,7 @@
   "SAP_WRITES": 0,
   "by_suite": {
     "adapters_interop": 99,
-    "corrective_closure": 61,
+    "corrective_closure": 67,
     "evidence_chain": 54,
     "evidence_contract": 207,
     "hardening": 140,
@@ -12,11 +12,11 @@
     "phase1_authority": 29,
     "provenance_authority": 153,
     "readback": 34,
-    "scanner": 150
+    "scanner": 176
   },
   "failed": [],
   "network_calls": 0,
   "not_verified": [],
   "suites": 11,
-  "tests": 1742
+  "tests": 1774
 }

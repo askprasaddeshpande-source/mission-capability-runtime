@@ -131,6 +131,20 @@ def run():
     for label, clk in (("minus_infinity", lambda: -inf), ("negative", lambda: -1.0), ("bool", lambda: True), ("string", lambda: "x"), ("huge", lambda: huge), ("nan", lambda: nan), ("raising", boom)):
         t(g, "adapter_promotion_with_a_%s_clock_is_refused" % label, lambda clk=clk: _adapter_promotion_refused(clk))
 
+    t(g, "valid_time_accepts_zero_and_ordinary_readings", lambda: M.valid_time(0) == 0.0 and M.valid_time(1.5) == 1.5 and M.valid_time(7) == 7.0)
+    t(g, "valid_time_refuses_everything_else", lambda: all(M.valid_time(x) is None for x in (-1, -0.5, "x", None, True, False, [], nan, inf, -inf, huge)))
+    reg, cap, rec = _approvable(lambda: 1.0)
+    reg.record_approval(cap, rec)
+    cap.approval["expires_at"] = "bogus"                       # a corrupted stored approval must lapse, not crash
+    t(g, "an_approval_with_a_corrupted_expiry_lapses_to_qualified", lambda: reg.effective_state(cap) == "QUALIFIED")
+    reg3 = A.CapabilityRegistry()
+    t(g, "the_approval_record_builder_tolerates_an_unqualified_capability", lambda: A.capability_approval_record(reg3.discover("create_object", "1.0.0", HX), _scope(), "X")["qualification_digest"] is None)
+    for label, body in (("integer_principal_id", dict(principal_id=5, tenant="t", roles=["dev"])), ("list_principal_id", dict(principal_id=["p"], tenant="t", roles=["dev"]))):
+        def attempt(body=body):
+            m, f = fixture()
+            return raises(lambda: m.context_ready(f["intent"], make("PrincipalContext", **body)), "must be a string")
+        t(g, "a_%s_is_refused" % label, attempt)
+
     # ------------------------------------------------------------------ B4 capability approval binding
     g = "B4_APPROVAL_BINDING"
     reg, cap, rec = _approvable(lambda: 1.0)

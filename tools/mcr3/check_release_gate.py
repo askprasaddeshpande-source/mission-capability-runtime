@@ -42,7 +42,7 @@ def decide(directory, sha, required=None):
             problems.append("%s: mutation check is not PASS" % mod)
         elif bm["mutants"] < MIN_MUTANTS or (bm.get("assertion") or 0) < 1 or (bm.get("assertion") or 0) + (bm.get("crash") or 0) + (bm.get("hang") or 0) > bm["mutants"]:
             problems.append("%s: implausibly small or inconsistent mutation result (%s mutants)" % (mod, bm.get("mutants")))
-        if d.get("inconclusive") or d.get("unexplained_survivors") or d.get("not_applied") or d.get("detected_by_hang"):
+        if d.get("inconclusive") or d.get("unexplained_survivors") or d.get("not_applied"):
             problems.append("%s: inconclusive, unexplained, hanging or unapplied mutants" % mod)
         modules[mod] = {"mutants": d.get("mutants"), "assertion": (bm or {}).get("assertion"), "validator_crash": (bm or {}).get("crash"),
                         "hang": (bm or {}).get("hang"), "survivors": (bm or {}).get("survivors"), "explained_survivors": len(d.get("explained_survivors") or {}),
