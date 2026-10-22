@@ -47,6 +47,9 @@ class RecordedApprovalVerifier(ApprovalVerifier):
     def __init__(self, issued):
         self.issued = set(issued)
 
+    def revoke(self, approval_id):
+        self.issued.discard(approval_id)
+
     def verify(self, record):
         return record.get("approval_id") in self.issued
 
@@ -209,10 +212,20 @@ class Adapter:
 
 
 class AdapterRegistry:
-    """Tracks adapters by (id, version). Promotion beyond OBSERVATION_ONLY needs qualification evidence AND an owner approval
-    reference; a downgrade or rollback can never re-grant a mode a revoked or newer-restricted record withdrew."""
-    def __init__(self):
+    """Tracks adapters by (id, version). Promotion beyond OBSERVATION_ONLY needs qualification evidence AND an approval record
+    that the EXTERNAL approver verifies (fail closed: default verifier denies everything), that is complete, unexpired, scoped
+    to the exact owner, capability, provider, target, operation, environment and policy digest the caller expects, and bound to
+    this adapter, version, target mode and qualification digest. The approval is re-checked every time the mode is read, so an
+    expired or revoked approval drops the adapter back to OBSERVATION_ONLY. A downgrade or rollback can never re-grant a mode a
+    revoked or newer-restricted record withdrew."""
+    BOUND_FIELDS = ("adapter_id", "adapter_version", "to_mode", "qualification_digest")
+
+    def __init__(self, approval_verifier=None, clock=None):
+        import time
+        self.approval_verifier = approval_verifier or DenyAllApprovalVerifier()
+        self.clock = clock or time.time
         self._a = {}
+        self._approval = {}                      # (adapter_id, version) -> the verified approval record behind the current mode
         self.floor = {}                          # adapter_id -> most restrictive mode ever imposed by a revocation or suspension
 
     def register(self, adapter, version):
@@ -222,7 +235,18 @@ class AdapterRegistry:
         if adapter.declaration["MODE"] != "OBSERVATION_ONLY":
             raise AuthorityError("a new adapter registers in OBSERVATION_ONLY mode")
         self._a[key] = adapter
+        self._approval.pop(key, None)
         return adapter
+
+    def _approval_current(self, key, record):
+        """True only if the record is unexpired now and the external approver still verifies it (fail closed on any error)."""
+        exp = _expiry(record.get("expires_at"))
+        if exp is None or self.clock() >= exp:
+            return False
+        try:
+            return self.approval_verifier.verify(copy.deepcopy(record)) is True
+        except Exception:
+            return False
 
     def mode(self, adapter_id, version):
         a = self._a.get((adapter_id, version))
@@ -230,11 +254,46 @@ class AdapterRegistry:
             return "OBSERVATION_ONLY"                    # unknown adapters get the lowest mode
         if a.declaration["REVOCATION_STATUS"] != "NOT_REVOKED":
             return "OBSERVATION_ONLY"
+        declared = a.declaration["MODE"]
+        if declared != "OBSERVATION_ONLY":
+            rec = self._approval.get((adapter_id, version))
+            if rec is None or not self._approval_current((adapter_id, version), rec):
+                return "OBSERVATION_ONLY"                # no current verified approval behind the mode: it lapses
         order = {m: i for i, m in enumerate(ADAPTER_MODES)}
         cap = self.floor.get(adapter_id)                 # review 8: a recorded restriction caps every version of the adapter
-        return a.declaration["MODE"] if cap is None or order[a.declaration["MODE"]] <= order[cap] else cap
+        return declared if cap is None or order[declared] <= order[cap] else cap
 
-    def promote(self, adapter_id, version, to_mode, qualification_digest, approval_reference):
+    def _check_promotion_approval(self, a, adapter_id, version, to_mode, qualification_digest, record, expected_scope):
+        if not isinstance(record, dict) or not record.get("approval_id") or record.get("source") != "EXTERNAL_GOVERNOR":
+            raise AuthorityError("promotion needs an external approval reference")
+        if not isinstance(expected_scope, dict) or not all(isinstance(expected_scope.get(k), str) and expected_scope.get(k) for k in SCOPE_FIELDS):
+            raise AuthorityError("promotion needs the expected approval scope (%s)" % ", ".join(SCOPE_FIELDS))
+        need = ("approval_id",) + SCOPE_FIELDS + self.BOUND_FIELDS + ("expires_at",)
+        missing = [k for k in need if k not in record]
+        if missing:
+            raise AuthorityError("approval record is missing %s" % missing)
+        if not all(isinstance(record[k], str) and record[k] for k in ("approval_id",) + SCOPE_FIELDS + self.BOUND_FIELDS):
+            raise AuthorityError("approval record fields must be non-empty strings")
+        if any(record[k] != expected_scope[k] for k in SCOPE_FIELDS):
+            raise AuthorityError("approval scope does not match the expected scope")
+        supported = a.declaration["SUPPORTED_CAPABILITIES"]
+        if "*" not in supported and record["capability_id"] not in supported:
+            raise AuthorityError("approval capability is not one this adapter supports")
+        if (record["adapter_id"], record["adapter_version"], record["to_mode"], record["qualification_digest"]) != (adapter_id, version, to_mode, qualification_digest):
+            raise AuthorityError("approval is bound to another adapter, version, mode or qualification")
+        exp = _expiry(record["expires_at"])
+        if exp is None:
+            raise AuthorityError("approval expires_at is not a valid UTC time")
+        if self.clock() >= exp:
+            raise AuthorityError("approval already expired")
+        try:
+            ok = self.approval_verifier.verify(copy.deepcopy(record)) is True
+        except Exception:
+            ok = False
+        if not ok:
+            raise AuthorityError("approval record was not verified by the external approver")
+
+    def promote(self, adapter_id, version, to_mode, qualification_digest, approval_record, expected_scope=None):
         a = self._a.get((adapter_id, version))
         if a is None:
             raise AuthorityError("unknown adapter")
@@ -245,13 +304,13 @@ class AdapterRegistry:
             raise AuthorityError("promotion must raise the mode")
         if not _hex64(qualification_digest):
             raise AuthorityError("promotion needs qualification evidence")
-        if not isinstance(approval_reference, dict) or not approval_reference.get("approval_id") or approval_reference.get("source") != "EXTERNAL_GOVERNOR":
-            raise AuthorityError("promotion needs an external approval reference")
+        self._check_promotion_approval(a, adapter_id, version, to_mode, qualification_digest, approval_record, expected_scope)
         if order[to_mode] > order.get(self.floor.get(adapter_id, "ACTIVE"), 2):
             raise AuthorityError("a restriction recorded for this adapter caps its mode")
         a.declaration["QUALIFICATION_EVIDENCE"] = qualification_digest
-        a.declaration["APPROVAL_STATUS"] = "APPROVAL_REFERENCED:" + approval_reference["approval_id"]
+        a.declaration["APPROVAL_STATUS"] = "APPROVAL_REFERENCED:" + approval_record["approval_id"]
         a.declaration["MODE"] = to_mode
+        self._approval[(adapter_id, version)] = copy.deepcopy(approval_record)
 
     def revoke(self, adapter_id, version):
         a = self._a.get((adapter_id, version))
@@ -267,6 +326,15 @@ class AdapterRegistry:
         if (adapter_id, to_version) not in self._a:
             raise AuthorityError("unknown rollback target")
         return self.mode(adapter_id, to_version)          # mode() already applies any recorded restriction
+
+
+def adapter_approval_record(approval_id, scope, adapter_id, adapter_version, to_mode, qualification_digest, expires_at="2099-01-01"):
+    """Builds the SHAPE of an adapter-promotion approval (what an external approver would issue). It is not an approval:
+    only the registry's ApprovalVerifier decides whether a record is genuine."""
+    r = dict(scope)
+    r.update(approval_id=approval_id, source="EXTERNAL_GOVERNOR", adapter_id=adapter_id, adapter_version=adapter_version,
+             to_mode=to_mode, qualification_digest=qualification_digest, expires_at=expires_at)
+    return r
 
 
 def _hex64(s):

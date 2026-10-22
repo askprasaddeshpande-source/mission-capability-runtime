@@ -263,8 +263,9 @@ def run():
     unknown = creg.discover("new_tool", "0.1.0", "e" * 64)
     t(g, "s03_an_unknown_capability_is_quarantined", lambda: (unknown.state == "QUARANTINED" and creg.view(unknown)["may_request_execution_review"] is False and all(e["capability"]["qualification_status"] == "QUARANTINED" for e in evs)))
     # 4 unqualified adapter cannot obtain trusted authority
+    ASC = {"owner": "o", "capability_id": "x", "provider_id": "P", "target_system": "T", "operation": "op", "environment": "TEST", "policy_digest": "a" * 64}
     areg = AU.AdapterRegistry(); areg.register(AD.Mcr3NativeAdapter.declaration(), "1.0.0")
-    t(g, "s04_an_unqualified_adapter_cannot_be_promoted_or_trusted", raises(lambda: areg.promote("mcr3-native", "1.0.0", "ACTIVE", "bad", {"approval_id": "A", "source": "EXTERNAL_GOVERNOR"})) and areg.mode("mcr3-native", "1.0.0") == "OBSERVATION_ONLY"
+    t(g, "s04_an_unqualified_adapter_cannot_be_promoted_or_trusted", raises(lambda: areg.promote("mcr3-native", "1.0.0", "ACTIVE", "bad", {"approval_id": "A", "source": "EXTERNAL_GOVERNOR"}, ASC)) and areg.mode("mcr3-native", "1.0.0") == "OBSERVATION_ONLY"
       and all(e["evidence"]["trust"] != "SIGNED_TRUSTED" for e in ev3))
     # 5 valid evidence cannot bypass owner approval
     hm = P.HmacTestVerifier({"alice": b"k"})
@@ -301,9 +302,9 @@ def run():
     t(g, "s09_the_original_is_the_full_canonical_event", lambda: (ec3.originals[ev3[3]["id"]] == ev3[3]))
     t(g, "s09_the_normalized_form_is_lossy_by_design_and_says_so", lambda: ("claim" not in col3.stored[ev3[3]["id"]] and "mcr_class" in col3.stored[ev3[3]["id"]]["data"]))
     # 10 adapter upgrade and rollback preserve governance decisions
-    r10 = AU.AdapterRegistry()
+    r10 = AU.AdapterRegistry(AU.RecordedApprovalVerifier({"APPR-10"}), lambda: NOW)
     r10.register(AD.Mcr3NativeAdapter.declaration(), "1.0.0")
-    r10.promote("mcr3-native", "1.0.0", "SHADOW", "a" * 64, {"approval_id": "APPR-10", "source": "EXTERNAL_GOVERNOR"})
+    r10.promote("mcr3-native", "1.0.0", "SHADOW", "a" * 64, AU.adapter_approval_record("APPR-10", ASC, "mcr3-native", "1.0.0", "SHADOW", "a" * 64), ASC)
     r10.register(AD.Mcr3NativeAdapter.declaration(), "1.1.0")
     t(g, "s10_an_upgrade_starts_in_observation_only_not_inheriting_shadow", lambda: (r10.mode("mcr3-native", "1.1.0") == "OBSERVATION_ONLY" and r10.mode("mcr3-native", "1.0.0") == "SHADOW"))
     r10.revoke("mcr3-native", "1.1.0")

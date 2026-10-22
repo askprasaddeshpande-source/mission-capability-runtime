@@ -378,13 +378,18 @@ def run():
     ad3 = AU.Adapter("c", "2.0.0", "1.0.0", ["x"], "HISTORICAL", "unsigned")
     ad3.declaration["SUPPORTED_CAPABILITIES"] = []
     t(g, "an_adapter_with_no_capabilities_is_not_complete", lambda: not ad3.complete())
-    ar = AU.AdapterRegistry(); ar.register(AU.Adapter("p", "2.0.0", "1.0.0", ["x"], "HISTORICAL", "unsigned"), "1.0.0")
-    ref = {"approval_id": "A1", "source": "EXTERNAL_GOVERNOR"}
-    t(g, "promotion_to_an_unknown_mode_raises_an_authority_error", lambda: raises(lambda: ar.promote("p", "1.0.0", "TURBO", HX, ref), "raise", (AU.AuthorityError,)))
-    t(g, "promotion_with_an_approval_reference_lacking_an_id_is_refused", lambda: raises(lambda: ar.promote("p", "1.0.0", "SHADOW", HX, {"source": "EXTERNAL_GOVERNOR"}), "external approval", (AU.AuthorityError,)) and raises(lambda: ar.promote("p", "1.0.0", "SHADOW", HX, {"approval_id": "", "source": "EXTERNAL_GOVERNOR"}), "external approval", (AU.AuthorityError,)))
+    GSC = {"owner": "o", "capability_id": "x", "provider_id": "P", "target_system": "T", "operation": "op", "environment": "TEST", "policy_digest": HX}
+    GOV = AU.RecordedApprovalVerifier({"A1"})
+
+    def ref_for(ad, ver, mode):
+        return AU.adapter_approval_record("A1", GSC, ad, ver, mode, HX)
+    ar = AU.AdapterRegistry(GOV, lambda: NOW); ar.register(AU.Adapter("p", "2.0.0", "1.0.0", ["x"], "HISTORICAL", "unsigned"), "1.0.0")
+    ref = ref_for("p", "1.0.0", "SHADOW")
+    t(g, "promotion_to_an_unknown_mode_raises_an_authority_error", lambda: raises(lambda: ar.promote("p", "1.0.0", "TURBO", HX, ref, GSC), "raise", (AU.AuthorityError,)))
+    t(g, "promotion_with_an_approval_reference_lacking_an_id_is_refused", lambda: raises(lambda: ar.promote("p", "1.0.0", "SHADOW", HX, {"source": "EXTERNAL_GOVERNOR"}, GSC), "external approval", (AU.AuthorityError,)) and raises(lambda: ar.promote("p", "1.0.0", "SHADOW", HX, {"approval_id": "", "source": "EXTERNAL_GOVERNOR"}, GSC), "external approval", (AU.AuthorityError,)))
     ar.register(AU.Adapter("q", "2.0.0", "1.0.0", ["x"], "HISTORICAL", "unsigned"), "1.0.0"); ar.revoke("q", "1.0.0"); ar.register(AU.Adapter("q", "2.0.0", "1.0.0", ["x"], "HISTORICAL", "unsigned"), "2.0.0")
-    t(g, "a_recorded_floor_caps_even_the_first_step_up", lambda: raises(lambda: ar.promote("q", "2.0.0", "SHADOW", HX, ref), "caps", (AU.AuthorityError,)))
-    t(g, "an_unrestricted_adapter_can_step_up_one_mode_at_a_time", lambda: (ar.promote("p", "1.0.0", "SHADOW", HX, ref), ar.mode("p", "1.0.0"))[1] == "SHADOW" and (ar.promote("p", "1.0.0", "ACTIVE", HX, ref), ar.mode("p", "1.0.0"))[1] == "ACTIVE")
+    t(g, "a_recorded_floor_caps_even_the_first_step_up", lambda: raises(lambda: ar.promote("q", "2.0.0", "SHADOW", HX, ref_for("q", "2.0.0", "SHADOW"), GSC), "caps", (AU.AuthorityError,)))
+    t(g, "an_unrestricted_adapter_can_step_up_one_mode_at_a_time", lambda: (ar.promote("p", "1.0.0", "SHADOW", HX, ref_for("p", "1.0.0", "SHADOW"), GSC), ar.mode("p", "1.0.0"))[1] == "SHADOW" and (ar.promote("p", "1.0.0", "ACTIVE", HX, ref_for("p", "1.0.0", "ACTIVE"), GSC), ar.mode("p", "1.0.0"))[1] == "ACTIVE")
 
     # ================================================================== scanner
     g = "SCANNER_EDGES"
@@ -558,16 +563,20 @@ def run_review8():
     t(g, "changing_a_returned_event_does_not_change_the_store", lambda: st3.get(mine["id"])["claim"]["call_class"] == "PROVIDER_RESPONSE_SUCCESS" and st3.history("M-SYN-1")[0]["claim"]["call_class"] == "PROVIDER_RESPONSE_SUCCESS")
     t(g, "the_trust_rank_table_covers_every_trust_level", lambda: set(LN.TRUST_RANK) == set(evc1.TRUST_LEVELS))
     # 7 and 8 authority
-    ar = AU.AdapterRegistry()
-    ref = {"approval_id": "A1", "source": "EXTERNAL_GOVERNOR"}
+    GSC = {"owner": "o", "capability_id": "x", "provider_id": "P", "target_system": "T", "operation": "op", "environment": "TEST", "policy_digest": HX}
+    GOV = AU.RecordedApprovalVerifier({"A1"})
+
+    def ref_for(ad, ver, mode):
+        return AU.adapter_approval_record("A1", GSC, ad, ver, mode, HX)
+    ar = AU.AdapterRegistry(GOV, lambda: NOW)
     ar.register(AU.Adapter("z", "2.0.0", "1.0.0", ["x"], "HISTORICAL", "unsigned"), "1.0.0")
-    ar.promote("z", "1.0.0", "ACTIVE", HX, ref)
+    ar.promote("z", "1.0.0", "ACTIVE", HX, ref_for("z", "1.0.0", "ACTIVE"), GSC)
     ar.register(AU.Adapter("z", "2.0.0", "1.0.0", ["x"], "HISTORICAL", "unsigned"), "2.0.0")
     ar.revoke("z", "2.0.0")
     t(g, "a_recorded_restriction_caps_the_mode_of_other_versions_too", lambda: ar.mode("z", "1.0.0") == "OBSERVATION_ONLY" and ar.rollback("z", "2.0.0", "1.0.0") == "OBSERVATION_ONLY")
-    ar2 = AU.AdapterRegistry()
+    ar2 = AU.AdapterRegistry(GOV, lambda: NOW)
     ar2.register(AU.Adapter("y", "2.0.0", "1.0.0", ["x"], "HISTORICAL", "unsigned"), "1.0.0")
-    ar2.promote("y", "1.0.0", "SHADOW", HX, ref)
+    ar2.promote("y", "1.0.0", "SHADOW", HX, ref_for("y", "1.0.0", "SHADOW"), GSC)
     t(g, "an_unrestricted_adapter_keeps_its_declared_mode", lambda: ar2.mode("y", "1.0.0") == "SHADOW")
     # 10 times are compared as times
     nb = AD.Mcr3NativeAdapter()

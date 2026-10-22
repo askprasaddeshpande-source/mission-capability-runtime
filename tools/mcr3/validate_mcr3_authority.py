@@ -233,7 +233,33 @@ def run():
                  evidence_classification="HISTORICAL", trust_requirements="unsigned; research only")
         d.update(kw)
         return A.Adapter(**d)
-    ar = A.AdapterRegistry()
+    ascope = {"owner": "owner-1", "capability_id": "create_object", "provider_id": "SYN", "target_system": "SYN_SYS", "operation": "create", "environment": "TEST", "policy_digest": H}
+    aclock = {"now": NOW}
+    gov = A.RecordedApprovalVerifier({"A1", "A2", "A3", "A9"})
+
+    def aref(aid, ad, ver, mode, qd=H, **kw):
+        r = A.adapter_approval_record(aid, ascope, ad, ver, mode, qd)
+        r.update(kw)
+        return r
+
+    class Exploding(A.ApprovalVerifier):
+        def verify(self, record):
+            raise RuntimeError("governor unreachable")
+
+    class Truthy(A.ApprovalVerifier):
+        def verify(self, record):
+            return "yes"
+
+    def failing(verifier):
+        r = A.AdapterRegistry(verifier, lambda: aclock["now"])
+        r.register(adapter(adapter_id="e"), "1.0.0")
+        return raises(lambda: r.promote("e", "1.0.0", "SHADOW", H, aref("A1", "e", "1.0.0", "SHADOW"), ascope), "not verified") and r.mode("e", "1.0.0") == "OBSERVATION_ONLY"
+
+    def dflt():
+        r = A.AdapterRegistry()
+        r.register(adapter(adapter_id="dd"), "1.0.0")
+        return raises(lambda: r.promote("dd", "1.0.0", "SHADOW", H, aref("A1", "dd", "1.0.0", "SHADOW"), ascope), "not verified") and r.mode("dd", "1.0.0") == "OBSERVATION_ONLY"
+    ar = A.AdapterRegistry(approval_verifier=gov, clock=lambda: aclock["now"])
     a1 = adapter()
     t(g, "the_declaration_has_every_required_field", {"ADAPTER_ID", "SOURCE_RUNTIME_VERSION", "TARGET_CONTRACT_VERSION", "SUPPORTED_CAPABILITIES", "EVIDENCE_CLASSIFICATION", "TRUST_REQUIREMENTS",
                                                        "QUALIFICATION_EVIDENCE", "APPROVAL_STATUS", "REVOCATION_STATUS", "DEFAULT_AUTHORITY"} <= set(a1.declaration))
@@ -243,22 +269,54 @@ def run():
     t(g, "an_incomplete_declaration_is_refused", lambda: (raises(lambda: ar.register(adapter(adapter_id="y", trust_requirements=""), "1.0.0"), "incomplete")))
     t(g, "an_unknown_mode_is_refused", lambda: (raises(lambda: adapter(mode="TURBO"))))
     t(g, "an_unknown_adapter_gets_the_lowest_mode", lambda: (ar.mode("nobody", "9.9.9") == "OBSERVATION_ONLY"))
-    t(g, "an_unqualified_adapter_cannot_be_promoted", lambda: (raises(lambda: ar.promote("mcr2-reference", "1.0.0", "SHADOW", "x", {"approval_id": "A1", "source": "EXTERNAL_GOVERNOR"}), "qualification evidence")))
-    t(g, "promotion_without_an_external_approval_reference_is_refused", lambda: (raises(lambda: ar.promote("mcr2-reference", "1.0.0", "SHADOW", H, None), "external approval") and raises(lambda: ar.promote("mcr2-reference", "1.0.0", "SHADOW", H, {"approval_id": "A1", "source": "SELF"}), "external approval")))
-    t(g, "promotion_must_raise_the_mode", lambda: (raises(lambda: ar.promote("mcr2-reference", "1.0.0", "OBSERVATION_ONLY", H, {"approval_id": "A1", "source": "EXTERNAL_GOVERNOR"}), "raise")))
-    ar.promote("mcr2-reference", "1.0.0", "SHADOW", H, {"approval_id": "A1", "source": "EXTERNAL_GOVERNOR"})
+    t(g, "an_unqualified_adapter_cannot_be_promoted", lambda: (raises(lambda: ar.promote("mcr2-reference", "1.0.0", "SHADOW", "x", aref("A1", "mcr2-reference", "1.0.0", "SHADOW"), ascope), "qualification evidence")))
+    t(g, "promotion_without_an_external_approval_reference_is_refused", lambda: (raises(lambda: ar.promote("mcr2-reference", "1.0.0", "SHADOW", H, None, ascope), "external approval") and raises(lambda: ar.promote("mcr2-reference", "1.0.0", "SHADOW", H, aref("A1", "mcr2-reference", "1.0.0", "SHADOW", source="SELF"), ascope), "external approval")))
+    t(g, "promotion_must_raise_the_mode", lambda: (raises(lambda: ar.promote("mcr2-reference", "1.0.0", "OBSERVATION_ONLY", H, aref("A1", "mcr2-reference", "1.0.0", "OBSERVATION_ONLY"), ascope), "raise")))
+    t(g, "a_fabricated_external_approval_reference_cannot_promote", lambda: (raises(lambda: ar.promote("mcr2-reference", "1.0.0", "SHADOW", H, {"approval_id": "FORGED", "source": "EXTERNAL_GOVERNOR"}, ascope), "missing") and ar.mode("mcr2-reference", "1.0.0") == "OBSERVATION_ONLY"))
+    t(g, "a_complete_looking_forged_approval_is_refused_by_the_governor", lambda: (raises(lambda: ar.promote("mcr2-reference", "1.0.0", "SHADOW", H, aref("FORGED", "mcr2-reference", "1.0.0", "SHADOW"), ascope), "not verified") and ar.mode("mcr2-reference", "1.0.0") == "OBSERVATION_ONLY" and ar._a[("mcr2-reference", "1.0.0")].declaration["APPROVAL_STATUS"] == "NOT_APPROVED"))
+    t(g, "the_default_adapter_registry_denies_every_promotion", lambda: dflt())
+    t(g, "an_approval_with_the_wrong_scope_is_refused", lambda: all(raises(lambda f=f: ar.promote("mcr2-reference", "1.0.0", "SHADOW", H, aref("A1", "mcr2-reference", "1.0.0", "SHADOW", **{f: "other"}), ascope), "scope") for f in A.SCOPE_FIELDS))
+    t(g, "an_approval_for_a_capability_the_adapter_does_not_support_is_refused", lambda: raises(lambda: ar.promote("mcr2-reference", "1.0.0", "SHADOW", H, aref("A1", "mcr2-reference", "1.0.0", "SHADOW", capability_id="delete_object"), dict(ascope, capability_id="delete_object")), "supports"))
+    t(g, "an_approval_bound_to_another_adapter_is_refused", lambda: raises(lambda: ar.promote("mcr2-reference", "1.0.0", "SHADOW", H, aref("A1", "other-adapter", "1.0.0", "SHADOW"), ascope), "bound"))
+    t(g, "an_approval_bound_to_another_version_is_refused", lambda: raises(lambda: ar.promote("mcr2-reference", "1.0.0", "SHADOW", H, aref("A1", "mcr2-reference", "9.9.9", "SHADOW"), ascope), "bound"))
+    t(g, "an_approval_bound_to_another_mode_is_refused", lambda: raises(lambda: ar.promote("mcr2-reference", "1.0.0", "SHADOW", H, aref("A1", "mcr2-reference", "1.0.0", "ACTIVE"), ascope), "bound"))
+    t(g, "an_approval_bound_to_another_qualification_is_refused", lambda: raises(lambda: ar.promote("mcr2-reference", "1.0.0", "SHADOW", H, aref("A1", "mcr2-reference", "1.0.0", "SHADOW", qd="b" * 64), ascope), "bound"))
+    t(g, "an_expired_approval_is_refused", lambda: raises(lambda: ar.promote("mcr2-reference", "1.0.0", "SHADOW", H, aref("A1", "mcr2-reference", "1.0.0", "SHADOW", expires_at="2020-01-01"), ascope), "expired"))
+    t(g, "a_malformed_expiry_is_refused", lambda: raises(lambda: ar.promote("mcr2-reference", "1.0.0", "SHADOW", H, aref("A1", "mcr2-reference", "1.0.0", "SHADOW", expires_at="soon"), ascope), "valid UTC"))
+    t(g, "promotion_without_an_expected_scope_is_refused", lambda: (raises(lambda: ar.promote("mcr2-reference", "1.0.0", "SHADOW", H, aref("A1", "mcr2-reference", "1.0.0", "SHADOW")), "expected approval scope") and raises(lambda: ar.promote("mcr2-reference", "1.0.0", "SHADOW", H, aref("A1", "mcr2-reference", "1.0.0", "SHADOW"), {}), "expected approval scope")))
+    t(g, "a_missing_scope_or_bound_field_is_refused", lambda: all(raises(lambda f=f: ar.promote("mcr2-reference", "1.0.0", "SHADOW", H, {k: v for k, v in aref("A1", "mcr2-reference", "1.0.0", "SHADOW").items() if k != f}, ascope)) for f in A.SCOPE_FIELDS + A.AdapterRegistry.BOUND_FIELDS + ("approval_id", "expires_at")))
+    t(g, "a_non_string_scope_field_is_refused", lambda: raises(lambda: ar.promote("mcr2-reference", "1.0.0", "SHADOW", H, aref("A1", "mcr2-reference", "1.0.0", "SHADOW", owner=5), ascope), "non-empty"))
+    t(g, "a_verifier_that_fails_denies", lambda: failing(Exploding()))
+    t(g, "a_verifier_that_answers_loosely_denies", lambda: failing(Truthy()))
+    t(g, "no_refused_promotion_changed_the_adapter", lambda: (ar.mode("mcr2-reference", "1.0.0") == "OBSERVATION_ONLY" and a1.declaration["QUALIFICATION_EVIDENCE"] is None and a1.declaration["APPROVAL_STATUS"] == "NOT_APPROVED"))
+    ar.promote("mcr2-reference", "1.0.0", "SHADOW", H, aref("A1", "mcr2-reference", "1.0.0", "SHADOW"), ascope)
     t(g, "a_qualified_and_approved_adapter_can_move_to_shadow", lambda: (ar.mode("mcr2-reference", "1.0.0") == "SHADOW" and a1.declaration["APPROVAL_STATUS"].startswith("APPROVAL_REFERENCED")))
     t(g, "default_authority_stays_none_after_promotion", lambda: (a1.declaration["DEFAULT_AUTHORITY"] == "NONE"))
     ar.register(adapter(adapter_id="mcr2-reference"), "1.1.0")
     t(g, "a_newer_version_starts_again_in_observation_only", lambda: (ar.mode("mcr2-reference", "1.1.0") == "OBSERVATION_ONLY"))
     ar.revoke("mcr2-reference", "1.1.0")
-    t(g, "revocation_forces_observation_only_and_blocks_promotion", lambda: (ar.mode("mcr2-reference", "1.1.0") == "OBSERVATION_ONLY" and raises(lambda: ar.promote("mcr2-reference", "1.1.0", "SHADOW", H, {"approval_id": "A2", "source": "EXTERNAL_GOVERNOR"}), "revoked")))
+    t(g, "revocation_forces_observation_only_and_blocks_promotion", lambda: (ar.mode("mcr2-reference", "1.1.0") == "OBSERVATION_ONLY" and raises(lambda: ar.promote("mcr2-reference", "1.1.0", "SHADOW", H, aref("A2", "mcr2-reference", "1.1.0", "SHADOW"), ascope), "revoked")))
     t(g, "rollback_after_a_revocation_cannot_lift_the_restriction", lambda: (ar.rollback("mcr2-reference", "1.1.0", "1.0.0") == "OBSERVATION_ONLY"))
     t(g, "rollback_to_an_unknown_version_is_refused", lambda: (raises(lambda: ar.rollback("mcr2-reference", "1.1.0", "0.0.1"), "unknown rollback")))
-    t(g, "a_floor_caps_later_promotion_of_the_same_adapter", lambda: (raises(lambda: ar.promote("mcr2-reference", "1.0.0", "ACTIVE", H, {"approval_id": "A3", "source": "EXTERNAL_GOVERNOR"}), "caps")))
-    ar2 = A.AdapterRegistry(); a2 = adapter(adapter_id="clean"); ar2.register(a2, "1.0.0"); ar2.register(adapter(adapter_id="clean"), "1.1.0")
-    ar2.promote("clean", "1.1.0", "SHADOW", H, {"approval_id": "A9", "source": "EXTERNAL_GOVERNOR"})
+    t(g, "a_floor_caps_later_promotion_of_the_same_adapter", lambda: (raises(lambda: ar.promote("mcr2-reference", "1.0.0", "ACTIVE", H, aref("A3", "mcr2-reference", "1.0.0", "ACTIVE"), ascope), "caps")))
+    ar2 = A.AdapterRegistry(approval_verifier=gov, clock=lambda: aclock["now"]); a2 = adapter(adapter_id="clean"); ar2.register(a2, "1.0.0"); ar2.register(adapter(adapter_id="clean"), "1.1.0")
+    ar2.promote("clean", "1.1.0", "SHADOW", H, aref("A9", "clean", "1.1.0", "SHADOW"), ascope)
     t(g, "rollback_without_any_restriction_returns_the_older_versions_own_mode", lambda: (ar2.rollback("clean", "1.1.0", "1.0.0") == "OBSERVATION_ONLY" and ar2.mode("clean", "1.1.0") == "SHADOW"))
+    ar3 = A.AdapterRegistry(approval_verifier=gov, clock=lambda: aclock["now"])
+    ar3.register(adapter(adapter_id="life"), "1.0.0")
+    ar3.promote("life", "1.0.0", "SHADOW", H, aref("A9", "life", "1.0.0", "SHADOW", expires_at="2027-01-16"), ascope)
+    t(g, "a_promoted_adapter_is_shadow_while_the_approval_is_current", lambda: ar3.mode("life", "1.0.0") == "SHADOW")
+    aclock["now"] = NOW + 2 * 86400
+    t(g, "an_expired_approval_drops_the_adapter_back_to_observation_only", lambda: (ar3.mode("life", "1.0.0") == "OBSERVATION_ONLY" and ar3._a[("life", "1.0.0")].declaration["DEFAULT_AUTHORITY"] == "NONE"))
+    aclock["now"] = NOW
+    t(g, "a_current_approval_keeps_the_mode", lambda: ar3.mode("life", "1.0.0") == "SHADOW")
+    gov.revoke("A9")
+    t(g, "a_revoked_approval_drops_the_adapter_back_to_observation_only", lambda: ar3.mode("life", "1.0.0") == "OBSERVATION_ONLY")
+    ar3.register(adapter(adapter_id="life2"), "1.0.0")
+    t(g, "a_revoked_approval_cannot_promote_another_adapter", lambda: raises(lambda: ar3.promote("life2", "1.0.0", "SHADOW", H, aref("A9", "life2", "1.0.0", "SHADOW"), ascope), "not verified"))
+    ar2.register(adapter(adapter_id="third"), "1.0.0")
+    t(g, "a_used_approval_does_not_transfer_to_another_adapter", lambda: raises(lambda: ar2.promote("third", "1.0.0", "SHADOW", H, aref("A9", "clean", "1.1.0", "SHADOW"), ascope), "bound") and ar2.mode("third", "1.0.0") == "OBSERVATION_ONLY")
+    t(g, "reregistering_an_adapter_drops_its_stored_approval", lambda: (ar3.register(adapter(adapter_id="life"), "1.0.0"), ar3._approval.get(("life", "1.0.0")) is None and ar3.mode("life", "1.0.0") == "OBSERVATION_ONLY")[1])
 
 
 def _qualified(reg):
