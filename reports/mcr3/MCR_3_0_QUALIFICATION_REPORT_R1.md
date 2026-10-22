@@ -12,7 +12,7 @@ Release line 3.0.0, an **offline engineering release candidate**. Baseline `main
 See `architecture/mcr3/MCR_3_0_ARCHITECTURE_AND_DECISION_RECORD_R1.md` (decision and module map), `MCR_3_0_SECURITY_AND_AUTHORITY_CONTRACT_R1.md`, `contracts/evidence-v1/README.md`, `CLAUDE_MODS_CHANGE_PACKET_R1.md` and `reports/mcr3/MCR_3_0_GAP_CLOSURE_MATRIX_R1.md`.
 
 ## 2. Test results (reproduce with `python tools/mcr3/run_mcr3_tests.py`)
-**1,573 checks in 9 suites, 0 failed** (about 31 s sequentially, peak 38 MB in any one suite; raw records in `evidence/mcr3/MCR3_RESULT_*_R1.json`, resource record `MCR3_RESOURCE_USE_R1.json`).
+**1,573 checks in 9 suites, 0 failed** (tens of seconds sequentially, about 30 to 50 s on the qualifying machine, peak 38 MB in any one suite; raw records in `evidence/mcr3/MCR3_RESULT_*_R1.json`, resource record `MCR3_RESOURCE_USE_R1.json`).
 | Suite | Checks | What it holds |
 |---|---|---|
 | inherited_r2 | 519 | the R2.0 validator re-run against the 3.0 model, with documented expectation changes |
@@ -51,14 +51,14 @@ MCR 3.0 is an independently qualified **offline capability release candidate / b
 ## 7. Independent review
 **Review 8** (isolated agent, fresh clone of commit `dab77be`, own adversarial scripts, `run_mcr3_tests` three times, the fresh-clone verifier with the external anchor, the full attack suite once, two modules re-mutated): **GO_WITH_DOCUMENTED_GAPS, no blocker, no critical authority, replay or evidence-integrity defect.** It reproduced the test, anchor, frozen-history, mutation (for the modules it re-ran) and attack results. It also found new defects, all of which were fixed afterwards with tests (section 9): top-level `disposition`/`outcome_class` accepted on any event type; schema patterns accepting a trailing newline and impossible calendar dates; `parse_expiry` reading `...+05:00Z` as UTC; one mutation survivor wrongly called equivalent (a broken integrity block could poison the replay cache); supersession without a trust rule and a store holding the caller's dict; an adapter mode not capped by a recorded restriction; an approval reference reported without a scope; fractional-second ordering by string; a readback identity test that was a substring match; id limits looser than the `pe-event/1` envelope; undocumented scanner gaps; and a documentation count that was stale. **The fixes are verified by new tests (1,573 checks now), a fresh full mutation run, the re-run attack suite and the fresh-clone verification, but they were not independently re-reviewed in full**: a targeted re-review of the fix diff is recorded below if it was run.
 
-{{REREVIEW_SUMMARY}}
+**Review 9** (targeted, isolated agent, fresh clone of commit `26f84dc`, the diff `dab77be..26f84dc`): **GO_WITH_DOCUMENTED_GAPS**, no blocker, no regression. All 13 Review 8 findings and the scanner items were checked with the reviewer's own adversarial scripts (every event type against both summary fields, all 49 trust pairs for supersession, ids of 95/96/97 characters, ASCII and Unicode line separators on every pattern-constrained field, offsets in every position of `expires_at`, replay-cache poisoning variants, deep events to 100,000 levels) and found fixed. It reproduced 1,573 checks, the fresh-clone verification with the external anchor, the frozen-history checks and the chain-module mutation counts (119 mutants, 2 explained survivors), and confirmed that the frozen R2.0 evidence still converts and ingests (7 of 7 events) and that the 11 example events still parse. Its five new findings are low or informational and are recorded in section 10; none touches authority, replay, provenance or evidence integrity. The release candidate as a whole may go to the owner as a draft pull request.
 
 ## 8. Remaining gaps (not hidden)
 1. No production signing key, trust root or key-custody decision exists (owner decision); signatures are tested with throwaway identities only.
 2. The HMAC back-end is TEST ONLY; Ed25519 needs the optional `cryptography` package; SSHSIG needs `ssh-keygen`.
 3. Ledger guarantees were exercised on Windows/NTFS only; POSIX locking, network filesystems and power-loss durability are untested. A restored older ledger or rewritten history is detected only if an anchor is held somewhere the ledger's host cannot rewrite; local tests do not establish exactly-once enterprise execution.
 4. The model verifies the consistency of presented evidence, not who produced it; identity assurance is SELF_REPORTED unless SIGNED_TRUSTED evidence supports more; `tenant` has no authoritative offline source.
-5. 42% of mutant detections are validator crashes rather than targeted assertions; the 32 survivors are justified by argument.
+5. 42% of mutant detections are validator crashes rather than targeted assertions; the 36 survivors are justified by argument.
 6. The Claude Mods side is exercised only through mocks: the live Governor, approval records, collector store and signing keys were not read; ingestion needs the change packet applied there.
 7. The scanner is a heuristic with documented unsupported patterns.
 8. R2.0 carry-overs that stay open: one live run, token rotation declined (owner-accepted risk), the leftover test CDS view `ZC_MCR20C_7A3F91D2`, the frozen R2.0 verifier's A13a-f suite never run to completion (the 3.0 verifier's equivalent suite is in section 6).
@@ -75,9 +75,17 @@ MCR 3.0 is an independently qualified **offline capability release candidate / b
 | 7 `mode()` ignored a recorded restriction | the mode of every version is capped by it; `rollback` simplified to `mode()` |
 | 8 `view()` without a scope reported an approval reference | no scope, no reference |
 | 9 default `Mission` ledger is volatile | documented as a deployment requirement (security contract section 3); `resume()` still enforces a durable ledger |
-| 10 times compared as strings; calendar-invalid times | compared by value; calendar validity enforced by the schema validator |
-| 11 readback identity was a substring match | whole-name match (`ZCL_FOO` is not found in `ZCL_FOOBAR`) |
+| 10 times compared as strings; calendar-invalid times | compared by value (to microsecond precision); calendar validity enforced by the schema validator |
+| 11 readback identity was a substring match | whole-name match (`ZCL_FOO` is not found in `ZCL_FOOBAR`); comments and namespace-style prefixes can still match (see section 10) |
 | 12 ids longer than the `pe-event/1` envelope; mock collector looser than the real one | ids limited to 96 characters; the mock uses the alphanumeric-first 96-character safe-string rule; consumers MUST re-run provenance assessment because a trust label in an event is self-asserted (security contract 3b) |
 | 13 recursion on absurdly deep events | a contract error |
 | scanner gaps and names | `passphrase`, `pwd`, `credential(s)`, `access_key` and the `:=` and `=>` operators covered; remaining gaps documented |
 | stale counts and a placeholder in the reports | corrected |
+
+## 10. Low findings of Review 9 left open (disclosed, no code change made)
+1. The date-time check uses a Unicode-aware digit class, so non-ASCII digits (for example Arabic-Indic) pass as an event `time`; a strict ECMA validator would refuse them. No authority impact. Repair: `[0-9]` and an ASCII check.
+2. `parse_expiry` accepts ISO forms Python 3.13's `fromisoformat` allows beyond its docstring (basic format, week dates, a space separator); all resolve to the correct UTC instant.
+3. Mission-chain time ordering truncates fractions to microseconds; a decrease below that scale is not flagged.
+4. Readback identity is a whole-name match, not a structural one: a name in a comment, or after a `/` or `-`, still counts as the object (a comment mention was always true).
+5. `evc1.seal` and `digest_of` raise a raw `RecursionError` for a hostile, absurdly deep producer-side object (the consumer paths `parse`, `migrate` and the store return a contract error); the schema validator's `$` rewrite would break a future pattern containing `[$]` (none exists).
+Also noted: EXPIRED and UNTRUSTED_RESEARCH share a trust rank, so they can supersede each other.

@@ -25,3 +25,5 @@ Every R2.0 carry-forward item (register: `architecture/mcr3/MCR_3_0_PHASE0_BASEL
 | N02 | a mutant that lets a device name through created real files in the working tree | FIXED in the harness (scratch cwd); the earlier stray files were removed; noted so the hazard is not forgotten |
 | N03 | lease format changed: leases now require a ledger anchor | contract change inside the 3.0 lineage; R2.0 leases are not accepted by the 3.0 model (R2.0 is not upgraded in place) |
 | N04 | `sk-ant-` style and other shapes the R2.0 scanner missed | FIXED in the 3.0 scanner |
+| N05 | Review 8 findings (13) | FIXED; verified by Review 9 | see qualification report sections 7 and 9 |
+| N06 | Review 9 low findings (non-ASCII digits in date-time, lenient ISO forms in `parse_expiry`, microsecond time precision, readback identity not structural, raw RecursionError in producer-side `seal`) | DEFERRED, disclosed | qualification report section 10; none touches authority, replay, provenance or evidence integrity |
