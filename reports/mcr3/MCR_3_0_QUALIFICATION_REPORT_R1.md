@@ -12,7 +12,7 @@ Release line 3.0.0, an **offline engineering release candidate**. Baseline `main
 See `architecture/mcr3/MCR_3_0_ARCHITECTURE_AND_DECISION_RECORD_R1.md` (decision and module map), `MCR_3_0_SECURITY_AND_AUTHORITY_CONTRACT_R1.md`, `contracts/evidence-v1/README.md`, `CLAUDE_MODS_CHANGE_PACKET_R1.md` and `reports/mcr3/MCR_3_0_GAP_CLOSURE_MATRIX_R1.md`.
 
 ## 2. Test results (reproduce with `python tools/mcr3/run_mcr3_tests.py`)
-**1,611 checks in 9 suites, 0 failed** (tens of seconds sequentially, about 30 to 50 s on the qualifying machine, peak 38 MB in any one suite; raw records in `evidence/mcr3/MCR3_RESULT_*_R1.json`, resource record `MCR3_RESOURCE_USE_R1.json`).
+**1,644 checks in 10 suites, 0 failed** (tens of seconds sequentially, about 30 to 50 s on the qualifying machine, peak 38 MB in any one suite; raw records in `evidence/mcr3/MCR3_RESULT_*_R1.json`, resource record `MCR3_RESOURCE_USE_R1.json`).
 | Suite | Checks | What it holds |
 |---|---|---|
 | inherited_r2 | 519 | the R2.0 validator re-run against the 3.0 model, with documented expectation changes |
@@ -104,3 +104,7 @@ Also noted: EXPIRED and UNTRUSTED_RESEARCH share a trust rank, so they can super
 4. (low) A raising, None or NaN clock. **Fixed** for `mode()` and `promote()` (they lapse or refuse); tests added.
 5. (info) dict subclasses were accepted as records. **Fixed** (`type(record) is dict`).
 The fixes to findings 1, 4 and 5 were verified by new tests and a re-run mutation of this module (below) but not re-reviewed by the isolated reviewer.
+
+## 12. Consolidated-mission increment (commit 16dde76)
+Added: delegation/authority/principal **revocation** at authorization, at every send and at every compensating send (`RevocationList`, `Mission(revocation_check=...)`; a raising source or any answer other than `False` denies; no source connected means nothing is checked); **principal typing** (non-empty id and tenant, unique non-empty role names); a **Git-history credential scan** (`scan_history`, `scan_history_mcr3.py`; 2 findings in this repository's history, both reviewed false positives recorded in `history_scan_reviewed.json`, 0 unreviewed); an **offline CI workflow** (`.github/workflows/mcr3-offline.yml`, read-only token, actions pinned by commit SHA, no secrets, heavy mutation/attack tier manual); the **live-study package** (prepared, not executed) and the acceptance matrix, migration guide and claim ledger (`MCR_3_0_ACCEPTANCE_MATRIX_R1.md`). Tests: 1,644 checks in 10 suites, 0 failed (new suite `phase1_authority`, 29 checks; 4 history-scan checks).
+**NOT done for this increment:** the mutation run of `mcr3_model.py` and `mcr3_scan.py` was started and then stopped by the workstation's low-memory guard; it was not restarted. The mutation figures in this report therefore do NOT cover the new revocation, principal-typing and history-scan code, which is covered by tests only. A fresh isolated review of this increment was also not obtained. CI results are recorded in the PR, not here.
