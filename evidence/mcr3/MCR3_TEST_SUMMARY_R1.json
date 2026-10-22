@@ -7,7 +7,7 @@
     "evidence_contract": 207,
     "hardening": 140,
     "inherited_r2": 519,
-    "mutation_gap_tests": 288,
+    "mutation_gap_tests": 296,
     "provenance_authority": 115,
     "readback": 34,
     "scanner": 109
@@ -16,5 +16,5 @@
   "network_calls": 0,
   "not_verified": [],
   "suites": 9,
-  "tests": 1565
+  "tests": 1573
 }

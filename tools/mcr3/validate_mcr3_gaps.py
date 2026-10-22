@@ -584,6 +584,22 @@ def run_review8():
         for e in es[2:]:
             e["time"] = "2027-01-15T12:00:01Z"
     t(g, "a_fractional_second_that_goes_forwards_is_accepted", lambda: not any("times decrease" in p for p in CH.check_mission_events(VC.reseal_all(full, stamp_ok))))
+    def at(a, b):
+        def stamp2(es):
+            es[0]["time"] = a
+            es[1]["time"] = b
+            for e in es[2:]:
+                e["time"] = "2027-01-15T12:00:09Z"
+        return stamp2
+    dec = lambda a, b: any("times decrease" in p for p in CH.check_mission_events(VC.reseal_all(full, at(a, b))))
+    t(g, "half_a_second_then_a_quarter_second_is_a_decrease", lambda: dec("2027-01-15T12:00:00.5Z", "2027-01-15T12:00:00.25Z"))
+    t(g, "a_quarter_second_then_half_a_second_is_not_a_decrease", lambda: not dec("2027-01-15T12:00:00.25Z", "2027-01-15T12:00:00.5Z"))
+    t(g, "half_a_second_then_the_whole_second_is_a_decrease", lambda: dec("2027-01-15T12:00:00.5Z", "2027-01-15T12:00:00Z"))
+    t(g, "the_whole_second_then_half_a_second_is_not_a_decrease", lambda: not dec("2027-01-15T12:00:00Z", "2027-01-15T12:00:00.5Z"))
+    t(g, "equal_times_are_not_a_decrease", lambda: not dec("2027-01-15T12:00:00.5Z", "2027-01-15T12:00:00.5Z") and not dec("2027-01-15T12:00:00Z", "2027-01-15T12:00:00Z"))
+    t(g, "six_and_nine_digit_fractions_compare_by_value", lambda: dec("2027-01-15T12:00:00.123457Z", "2027-01-15T12:00:00.123456Z") and not dec("2027-01-15T12:00:00.123456Z", "2027-01-15T12:00:00.123457Z"))
+    t(g, "a_second_apart_is_ordered", lambda: dec("2027-01-15T12:00:01Z", "2027-01-15T12:00:00Z") and not dec("2027-01-15T12:00:00Z", "2027-01-15T12:00:01Z"))
+    t(g, "when_parses_whole_and_fractional_seconds", lambda: CH._when("2027-01-15T12:00:00.5Z") > CH._when("2027-01-15T12:00:00Z") and (CH._when("2027-01-15T12:00:00.5Z") - CH._when("2027-01-15T12:00:00Z")).total_seconds() == 0.5 and (CH._when("2027-01-15T12:00:00.25Z") - CH._when("2027-01-15T12:00:00Z")).total_seconds() == 0.25)
     # 11 readback identity is a whole-name match
     VR = __import__("validate_mcr3_readback")
     other = VR.der(VR.ok_read("active", text="define view entity ZC_SYN_OBJ_OTHER as select from x"), VR.nf("inactive"))

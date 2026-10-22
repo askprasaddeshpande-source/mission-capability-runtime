@@ -11,6 +11,9 @@ Event id (idempotency key), type, source, time, producer (runtime, runtime versi
 - Digests: SHA-256 over canonical JSON (sorted keys, no whitespace, UTF-8, no floats). The signature-relevant `content_digest` excludes the integrity block and the verifier-controlled provenance and trust, so a verifier can attach its verdict without invalidating the producer's signature.
 - A claim states what it is: an execution receipt carries `implies_commit: false`; a commit observation carries `implies_outcome: false`; a readback separates `claimed_authoritative` from `provenance_verified`.
 
+## Using the trust label
+`evidence.trust` is derived from `evidence.provenance` and checked for consistency on parse. It is **not** proof: a consumer that makes a trust decision must re-run provenance assessment itself (see the security contract, section 3b). Ids are limited to 96 characters (the `pe-event/1` limit), and `$` in a schema pattern means end of string only.
+
 ## Compatibility
 | Situation | Behaviour |
 |---|---|

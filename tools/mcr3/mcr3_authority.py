@@ -266,7 +266,7 @@ class AdapterRegistry:
         and a recorded floor for the adapter still caps it."""
         if (adapter_id, to_version) not in self._a:
             raise AuthorityError("unknown rollback target")
-        return self.mode(adapter_id, to_version) if self.floor.get(adapter_id) is None else "OBSERVATION_ONLY"
+        return self.mode(adapter_id, to_version)          # mode() already applies any recorded restriction
 
 
 def _hex64(s):

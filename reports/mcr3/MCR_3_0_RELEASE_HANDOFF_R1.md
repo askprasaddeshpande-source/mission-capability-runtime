@@ -3,7 +3,7 @@
 Entry point for MCR 3.0.0 (offline engineering release candidate). Baseline: `main` at `fd865c67c053431dc33297a0df2a3c9a02fd51fe` (MCR R2.0, PR #4). Branch: `work/mcr3-consolidated-evidence-outcome-runtime-r1`. One consolidated PR is prepared; **it is not merged, not tagged, and no release exists until the owner approves**.
 
 ## What this release is and is not
-**Is:** a new, independently versioned and independently qualified runtime lineage (`tools/mcr3/`) that carries the R2.0 reference model forward with the R2.0 engineering gaps closed or dispositioned; a version-independent Evidence Contract v1 (`mcr-evidence/1`); provenance verification with the hash/signature/producer/trust/freshness/replay findings kept separate; capability and adapter governance in which qualification never approves; two reference adapters (frozen R2.0 evidence, native 3.0); portable readback rules; and a Claude Mods interoperability package at the contract boundary (mock consumers and a change packet).
+**Is:** a new, independently versioned runtime lineage (`tools/mcr3/`), qualified offline (tests, mutation, attacks, fresh clone) and reviewed by an independent agent (verdict in the qualification report) that carries the R2.0 reference model forward with the R2.0 engineering gaps closed or dispositioned; a version-independent Evidence Contract v1 (`mcr-evidence/1`); provenance verification with the hash/signature/producer/trust/freshness/replay findings kept separate; capability and adapter governance in which qualification never approves; two reference adapters (frozen R2.0 evidence, native 3.0); portable readback rules; and a Claude Mods interoperability package at the contract boundary (mock consumers and a change packet).
 **Is not:** production-qualified, live-verified, signed with a production key, connected to Claude Mods, or evidence that any enterprise outcome is correct. INTEROPERABILITY_DOES_NOT_IMPLY_AUTHORITY holds everywhere: every event carries `authority_effect = NONE`.
 
 ## Where things are
@@ -20,7 +20,7 @@ Entry point for MCR 3.0.0 (offline engineering release candidate). Baseline: `ma
 
 ## How to verify (offline, no SAP, no network)
 ```
-python tools/mcr3/run_mcr3_tests.py                                   # 1,498 checks in 9 suites, about 31 s
+python tools/mcr3/run_mcr3_tests.py                                   # 1,565 checks in 9 suites, about 31 s
 python tools/mcr3/verify_mcr3.py --fast --expect-sums-sha256 <anchor taken from outside the repository>
 python tools/mcr3/verify_mcr3.py --clone --expect-sums-sha256 <anchor>   # fresh clone, runs every validator and checks they reproduce the archived results
 python tools/mcr3/run_mcr3_mutation_check.py --jobs 3                  # about 25 minutes

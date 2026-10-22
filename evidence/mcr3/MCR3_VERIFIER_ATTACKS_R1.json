@@ -1,111 +1,111 @@
 {
   "all_passed": true,
   "evidence_class": "SYNTHETIC/LOCAL",
-  "head_attacked": "bec9a3a670f86ecd04f8ce67cc607c730dcb8758",
-  "max_peak_bytes": 30748672,
+  "head_attacked": "6188d3d1f7fca01b4249f24608671fd6b95e707d",
+  "max_peak_bytes": 30699520,
   "profile": "--fast",
   "results": {
     "A13a_nul_prefixed_utf16_secret": {
       "intended_check": "no_credential_shaped_content",
       "intended_check_failed": true,
       "passed": true,
-      "peak_bytes": 30642176,
+      "peak_bytes": 30588928,
       "verifier": "FAIL",
-      "wall_seconds": 37.4
+      "wall_seconds": 37.63
     },
     "A13b_utf32_secret": {
       "intended_check": "no_credential_shaped_content",
       "intended_check_failed": true,
       "passed": true,
-      "peak_bytes": 30588928,
+      "peak_bytes": 30441472,
       "verifier": "FAIL",
-      "wall_seconds": 30.11
+      "wall_seconds": 39.95
     },
     "A13c_secret_key_assignment": {
       "intended_check": "no_credential_shaped_content",
       "intended_check_failed": true,
       "passed": true,
-      "peak_bytes": 30601216,
+      "peak_bytes": 30638080,
       "verifier": "FAIL",
-      "wall_seconds": 21.95
+      "wall_seconds": 43.31
     },
     "A13d_secret_outside_the_3_0_folders": {
       "intended_check": "no_credential_shaped_content",
       "intended_check_failed": true,
       "passed": true,
-      "peak_bytes": 30584832,
+      "peak_bytes": 30646272,
       "verifier": "FAIL",
-      "wall_seconds": 26.36
+      "wall_seconds": 40.25
     },
     "A13e_hex_value_under_a_secret_name": {
       "intended_check": "no_credential_shaped_content",
       "intended_check_failed": true,
       "passed": true,
-      "peak_bytes": 30519296,
+      "peak_bytes": 30359552,
       "verifier": "FAIL",
-      "wall_seconds": 31.35
+      "wall_seconds": 45.5
     },
     "A13f_secret_inside_a_zip_member": {
       "intended_check": "no_credential_shaped_content",
       "intended_check_failed": true,
       "passed": true,
-      "peak_bytes": 30715904,
+      "peak_bytes": 30699520,
       "verifier": "FAIL",
-      "wall_seconds": 24.17
+      "wall_seconds": 48.31
     },
     "S01_edit_a_tracked_file_without_updating_sums": {
       "intended_check": "sums_hashes_match",
       "intended_check_failed": true,
       "passed": true,
-      "peak_bytes": 30334976,
+      "peak_bytes": 30375936,
       "verifier": "FAIL",
-      "wall_seconds": 31.24
+      "wall_seconds": 29.12
     },
     "S02_add_an_unlisted_file_in_a_3_0_folder": {
       "intended_check": "sums_cover_every_tracked_file",
       "intended_check_failed": true,
       "passed": true,
-      "peak_bytes": 30420992,
+      "peak_bytes": 30314496,
       "verifier": "FAIL",
-      "wall_seconds": 24.14
+      "wall_seconds": 27.58
     },
     "S03_edit_a_frozen_r2_0_file_and_commit": {
       "intended_check": "frozen_history_untouched",
       "intended_check_failed": true,
       "passed": true,
-      "peak_bytes": 30437376,
+      "peak_bytes": 30306304,
       "verifier": "FAIL",
-      "wall_seconds": 24.32
+      "wall_seconds": 25.83
     },
     "S04_delete_the_frozen_live_result_and_commit": {
       "intended_check": "frozen_history_untouched",
       "intended_check_failed": true,
       "passed": true,
-      "peak_bytes": 30343168,
+      "peak_bytes": 30253056,
       "verifier": "FAIL",
-      "wall_seconds": 21.93
+      "wall_seconds": 26.66
     },
     "S05_add_a_file_outside_the_3_0_folders_and_commit": {
       "intended_check": "frozen_history_untouched",
       "intended_check_failed": true,
       "passed": true,
-      "peak_bytes": 30683136,
+      "peak_bytes": 30552064,
       "verifier": "FAIL",
-      "wall_seconds": 21.24
+      "wall_seconds": 30.64
     },
     "S06_move_the_r1_9_tag": {
       "intended_check": "r1_9_tag_is_unchanged",
       "intended_check_failed": true,
       "passed": true,
-      "peak_bytes": 30556160,
+      "peak_bytes": 30269440,
       "verifier": "FAIL",
-      "wall_seconds": 21.55
+      "wall_seconds": 29.93
     },
     "S07_documented_limit_new_file_with_regenerated_sums_passes_without_an_anchor": {
       "note": "must PASS without --expect-sums-sha256 and FAIL with it (self-attesting limit)",
       "passed": true,
-      "peak_bytes": 30691328,
-      "wall_seconds": 32.75,
+      "peak_bytes": 30633984,
+      "wall_seconds": 30.08,
       "with_anchor": "FAIL",
       "without_anchor": "PASS"
     },
@@ -113,25 +113,25 @@
       "intended_check": "no_machine_specific_paths_in_code",
       "intended_check_failed": true,
       "passed": true,
-      "peak_bytes": 30666752,
+      "peak_bytes": 30568448,
       "verifier": "FAIL",
-      "wall_seconds": 24.64
+      "wall_seconds": 41.0
     },
     "S09_tracked_bytecode": {
       "intended_check": "no_tracked_bytecode",
       "intended_check_failed": true,
       "passed": true,
-      "peak_bytes": 30470144,
+      "peak_bytes": 30662656,
       "verifier": "FAIL",
-      "wall_seconds": 23.13
+      "wall_seconds": 53.44
     },
     "T_anthropic_api_key_in_a_tracked_file": {
       "intended_check": "no_credential_shaped_content",
       "intended_check_failed": true,
       "passed": true,
-      "peak_bytes": 30748672,
+      "peak_bytes": 30584832,
       "verifier": "FAIL",
-      "wall_seconds": 23.53
+      "wall_seconds": 40.26
     },
     "T_aws_access_key_id_in_a_tracked_file": {
       "intended_check": "no_credential_shaped_content",
@@ -139,47 +139,47 @@
       "passed": true,
       "peak_bytes": 30519296,
       "verifier": "FAIL",
-      "wall_seconds": 27.34
+      "wall_seconds": 36.34
     },
     "T_github_fine_grained_pat_in_a_tracked_file": {
       "intended_check": "no_credential_shaped_content",
       "intended_check_failed": true,
       "passed": true,
-      "peak_bytes": 30687232,
+      "peak_bytes": 30633984,
       "verifier": "FAIL",
-      "wall_seconds": 26.02
+      "wall_seconds": 43.4
     },
     "T_gitlab_token_in_a_tracked_file": {
       "intended_check": "no_credential_shaped_content",
       "intended_check_failed": true,
       "passed": true,
-      "peak_bytes": 30629888,
+      "peak_bytes": 30609408,
       "verifier": "FAIL",
-      "wall_seconds": 25.31
+      "wall_seconds": 40.5
     },
     "T_google_api_key_in_a_tracked_file": {
       "intended_check": "no_credential_shaped_content",
       "intended_check_failed": true,
       "passed": true,
-      "peak_bytes": 30633984,
+      "peak_bytes": 30683136,
       "verifier": "FAIL",
-      "wall_seconds": 31.7
+      "wall_seconds": 41.58
     },
     "T_sendgrid_api_key_in_a_tracked_file": {
       "intended_check": "no_credential_shaped_content",
       "intended_check_failed": true,
       "passed": true,
-      "peak_bytes": 30535680,
+      "peak_bytes": 30498816,
       "verifier": "FAIL",
-      "wall_seconds": 22.11
+      "wall_seconds": 37.4
     },
     "T_stripe_key_in_a_tracked_file": {
       "intended_check": "no_credential_shaped_content",
       "intended_check_failed": true,
       "passed": true,
-      "peak_bytes": 30642176,
+      "peak_bytes": 30584832,
       "verifier": "FAIL",
-      "wall_seconds": 24.58
+      "wall_seconds": 31.25
     }
   },
   "scenarios": 22,

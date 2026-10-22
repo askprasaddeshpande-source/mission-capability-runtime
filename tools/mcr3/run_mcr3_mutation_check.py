@@ -39,7 +39,7 @@ TARGETS = [
     ("mcr3_adapters.py", ["validate_mcr3_adapters.py", "validate_mcr3_gaps.py"]),
     ("mcr3_lineage.py", ["validate_mcr3_adapters.py", "validate_mcr3_gaps.py"]),
     ("mcr3_interop.py", ["validate_mcr3_adapters.py", "validate_mcr3_gaps.py"]),
-    ("mcr3_chain.py", ["validate_mcr3_chain.py"]),
+    ("mcr3_chain.py", ["validate_mcr3_chain.py", "validate_mcr3_gaps.py"]),
 ]
 
 # (name, old, new): applied once; old must occur exactly once.
@@ -109,6 +109,11 @@ EXPLAINED = {
     'mcr3_adapters.py::ast: drop clause 1 of not isinstance(chain, list)': "equivalent: a non-list chain yields no labelled rows and fails the label comparison with the same message",
     'mcr3_adapters.py::ast: drop clause 1 of mission.mutations_sent or 1': "equivalent: a mutation event exists only after a send, so mutations_sent is at least 1",
     'mcr3_adapters.py::ast: drop clause 2 of mission.mutations_sent or 1': "equivalent: a mutation event exists only after a send, so mutations_sent is at least 1",
+    'mcr3_authority.py::ast: drop clause 2 of cap is None or order[a.declaration["MODE"]] <= order[cap]': "equivalent: the only restriction ever recorded is OBSERVATION_ONLY, so the comparison and the cap give the same mode",
+    'mcr3_authority.py::ast: flip order[a.declaration["MODE"]] <= order[cap]': "equivalent: when the declared mode equals the cap, returning either gives the same mode",
+    'mcr3_interop.py::ast: drop clause 1 of val is not None and len(val) > 96': "equivalent (defence in depth): the event contract already limits these ids to 96 characters, so the check is unreachable",
+    'mcr3_interop.py::ast: flip val is not None': "equivalent (defence in depth): the event contract already limits these ids to 96 characters, so the check is unreachable",
+    'mcr3_interop.py::ast: flip len(val) > 96': "equivalent (defence in depth): the event contract already limits these ids to 96 characters, so the check is unreachable",
     'mcr3_chain.py::ast: drop clause 1 of len(disp) > 1 or (disp and disp[0] != len(parsed) - 1)': "equivalent: with two dispositions the first can never be the last event",
     'mcr3_chain.py::ast: drop clause 2 of rb and rb["claim"]["claimed_authoritative"]': "equivalent: the event contract rejects an authoritative claim from a weak level before this check runs",
 }
