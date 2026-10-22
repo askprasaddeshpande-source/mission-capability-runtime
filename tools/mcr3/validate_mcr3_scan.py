@@ -277,6 +277,9 @@ def run_limits_and_names():
         t(g, "a_hash_prefix_exempts_a_secret_name_%s" % off_label, not names_for(pad + "digest_" + "pass" + "word: " + hexv))
         t(g, "a_hash_suffix_exempts_a_secret_name_%s" % off_label, not names_for(pad + "pass" + "word_sha256: " + hexv))
         t(g, "an_ordinary_prefix_does_not_exempt_%s" % off_label, "secret_named_assignment" in names_for(pad + "mine_" + "pass" + "word: " + hexv))
+    t(g, "a_secret_name_with_a_suffix_is_found_late_in_the_text", "secret_named_assignment" in names_for("x" * 200 + chr(10) + "pass" + "word_value = hunter2hunter2xyz"))
+    t(g, "a_hash_segment_exactly_at_the_prefix_limit_exempts", not names_for("digest" + "_" * 250 + "pass" + "word: " + hexv))
+    t(g, "a_hash_segment_one_character_beyond_the_prefix_limit_does_not", "secret_named_assignment" in names_for("digest" + "_" * 251 + "pass" + "word: " + hexv))
     t(g, "a_name_longer_than_the_span_is_not_a_name", not names_for("pass" + "word" + "a" * 400 + "=hunter2hunter2xyz"))
     t(g, "a_keyword_starting_exactly_where_the_previous_name_was_cut_is_still_examined",
       "secret_named_assignment" in names_for("pass" + "word" + "x" * 256 + "pass" + "word=hunter2hunter2xyz"))

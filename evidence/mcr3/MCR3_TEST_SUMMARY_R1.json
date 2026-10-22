@@ -12,11 +12,11 @@
     "phase1_authority": 29,
     "provenance_authority": 153,
     "readback": 34,
-    "scanner": 176
+    "scanner": 179
   },
   "failed": [],
   "network_calls": 0,
   "not_verified": [],
   "suites": 11,
-  "tests": 1774
+  "tests": 1777
 }
