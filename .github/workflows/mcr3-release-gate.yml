@@ -1,16 +1,20 @@
-# MCR 3.0 release qualification gate. Dispatch this workflow on the exact candidate commit; the check named
-# "release gate" on that commit is the only thing that may be read as "heavy qualification passed".
+# MCR 3.0 release qualification gate. It runs on EVERY push to a work/mcr3* branch (a workflow_dispatch-only trigger
+# cannot be started from a branch until the file exists on the default branch, and a path- or message-conditioned
+# trigger would show 'skipped', which branch protection counts as success). The check named "release gate" on a commit
+# is the only thing that may be read as "heavy qualification passed" for exactly that commit.
 # It fails (it never skips to success) unless: every mutation target passed, the verifier attack suite passed against
 # THIS commit, and the checksum manifest matches the externally held anchor (repository variable MCR3_SUMS_ANCHOR).
 # No secrets, no network access to any provider, read-only token.
 name: mcr3-release-gate
 on:
+  push:
+    branches: ["work/mcr3*"]
   workflow_dispatch:
 permissions:
   contents: read
 concurrency:
-  group: mcr3-release-gate-${{ github.sha }}
-  cancel-in-progress: false
+  group: mcr3-release-gate-${{ github.ref }}
+  cancel-in-progress: true
 env:
   PIP_DISABLE_PIP_VERSION_CHECK: "1"
 jobs:
