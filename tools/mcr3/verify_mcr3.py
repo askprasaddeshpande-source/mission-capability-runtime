@@ -29,6 +29,7 @@ import mcr3_scan  # noqa: E402
 BASELINE = "fd865c67c053431dc33297a0df2a3c9a02fd51fe"
 R1_9_TAG, R1_9_COMMIT = "v1.9.0", "9c5105fe5b35dadf7b1384f54d4bea4c490d3ae0"
 NEW_DIRS = ("tools/mcr3/", "architecture/mcr3/", "evidence/mcr3/", "reports/mcr3/")
+ADDED_FILES = (".github/workflows/mcr3-offline.yml",)       # the only file outside NEW_DIRS that 3.0 adds (CI); additions only
 SUMS = "evidence/mcr3/SHA256SUMS_MCR3.txt"
 ABS = re.compile(r"(?i)(?<![A-Za-z0-9])[A-Za-z]:[\\/](?!/)|\\\\[A-Za-z0-9_.-]+\\|/(?:home|Users)/[A-Za-z0-9_.-]+")
 # files that contain path-form TEST VECTORS on purpose (device names, drive forms, a fake tool path), not machine-specific paths
@@ -47,7 +48,7 @@ def git(root, *args):
 
 def tracked_new(root):
     r = git(root, "ls-files")
-    return sorted(p for p in r.stdout.split("\n") if p and p.startswith(NEW_DIRS) and p != SUMS and "__pycache__" not in p and not p.endswith((".pyc", ".pyo")))
+    return sorted(p for p in r.stdout.split("\n") if p and (p.startswith(NEW_DIRS) or p in ADDED_FILES) and p != SUMS and "__pycache__" not in p and not p.endswith((".pyc", ".pyo")))
 
 
 def write_sums(root):
@@ -92,7 +93,7 @@ def verify(root, argv):
             for line in diff:
                 parts = line.split("\t")
                 st, paths = parts[0], parts[1:]
-                if st.startswith("A") and all(p.startswith(NEW_DIRS) for p in paths):
+                if st.startswith("A") and all(p.startswith(NEW_DIRS) or p in ADDED_FILES for p in paths):
                     continue
                 bad.append(line)
             res["frozen_history_untouched"] = not bad
