@@ -13,7 +13,11 @@ def main(argv):
     root = argv[argv.index("--root") + 1] if "--root" in argv else os.path.abspath(os.path.join(HERE, "..", ".."))
     reviewed = json.load(open(os.path.join(HERE, "history_scan_reviewed.json"), encoding="utf-8"))["reviewed_false_positives"]
     ok = {(r["path"], r["shape"], r["fingerprint"]) for r in reviewed}
-    found = S.scan_history(root)
+    try:
+        found = S.scan_history(root)
+    except S.ScanError as exc:
+        print(json.dumps({"HISTORY_SCAN": "FAIL", "reason": "scan could not run: %s" % exc}, indent=2, sort_keys=True))
+        return 2
     new = [f for f in found if (f[1], f[2], f[3]) not in ok]
     print(json.dumps({"history_findings": len(found), "reviewed_false_positives": len(found) - len(new),
                       "unreviewed": [{"oid": o, "path": p, "shape": n, "fingerprint": fp} for o, p, n, fp in new],

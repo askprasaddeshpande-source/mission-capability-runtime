@@ -165,12 +165,12 @@ def main(argv):
         r = subprocess.run(["git", "clone", "-q", "--no-hardlinks", ROOT, c], capture_output=True, text=True)
         git(c, "checkout", "-q", head)
         fn(c)
-        d, wall, peak = verify(c)
+        d, wall, peak = verify(c, "--allow-no-anchor")
         if anchor:
             anchor_sha = subprocess.run(["git", "show", "HEAD~2:evidence/mcr3/SHA256SUMS_MCR3.txt"], cwd=c, capture_output=True).stdout.replace(b"\r\n", b"\n")
             import hashlib
             d2, _, _ = verify(c, "--expect-sums-sha256", hashlib.sha256(anchor_sha).hexdigest())
-            passed = d["MCR3_VERIFY"] == "PASS" and d2["MCR3_VERIFY"] == "FAIL" and d2.get("sums_anchor_matches") is False
+            passed = d["MCR3_VERIFY"] == "PASS_WITHOUT_EXTERNAL_ANCHOR" and d2["MCR3_VERIFY"] == "FAIL" and d2.get("sums_anchor_matches") is False
             results[name] = {"passed": passed, "without_anchor": d["MCR3_VERIFY"], "with_anchor": d2["MCR3_VERIFY"], "wall_seconds": wall, "peak_bytes": peak, "note": note}
         else:
             key_ok = (d.get(expect_false) is False) or (expect_false == "r1_9_tag_is_unchanged" and d.get("r1_9_tag") == "CHANGED_OR_MISSING")
@@ -178,6 +178,19 @@ def main(argv):
             results[name] = {"passed": passed, "verifier": d["MCR3_VERIFY"], "intended_check": expect_false, "intended_check_failed": key_ok, "wall_seconds": wall, "peak_bytes": peak}
         ok_all &= results[name]["passed"]
         rm(c)
+    # --- verdict-honesty scenarios: a check that was not performed, or an anchor that was not supplied, is never a PASS
+    c = os.path.join(scratch, "c")
+    rm(c)
+    subprocess.run(["git", "clone", "-q", "--no-hardlinks", ROOT, c], capture_output=True, text=True)
+    git(c, "checkout", "-q", head)
+    d_none, w1, p1 = verify(c)
+    results["N1_no_anchor_is_blocked_not_pass"] = {"passed": d_none["MCR3_VERIFY"] == "BLOCKED_EXTERNAL_ANCHOR", "verifier": d_none["MCR3_VERIFY"], "wall_seconds": w1, "peak_bytes": p1}
+    d_ng, w2, p2 = verify(c, "--no-git", "--allow-no-anchor")
+    results["N2_no_git_mode_is_not_pass"] = {"passed": d_ng["MCR3_VERIFY"] == "FAIL" and bool(d_ng.get("mandatory_checks_not_performed")), "verifier": d_ng["MCR3_VERIFY"], "wall_seconds": w2, "peak_bytes": p2}
+    d_mv, w3, p3 = verify(c, "--expect-sums-sha256")
+    results["N3_anchor_flag_without_a_value_fails"] = {"passed": d_mv["MCR3_VERIFY"] == "FAIL", "verifier": d_mv["MCR3_VERIFY"], "wall_seconds": w3, "peak_bytes": p3}
+    ok_all &= all(results[k]["passed"] for k in ("N1_no_anchor_is_blocked_not_pass", "N2_no_git_mode_is_not_pass", "N3_anchor_flag_without_a_value_fails"))
+    rm(c)
     out = {"evidence_class": "SYNTHETIC/LOCAL", "scenarios": len(results), "all_passed": ok_all, "head_attacked": head, "sequential": True, "profile": "--fast", "results": results,
            "max_peak_bytes": max([v.get("peak_bytes") or 0 for v in results.values()])}
     s = json.dumps(out, indent=2, sort_keys=True)

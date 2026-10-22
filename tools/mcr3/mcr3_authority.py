@@ -77,6 +77,16 @@ class CapabilityRegistry:
         self._caps = {}
         self.policy_epoch = 0
 
+    def _now(self):
+        import math
+        try:
+            t = self.clock()
+        except Exception as exc:
+            raise AuthorityError("clock failed") from exc
+        if isinstance(t, bool) or not isinstance(t, (int, float)) or not math.isfinite(t) or t < 0:
+            raise AuthorityError("clock returned an invalid time")
+        return float(t)
+
     # ---- discovery: anything unknown is quarantined, never trusted
     def discover(self, capability_id, version, digest):
         if not (isinstance(capability_id, str) and capability_id and isinstance(version, str) and version and isinstance(digest, str) and len(digest) == 64):
@@ -142,10 +152,15 @@ class CapabilityRegistry:
             raise AuthorityError("approval record fields must be non-empty strings")
         if record["capability_id"] != c.capability_id:
             raise AuthorityError("approval is for another capability")
+        bound = {"capability_version": c.version, "capability_digest": c.digest, "to_state": "APPROVED",
+                 "qualification_digest": (c.qualification or {}).get("digest")}
+        for k, v in bound.items():
+            if record.get(k) != v or not isinstance(record.get(k), str):
+                raise AuthorityError("approval is not bound to this capability version, digest, qualification or target state (%s)" % k)
         exp = _expiry(record["expires_at"])
         if exp is None:
             raise AuthorityError("approval expires_at is not a valid UTC time")
-        if require_unexpired and self.clock() >= exp:
+        if require_unexpired and self._now() >= exp:
             raise AuthorityError("approval already expired")
 
     def _approval_scope_matches(self, c, scope):
@@ -181,7 +196,11 @@ class CapabilityRegistry:
     def effective_state(self, c):
         if c.state == "APPROVED" and c.approval is not None:
             exp = _expiry(c.approval["expires_at"])
-            if exp is None or self.clock() >= exp:
+            try:
+                lapsed = exp is None or self._now() >= exp
+            except AuthorityError:
+                lapsed = True                         # an unusable clock never keeps an approval alive
+            if lapsed:
                 return "QUALIFIED"                  # an expired approval silently lapses to QUALIFIED
         return c.state
 
@@ -341,6 +360,14 @@ def adapter_approval_record(approval_id, scope, adapter_id, adapter_version, to_
     r.update(approval_id=approval_id, source="EXTERNAL_GOVERNOR", adapter_id=adapter_id, adapter_version=adapter_version,
              to_mode=to_mode, qualification_digest=qualification_digest, expires_at=expires_at)
     return r
+
+
+def capability_approval_record(cap, scope, approval_id, expires_at="2099-01-01"):
+    """Shape of a capability approval record bound to one capability version, digest and qualification (shape only,
+    not an approval: the external approver must still verify it)."""
+    q = (cap.qualification or {}).get("digest")
+    return dict(scope, approval_id=approval_id, expires_at=expires_at, capability_version=cap.version,
+                capability_digest=cap.digest, qualification_digest=q, to_state="APPROVED")
 
 
 def _hex64(s):

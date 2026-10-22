@@ -191,7 +191,7 @@ def run():
     t(g, "qualification_does_not_approve", lambda: (reg.effective_state(cap) == "QUALIFIED" and reg.view(cap)["may_request_execution_review"] is False))
     t(g, "mcr_never_reports_that_it_grants_authority", lambda: (reg.view(cap)["mcr_grants_authority"] is False))
     scope = {"owner": "owner-1", "capability_id": "create_object", "provider_id": "SYN", "target_system": "SYN_SYS", "operation": "create", "environment": "TEST", "policy_digest": H}
-    rec = dict(scope, approval_id="APPR-1", expires_at="2099-01-01")
+    rec = A.capability_approval_record(cap, scope, "APPR-1")
     t(g, "the_default_registry_refuses_every_approval", lambda: (raises(lambda: A.CapabilityRegistry().record_approval(_qualified(A.CapabilityRegistry()), rec), "external approver")))
     for field in A.SCOPE_FIELDS + ("approval_id", "expires_at"):
         t(g, "approval_record_missing_%s_is_refused" % field, raises(lambda f=field: reg.record_approval(cap, {k: v for k, v in rec.items() if k != f}), "missing"))

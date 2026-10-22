@@ -92,7 +92,6 @@ def run():
     g = "DOCUMENTED_UNSUPPORTED"
     unsupported = {
         "short_token_value": "to" + "ken = \"abc123def456\"",
-        "quoted_password_with_spaces": "pass" + "word = \"correct horse battery staple\"",
         "base64_wrapped_bearer": "QmVhcmVy" + "IGFiY2RlZmdoaWprbG1ub3BxcnN0",
         "zero_width_split": S.fixture("github_classic_token")[:6] + "​" + S.fixture("github_classic_token")[6:],
         "homoglyph": S.fixture("github_classic_token").replace("g", "ɡ", 1),
@@ -138,11 +137,26 @@ def run():
     t("HISTORY", "a_clean_history_has_no_findings", lambda: clean == [])
     t("HISTORY", "a_secret_deleted_from_the_tree_is_found_in_history", lambda: [x for x in hist if x[2] == "github_classic_token" and x[1] == "b.txt"] and tree == [])
     t("HISTORY", "history_findings_carry_no_matched_text", lambda: hist and all(len(x) == 4 and S.fixture("github_classic_token") not in " ".join(map(str, x)) for x in hist))
-    t("HISTORY", "history_scan_of_a_missing_folder_or_non_repository_is_empty", lambda: S.scan_history(os.path.join(HERE, "no_such_dir_xyz")) == [] and S.scan_history(tempfile.gettempdir() + os.sep + "m3_not_a_repo_xyz") == [])
+    def refuses(fn):
+        try:
+            fn()
+        except S.ScanError:
+            return True
+        return False
+    nr = tempfile.mkdtemp(prefix="m3_not_a_repo_")
+    try:
+        t("HISTORY", "history_scan_of_a_missing_folder_or_non_repository_raises_not_passes", lambda: refuses(lambda: S.scan_history(os.path.join(HERE, "no_such_dir_xyz"))) and refuses(lambda: S.scan_history(nr)))
+        t("HISTORY", "tree_scan_of_a_non_repository_raises_not_passes", lambda: refuses(lambda: S.scan_tracked_tree(nr)))
+        cli = subprocess.run([sys.executable, os.path.join(HERE, "scan_history_mcr3.py"), "--root", nr], capture_output=True, text=True)
+        t("HISTORY", "history_scan_command_does_not_report_pass_for_a_non_repository", lambda: cli.returncode != 0 and "PASS" not in cli.stdout)
+    finally:
+        shutil.rmtree(nr, ignore_errors=True)
 
 
 def main(argv):
     run()
+    run_bounded_and_coverage()
+    run_bounded_and_coverage()
     failed = sorted(n for n, ok in T.items() if not ok)
     groups = {gk: "PASS" if all(T[n] for n in names) else "FAIL" for gk, names in G.items()}
     digest = hashlib.sha256(json.dumps(sorted(T), separators=(",", ":")).encode()).hexdigest().upper()
@@ -154,6 +168,62 @@ def main(argv):
     print(out)
     return 0 if not failed else 1
 
+
+
+def run_bounded_and_coverage():
+    import shutil
+    import subprocess
+    import tempfile
+    import time
+    import zipfile
+    g = "BOUNDED_EXECUTION"
+    for label, pat in (("alphanumeric_run", "aA1"), ("single_letter_run", "A"), ("repeated_secret_keyword", "password"), ("repeated_weak_keyword", "token")):
+        blob = (pat * 80000)[:200000].encode()
+        t0 = time.time()
+        S.scan_bytes(blob)
+        t(g, "scan_of_200kb_%s_finishes_in_bounded_time" % label, time.time() - t0 < 8)
+    g = "CREDENTIAL_FORMATS"
+    cases = {
+        "lowercase_basic_header": "Authorization: basic " + "dXNlcjpwYXNzd29yZDEyMzQ1Ng==",
+        "env_style_pass_name": "MY_" + "PASS=Abcdefghij12",
+        "auth_key_name": "AUTH_" + "KEY=Zq9Zq9Zq9Zq9Zq9Zq9Zq9",
+        "quoted_password_phrase": "pass" + "word: \"correct horse battery staple\"",
+        "command_line_password_flag": "--pass" + "word hunter2hunter2",
+        "curl_user_password": "curl -" + "u admin:hunter22 https://x.example",
+        "slack_webhook": "hooks.slack" + ".com/services/T" + "ABCDEFGH/B" + "ABCDEFGH/" + "x" * 24,
+        "telegram_bot_token": "1234567" + "890:" + "x" * 35,
+    }
+    for label, text in cases.items():
+        t(g, label + "_is_detected", bool(names_for(text)))
+    for label, text in {"powershell_variable": "$pass=($decision -eq 'PASS')", "prose_key_ending_in_a_longer_word": "\"X_SECRETISH\": \"this explains the behaviour of the thing in prose\""}.items():
+        t(g, "benign_" + label + "_is_not_flagged", not names_for(text))
+    g = "HISTORY_COVERAGE"
+    hd = tempfile.mkdtemp(prefix="m3hist2_")
+
+    def git(*a, **kw):
+        return subprocess.run(["git", "-c", "user.name=t", "-c", "user.email=t@example.invalid", "-c", "commit.gpgsign=false", "-c", "tag.gpgsign=false"] + list(a), cwd=hd, capture_output=True, check=True, **kw)
+    try:
+        git("init", "-q")
+        tok = S.fixture("github_classic_token")
+        open(os.path.join(hd, "pic.png"), "w").write(tok + "\n")                       # text content under a binary-looking name
+        with zipfile.ZipFile(os.path.join(hd, "z.bin"), "w") as z:                       # a ZIP under a non-zip name
+            z.writestr("inner.txt", tok)
+        open(os.path.join(hd, "a.txt"), "w").write("clean\n")
+        git("add", "-A")
+        git("commit", "-q", "-m", "message carrying " + tok)
+        git("tag", "-a", "v0", "-m", "tag message " + S.fixture("stripe_key"))
+        hist = S.scan_history(hd)
+        tree = S.scan_tracked_tree(hd)
+    finally:
+        shutil.rmtree(hd, ignore_errors=True)
+    t(g, "a_text_file_named_like_an_image_is_scanned_in_history", any(x[1] == "pic.png" for x in hist))
+    t(g, "a_text_file_named_like_an_image_is_scanned_in_the_tree", any(x[0] == "pic.png" for x in tree))
+    t(g, "a_zip_without_a_zip_name_is_opened_in_history", any(x[1].startswith("z.bin!") for x in hist))
+    t(g, "a_zip_without_a_zip_name_is_opened_in_the_tree", any(x[0].startswith("z.bin!") for x in tree))
+    t(g, "a_credential_in_a_commit_message_is_found", any(x[1] == "<commit message>" for x in hist))
+    t(g, "a_credential_in_a_tag_message_is_found", any(x[1] == "<tag message>" for x in hist))
+    big = b"x" * (S.MAX_SCAN + 1)
+    t(g, "content_beyond_the_scan_limit_is_reported_not_skipped", any(h[1] == "unscanned_oversize" for h in S.scan_blob("big.txt", big)))
 
 if __name__ == "__main__":
     sys.exit(main(sys.argv[1:]))

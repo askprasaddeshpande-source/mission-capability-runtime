@@ -323,10 +323,10 @@ def run():
     lease_r = mr.checkpoint_lease()
     open(fresh_led.path, "wb").write(open(fresh_led.path + ".keep", "rb").read()[:0] + open(fresh_led.path + ".keep", "rb").read())   # same bytes: control
     ev_r = {k: mr.ev[k] for k in ev_up}
-    t(g, "resume_control_with_an_untouched_ledger_works", Mission.resume(lease_r, fr["cp"], fr["bu"], "M-SYN-1", ev_r, MODEL.ReplayLedger(fresh_led.path)).state == "COMMIT_STATE_UNKNOWN")
+    t(g, "resume_control_with_an_untouched_ledger_works", Mission.resume(lease_r, fr["cp"], fr["bu"], "M-SYN-1", ev_r, MODEL.ReplayLedger(fresh_led.path), allow_unanchored_ledger=True).state == "COMMIT_STATE_UNKNOWN")
     header_only = open(fresh_led.path, "rb").read().split(b"\n")[0] + b"\n"
     open(fresh_led.path, "wb").write(header_only)               # the send record is removed from the file, header (id) kept
-    t(g, "removing_the_send_record_from_a_durable_ledger_is_caught_on_resume", raises(lambda: Mission.resume(lease_r, fr["cp"], fr["bu"], "M-SYN-1", ev_r, MODEL.ReplayLedger(fresh_led.path)), "does not record"))
+    t(g, "removing_the_send_record_from_a_durable_ledger_is_caught_on_resume", raises(lambda: Mission.resume(lease_r, fr["cp"], fr["bu"], "M-SYN-1", ev_r, MODEL.ReplayLedger(fresh_led.path), allow_unanchored_ledger=True), "does not record"))
     shutil.rmtree(d_, ignore_errors=True)
 
     # ---------------------------------------------------------------- outcome classification (the 3.0 distinction)

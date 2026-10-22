@@ -23,6 +23,7 @@ SUITES = [
     ("mutation_gap_tests", "validate_mcr3_gaps.py"),
     ("scanner", "validate_mcr3_scan.py"),
     ("phase1_authority", "validate_mcr3_phase1.py"),
+    ("corrective_closure", "validate_mcr3_corrective.py"),
 ]
 WRAPPER = r'''
 import runpy, sys, os

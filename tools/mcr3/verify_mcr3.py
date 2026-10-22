@@ -6,7 +6,10 @@ Usage:
   python tools/mcr3/verify_mcr3.py --clone               # git clone the checkout to a temp folder first, verify the clone
   python tools/mcr3/verify_mcr3.py --expect-sums-sha256 H   # anchor: SHA-256 of the sums file, taken from OUTSIDE the repository
   python tools/mcr3/verify_mcr3.py --write-sums          # (re)write evidence/mcr3/SHA256SUMS_MCR3.txt
-  python tools/mcr3/verify_mcr3.py --no-git              # skip the checks that need git history (reported as NOT_CHECKED)
+  python tools/mcr3/verify_mcr3.py --no-git              # skip the checks that need git history (reported as NOT_CHECKED, so the verdict is FAIL)
+  Verdicts: PASS (every check ran, anchor matched) | PASS_WITHOUT_EXTERNAL_ANCHOR (only with --allow-no-anchor) |
+            BLOCKED_EXTERNAL_ANCHOR (no anchor supplied) | FAIL (a check failed or a mandatory check was not performed).
+  --require-clean also demands a clean working tree.
 Checks: sums cover every tracked file of the MCR 3.0 folders and match; the frozen R1.9/R2.0 history is untouched since the
 baseline commit (no modified, deleted or renamed path outside the 3.0 folders, tag v1.9.0 unchanged); no credential-shaped
 content anywhere in the tracked tree; no machine-specific absolute path in 3.0 code; the validators pass and reproduce the
@@ -29,7 +32,7 @@ import mcr3_scan  # noqa: E402
 BASELINE = "fd865c67c053431dc33297a0df2a3c9a02fd51fe"
 R1_9_TAG, R1_9_COMMIT = "v1.9.0", "9c5105fe5b35dadf7b1384f54d4bea4c490d3ae0"
 NEW_DIRS = ("tools/mcr3/", "architecture/mcr3/", "evidence/mcr3/", "reports/mcr3/")
-ADDED_FILES = (".github/workflows/mcr3-offline.yml",)       # the only file outside NEW_DIRS that 3.0 adds (CI); additions only
+ADDED_FILES = (".github/workflows/mcr3-offline.yml", ".github/workflows/mcr3-release-gate.yml")       # the only file outside NEW_DIRS that 3.0 adds (CI); additions only
 SUMS = "evidence/mcr3/SHA256SUMS_MCR3.txt"
 ABS = re.compile(r"(?i)(?<![A-Za-z0-9])[A-Za-z]:[\\/](?!/)|\\\\[A-Za-z0-9_.-]+\\|/(?:home|Users)/[A-Za-z0-9_.-]+")
 # files that contain path-form TEST VECTORS on purpose (device names, drive forms, a fake tool path), not machine-specific paths
@@ -81,7 +84,9 @@ def verify(root, argv):
     sums_sha = sh(os.path.join(root, SUMS)) if listed else None
     res["sums_sha256"] = sums_sha
     if "--expect-sums-sha256" in argv:
-        res["sums_anchor_matches"] = sums_sha == argv[argv.index("--expect-sums-sha256") + 1].upper()
+        i = argv.index("--expect-sums-sha256")
+        want = argv[i + 1].strip().upper() if i + 1 < len(argv) else ""
+        res["sums_anchor_matches"] = len(want) == 64 and sums_sha == want         # a missing or malformed expected value never matches
     else:
         res["sums_anchor_matches"] = "NOT_CHECKED (pass --expect-sums-sha256 from a source outside the repository)"
 
@@ -108,8 +113,12 @@ def verify(root, argv):
     else:
         res["frozen_history_untouched"] = res["r1_9_tag"] = res["no_tracked_bytecode"] = "NOT_CHECKED (--no-git or no repository)"
 
-    hits = mcr3_scan.scan_tracked_tree(root) if use_git else []
-    res["no_credential_shaped_content"] = (not hits) if use_git else "NOT_CHECKED (--no-git)"
+    try:
+        hits = mcr3_scan.scan_tracked_tree(root) if use_git else []
+        res["no_credential_shaped_content"] = (not hits) if use_git else "NOT_CHECKED (--no-git)"
+    except mcr3_scan.ScanError as exc:
+        hits = []
+        res["no_credential_shaped_content"] = "NOT_CHECKED (scan could not run: %s)" % exc
     res["credential_hits"] = [(p, n) for p, n, _ in hits][:10]
     bad_abs = []
     for p in tracked_new(root) if use_git else listed:
@@ -132,9 +141,24 @@ def verify(root, argv):
         res["validator_results_reproduce"] = d.get("reproduces_archived_results") is True
         res["tests"] = d.get("tests")
         res["not_verified"] = d.get("not_verified")
-    bools = [v for k, v in res.items() if isinstance(v, bool) and k not in ("working_tree_clean",)]
-    strict = all(bools) and res.get("r1_9_tag") in ("UNCHANGED", "NOT_CHECKED (--no-git or no repository)")
-    res["MCR3_VERIFY"] = "PASS" if strict else "FAIL"
+    # A mandatory check that was not performed is not a pass. The external anchor is reported separately:
+    # without one the overall verdict can be at best BLOCKED_EXTERNAL_ANCHOR (or PASS_WITHOUT_EXTERNAL_ANCHOR if the
+    # caller explicitly accepts a self-attested run with --allow-no-anchor).
+    not_checked = sorted(k for k, v in res.items() if isinstance(v, str) and v.startswith("NOT_CHECKED") and k != "sums_anchor_matches")
+    res["mandatory_checks_not_performed"] = not_checked
+    if "--require-clean" in argv:
+        res["working_tree_clean"] = res.get("working_tree_clean", False) is True
+    bools = [v for k, v in res.items() if isinstance(v, bool) and (k != "working_tree_clean" or "--require-clean" in argv)]
+    strict = all(bools) and res.get("r1_9_tag") == "UNCHANGED" and not not_checked
+    anchored = res["sums_anchor_matches"] is True
+    if not strict or res["sums_anchor_matches"] is False:
+        res["MCR3_VERIFY"] = "FAIL"
+    elif anchored:
+        res["MCR3_VERIFY"] = "PASS"
+    elif "--allow-no-anchor" in argv:
+        res["MCR3_VERIFY"] = "PASS_WITHOUT_EXTERNAL_ANCHOR"
+    else:
+        res["MCR3_VERIFY"] = "BLOCKED_EXTERNAL_ANCHOR"
     return res
 
 
@@ -160,7 +184,7 @@ def main(argv):
     else:
         res = verify(root, argv)
     print(json.dumps(res, indent=2, sort_keys=True))
-    return 0 if res["MCR3_VERIFY"] == "PASS" else 1
+    return 0 if res["MCR3_VERIFY"] in ("PASS", "PASS_WITHOUT_EXTERNAL_ANCHOR") else 1
 
 
 if __name__ == "__main__":

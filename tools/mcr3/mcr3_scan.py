@@ -41,14 +41,57 @@ SHAPES = [
     ("jwt", r"(?<![A-Za-z0-9_-])eyJ[A-Za-z0-9_-]{15,}\.[A-Za-z0-9_-]{15,}\.[A-Za-z0-9_-]{5,}"),
     ("private_key_block", r"-----BEGIN (?:RSA |EC |OPENSSH |DSA |ENCRYPTED |PGP )?PRIVATE KEY"),
     ("bearer_header", r"(?i)\bBearer\s+[A-Za-z0-9+/=_.-]{20,}"),
-    ("basic_header", r"\bBasic\s+[A-Za-z0-9+/=]{20,}"),
+    ("basic_header", r"(?i)\bBasic\s+[A-Za-z0-9+/=]{20,}"),
+    ("slack_webhook_url", r"hooks\.slack\.com/services/T[A-Z0-9]{6,}/B[A-Z0-9]{6,}/[A-Za-z0-9]{16,}"),
+    ("telegram_bot_token", r"(?<![A-Za-z0-9])\d{8,10}:[A-Za-z0-9_-]{35}(?![A-Za-z0-9_-])"),
+    ("command_line_secret_flag", r"(?i)(?<![A-Za-z0-9-])--(?:password|passwd|pass|token|secret|api-?key|access-?key)(?:\s+|=)['\"]?[^\s'\"-][^\s'\"]{7,}"),
+    ("curl_user_password", r"(?<![A-Za-z0-9-])(?:-u|--user)\s+['\"]?[^\s:'\"]{1,64}:[^\s'\"]{4,}"),
     ("url_userinfo", r"://[^/\s:@]{1,64}:[^/\s@]{3,}@"),
 ]
 COMPILED = [(n, re.compile(rx)) for n, rx in SHAPES]
 
-# secret-named assignment: strong names flag a 8+ character value, weak names (token/authorization) need 16+
-_STRONG = re.compile(r"(?P<n>[A-Za-z0-9_.-]*(?i:password|passwd|passphrase|pwd|credentials?|secret|api[_-]?key|access[_-]?key|private[_-]?key)[A-Za-z0-9_.-]*)[\"']?\s*(?::=|=>|[:=])\s*[\"']?(?P<v>[^\s\"']{8,})")
-_WEAK = re.compile(r"(?P<n>[A-Za-z0-9_.-]*(?i:token|authorization)[A-Za-z0-9_.-]*)[\"']?\s*[:=]\s*[\"']?(?P<v>[A-Za-z0-9+/=_.-]{16,}+)(?!\()")
+# secret-named assignment, found from the KEYWORD outwards (linear time: a regex with an unbounded name prefix backtracks
+# quadratically on a long alphanumeric run). The name is the run of name characters around the keyword (at most
+# _NAME_SPAN either side); the value tail must follow the name. Strong names flag an 8+ character value, weak names
+# (token/authorization) need 16+.
+_NAME_SPAN = 256
+_NAMECH = frozenset("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_.-")
+_KW_STRONG = re.compile(r"(?i)password|passwd|passphrase|pwd|credentials?|secret|api[_-]?key|access[_-]?key|private[_-]?key|auth[_-]?key|(?<=[_.-])pass(?![A-Za-z0-9_.-])")
+_KW_WEAK = re.compile(r"(?i)token|authorization")
+_KW_QUOTED = re.compile(r"(?i)password|passwd|passphrase|pwd|secret|api[_-]?key|private[_-]?key")
+_TAIL_STRONG = re.compile(r"[\"']?\s*(?::=|=>|[:=])\s*[\"']?(?P<v>[^\s\"']{8,})")
+_TAIL_WEAK = re.compile(r"[\"']?\s*[:=]\s*[\"']?(?P<v>[A-Za-z0-9+/=_.-]{16,}+)(?!\()")
+_TAIL_QUOTED = re.compile(r"[\"']?\s*[:=]\s*(?P<q>[\"'])(?P<v>[^\"'\r\n]{12,200})(?P=q)")
+
+
+class _Named:
+    def __init__(self, whole, n, v):
+        self._d = {0: whole, "n": n, "v": v}
+
+    def group(self, k):
+        return self._d[k]
+
+
+def _named(kw, tail, txt, ends_with_keyword=False):
+    """Matches of <name containing a keyword><tail> with .group(0) (whole), .group("n") (name), .group("v") (value)."""
+    last_hi = -1
+    for m in kw.finditer(txt):
+        a, b = m.start(), m.end()
+        if a < last_hi:                                   # another keyword inside a name already examined
+            continue
+        lo, hi = a, b
+        while lo > 0 and a - lo < _NAME_SPAN and txt[lo - 1] in _NAMECH:
+            lo -= 1
+        while hi < len(txt) and hi - b < _NAME_SPAN and txt[hi] in _NAMECH:
+            hi += 1
+        last_hi = hi
+        if ends_with_keyword and not any(mm.end() == hi - lo for mm in kw.finditer(txt[lo:hi])):
+            continue                                      # e.g. a prose key such as SECRETISH_NOTE is not a secret name
+        t = tail.match(txt, hi)
+        if t:
+            yield _Named(txt[lo:t.end()], txt[lo:hi], t.group("v"))
+
+
 _HASHY = {"hash", "sha", "sha1", "sha224", "sha256", "sha384", "sha512", "digest", "checksum", "fingerprint"}
 _COUNTY = {"count", "len", "length", "id", "ids", "size", "name", "type", "source", "kind", "path", "file"}
 _LABEL = re.compile(r"(?:[A-Z]+[0-9]?|[0-9]+)(?:_(?:[A-Z]+[0-9]?|[0-9]+))+")
@@ -92,7 +135,7 @@ def scan_text(txt):
     for name, rx in COMPILED:
         for m in rx.finditer(txt):
             hits.append((name, _fp(m.group(0))))
-    for m in _STRONG.finditer(txt):
+    for m in _named(_KW_STRONG, _TAIL_STRONG, txt):
         v = m.group("v").rstrip("),;]}")                 # trailing code punctuation is not part of a value
         if len(v) < 8 or _exempt_name(m.group("n")) or _PLACEHOLDER.match(v) or _LABEL.fullmatch(v) or _ATTR_PATH.fullmatch(v):
             continue
@@ -100,7 +143,11 @@ def scan_text(txt):
         # attacks: letters-only values slipped through); 8 to 15 characters need a digit with a letter, or a symbol
         if len(v) >= 16 or _short_secret_like(v):
             hits.append(("secret_named_assignment", _fp(m.group(0))))
-    for m in _WEAK.finditer(txt):
+    for m in _named(_KW_QUOTED, _TAIL_QUOTED, txt, ends_with_keyword=True):
+        v = m.group("v")
+        if not (_exempt_name(m.group("n")) or _PLACEHOLDER.match(v) or _ATTR_PATH.fullmatch(v) or _LABEL.fullmatch(v)):
+            hits.append(("secret_named_assignment", _fp(m.group(0))))
+    for m in _named(_KW_WEAK, _TAIL_WEAK, txt):
         v = m.group("v")
         if not (_exempt_name(m.group("n")) or _LABEL.fullmatch(v) or _PLACEHOLDER.match(v) or v == m.group("n") or _ATTR_PATH.fullmatch(v)):
             hits.append(("token_named_assignment", _fp(m.group(0))))
@@ -117,52 +164,91 @@ def scan_bytes(b):
     return out
 
 
-BINARY_EXT = (".png", ".jpg", ".jpeg", ".gif", ".ico", ".pdf", ".woff", ".woff2", ".ttf", ".pyc", ".pyo")
 MAX_SCAN = 8 * 1024 * 1024
+MAX_ZIP_TOTAL = 64 * 1024 * 1024
+
+
+class ScanError(RuntimeError):
+    """The scan could not be performed (not a Git repository, git missing or failing). A scan that did not run is never a pass."""
+
+
+def _git(root, *args, **kw):
+    try:
+        r = subprocess.run(["git"] + list(args), cwd=root, capture_output=True, **kw)
+    except OSError as exc:
+        raise ScanError("git could not be run in %r: %s" % (root, type(exc).__name__)) from exc
+    if r.returncode != 0:
+        raise ScanError("git %s failed in %r (not a Git repository?)" % (args[0], root))
+    return r
+
+
+def _require_toplevel(root):
+    """root must be the top of a Git work tree itself (a sub-folder, or a folder that merely sits inside some other
+    repository, would be scanned as if it were the whole project)."""
+    import os
+    top = _git(root, "rev-parse", "--show-toplevel", text=True).stdout.strip()
+    if os.path.normcase(os.path.realpath(top)) != os.path.normcase(os.path.realpath(root)):
+        raise ScanError("%r is not the top of a Git repository" % (root,))
+
+
+def scan_blob(label, data):
+    """Scan one object's bytes whatever its file name (a text file named .png is still text). A ZIP (by content) is
+    opened and its members scanned; content beyond MAX_SCAN is reported ('unscanned_oversize'), never silently skipped.
+    Returns [(label, shape, fingerprint)]."""
+    import io
+    import zipfile
+    if len(data) > MAX_SCAN and not data.startswith(b"PK\x03\x04"):
+        return [(label, "unscanned_oversize", "%08x" % (len(data) & 0xFFFFFFFF))]
+    if data.startswith(b"PK\x03\x04"):
+        try:
+            with zipfile.ZipFile(io.BytesIO(data)) as z:
+                infos = z.infolist()
+                if sum(i.file_size for i in infos) > MAX_ZIP_TOTAL:
+                    return [(label, "unscanned_oversize", "zip")]
+                out = []
+                for i in infos:
+                    if i.is_dir():
+                        continue
+                    member = z.read(i)
+                    if len(member) > MAX_SCAN:
+                        out.append((label + "!" + i.filename, "unscanned_oversize", "%08x" % (len(member) & 0xFFFFFFFF)))
+                    else:
+                        out += [(label + "!" + i.filename, n, f) for n, f in scan_bytes(member)]
+                return out
+        except (zipfile.BadZipFile, NotImplementedError, RuntimeError, OSError):
+            pass                                                       # not a readable ZIP: scan the raw bytes
+    return [(label, n, f) for n, f in scan_bytes(data)]
 
 
 def scan_tracked_tree(root):
-    """Scan every tracked file and the text members of zip archives. Returns [(path, shape, fingerprint)]."""
-    import zipfile
-    try:
-        tr = subprocess.run(["git", "ls-files"], cwd=root, capture_output=True, text=True)
-    except OSError:                                    # missing folder or no git: nothing to scan
-        return []
-    names = [x for x in tr.stdout.split("\n") if x] if tr.returncode == 0 else []
-    found = []
+    """Scan every tracked file (and ZIP members) whatever its extension. Returns [(path, shape, fingerprint)].
+    Raises ScanError if the folder is not a Git repository: a scan that did not run is not a clean scan."""
     import os
+    _require_toplevel(root)
+    tr = _git(root, "ls-files", "-z")
+    names = [x.decode("utf-8", "replace") for x in tr.stdout.split(b"\0") if x]
+    found = []
     for p in names:
         fp = os.path.join(root, p)
-        if not os.path.isfile(fp) or p.lower().endswith(BINARY_EXT):
+        if not os.path.isfile(fp):
             continue
         try:
-            if p.lower().endswith(".zip"):
-                with zipfile.ZipFile(fp) as z:
-                    for mem in z.namelist():
-                        if mem.lower().endswith(BINARY_EXT) or mem.endswith("/"):
-                            continue
-                        data = z.read(mem)[:MAX_SCAN]
-                        found += [(p + "!" + mem, n, f) for n, f in scan_bytes(data)]
-                continue
-            data = open(fp, "rb").read(MAX_SCAN)
-        except (OSError, zipfile.BadZipFile):
+            with open(fp, "rb") as fh:
+                data = fh.read(MAX_SCAN + 1) if not p.lower().endswith(".zip") else fh.read()
+        except OSError:
             continue
-        found += [(p, n, f) for n, f in scan_bytes(data)]
+        found += scan_blob(p, data)
     return found
 
 
 def scan_history(root):
-    """Scan every distinct blob reachable from any ref (all of Git history, including deleted files).
-    Returns [(oid, path, shape, fingerprint)] (never the matched text). A blob removed from the tree but still
-    reachable from history IS scanned. Unreachable objects and anything outside Git are not."""
+    """Scan every distinct blob, commit message and tag message reachable from any ref (all of Git history, including
+    deleted files). Returns [(oid, path, shape, fingerprint)] (never the matched text). Unreachable objects and anything
+    outside Git are not scanned. Raises ScanError if the folder is not a usable Git repository."""
     import os
     import tempfile
-    try:
-        r = subprocess.run(["git", "rev-list", "--objects", "--all"], cwd=root, capture_output=True, text=True)
-    except OSError:
-        return []
-    if r.returncode != 0:
-        return []
+    _require_toplevel(root)
+    r = _git(root, "rev-list", "--objects", "--all", text=True)
     paths = {}
     for line in r.stdout.split("\n"):
         if line:
@@ -173,11 +259,14 @@ def scan_history(root):
         with os.fdopen(fd, "w", newline="\n") as fh:
             fh.write("\n".join(paths) + "\n")
         with open(lst, "rb") as fin:
-            c = subprocess.run(["git", "cat-file", "--batch"], cwd=root, stdin=fin, capture_output=True)
+            try:
+                c = subprocess.run(["git", "cat-file", "--batch"], cwd=root, stdin=fin, capture_output=True)
+            except OSError as exc:
+                raise ScanError("git cat-file could not be run") from exc
     finally:
         os.remove(lst)
     if c.returncode != 0:
-        return []
+        raise ScanError("git cat-file failed")
     data, pos, found = c.stdout, 0, []
     while pos < len(data):
         nl = data.find(b"\n", pos)
@@ -190,9 +279,9 @@ def scan_history(root):
         oid, typ, size = head[0].decode(), head[1], int(head[2])
         body = data[nl + 1:nl + 1 + size]
         pos = nl + 1 + size + 1
-        name = paths.get(oid, "")
-        if typ == b"blob" and not name.lower().endswith(BINARY_EXT):
-            found += [(oid, name, n, f) for n, f in scan_bytes(body[:MAX_SCAN])]
+        if typ in (b"blob", b"commit", b"tag"):
+            label = paths.get(oid, "") if typ == b"blob" else "<%s message>" % typ.decode()
+            found += [(oid, lab, n, f) for lab, n, f in scan_blob(label, body)]
     return found
 
 
@@ -230,6 +319,10 @@ def fixture(name):
         "bearer_header": lambda: "Bear" + "er " + _a(30),
         "basic_header": lambda: "Bas" + "ic " + _a(30),
         "url_userinfo": lambda: "https://user:" + "hunter22" + "@example.org/x",
+        "slack_webhook_url": lambda: "hooks.slack" + ".com/services/T" + "ABCDEFGH" + "/B" + "ABCDEFGH" + "/" + _a(24, "x"),
+        "telegram_bot_token": lambda: "1234567" + "890:" + _a(35, "x"),
+        "command_line_secret_flag": lambda: "--pass" + "word " + "hunter2hunter2",
+        "curl_user_password": lambda: "curl " + "-u " + "admin:" + "hunter22",
         "secret_named_assignment": lambda: "pass" + "word = " + "p@ss!w0rd",
         "token_named_assignment": lambda: "to" + "ken: " + _a(24, "q"),
     }

@@ -125,7 +125,7 @@ def rsm(lease, f, mm, cp=None, evidence=None, ledger=None, mission_id="M-SYN-1")
     """resume() with the standard re-presented upstream evidence and the mission's own ledger."""
     return Mission.resume(lease, cp if cp is not None else f["cp"], f["bu"], mission_id,
                           evidence if evidence is not None else ev_upstream(mm), ledger if ledger is not None else mm.ledger,
-                          allow_volatile_ledger=True)
+                          allow_volatile_ledger=True, allow_unanchored_ledger=True)
 
 
 def comp_exec(gg, cls="PROVIDER_RESPONSE_SUCCESS", mut=None, tx="TX-SYN-1", attempt=1):
@@ -884,7 +884,7 @@ def run():
                                                       readback_contract_hash=rc["object_hash"], remaining_budget=1), **(cp_chg or {})))
         lease = make("ContinuationLease", lease_id="L1", checkpoint_hash=cp["object_hash"], transaction_id="TX-SYN-1", remaining_budget=1, state_at_checkpoint="PREWRITE_VALIDATED",
                      mutation_id=None, execution_receipt_hash=None, consumed_authority_ids=[],
-                     ledger_anchor=MODEL.ReplayLedger().anchor())
+                     ledger_anchor=MODEL.ReplayLedger().anchor(), revocation_required=False)
         ev = dict(intent=intent, principal=ff["pr"], delegation=dl, capability=cb, provider=pb, tx=tx, budget=bu, outcome_contract=oc, readback_contract=rc, authority=au)
         return lease, cp, bu, ev
 
@@ -1145,7 +1145,7 @@ def run():
     t(g, "resume_rejects_a_tampered_execution_receipt", lambda: (raises(lambda: rsm(leaseX, fX, mX, evidence=dict(ev_upstream(mX), execution_receipt=tampered_er)), "hash invalid")))
     dpath = os.path.join(ldir2, "durable_resume.txt")
     mD, fD = fixture(); mD.ledger = MODEL.ReplayLedger(dpath); to_prewrite(mD, fD); leaseD = mD.checkpoint_lease(); mD.begin_execution("MUT-1", FP)
-    rD = Mission.resume(leaseD, fD["cp"], fD["bu"], "M-SYN-1", ev_upstream(mD), MODEL.ReplayLedger(dpath))
+    rD = Mission.resume(leaseD, fD["cp"], fD["bu"], "M-SYN-1", ev_upstream(mD), MODEL.ReplayLedger(dpath), allow_unanchored_ledger=True)
     t(g, "resume_with_a_durable_ledger_needs_no_opt_in", lambda: (rD.state == "COMMIT_STATE_UNKNOWN" and rD.mutations_sent == 1))
 
     # lock waiting: a released lock is acquired after waiting (kills the timeout arithmetic mutants)
@@ -1263,7 +1263,7 @@ def run():
     mm_.begin_execution("MUT-1", FP)
     os.remove(os.path.join(ld2, "lease.txt"))
     recreated = MODEL.ReplayLedger(os.path.join(ld2, "lease.txt"))                  # deleted and recreated: new identity
-    t(g, "resume_refuses_a_lease_from_another_ledger_identity", lambda: (raises(lambda: Mission.resume(lease_l, ff_["cp"], ff_["bu"], "M-SYN-1", ev_upstream(mm_), recreated), "ledger identity differs from the lease")))
+    t(g, "resume_refuses_a_lease_from_another_ledger_identity", lambda: (raises(lambda: Mission.resume(lease_l, ff_["cp"], ff_["bu"], "M-SYN-1", ev_upstream(mm_), recreated, allow_unanchored_ledger=True), "ledger identity differs from the lease")))
     pinned_id = la.ledger_id
     t(g, "pinned_identity_with_the_right_file_works", lambda: (MODEL.ReplayLedger(pa, expected_id=pinned_id).has(("A" * 64, "MUT-1"))))
     os.remove(pa)

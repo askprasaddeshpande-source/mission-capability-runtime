@@ -209,7 +209,10 @@ def parse_expiry(value):
     if isinstance(value, bool):
         return None
     if isinstance(value, (int, float)):
-        return float(value) if math.isfinite(value) and value >= 0 else None
+        try:
+            return float(value) if math.isfinite(value) and value >= 0 else None
+        except OverflowError:
+            return None
     if not isinstance(value, str):
         return None
     try:
@@ -731,11 +734,23 @@ class Mission:
         if obj.get("transaction_id") != self.transaction_id:
             raise GuardError("transaction correlation mismatch on %s" % obj.get("kind"))
 
+    def _now(self):
+        """The injected clock, validated: a clock that raises or returns a non-finite, negative or non-numeric value
+        is refused (a NaN would otherwise make every expiry comparison False, i.e. 'not expired')."""
+        import math
+        try:
+            t = self._clock()
+        except Exception as exc:
+            raise GuardError("clock failed") from exc
+        if isinstance(t, bool) or not isinstance(t, (int, float)) or not math.isfinite(t) or t < 0:
+            raise GuardError("clock returned an invalid time")
+        return float(t)
+
     def _expiry_guard(self, delegation, what):
         exp = parse_expiry(delegation.get("expires_at"))
         if exp is None:
             raise GuardError("delegation expires_at is not a valid UTC time")
-        if self._clock() >= exp:
+        if self._now() >= exp:
             raise GuardError("delegation expired (%s)" % what)
 
     def _revocation_guard(self, what):
@@ -744,7 +759,7 @@ class Mission:
         connected nothing is checked: the model cannot know about revocations it is not told about."""
         if self._revoked is None:
             return
-        for kind in ("principal", "delegation", "authority"):
+        for kind in ("principal", "delegation", "authority", "comp_grant"):
             obj = self.ev.get(kind)
             if obj is None:
                 continue
@@ -1112,6 +1127,7 @@ class Mission:
         grant = self._need("comp_grant")
         if self.state != "COMPENSATION_AUTHORIZED":
             raise GuardError("illegal transition %s -> compensation start" % self.state)
+        self._expiry_guard(self._need("delegation"), "at the point of a compensating send")
         self._revocation_guard("at the point of a compensating send")
         if self.ev.get("comp_open") is not None:
             raise GuardError("a compensation attempt is already open: record its result first")
@@ -1211,6 +1227,7 @@ class Mission:
                         mutation_id=self.ev.get("mutation_id"),
                         execution_receipt_hash=er["object_hash"] if er else None,
                         ledger_id=self.ledger.ledger_id, ledger_anchor=self.ledger.anchor(),
+                        revocation_required=self._revoked is not None,
                         consumed_authority_ids=sorted(("%s:%s" % k) for k in self.consumed))
 
     @classmethod
@@ -1222,25 +1239,40 @@ class Mission:
             raise GuardError("malformed argument: %s" % type(exc).__name__) from exc
 
     @classmethod
-    def _resume(cls, lease, checkpoint, original_budget, mission_id, evidence, ledger, allow_volatile_ledger=False, clock=None, revocation_check=None):
+    def _resume(cls, lease, checkpoint, original_budget, mission_id, evidence, ledger, allow_volatile_ledger=False, clock=None, revocation_check=None,
+                trusted_anchor=None, allow_unanchored_ledger=False):
         """Rebuild a mission by re-running the REAL guard methods on re-presented evidence (so a resumed mission is
         held to exactly the checks a fresh one gets), then applying consumption. Lease, checkpoint and original budget
         must be hash-valid and agree with each other; consumption is the UNION of the lease and the external
         ReplayLedger, so a stale lease cannot re-open a send recorded there; after any possible send the mission
         restarts in COMMIT_STATE_UNKNOWN and needs a fresh readback. Only pre-observation evidence is accepted.
         A durable (file-backed) ledger is required unless allow_volatile_ledger is set (tests). Lease integrity
-        (hash) is checked; authenticity (signature) is not provided by this library."""
+        (hash) is checked; authenticity (signature) is not provided by this library.
+        REPLAY / ROLLBACK: a lease carries the anchor of the ledger at the time it was cut, so a lease cut before a send
+        cannot reveal that the ledger has since been restored to an older copy. Resume therefore needs trusted_anchor,
+        an anchor (ledger.anchor()) recorded AFTER the latest send in a store the ledger's host cannot rewrite; it is
+        checked against the ledger. Without one the configuration cannot prevent a replay after a restore, and resume
+        is refused unless the caller explicitly accepts that with allow_unanchored_ledger=True (a documented residual
+        risk, never the default). A volatile ledger (tests) is exempt."""
         if not isinstance(ledger, ReplayLedger):
             raise GuardError("resume requires the ReplayLedger")
         if not ledger.is_durable and not allow_volatile_ledger:
             raise GuardError("resume requires a durable (file-backed) ledger")
         if not isinstance(evidence, dict):
             raise GuardError("resume requires re-presented evidence")
+        if trusted_anchor is not None:
+            ledger.check_anchor(trusted_anchor)               # a restored older copy or rewritten history fails here
+        elif ledger.is_durable and not allow_unanchored_ledger:
+            raise GuardError("resume cannot prove the ledger was not restored to an older copy: pass trusted_anchor (held outside the ledger host) or accept the replay risk with allow_unanchored_ledger=True")
         for o, kind in ((lease, "ContinuationLease"), (checkpoint, "PreMutationCheckpoint"), (original_budget, "MutationBudget")):
             if not isinstance(o, dict) or o.get("kind") != kind or not _hash_ok(o):
                 raise GuardError("%s absent, wrong kind or hash invalid" % kind)
         if lease["checkpoint_hash"] != checkpoint["object_hash"]:
             raise GuardError("lease not bound to checkpoint")
+        if lease.get("revocation_required") is not False and revocation_check is None:
+            raise GuardError("the original mission was governed by a revocation source (or the lease does not say it was not): resume needs a revocation_check")
+        if revocation_check is not None and not callable(revocation_check):
+            raise GuardError("revocation_check must be callable")
         if lease.get("ledger_id") is not None and lease["ledger_id"] != ledger.ledger_id:
             raise GuardError("ledger identity differs from the lease (deleted, replaced or restored ledger?)")
         lease_rem = lease["remaining_budget"]

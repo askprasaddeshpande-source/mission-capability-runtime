@@ -353,13 +353,13 @@ def run():
     t(g, "qualify_refuses_a_non_string_reviewer", lambda: raises(lambda: reg.qualify(cap, HX, "GO", 5), None, (AU.AuthorityError,)) and cap.state == "VERIFIED")
     reg.qualify(cap, HX, "GO", "reviewer")
     scope = {"owner": "o", "capability_id": "create_object", "provider_id": "SYN", "target_system": "T", "operation": "create", "environment": "TEST", "policy_digest": HX}
-    rec = dict(scope, approval_id="APPR-1", expires_at=iso(NOW + 100))
+    rec = AU.capability_approval_record(cap, scope, "APPR-1", iso(NOW + 100))
     t(g, "an_approval_field_that_is_a_truthy_non_string_is_refused", lambda: raises(lambda: reg.record_approval(cap, dict(rec, owner=5)), "non-empty strings", (AU.AuthorityError,)) and raises(lambda: reg.record_approval(cap, dict(rec, approval_id=["x"])), "non-empty strings", (AU.AuthorityError,)))
     t(g, "an_approval_expiring_exactly_now_is_refused", lambda: raises(lambda: reg.record_approval(cap, dict(rec, expires_at=iso(NOW))), "expired", (AU.AuthorityError,)))
     t(g, "an_approval_expiring_one_second_from_now_is_accepted", lambda: (reg.record_approval(cap, dict(rec, expires_at=iso(NOW + 1))), cap.state)[1] == "APPROVED")
     clock = {"now": NOW}
     reg2 = AU.CapabilityRegistry(approval_verifier=AU.RecordedApprovalVerifier({"APPR-1"}), clock=lambda: clock["now"])
-    c2 = reg2.discover("create_object", "2.0.0", HX); reg2.verify(c2, HX, True); reg2.qualify(c2, HX, "GO", "r"); reg2.record_approval(c2, rec)
+    c2 = reg2.discover("create_object", "2.0.0", HX); reg2.verify(c2, HX, True); reg2.qualify(c2, HX, "GO", "r"); rec = AU.capability_approval_record(c2, scope, "APPR-1", iso(NOW + 100)); reg2.record_approval(c2, rec)
     t(g, "view_without_a_scope_never_reports_an_approval_reference", lambda: reg2.view(c2)["approval_reference_present"] is False and reg2.view(c2)["may_request_execution_review"] is False and reg2.view(c2)["authority_source"] is None)
     t(g, "view_with_the_exact_scope_reports_it_and_with_none_of_it_does_not", lambda: reg2.view(c2, scope)["approval_reference_present"] is True and reg2.view(c2, {})["approval_reference_present"] is False)
     exp = AU._expiry(rec["expires_at"])
@@ -421,10 +421,10 @@ def run():
         hits = S.scan_tracked_tree(tmp)
         paths = {p for p, _, _ in hits}
         t(g, "the_tracked_tree_scan_finds_tracked_text_files", lambda: "a.txt" in paths)
-        t(g, "the_tracked_tree_scan_skips_binary_extensions_and_untracked_files", lambda: "b.png" not in paths and "untracked.txt" not in paths)
-        t(g, "the_tracked_tree_scan_reads_zip_members_and_names_them", lambda: "z.zip!inner/notes.txt" in paths and "z.zip!inner/pic.png" not in paths)
-        t(g, "the_tracked_tree_scan_reports_exactly_the_expected_paths", lambda: paths == {"a.txt", "z.zip!inner/notes.txt"})
-        t(g, "the_tracked_tree_scan_finds_nothing_in_a_directory_that_is_not_a_repository", lambda: S.scan_tracked_tree(tempfile.gettempdir() + os.sep + "m3_no_such_dir_xyz") == [])
+        t(g, "the_tracked_tree_scan_ignores_file_names_but_skips_untracked_files", lambda: "b.png" in paths and "untracked.txt" not in paths)
+        t(g, "the_tracked_tree_scan_reads_zip_members_and_names_them", lambda: "z.zip!inner/notes.txt" in paths and "z.zip!inner/pic.png" in paths)
+        t(g, "the_tracked_tree_scan_reports_exactly_the_expected_paths", lambda: paths == {"a.txt", "b.png", "z.zip!inner/notes.txt", "z.zip!inner/pic.png"})
+        t(g, "the_tracked_tree_scan_raises_for_a_directory_that_is_not_a_repository", lambda: raises(lambda: S.scan_tracked_tree(tempfile.gettempdir() + os.sep + "m3_no_such_dir_xyz"), None, (S.ScanError,)))
         os.remove(os.path.join(tmp, "a.txt"))
         t(g, "a_tracked_file_that_was_deleted_is_skipped", lambda: "a.txt" not in {p for p, _, _ in S.scan_tracked_tree(tmp)})
     finally:
