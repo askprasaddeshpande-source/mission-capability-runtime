@@ -220,6 +220,8 @@ def parse_expiry(value):
             if not v.endswith("+00:00"):
                 return None
             d = datetime.datetime.fromisoformat(v[:-6])
+            if d.tzinfo is not None:                       # review 8: "...+05:00Z" must not be read as UTC
+                return None
         return d.replace(tzinfo=datetime.timezone.utc).timestamp()
     except ValueError:
         return None

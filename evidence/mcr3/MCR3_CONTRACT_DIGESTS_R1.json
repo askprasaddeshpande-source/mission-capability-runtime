@@ -15,49 +15,49 @@
   ],
   "example_event_digests": [
     {
-      "event_digest": "ea0e34bcf9f15119d1a4e3fc76d2b45459df41f55fabb865ab95b0b61433ef71",
+      "event_digest": "c82adf410f6b472c66c17ccb32e06200ba5a6f258cc583b635eed9cde8083878",
       "type": "mcr.authorization.referenced"
     },
     {
-      "event_digest": "e546318ac75d3b9b1646a77be16d4ec5800cfce8248a077ecf3d2006947650a4",
+      "event_digest": "bb49bd75dd70e5515d4d1772db59027b7383c853677a9d012167960ada63bc48",
       "type": "mcr.capability.state_changed"
     },
     {
-      "event_digest": "41c6511448811ec9d12c456cdb4cfd3adf0f7c75fbcbdfe7a52edbeb228bd540",
+      "event_digest": "c9f727b119de19e83cf47c271742c1b6167d803c39116744e002fc6be662338a",
       "type": "mcr.commit.observed"
     },
     {
-      "event_digest": "80b92903c89e4a97e6bf15cddc42804da7d19f816ab5750c7a6332c31e2d4d55",
+      "event_digest": "387041a0c4b200cf6d6a6e3ff1a0665d32a25eaa1c9d73808468d7ca5ce05916",
       "type": "mcr.compensation.attempted"
     },
     {
-      "event_digest": "ece8185aa5885d66b681187d6213e1941205c33a93139700cec7a142c922df95",
+      "event_digest": "91ad943b47dd5a2271061d8e2ed83d3e54249c3d138ea71d986c1db766532d6c",
       "type": "mcr.evidence.verified"
     },
     {
-      "event_digest": "1cbe33a611686225a9018e15914c0df8aecf7541bad5945929361c8283f733b2",
+      "event_digest": "c451df7b1810b43375549ca087a7ac27893d92a69005f1ef92026f27f32ae779",
       "type": "mcr.execution.receipt"
     },
     {
-      "event_digest": "bdabda107f6b8b5cc330811cf6465840a88c871e143b599b77d24420dfc82ecb",
+      "event_digest": "7676e62b80226ab6d720472468a8f7e5cf00eaa553b2623325d16cbf5850d725",
       "type": "mcr.mission.disposition"
     },
     {
-      "event_digest": "0287232e806a3c60563e7ca593bc60f10ba8f3f2ad05ad04c9e4f2a60f05e5b6",
+      "event_digest": "5d398096f555479bf717bde3ba90fafd6d560911d8ce8091ad5b5342f2ad2b75",
       "type": "mcr.mission.started"
     },
     {
-      "event_digest": "699e31c02cfe582c3d4b62f6e8e5d3316965d33742dc2381b63347d144d8fb72",
+      "event_digest": "8661a2317518e397654301dfd4a8e2ecb126fa62e2dc1db848d9dc3445d2539c",
       "type": "mcr.mutation.attempted"
     },
     {
-      "event_digest": "d2523f1763e2e0d667f78d00ef51de923f9669651b65d6bcdefa74a85d770316",
+      "event_digest": "852054dbcdbbcf49ecbc7fdf21f36ec5b58a5332d8289f8907f39609a88417d2",
       "type": "mcr.outcome.evaluated"
     },
     {
-      "event_digest": "710b010358ef4ea7d512c587cb1eaa45867663b16b1e2f62103ac09aba91758b",
+      "event_digest": "458e7a3594d6c9973d14f0ab60398be62efe63c77d3a117a613408a8d246209f",
       "type": "mcr.readback.claimed"
     }
   ],
-  "schema_digest": "54e14e326a509b5f19194b9bc27fedb3eb355474697319545da95fc0af75ad58"
+  "schema_digest": "45e48d7db6a6e41d060e81fd624b7ba6eb08ce069afaf176625f7629b99cd8b3"
 }

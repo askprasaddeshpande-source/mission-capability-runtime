@@ -11,7 +11,24 @@ import re
 KNOWN = {"$schema", "$id", "$defs", "$ref", "$comment", "title", "description", "type", "enum", "const", "required", "properties",
          "additionalProperties", "patternProperties", "items", "minItems", "maxItems", "uniqueItems", "minLength", "maxLength",
          "pattern", "minimum", "maximum", "allOf", "anyOf", "oneOf", "not", "if", "then", "else", "format", "default", "examples"}
-_DT = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,9})?Z$")
+_DT = re.compile(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,9})?Z")
+
+
+def _valid_date_time(v):
+    """RFC 3339 UTC with a REAL calendar date and clock time (2026-02-30 and 99:99:99 are refused)."""
+    import datetime
+    if not _DT.fullmatch(v):
+        return False
+    try:
+        datetime.datetime.strptime(v[:19], "%Y-%m-%dT%H:%M:%S")
+    except ValueError:
+        return False
+    return True
+
+
+def _ecma_pattern(p):
+    """JSON Schema patterns are ECMA 262: `$` matches only at the very end, not before a trailing newline."""
+    return re.sub(r"(?<!\\)\$", r"\\Z", p)
 
 
 class SchemaProblem(ValueError):
@@ -78,9 +95,9 @@ def _walk(schema, root, v, path, out):
             out.append("%s: shorter than %d" % (path, schema["minLength"]))
         if "maxLength" in schema and len(v) > schema["maxLength"]:
             out.append("%s: longer than %d" % (path, schema["maxLength"]))
-        if "pattern" in schema and not re.search(schema["pattern"], v):
+        if "pattern" in schema and not re.search(_ecma_pattern(schema["pattern"]), v):
             out.append("%s: does not match pattern" % path)
-        if schema.get("format") == "date-time" and not _DT.match(v):
+        if schema.get("format") == "date-time" and not _valid_date_time(v):
             out.append("%s: not an RFC 3339 UTC date-time" % path)
     if isinstance(v, (int, float)) and not isinstance(v, bool):
         if "minimum" in schema and v < schema["minimum"]:

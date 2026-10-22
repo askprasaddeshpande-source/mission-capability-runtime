@@ -47,7 +47,7 @@ SHAPES = [
 COMPILED = [(n, re.compile(rx)) for n, rx in SHAPES]
 
 # secret-named assignment: strong names flag a 8+ character value, weak names (token/authorization) need 16+
-_STRONG = re.compile(r"(?P<n>[A-Za-z0-9_.-]*(?i:password|passwd|secret|api[_-]?key|private[_-]?key)[A-Za-z0-9_.-]*)[\"']?\s*[:=]\s*[\"']?(?P<v>[^\s\"']{8,})")
+_STRONG = re.compile(r"(?P<n>[A-Za-z0-9_.-]*(?i:password|passwd|passphrase|pwd|credentials?|secret|api[_-]?key|access[_-]?key|private[_-]?key)[A-Za-z0-9_.-]*)[\"']?\s*(?::=|=>|[:=])\s*[\"']?(?P<v>[^\s\"']{8,})")
 _WEAK = re.compile(r"(?P<n>[A-Za-z0-9_.-]*(?i:token|authorization)[A-Za-z0-9_.-]*)[\"']?\s*[:=]\s*[\"']?(?P<v>[A-Za-z0-9+/=_.-]{16,}+)(?!\()")
 _HASHY = {"hash", "sha", "sha1", "sha224", "sha256", "sha384", "sha512", "digest", "checksum", "fingerprint"}
 _COUNTY = {"count", "len", "length", "id", "ids", "size", "name", "type", "source", "kind", "path", "file"}

@@ -34,7 +34,7 @@
     "a new enum value or event type is a major change (rejected here)",
     "migration within a major relabels, records lineage and the source digest, and refuses to drop unrecognized fields"
   ],
-  "schema_digest": "54e14e326a509b5f19194b9bc27fedb3eb355474697319545da95fc0af75ad58",
+  "schema_digest": "45e48d7db6a6e41d060e81fd624b7ba6eb08ce069afaf176625f7629b99cd8b3",
   "spec_pins": {
     "cloudevents": "1.0.2",
     "in-toto-attestation": "v1",

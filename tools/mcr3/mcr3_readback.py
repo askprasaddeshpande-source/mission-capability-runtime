@@ -15,6 +15,7 @@ Rules that close R2.0 readback weaknesses on paper (and are unit-tested offline,
   * the "authoritative" level is the provider's claim; `independent_source` is False until a second, independent reader agrees.
 """
 import hashlib
+import re
 
 import mcr3_model as M
 
@@ -40,7 +41,7 @@ def _classify(r, name, otype):
         if not isinstance(src, str) or not src:
             return "UNKNOWN", False, False
         integrity = r.get("source_sha256_reported") == hashlib.sha256(src.encode("utf-8")).hexdigest()
-        identity = name.lower() in src.lower()
+        identity = re.search(r"(?<![A-Za-z0-9_])" + re.escape(name) + r"(?![A-Za-z0-9_])", src, re.IGNORECASE) is not None      # ZCL_FOO is not found inside ZCL_FOOBAR
         return ("EXISTS" if integrity and identity else "UNKNOWN"), integrity, identity
     if st == 404:
         return ("ABSENT" if r.get("error_names_object") == name else "UNKNOWN"), False, False

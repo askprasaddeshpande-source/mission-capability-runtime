@@ -19,6 +19,8 @@ import evc1  # noqa: E402
 import mini_jsonschema as MJ  # noqa: E402
 import mcr3_adapters as AD  # noqa: E402
 import mcr3_authority as AU  # noqa: E402
+import mcr3_chain as CH  # noqa: E402
+import validate_mcr3_chain as VC  # noqa: E402
 import mcr3_interop as IO  # noqa: E402
 import mcr3_lineage as LN  # noqa: E402
 import mcr3_model as M  # noqa: E402
@@ -358,7 +360,7 @@ def run():
     clock = {"now": NOW}
     reg2 = AU.CapabilityRegistry(approval_verifier=AU.RecordedApprovalVerifier({"APPR-1"}), clock=lambda: clock["now"])
     c2 = reg2.discover("create_object", "2.0.0", HX); reg2.verify(c2, HX, True); reg2.qualify(c2, HX, "GO", "r"); reg2.record_approval(c2, rec)
-    t(g, "view_without_a_scope_reports_the_approval_reference_for_an_approved_capability", lambda: reg2.view(c2)["approval_reference_present"] is True and reg2.view(c2)["may_request_execution_review"] is True)
+    t(g, "view_without_a_scope_never_reports_an_approval_reference", lambda: reg2.view(c2)["approval_reference_present"] is False and reg2.view(c2)["may_request_execution_review"] is False and reg2.view(c2)["authority_source"] is None)
     t(g, "view_with_the_exact_scope_reports_it_and_with_none_of_it_does_not", lambda: reg2.view(c2, scope)["approval_reference_present"] is True and reg2.view(c2, {})["approval_reference_present"] is False)
     exp = AU._expiry(rec["expires_at"])
     clock["now"] = exp - 1
@@ -498,6 +500,127 @@ def run():
     t(g, "a_pending_validation_that_is_not_unknown_cannot_exist_so_incomplete_is_the_default", lambda: nb2._disposition(Mission_stub("OUTCOME_VALIDATION_PENDING", {"outcome": {"result": "PASS"}})) == "INCOMPLETE" and nb2._disposition(Mission_stub("OUTCOME_VALIDATION_PENDING", {"outcome": {"result": "UNKNOWN"}})) == "OUTCOME_UNKNOWN" and nb2._disposition(Mission_stub("PLANNED", {"outcome": {"result": "UNKNOWN"}})) == "INCOMPLETE")
 
 
+def run_review8():
+    g = "REVIEW8_FIXES"
+    ok_ev = VE.event_of
+    # 1 layer separation for the top-level summary fields
+    for etype in ("mcr.evidence.verified", "mcr.execution.receipt", "mcr.mutation.attempted", "mcr.readback.claimed"):
+        t(g, "top_level_outcome_class_is_refused_on_" + etype.replace(".", "_"), lambda etype=etype: VE.rejects(VE.reseal(ok_ev(etype), lambda x: x.update(outcome_class="COMPLETE")), "only on mcr.mission.disposition"))
+        t(g, "top_level_disposition_is_refused_on_" + etype.replace(".", "_"), lambda etype=etype: VE.rejects(VE.reseal(ok_ev(etype), lambda x: x.update(disposition="COMPLETE")), "only on mcr.mission.disposition"))
+    t(g, "null_top_level_summary_fields_are_allowed_on_other_types", lambda: VE.accepts(VE.reseal(ok_ev("mcr.execution.receipt"), lambda x: x.update(outcome_class=None, disposition=None))))
+    disp = ok_ev("mcr.mission.disposition")
+    pe = IO.to_pe_event(disp, producer_id="p", seq=1)
+    t(g, "the_mapping_takes_summary_fields_from_the_claim", lambda: pe["data"]["disposition"] == "COMPLETE" and pe["data"]["outcome_class"] == "COMPLETE")
+    t(g, "the_mapping_carries_no_summary_fields_for_other_types", lambda: "outcome_class" not in IO.to_pe_event(ok_ev("mcr.execution.receipt"), producer_id="p", seq=1)["data"] and "disposition" not in IO.to_pe_event(ok_ev("mcr.evidence.verified"), producer_id="p", seq=1)["data"])
+    # 2 trailing newline and calendar validity
+    base_e = ok_ev("mcr.execution.receipt")
+    for label, edit in (("event_id", lambda x: x.update(id=x["id"] + "\n")), ("evidence_digest", lambda x: x["evidence"].update(digest=x["evidence"]["digest"] + "\n")),
+                        ("source", lambda x: x.update(source=x["source"] + "\n")), ("mission_id", lambda x: x["correlation"].update(mission_id="M-SYN-1\n")),
+                        ("runtime_version", lambda x: x["producer"].update(runtime_version="3.0.0\n")), ("contract_version", lambda x: x.update(contract_version="1.0.0\n")),
+                        ("time", lambda x: x.update(time="2026-10-21T12:00:00Z\n"))):
+        t(g, "a_trailing_newline_in_%s_is_refused" % label, lambda edit=edit: VE.rejects(VE.reseal(base_e, edit)))
+    t(g, "the_dollar_anchor_means_end_of_string_only", lambda: MJ.validate("a\n", {"pattern": "^a$"}) != [] and MJ.validate("a", {"pattern": "^a$"}) == [] and MJ.validate("a\n", {"pattern": "a"}) == [])
+    for label, v in (("feb_30", "2026-02-30T00:00:00Z"), ("hour_99", "2026-10-21T99:99:99Z"), ("zero_date", "0000-00-00T00:00:00Z"), ("month_13", "2026-13-01T00:00:00Z")):
+        t(g, "an_impossible_date_time_%s_is_refused" % label, lambda v=v: MJ.validate(v, {"format": "date-time"}) != [] and VE.rejects(VE.reseal(base_e, lambda x, v=v: x.update(time=v))))
+    t(g, "a_real_leap_day_is_accepted", lambda: MJ.validate("2028-02-29T00:00:00Z", {"format": "date-time"}) == [] and MJ.validate("2027-02-29T00:00:00Z", {"format": "date-time"}) != [])
+    # 3 expiry offsets
+    t(g, "an_offset_before_a_z_is_not_read_as_utc", lambda: M.parse_expiry("2099-01-01T00:00:00+05:00Z") is None and M.parse_expiry("2099-01-01T00:00:00-12:00+00:00") is None and M.parse_expiry("2099-01-01T00:00:00+00:00Z") is None)
+    t(g, "plain_utc_expiries_still_parse", lambda: M.parse_expiry("2099-01-01T00:00:00Z") is not None and M.parse_expiry("2099-01-01T00:00:00+00:00") is not None)
+    # 4 the replay cache must not be polluted by an event whose integrity block is wrong
+    hm = P.HmacTestVerifier({"alice": b"k"})
+    ev = VE.base("mcr.execution.receipt", VE.CLAIMS["mcr.execution.receipt"], classification="OBSERVED")
+    pol = P.TrustPolicy(issuers={"alice": {"status": "TRUSTED"}}, clock=lambda: NOW)
+    att = P.make_attestation(ev, "alice", hm, signed_at=iso(NOW - 60))
+    broken = dict(ev, integrity={"event_digest": "0" * 64})
+    rc = P.ReplayCache()
+    t(g, "a_broken_integrity_block_does_not_enter_the_replay_cache", lambda: (P.assess(broken, att, hm, pol, rc), len(rc._seen))[1] == 0)
+    t(g, "the_genuine_event_is_still_signed_trusted_afterwards", lambda: evc1.derive_trust(P.assess(ev, att, hm, pol, rc)) == "SIGNED_TRUSTED")
+    # 5 and 6 lineage
+    st = LN.EventStore()
+    trusted = VE.reseal(ok_ev("mcr.execution.receipt"), lambda x: x["evidence"].update(provenance=VE.trusted_prov(), trust="SIGNED_TRUSTED", classification="OBSERVED"))
+    st.add(trusted)
+    weak = VE.reseal(trusted, lambda x: (x.update(id="EVT-WEAKER-0001"), x["evidence"].update(provenance=evc1.unsigned_provenance(), trust="UNTRUSTED_RESEARCH"), x["lineage"].update(supersedes=trusted["id"])))
+    t(g, "an_unsigned_event_cannot_supersede_a_trusted_one", lambda: raises(lambda: st.add(weak), "more trusted", (LN.LineageError,)) and not st.superseded(trusted["id"]))
+    same = VE.reseal(trusted, lambda x: (x.update(id="EVT-SAMETRUST-1"), x["lineage"].update(supersedes=trusted["id"])))
+    t(g, "an_equally_trusted_event_may_supersede", lambda: st.add(same) and st.superseded(trusted["id"]))
+    st2 = LN.EventStore()
+    plain = ok_ev("mcr.execution.receipt")
+    st2.add(plain)
+    better = VE.reseal(plain, lambda x: (x.update(id="EVT-BETTER-0001"), x["evidence"].update(provenance=VE.trusted_prov(), trust="SIGNED_TRUSTED", classification="OBSERVED"), x["lineage"].update(supersedes=plain["id"])))
+    t(g, "a_more_trusted_event_may_supersede_a_weaker_one", lambda: st2.add(better) and st2.superseded(plain["id"]))
+    st3 = LN.EventStore()
+    mine = copy.deepcopy(ok_ev("mcr.execution.receipt"))
+    st3.add(mine)
+    mine["claim"]["call_class"] = "PROVIDER_ERROR"
+    t(g, "changing_the_callers_dict_after_add_does_not_change_the_store", lambda: st3.get(mine["id"])["claim"]["call_class"] == "PROVIDER_RESPONSE_SUCCESS")
+    got = st3.get(mine["id"])
+    got["claim"]["call_class"] = "PROVIDER_ERROR"
+    t(g, "changing_a_returned_event_does_not_change_the_store", lambda: st3.get(mine["id"])["claim"]["call_class"] == "PROVIDER_RESPONSE_SUCCESS" and st3.history("M-SYN-1")[0]["claim"]["call_class"] == "PROVIDER_RESPONSE_SUCCESS")
+    t(g, "the_trust_rank_table_covers_every_trust_level", lambda: set(LN.TRUST_RANK) == set(evc1.TRUST_LEVELS))
+    # 7 and 8 authority
+    ar = AU.AdapterRegistry()
+    ref = {"approval_id": "A1", "source": "EXTERNAL_GOVERNOR"}
+    ar.register(AU.Adapter("z", "2.0.0", "1.0.0", ["x"], "HISTORICAL", "unsigned"), "1.0.0")
+    ar.promote("z", "1.0.0", "ACTIVE", HX, ref)
+    ar.register(AU.Adapter("z", "2.0.0", "1.0.0", ["x"], "HISTORICAL", "unsigned"), "2.0.0")
+    ar.revoke("z", "2.0.0")
+    t(g, "a_recorded_restriction_caps_the_mode_of_other_versions_too", lambda: ar.mode("z", "1.0.0") == "OBSERVATION_ONLY" and ar.rollback("z", "2.0.0", "1.0.0") == "OBSERVATION_ONLY")
+    ar2 = AU.AdapterRegistry()
+    ar2.register(AU.Adapter("y", "2.0.0", "1.0.0", ["x"], "HISTORICAL", "unsigned"), "1.0.0")
+    ar2.promote("y", "1.0.0", "SHADOW", HX, ref)
+    t(g, "an_unrestricted_adapter_keeps_its_declared_mode", lambda: ar2.mode("y", "1.0.0") == "SHADOW")
+    # 10 times are compared as times
+    nb = AD.Mcr3NativeAdapter()
+    mc, _ = VA.complete_mission()
+    full = nb.convert(mc, now="2027-01-15T00:00:00Z")
+    frac = VE.reseal(full[0], lambda x: x.update(time="2027-01-15T12:00:00Z"))
+    def stamp(es):
+        es[0]["time"] = "2027-01-15T12:00:01Z"
+        es[1]["time"] = "2027-01-15T12:00:00.500000Z"
+    t(g, "a_fractional_second_that_goes_backwards_is_reported", lambda: any("times decrease" in p for p in CH.check_mission_events(VC.reseal_all(full, stamp))))
+    def stamp_ok(es):
+        es[0]["time"] = "2027-01-15T12:00:00Z"
+        es[1]["time"] = "2027-01-15T12:00:00.500000Z"
+        for e in es[2:]:
+            e["time"] = "2027-01-15T12:00:01Z"
+    t(g, "a_fractional_second_that_goes_forwards_is_accepted", lambda: not any("times decrease" in p for p in CH.check_mission_events(VC.reseal_all(full, stamp_ok))))
+    # 11 readback identity is a whole-name match
+    VR = __import__("validate_mcr3_readback")
+    other = VR.der(VR.ok_read("active", text="define view entity ZC_SYN_OBJ_OTHER as select from x"), VR.nf("inactive"))
+    t(g, "a_longer_object_name_does_not_satisfy_the_identity_check", lambda: other["existence"] == "UNKNOWN")
+    t(g, "a_name_followed_by_a_digit_or_underscore_does_not_match", lambda: VR.der(VR.ok_read("active", text="ZC_SYN_OBJ2 here"), VR.nf("inactive"))["existence"] == "UNKNOWN" and VR.der(VR.ok_read("active", text="ZC_SYN_OBJ_ here"), VR.nf("inactive"))["existence"] == "UNKNOWN")
+    t(g, "a_name_inside_punctuation_still_matches", lambda: VR.der(VR.ok_read("active", text="view (zc_syn_obj), more"), VR.nf("inactive"))["existence"] == "EXISTS" and VR.der(VR.ok_read("active", text="@x ZC_SYN_OBJ."), VR.nf("inactive"))["existence"] == "EXISTS")
+    t(g, "a_name_preceded_by_an_identifier_character_does_not_match", lambda: VR.der(VR.ok_read("active", text="XZC_SYN_OBJ"), VR.nf("inactive"))["existence"] == "UNKNOWN")
+    # 12 envelope limits and the mock collector
+    def ids(es):
+        for e in es:
+            e["correlation"]["mission_id"] = "M" + "x" * 95
+    t(g, "a_96_character_mission_id_is_accepted", lambda: VE.accepts(VE.reseal(base_e, lambda x: x["correlation"].update(mission_id="M" + "x" * 95))))
+    t(g, "a_97_character_mission_id_is_refused", lambda: VE.rejects(VE.reseal(base_e, lambda x: x["correlation"].update(mission_id="M" + "x" * 96))))
+    t(g, "a_96_character_event_id_is_accepted", lambda: VE.accepts(VE.reseal(base_e, lambda x: x.update(id="E" + "x" * 95))))
+    t(g, "a_97_character_event_id_is_refused", lambda: VE.rejects(VE.reseal(base_e, lambda x: x.update(id="E" + "x" * 96))))
+    col = IO.MockCollector(extended=True)
+    p0 = IO.to_pe_event(base_e, producer_id="p", seq=1)
+    col.ingest(dict(p0, data={"trust": "_leading", "layer": "A" * 97, "event_type": "ok.value"}))
+    t(g, "the_mock_collector_uses_the_alphanumeric_first_96_character_safe_string_rule", lambda: col.stored[p0["event_id"]]["data"] == {"event_type": "ok.value"} and col.stripped == 2)
+    # 13 depth
+    deep = {}
+    cur = deep
+    for _ in range(5000):
+        cur["a"] = {}
+        cur = cur["a"]
+    nested = dict(base_e, extensions=deep)
+    t(g, "an_absurdly_deep_event_is_a_contract_error_not_a_recursion_error", lambda: VE.rejects(nested))
+    # scanner names and operators the review found missing
+    names = lambda text: {n for n, _ in S.scan_text(text)}
+    for label, text in (("pwd", "pw" + "d = " + "Zq9" * 7), ("passphrase", "pass" + "phrase: " + "Zq9" * 7), ("credentials", "credent" + "ials = " + "Zq9" * 7), ("access_key", "access" + "_key = " + "Zq9" * 7),
+                        ("walrus", "pass" + "word := " + "Zq9" * 7), ("fat_arrow", "secret" + " => " + "Zq9" * 7)):
+        t(g, "the_scanner_flags_a_long_value_under_" + label, lambda text=text: "secret_named_assignment" in names(text))
+    t(g, "the_scanner_still_leaves_a_command_named_pwd_alone", lambda: not names("run pwd and cwd") and not names("cwd = os.getcwd()"))
+    t(g, "an_identifier_with_a_trailing_newline_gets_a_fallback_attempt_id", lambda: AD._safe_id("MUT-1\n", "ATT-").startswith("ATT-"))
+    t(g, "a_deeply_nested_but_valid_event_keeps_working_at_normal_depth", lambda: VE.accepts(VE.reseal(base_e, lambda x: x.update(extensions={"a": {"b": {"c": [1, 2, {"d": 3}]}}}))))
+
+
 class Mission_stub:
     def __init__(self, state, ev):
         self.state, self.ev = state, ev
@@ -505,6 +628,7 @@ class Mission_stub:
 
 def main(argv):
     run()
+    run_review8()
     failed = sorted(n for n, ok in T.items() if not ok)
     groups = {gk: "PASS" if all(T[n] for n in names) else "FAIL" for gk, names in G.items()}
     digest = hashlib.sha256(json.dumps(sorted(T), separators=(",", ":")).encode()).hexdigest().upper()

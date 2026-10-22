@@ -60,8 +60,8 @@ TYPE_TABLE = {
     "mcr.evidence.verified": ("EVIDENCE_VERIFICATION", "VERIFIED_FACT"),
 }
 KNOWN_CRITICAL = frozenset()          # extension names this consumer understands; v1.0 defines none
-ID_RE = r"^[A-Za-z0-9][A-Za-z0-9_.:-]{7,127}$"          # event ids (idempotency keys): 8 to 128 characters
-ENTITY_ID_RE = r"^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"  # mission, transaction, correlation, attempt ids
+ID_RE = r"^[A-Za-z0-9][A-Za-z0-9_.:-]{7,95}$"           # event ids (idempotency keys): 8 to 96 characters (the pe-event/1 limit)
+ENTITY_ID_RE = r"^[A-Za-z0-9][A-Za-z0-9_.:-]{0,95}$"   # mission, transaction, correlation, attempt ids: 1 to 96 characters (the pe-event/1 limit)
 HASH_RE = r"^[0-9a-f]{64}$"
 VERSION_RE = r"^[0-9]+\.[0-9]+\.[0-9]+$"
 _HASH = {"type": "string", "pattern": HASH_RE}
@@ -272,6 +272,10 @@ def semantic_problems(e, full=None):
     kind, layer = TYPE_TABLE[e["type"]]
     if e["claim"]["kind"] != kind or e["claim"]["layer"] != layer:
         p.append("claim kind/layer does not belong to type %s" % e["type"])
+    if e["type"] != "mcr.mission.disposition":                      # review 8: layer separation also covers the top-level summary fields
+        for k_ in ("disposition", "outcome_class"):
+            if e.get(k_) is not None:
+                p.append("top-level %s is allowed only on mcr.mission.disposition events" % k_)
     if e["digests"]["payload"] != digest_of(e["claim"]):
         p.append("digests.payload does not match the claim")
     if e["digests"]["schema"] != SCHEMA_DIGEST:
@@ -332,7 +336,7 @@ def parse(event, *, supported_major=SUPPORTED_MAJOR, supported_minor=CURRENT_MIN
     if event.get("contract") != CONTRACT:
         raise ContractError("not an %s event" % CONTRACT)
     ver = event.get("contract_version")
-    if not isinstance(ver, str) or not re.match(VERSION_RE, ver):
+    if not isinstance(ver, str) or not re.fullmatch(VERSION_RE, ver):
         raise ContractError("contract_version missing or malformed")
     major, minor, _ = _split_version(ver)
     if major != supported_major:
@@ -349,11 +353,16 @@ def parse(event, *, supported_major=SUPPORTED_MAJOR, supported_minor=CURRENT_MIN
             raise ContractError("unknown critical semantics %r (fail closed)" % (name,))
     known = {k: v for k, v in event.items() if k in top_known}
     # the version pattern allows any 1.x; a newer minor is accepted only through the unknown-field rule above
-    probs = validate(known, SCHEMA)
+    try:
+        probs = validate(known, SCHEMA)
+    except RecursionError as exc:
+        raise ContractError("schema violation: event is nested too deeply") from exc
     if probs:
         raise ContractError("schema violation: " + "; ".join(probs[:6]))
     try:
         sem = semantic_problems(known, event)
+    except RecursionError as exc:
+        raise ContractError("semantic violation: event is nested too deeply") from exc
     except (ValueError, TypeError, KeyError, AttributeError) as exc:       # hostile content that the schema cannot describe (for example non-string keys)
         raise ContractError("semantic violation: unusable content (%s)" % type(exc).__name__) from exc
     if sem:

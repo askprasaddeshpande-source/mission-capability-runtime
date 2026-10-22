@@ -26,8 +26,8 @@ CLASS_MAP = {"OBSERVED": "OBSERVED", "READBACK": "READBACK", "CORROBORATED": "RE
 DATA_ALLOWED = ("contract_version", "event_type", "layer", "claim_kind", "adapter_id", "adapter_version", "source_runtime_version", "trust", "mcr_class",
                 "authority_effect", "evidence_digest", "content_digest", "outcome_class", "disposition", "result", "call_class", "commit_state", "source_level",
                 "existence", "activation", "claimed_authoritative", "provenance_verified", "attempt_number", "capability_state", "capability_id")
-_SAFE = re.compile(r"^[A-Za-z0-9_.:+=-]{1,128}$")
-_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.:-]{0,95}$")
+_SAFE = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.:+=-]{0,95}")          # as the Claude Mods safe string: alphanumeric first, at most 96 characters
+_ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.:-]{0,95}")
 _SECRETISH = re.compile(r"(?i)(bearer\s|password|secret|apikey|api_key|token=)")
 
 
@@ -52,13 +52,16 @@ def to_pe_event(event, *, producer_id, seq):
         "evidence_digest": known["evidence"]["digest"], "content_digest": evc1.content_digest(known),
         "capability_state": cap.get("qualification_status"), "capability_id": cap.get("capability_id"),
     }
-    for k in ("outcome_class", "disposition"):
-        if known.get(k) is not None:
-            data[k] = known[k]
+    for k in ("outcome_class", "disposition"):          # read from the claim, never from the top-level summary fields
+        if claim.get(k) is not None:
+            data[k] = claim[k]
     for k in ("result", "call_class", "commit_state", "source_level", "existence", "activation", "claimed_authoritative", "provenance_verified", "attempt_number"):
         if k in claim:
             data[k] = _scalar(claim[k])
     c = known["correlation"]
+    for label, val in (("event_id", known["id"]), ("mission_id", c["mission_id"]), ("transaction_id", c["transaction_id"]), ("correlation_id", c["correlation_id"])):
+        if val is not None and len(val) > 96:
+            raise ValueError("%s is longer than the 96 characters the pe-event/1 envelope accepts" % label)
     pe = {
         "schema": PE_SCHEMA, "event_id": known["id"], "source": PROPOSED_SOURCE, "kind": PROPOSED_KIND, "ts": known["time"],
         "producer_id": producer_id, "seq": seq, "evidence_class": CLASS_MAP[known["evidence"]["classification"]],
@@ -88,7 +91,7 @@ class MockCollector:
             why = "source not in the closed list"
         elif pe.get("kind") not in kinds:
             why = "kind not in the closed list"
-        elif not isinstance(pe.get("event_id"), str) or not re.match(r"^[A-Za-z0-9][A-Za-z0-9_.:-]{7,95}$", pe["event_id"]):
+        elif not isinstance(pe.get("event_id"), str) or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.:-]{7,95}", pe["event_id"]):
             why = "event_id"
         elif pe.get("evidence_class") not in PE_EVIDENCE_CLASSES:
             why = "evidence_class"
@@ -99,7 +102,7 @@ class MockCollector:
             return False
         data = {}
         for k, v in (pe.get("data") or {}).items():
-            if k in DATA_ALLOWED and (v is None or (isinstance(v, str) and _SAFE.match(v) and not _SECRETISH.search(v))):
+            if k in DATA_ALLOWED and (v is None or (isinstance(v, str) and _SAFE.fullmatch(v) and not _SECRETISH.search(v))):
                 data[k] = v
             else:
                 self.stripped += 1

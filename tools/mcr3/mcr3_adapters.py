@@ -36,7 +36,7 @@ def _id(*parts):
 
 def _safe_id(value, fallback_prefix):
     v = str(value)
-    return v if _ENTITY.match(v) else fallback_prefix + hashlib.sha256(v.encode("utf-8")).hexdigest()[:16]
+    return v if _ENTITY.fullmatch(v) else fallback_prefix + hashlib.sha256(v.encode("utf-8")).hexdigest()[:16]
 
 
 def corr_id(mission_id, transaction_id):

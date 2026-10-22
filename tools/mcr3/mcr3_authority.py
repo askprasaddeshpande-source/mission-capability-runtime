@@ -182,7 +182,7 @@ class CapabilityRegistry:
 
     def view(self, c, scope=None):
         st = self.effective_state(c)
-        scoped = st == "APPROVED" and (scope is None or self._approval_scope_matches(c, scope))
+        scoped = st == "APPROVED" and scope is not None and self._approval_scope_matches(c, scope)      # review 8: no scope given, no reference
         return {"capability_id": c.capability_id, "state": st, "approval_reference_present": bool(scoped),
                 "authority_source": "EXTERNAL_GOVERNOR" if scoped else None, "mcr_grants_authority": False,
                 "may_request_execution_review": bool(scoped)}
@@ -230,7 +230,9 @@ class AdapterRegistry:
             return "OBSERVATION_ONLY"                    # unknown adapters get the lowest mode
         if a.declaration["REVOCATION_STATUS"] != "NOT_REVOKED":
             return "OBSERVATION_ONLY"
-        return a.declaration["MODE"]
+        order = {m: i for i, m in enumerate(ADAPTER_MODES)}
+        cap = self.floor.get(adapter_id)                 # review 8: a recorded restriction caps every version of the adapter
+        return a.declaration["MODE"] if cap is None or order[a.declaration["MODE"]] <= order[cap] else cap
 
     def promote(self, adapter_id, version, to_mode, qualification_digest, approval_reference):
         a = self._a.get((adapter_id, version))

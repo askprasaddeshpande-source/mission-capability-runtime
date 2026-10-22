@@ -234,7 +234,7 @@
           "additionalProperties": false,
           "properties": {
             "attempt_id": {
-              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,95}$",
               "type": "string"
             },
             "attempt_number": {
@@ -599,35 +599,35 @@
       "additionalProperties": false,
       "properties": {
         "causation_id": {
-          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,95}$",
           "type": [
             "string",
             "null"
           ]
         },
         "correlation_id": {
-          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,95}$",
           "type": [
             "string",
             "null"
           ]
         },
         "mission_id": {
-          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,95}$",
           "type": [
             "string",
             "null"
           ]
         },
         "mutation_attempt_id": {
-          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,95}$",
           "type": [
             "string",
             "null"
           ]
         },
         "transaction_id": {
-          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,95}$",
           "type": [
             "string",
             "null"
@@ -806,7 +806,7 @@
       "type": "object"
     },
     "id": {
-      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{7,127}$",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{7,95}$",
       "type": "string"
     },
     "integrity": {

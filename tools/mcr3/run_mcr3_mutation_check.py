@@ -91,7 +91,6 @@ EXPLAINED = {
     'mcr3_model.py::ast: drop clause 4 of not isinstance(ref, str)': "equivalent: partition() splits at the first '::', so the part before it can never contain '::' and cannot equal a provider id that does",
     'mcr3_model.py::ast: drop clause 1 of sep == "::"': "equivalent: with no separator the tail is empty and tail != '' refuses the reference",
     'mcr3_readback.py::ast: drop clause 2 of not isinstance(src, str) or not src': "equivalent: an empty body contains no object name, so the read is UNKNOWN either way",
-    'mcr3_provenance.py::ast: drop clause 1 of prov["hash_consistent"] and content is not None': "equivalent: a hash-inconsistent event is downgraded to SIGNATURE_INVALID by derive_trust anyway (defence in depth)",
     'mcr3_provenance.py::ast: drop clause 2 of prov["hash_consistent"] and content is not None': "equivalent: content is None only when digesting failed, and an attestation digest can never equal None",
     'evc1.py::ast: drop clause 2 of e["claim"]["kind"] != kind or e["claim"]["layer"] != layer': "equivalent: the schema pins the layer to a constant per claim kind, so a wrong layer fails the schema first",
     'evc1.py::ast: drop clause 1 of known.get("integrity", {}).get("event_digest") or digest_of': "equivalent: for any event that passed parse, integrity.event_digest equals digest_of(body)",

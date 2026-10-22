@@ -308,7 +308,7 @@ def run():
     t(g, "s10_an_upgrade_starts_in_observation_only_not_inheriting_shadow", lambda: (r10.mode("mcr3-native", "1.1.0") == "OBSERVATION_ONLY" and r10.mode("mcr3-native", "1.0.0") == "SHADOW"))
     r10.revoke("mcr3-native", "1.1.0")
     t(g, "s10_rollback_after_a_revocation_cannot_bypass_the_restriction", lambda: (r10.rollback("mcr3-native", "1.1.0", "1.0.0") == "OBSERVATION_ONLY"))
-    t(g, "s10_governance_decisions_survive_the_upgrade", lambda: (r10.mode("mcr3-native", "1.0.0") == "SHADOW" and r10._a[("mcr3-native", "1.0.0")].declaration["APPROVAL_STATUS"] == "APPROVAL_REFERENCED:APPR-10"))
+    t(g, "s10_the_approval_record_survives_the_upgrade_but_a_recorded_restriction_caps_every_version", lambda: (r10.mode("mcr3-native", "1.0.0") == "OBSERVATION_ONLY" and r10._a[("mcr3-native", "1.0.0")].declaration["APPROVAL_STATUS"] == "APPROVAL_REFERENCED:APPR-10"))
 
     # ---------------------------------------------------------------- mapping rules
     g = "PE_EVENT_MAPPING"

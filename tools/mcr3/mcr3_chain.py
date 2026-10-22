@@ -7,7 +7,13 @@ the evidence digest of the event it refers to) and logic (a commit needs an EXIS
 a committed observation, COMPLETE needs both and a full 14-digest chain). A consistent set is not an authentic set: signatures
 and trust are separate (mcr3_provenance).
 """
+import datetime
+
 import evc1
+
+
+def _when(ts):
+    return datetime.datetime.strptime(ts[:19], "%Y-%m-%dT%H:%M:%S") + datetime.timedelta(microseconds=int((ts[19:-1] + "000000")[1:7]) if ts[19:20] == "." else 0)
 
 ORDER = ["mcr.mission.started", "mcr.authorization.referenced", "mcr.mutation.attempted", "mcr.execution.receipt", "mcr.readback.claimed",
          "mcr.commit.observed", "mcr.outcome.evaluated"]
@@ -47,7 +53,7 @@ def check_mission_events(events):
             probs.append("event %d does not name its predecessor as its cause" % i)
     if parsed[0]["correlation"]["causation_id"] is not None:
         probs.append("the first event must have no cause")
-    times = [e["time"] for e in parsed]
+    times = [_when(e["time"]) for e in parsed]
     if times != sorted(times):
         probs.append("event times decrease")
     # counting
