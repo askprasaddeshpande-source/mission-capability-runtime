@@ -8,7 +8,7 @@
     "hardening": 140,
     "inherited_r2": 519,
     "mutation_gap_tests": 296,
-    "provenance_authority": 115,
+    "provenance_authority": 145,
     "readback": 34,
     "scanner": 109
   },
@@ -16,5 +16,5 @@
   "network_calls": 0,
   "not_verified": [],
   "suites": 9,
-  "tests": 1573
+  "tests": 1603
 }

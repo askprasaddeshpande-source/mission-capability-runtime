@@ -20,7 +20,7 @@ Entry point for MCR 3.0.0 (offline engineering release candidate). Baseline: `ma
 
 ## How to verify (offline, no SAP, no network)
 ```
-python tools/mcr3/run_mcr3_tests.py                                   # 1,573 checks in 9 suites, tens of seconds
+python tools/mcr3/run_mcr3_tests.py                                   # 1,603 checks in 9 suites, tens of seconds
 python tools/mcr3/verify_mcr3.py --fast --expect-sums-sha256 <anchor taken from outside the repository>
 python tools/mcr3/verify_mcr3.py --clone --expect-sums-sha256 <anchor>   # fresh clone, runs every validator and checks they reproduce the archived results
 python tools/mcr3/run_mcr3_mutation_check.py --jobs 3                  # about 25 minutes

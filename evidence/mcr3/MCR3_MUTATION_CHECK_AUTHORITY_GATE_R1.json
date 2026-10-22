@@ -1,0 +1,985 @@
+{
+  "MUTATION_CHECK": "PASS",
+  "by_kind": {
+    "ast": 143,
+    "guard": 0,
+    "relation": 0,
+    "special": 0
+  },
+  "by_module": {
+    "mcr3_authority.py": {
+      "assertion": 59,
+      "crash": 75,
+      "detected": 134,
+      "hang": 0,
+      "mutants": 143,
+      "survivors": 9
+    }
+  },
+  "detected_by_assertion": 59,
+  "detected_by_hang": [],
+  "detected_by_validator_crash": {
+    "mcr3_authority.py::ast@L106: drop clause 1 of c.state != \"QUARANTINED\" and not (c.state == \"SUSPENDED\")": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L106: drop clause 2 of c.state != \"QUARANTINED\" and not (c.state == \"SUSPENDED\")": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L106: flip c.state != \"QUARANTINED\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L106: flip c.state == \"SUSPENDED\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L106: remove not in not (c.state == \"SUSPENDED\")": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L108: drop clause 1 of not passed or not _hex64(verification_digest)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L108: drop clause 2 of not passed or not _hex64(verification_digest)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L108: remove not in not _hex64(verification_digest)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L108: remove not in not passed": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L114: flip reviewer_verdict not in (\"GO\", \"GO_WITH_DOCUMENTED_GAPS\")": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L116: drop clause 1 of not _hex64(qualification_digest) or not isinstance(reviewer,": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L116: drop clause 2 of not _hex64(qualification_digest) or not isinstance(reviewer,": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L116: drop clause 3 of not _hex64(qualification_digest) or not isinstance(reviewer,": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L116: remove not in not _hex64(qualification_digest)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L116: remove not in not isinstance(reviewer, str)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L116: remove not in not reviewer": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L124: flip c.state != \"QUALIFIED\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L127: remove not in not self.approval_verifier.verify(record)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L133: remove not in not isinstance(record, dict)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L135: swap +/- in (\"approval_id\",) + SCOPE_FIELDS": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L135: swap +/- in (\"approval_id\",) + SCOPE_FIELDS + (\"expires_at\",)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L136: flip k not in record": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L139: drop clause 2 of isinstance(record[k], str) and record[k]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L139: remove not in not all(isinstance(record[k], str) and record[k] for k in (\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L139: swap +/- in (\"approval_id\",) + SCOPE_FIELDS": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L141: flip record[\"capability_id\"] != c.capability_id": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L144: flip exp is None": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L146: drop clause 2 of require_unexpired and self.clock() >= exp": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L155: flip c.state == \"REVOKED\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L157: flip c.state == \"SUSPENDED\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L173: flip c.state == \"APPROVED\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L199: flip mode not in ADAPTER_MODES": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L210: flip d[k] not in (None, \"\", [])": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L211: flip d[\"DEFAULT_AUTHORITY\"] == \"NONE\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L225: drop clause 1 of approval_verifier or DenyAllApprovalVerifier()": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L233: remove not in not adapter.complete()": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L235: flip adapter.declaration[\"MODE\"] != \"OBSERVATION_ONLY\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L267: drop clause 3 of not isinstance(record, dict) or not record.get(\"approval_id\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L267: flip record.get(\"source\") != \"EXTERNAL_GOVERNOR\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L267: remove not in not isinstance(record, dict)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L267: remove not in not record.get(\"approval_id\")": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L269: remove not in not all(isinstance(expected_scope.get(k), str) and expected_": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L269: remove not in not isinstance(expected_scope, dict)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L271: swap +/- in (\"approval_id\",) + SCOPE_FIELDS": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L271: swap +/- in (\"approval_id\",) + SCOPE_FIELDS + self.BOUND_FIELDS": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L271: swap +/- in (\"approval_id\",) + SCOPE_FIELDS + self.BOUND_FIELDS + (\"expi": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L272: flip k not in record": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L275: remove not in not all(isinstance(record[k], str) and record[k] for k in (\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L275: swap +/- in (\"approval_id\",) + SCOPE_FIELDS": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L275: swap +/- in (\"approval_id\",) + SCOPE_FIELDS + self.BOUND_FIELDS": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L277: flip record[k] != expected_scope[k]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L280: drop clause 2 of \"*\" not in supported and record[\"capability_id\"] not in supp": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L280: flip \"*\" not in supported": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L280: flip record[\"capability_id\"] not in supported": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L282: flip (record[\"adapter_id\"], record[\"adapter_version\"], record[\"to": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L285: flip exp is None": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L290: flip self.approval_verifier.verify(copy.deepcopy(record)) is True": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L293: remove not in not ok": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L298: flip a is None": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L300: flip a.declaration[\"REVOCATION_STATUS\"] != \"NOT_REVOKED\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L303: flip to_mode not in order": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L305: remove not in not _hex64(qualification_digest)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L308: flip order[to_mode] > order.get(self.floor.get(adapter_id, \"ACTIV": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L311: swap +/- in \"APPROVAL_REFERENCED:\" + approval_record[\"approval_id\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L317: flip a is None": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L341: flip c in \"0123456789abcdef\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L341: flip len(s) == 64": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L54: flip record.get(\"approval_id\") in self.issued": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L73: drop clause 1 of approval_verifier or DenyAllApprovalVerifier()": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L80: flip len(digest) == 64": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L80: remove not in not (isinstance(capability_id, str) and capability_id and is": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L83: flip key not in self._caps": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L86: flip c.state == \"DISCOVERED\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L97: flip c.state == \"REVOKED\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_authority.py::ast@L99: flip to not in FORWARD[c.state]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)"
+  },
+  "evidence_class": "SYNTHETIC/LOCAL",
+  "explained_survivors": {
+    "mcr3_authority.py::ast@L146: drop clause 1 of require_unexpired and self.clock() >= exp": "equivalent: require_unexpired is always True at the only call site",
+    "mcr3_authority.py::ast@L151: drop clause 1 of a is not None and all(a[k] == scope.get(k) for k in SCOPE_FI": "equivalent: an APPROVED capability always holds its approval record",
+    "mcr3_authority.py::ast@L180: drop clause 1 of c.state == \"APPROVED\" and c.approval is not None": "equivalent: the approval record is set exactly when the state is APPROVED and cleared on every other move",
+    "mcr3_authority.py::ast@L180: drop clause 2 of c.state == \"APPROVED\" and c.approval is not None": "equivalent: the approval record is set exactly when the state is APPROVED and cleared on every other move",
+    "mcr3_authority.py::ast@L182: drop clause 1 of exp is None or self.clock() >= exp": "equivalent: the expiry was validated when the approval was recorded, so it is never None here",
+    "mcr3_authority.py::ast@L225: drop clause 2 of approval_verifier or DenyAllApprovalVerifier()": "equivalent (fail closed either way): a None verifier raises when asked, and a raising verifier denies",
+    "mcr3_authority.py::ast@L244: drop clause 1 of exp is None or self.clock() >= exp": "equivalent: the expiry was validated when the approval was recorded, so it is never None here",
+    "mcr3_authority.py::ast@L264: drop clause 2 of cap is None or order[declared] <= order[cap]": "equivalent: the only restriction ever recorded is OBSERVATION_ONLY, so the comparison and the cap give the same mode",
+    "mcr3_authority.py::ast@L264: flip order[declared] <= order[cap]": "equivalent: when the declared mode equals the cap, returning either gives the same mode"
+  },
+  "inconclusive": [],
+  "mutants": 143,
+  "not_applied": [],
+  "results": [
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L341: drop clause 1 of isinstance(s, str) and len(s) == 64 and all(c in \"0123456789"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L341: drop clause 2 of isinstance(s, str) and len(s) == 64 and all(c in \"0123456789"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L341: drop clause 3 of isinstance(s, str) and len(s) == 64 and all(c in \"0123456789"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L54: flip record.get(\"approval_id\") in self.issued"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L73: drop clause 1 of approval_verifier or DenyAllApprovalVerifier()"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L73: drop clause 2 of approval_verifier or DenyAllApprovalVerifier()"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L74: drop clause 1 of clock or time.time"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L74: drop clause 2 of clock or time.time"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L80: remove not in not (isinstance(capability_id, str) and capability_id and is"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L83: flip key not in self._caps"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L86: flip c.state == \"DISCOVERED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L92: flip c is None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L97: flip c.state == \"REVOKED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L99: flip to not in FORWARD[c.state]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L106: drop clause 1 of c.state != \"QUARANTINED\" and not (c.state == \"SUSPENDED\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L106: drop clause 2 of c.state != \"QUARANTINED\" and not (c.state == \"SUSPENDED\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L108: drop clause 1 of not passed or not _hex64(verification_digest)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L108: drop clause 2 of not passed or not _hex64(verification_digest)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L114: flip reviewer_verdict not in (\"GO\", \"GO_WITH_DOCUMENTED_GAPS\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L116: drop clause 1 of not _hex64(qualification_digest) or not isinstance(reviewer,"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L116: drop clause 2 of not _hex64(qualification_digest) or not isinstance(reviewer,"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L116: drop clause 3 of not _hex64(qualification_digest) or not isinstance(reviewer,"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L124: flip c.state != \"QUALIFIED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L127: remove not in not self.approval_verifier.verify(record)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L133: remove not in not isinstance(record, dict)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L135: swap +/- in (\"approval_id\",) + SCOPE_FIELDS + (\"expires_at\",)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L139: remove not in not all(isinstance(record[k], str) and record[k] for k in (\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L141: flip record[\"capability_id\"] != c.capability_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L144: flip exp is None"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "mcr3_authority.py::ast@L146: drop clause 1 of require_unexpired and self.clock() >= exp"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L146: drop clause 2 of require_unexpired and self.clock() >= exp"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "mcr3_authority.py::ast@L151: drop clause 1 of a is not None and all(a[k] == scope.get(k) for k in SCOPE_FI"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L151: drop clause 2 of a is not None and all(a[k] == scope.get(k) for k in SCOPE_FI"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L155: flip c.state == \"REVOKED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L157: flip c.state == \"SUSPENDED\""
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "mcr3_authority.py::ast@L180: drop clause 1 of c.state == \"APPROVED\" and c.approval is not None"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "mcr3_authority.py::ast@L180: drop clause 2 of c.state == \"APPROVED\" and c.approval is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L188: drop clause 1 of st == \"APPROVED\" and scope is not None and self._approval_sc"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L188: drop clause 2 of st == \"APPROVED\" and scope is not None and self._approval_sc"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L188: drop clause 3 of st == \"APPROVED\" and scope is not None and self._approval_sc"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L199: flip mode not in ADAPTER_MODES"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L210: drop clause 1 of all(d[k] not in (None, \"\", []) for k in (\"ADAPTER_ID\", \"SOUR"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L210: drop clause 2 of all(d[k] not in (None, \"\", []) for k in (\"ADAPTER_ID\", \"SOUR"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L225: drop clause 1 of approval_verifier or DenyAllApprovalVerifier()"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "mcr3_authority.py::ast@L225: drop clause 2 of approval_verifier or DenyAllApprovalVerifier()"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L226: drop clause 1 of clock or time.time"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L226: drop clause 2 of clock or time.time"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L233: remove not in not adapter.complete()"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L235: flip adapter.declaration[\"MODE\"] != \"OBSERVATION_ONLY\""
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "mcr3_authority.py::ast@L244: drop clause 1 of exp is None or self.clock() >= exp"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L244: drop clause 2 of exp is None or self.clock() >= exp"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L253: flip a is None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L255: flip a.declaration[\"REVOCATION_STATUS\"] != \"NOT_REVOKED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L258: flip declared != \"OBSERVATION_ONLY\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L267: drop clause 1 of not isinstance(record, dict) or not record.get(\"approval_id\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L267: drop clause 2 of not isinstance(record, dict) or not record.get(\"approval_id\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L267: drop clause 3 of not isinstance(record, dict) or not record.get(\"approval_id\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L269: drop clause 1 of not isinstance(expected_scope, dict) or not all(isinstance(e"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L269: drop clause 2 of not isinstance(expected_scope, dict) or not all(isinstance(e"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L271: swap +/- in (\"approval_id\",) + SCOPE_FIELDS + self.BOUND_FIELDS + (\"expi"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L275: remove not in not all(isinstance(record[k], str) and record[k] for k in (\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L280: drop clause 1 of \"*\" not in supported and record[\"capability_id\"] not in supp"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L280: drop clause 2 of \"*\" not in supported and record[\"capability_id\"] not in supp"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L282: flip (record[\"adapter_id\"], record[\"adapter_version\"], record[\"to"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L285: flip exp is None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L287: flip self.clock() >= exp"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L293: remove not in not ok"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L298: flip a is None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L300: flip a.declaration[\"REVOCATION_STATUS\"] != \"NOT_REVOKED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L303: drop clause 1 of to_mode not in order or order[to_mode] <= order[a.declaratio"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L303: drop clause 2 of to_mode not in order or order[to_mode] <= order[a.declaratio"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L305: remove not in not _hex64(qualification_digest)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L308: flip order[to_mode] > order.get(self.floor.get(adapter_id, \"ACTIV"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L311: swap +/- in \"APPROVAL_REFERENCED:\" + approval_record[\"approval_id\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L317: flip a is None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L326: flip (adapter_id, to_version) not in self._a"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L341: flip len(s) == 64"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L80: drop clause 1 of isinstance(capability_id, str) and capability_id and isinsta"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L80: drop clause 2 of isinstance(capability_id, str) and capability_id and isinsta"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L80: drop clause 3 of isinstance(capability_id, str) and capability_id and isinsta"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L80: drop clause 4 of isinstance(capability_id, str) and capability_id and isinsta"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L80: drop clause 5 of isinstance(capability_id, str) and capability_id and isinsta"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L80: drop clause 6 of isinstance(capability_id, str) and capability_id and isinsta"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L106: flip c.state != \"QUARANTINED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L106: remove not in not (c.state == \"SUSPENDED\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L108: remove not in not passed"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L108: remove not in not _hex64(verification_digest)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L116: remove not in not _hex64(qualification_digest)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L116: remove not in not isinstance(reviewer, str)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L116: remove not in not reviewer"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L135: swap +/- in (\"approval_id\",) + SCOPE_FIELDS"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L146: flip self.clock() >= exp"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L151: flip a is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L173: flip c.state == \"APPROVED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L180: flip c.state == \"APPROVED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L180: flip c.approval is not None"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "mcr3_authority.py::ast@L182: drop clause 1 of exp is None or self.clock() >= exp"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L182: drop clause 2 of exp is None or self.clock() >= exp"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L188: flip st == \"APPROVED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L188: flip scope is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L211: flip d[\"DEFAULT_AUTHORITY\"] == \"NONE\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L244: flip exp is None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L244: flip self.clock() >= exp"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L247: flip self.approval_verifier.verify(copy.deepcopy(record)) is True"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L260: drop clause 1 of rec is None or not self._approval_current((adapter_id, versi"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L260: drop clause 2 of rec is None or not self._approval_current((adapter_id, versi"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L264: drop clause 1 of cap is None or order[declared] <= order[cap]"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "mcr3_authority.py::ast@L264: drop clause 2 of cap is None or order[declared] <= order[cap]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L267: remove not in not isinstance(record, dict)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L267: remove not in not record.get(\"approval_id\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L267: flip record.get(\"source\") != \"EXTERNAL_GOVERNOR\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L269: remove not in not isinstance(expected_scope, dict)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L269: remove not in not all(isinstance(expected_scope.get(k), str) and expected_"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L271: swap +/- in (\"approval_id\",) + SCOPE_FIELDS + self.BOUND_FIELDS"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L280: flip \"*\" not in supported"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L280: flip record[\"capability_id\"] not in supported"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L290: flip self.approval_verifier.verify(copy.deepcopy(record)) is True"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L303: flip to_mode not in order"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L303: flip order[to_mode] <= order[a.declaration[\"MODE\"]]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L80: flip len(digest) == 64"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L106: flip c.state == \"SUSPENDED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L136: flip k not in record"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L182: flip exp is None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L182: flip self.clock() >= exp"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L260: flip rec is None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L260: remove not in not self._approval_current((adapter_id, version), rec)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L264: flip cap is None"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "mcr3_authority.py::ast@L264: flip order[declared] <= order[cap]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L271: swap +/- in (\"approval_id\",) + SCOPE_FIELDS"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L272: flip k not in record"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L277: flip record[k] != expected_scope[k]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L341: flip c in \"0123456789abcdef\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L139: drop clause 1 of isinstance(record[k], str) and record[k]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L139: drop clause 2 of isinstance(record[k], str) and record[k]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L151: flip a[k] == scope.get(k)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L210: flip d[k] not in (None, \"\", [])"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L275: drop clause 1 of isinstance(record[k], str) and record[k]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L275: drop clause 2 of isinstance(record[k], str) and record[k]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L139: swap +/- in (\"approval_id\",) + SCOPE_FIELDS"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L269: drop clause 1 of isinstance(expected_scope.get(k), str) and expected_scope.ge"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_authority.py::ast@L269: drop clause 2 of isinstance(expected_scope.get(k), str) and expected_scope.ge"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L275: swap +/- in (\"approval_id\",) + SCOPE_FIELDS + self.BOUND_FIELDS"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_authority.py::ast@L275: swap +/- in (\"approval_id\",) + SCOPE_FIELDS"
+    }
+  ],
+  "survivors": [
+    "mcr3_authority.py::ast@L146: drop clause 1 of require_unexpired and self.clock() >= exp",
+    "mcr3_authority.py::ast@L151: drop clause 1 of a is not None and all(a[k] == scope.get(k) for k in SCOPE_FI",
+    "mcr3_authority.py::ast@L180: drop clause 1 of c.state == \"APPROVED\" and c.approval is not None",
+    "mcr3_authority.py::ast@L180: drop clause 2 of c.state == \"APPROVED\" and c.approval is not None",
+    "mcr3_authority.py::ast@L225: drop clause 2 of approval_verifier or DenyAllApprovalVerifier()",
+    "mcr3_authority.py::ast@L244: drop clause 1 of exp is None or self.clock() >= exp",
+    "mcr3_authority.py::ast@L182: drop clause 1 of exp is None or self.clock() >= exp",
+    "mcr3_authority.py::ast@L264: drop clause 2 of cap is None or order[declared] <= order[cap]",
+    "mcr3_authority.py::ast@L264: flip order[declared] <= order[cap]"
+  ],
+  "unexplained_survivors": []
+}
