@@ -3,13 +3,16 @@
 Release line 3.0.0, an **offline engineering release candidate**. Baseline `main` at `fd865c67c053431dc33297a0df2a3c9a02fd51fe` (MCR R2.0, PR #4). Everything here is SYNTHETIC/LOCAL evidence. No SAP write, no live run, no network call, no production signing key, no capability promoted to production trust.
 
 ## 0. Which commit each result belongs to
-The mutation run (section 3) and the verifier attack run (section 6) were executed on commit `bec9a3a`. The only code change after it is one test name made deterministic in `tools/mcr3/validate_mcr3_hardening.py` (a temporary-path hash made that suite's result differ between runs); the other later changes are evidence files, sums and these reports. The full test run, the fresh-clone verification with the external sums anchor and the independent review refer to the final commit named in the pull request.
+- The final mutation run (section 3) was executed on commit `25577dd`.
+- The verifier attack run (section 6) was executed on commit `6188d3d`; the files it exercises (`verify_mcr3.py`, `mcr3_scan.py`, the attack script) are unchanged since.
+- The full test run, the fresh-clone verification with the external sums anchor and the targeted re-review refer to the final commit named in the pull request. Between those commits the only code changes are an adapter-registry simplification (`rollback` now just calls `mode()`), test additions and the mutation harness's explanation list; the rest is evidence, sums and these reports.
+- Independent review 8 examined commit `dab77be`; its fixes are listed in section 9.
 
 ## 1. What was built
 See `architecture/mcr3/MCR_3_0_ARCHITECTURE_AND_DECISION_RECORD_R1.md` (decision and module map), `MCR_3_0_SECURITY_AND_AUTHORITY_CONTRACT_R1.md`, `contracts/evidence-v1/README.md`, `CLAUDE_MODS_CHANGE_PACKET_R1.md` and `reports/mcr3/MCR_3_0_GAP_CLOSURE_MATRIX_R1.md`.
 
 ## 2. Test results (reproduce with `python tools/mcr3/run_mcr3_tests.py`)
-**1,498 checks in 9 suites, 0 failed** (about 31 s sequentially, peak 38 MB in any one suite; raw records in `evidence/mcr3/MCR3_RESULT_*_R1.json`, resource record `MCR3_RESOURCE_USE_R1.json`).
+**1,573 checks in 9 suites, 0 failed** (about 31 s sequentially, peak 38 MB in any one suite; raw records in `evidence/mcr3/MCR3_RESULT_*_R1.json`, resource record `MCR3_RESOURCE_USE_R1.json`).
 | Suite | Checks | What it holds |
 |---|---|---|
 | inherited_r2 | 519 | the R2.0 validator re-run against the 3.0 model, with documented expectation changes |
@@ -19,16 +22,16 @@ See `architecture/mcr3/MCR_3_0_ARCHITECTURE_AND_DECISION_RECORD_R1.md` (decision
 | adapters_interop | 99 | frozen-R2.0 adapter, native adapter, equivalence between them, lineage, the ten Claude Mods scenarios, `pe-event` mapping |
 | evidence_chain | 54 | mission-level inconsistent-chain detection |
 | readback | 34 | portable readback rules and the offline SAP-style provider |
-| scanner | 99 | 27 credential shapes, encodings, false positives, documented unsupported patterns, tracked-tree scan |
-| mutation_gap_tests | 231 | tests written for specific surviving mutants |
+| scanner | 109 | 27 credential shapes, encodings, false positives, documented unsupported patterns, tracked-tree scan |
+| mutation_gap_tests | 296 | tests written for specific surviving mutants |
 Not verified on the qualifying machine: nothing optional was missing (the `cryptography` package and `ssh-keygen` were present, so the Ed25519 and SSHSIG back-ends ran). On a machine without them those checks are recorded NOT_VERIFIED by the suites themselves.
 
 ## 3. Mutation qualification (reproduce with `python tools/mcr3/run_mcr3_mutation_check.py --jobs 3`, about 25 minutes; `evidence/mcr3/MCR3_MUTATION_CHECK_R1.json`)
-**1,564 mutants generated from the source of 11 modules** (1342 syntax-tree clause/operator, 141 guard, 53 chain relation, 28 targeted). Every mutant applied. Classification kept separate:
-- **885 detected by an assertion** (a validator ran to completion and named failed checks);
-- **646 detected by validator crash** (a validator died with a traceback because the mutant broke a flow its own fixtures need): weaker evidence, counted but reported as such (42% of detections; 353 of the 765 runtime-model detections);
+**1,580 mutants generated from the source of 11 modules** (1,358 syntax-tree clause/operator, 141 guard, 53 chain relation, 28 targeted). Every mutant applied. Classification kept separate:
+- **890 detected by an assertion** (a validator ran to completion and named failed checks);
+- **653 detected by validator crash** (a validator died with a traceback because the mutant broke a flow its own fixtures need): weaker evidence, counted but reported as such (42% of detections; 353 of the 765 runtime-model detections);
 - **1 detected by hang** (removing the lock-wait timeout);
-- **32 survivors, each an explained equivalent mutant** with a stated reason in the harness (for example a clause made redundant by an earlier check, or a default that cannot differ); **0 unexplained; 0 inconclusive**.
+- **36 survivors, each an explained equivalent mutant** with a stated reason in the harness (for example a clause made redundant by an earlier check, or a default that cannot differ); **0 unexplained; 0 inconclusive**.
 How this went: the first full run of the new code left 190 survivors (184 unexplained); 212 targeted tests and three real defects found by them (scanner crash on a missing folder, migration silently dropping unrecognized fields, bare drive path accepted) brought it to 56, then 36, then 0 unexplained. Survivors are justified by argument, not proven equivalent. Per-module counts are in the JSON (`by_module`).
 A hazard found on the way: a mutant that lets a device name through created real `NUL`/`COM3.log` files in the working folder; the harness now runs validators in a scratch directory and the strays were removed.
 
@@ -46,7 +49,9 @@ MCR 3.0 is an independently qualified **offline capability release candidate / b
 22 scenarios, strictly one at a time, each in a throwaway clone of the committed HEAD, `--fast` profile (`evidence/mcr3/MCR3_VERIFIER_ATTACKS_R1.json`). **All 22 were detected for the intended reason** (the named check failed), except S07, which behaves as documented: a new unlisted file with regenerated sums passes without an external anchor and fails with one. The suite covers the six scanner attacks the R2.0 release could not finish (A13a NUL-prefixed UTF-16, A13b UTF-32, A13c `secret_key` assignment, A13d a secret outside the 3.0 folders, A13e a hex value under a secret name, A13f a secret inside a zip member), nine integrity attacks (edited file, unlisted file, edited and deleted frozen R2.0 files, a file outside the 3.0 folders, a moved `v1.9.0` tag, the documented self-attestation limit, a machine-specific path, tracked bytecode) and seven further token shapes. Resource use: one verifier process at a time, peak working set about 31 MB, 20 to 27 s per scenario. **The first run of this suite found two real scanner gaps** (A13b and A13c: letters-only values of 16 or more characters under a strong secret name were not flagged). They were fixed in `mcr3_scan.py` with regression tests, the scanner module was re-mutated, and the whole suite was re-run against the fixed commit (all 22 detected). The frozen R2.0 verifier's own A13a-f suite remains unrun (NOT_VERIFIED); this suite replaces it for the 3.0 verifier.
 
 ## 7. Independent review
-{{REVIEW_SUMMARY}}
+**Review 8** (isolated agent, fresh clone of commit `dab77be`, own adversarial scripts, `run_mcr3_tests` three times, the fresh-clone verifier with the external anchor, the full attack suite once, two modules re-mutated): **GO_WITH_DOCUMENTED_GAPS, no blocker, no critical authority, replay or evidence-integrity defect.** It reproduced the test, anchor, frozen-history, mutation (for the modules it re-ran) and attack results. It also found new defects, all of which were fixed afterwards with tests (section 9): top-level `disposition`/`outcome_class` accepted on any event type; schema patterns accepting a trailing newline and impossible calendar dates; `parse_expiry` reading `...+05:00Z` as UTC; one mutation survivor wrongly called equivalent (a broken integrity block could poison the replay cache); supersession without a trust rule and a store holding the caller's dict; an adapter mode not capped by a recorded restriction; an approval reference reported without a scope; fractional-second ordering by string; a readback identity test that was a substring match; id limits looser than the `pe-event/1` envelope; undocumented scanner gaps; and a documentation count that was stale. **The fixes are verified by new tests (1,573 checks now), a fresh full mutation run, the re-run attack suite and the fresh-clone verification, but they were not independently re-reviewed in full**: a targeted re-review of the fix diff is recorded below if it was run.
+
+{{REREVIEW_SUMMARY}}
 
 ## 8. Remaining gaps (not hidden)
 1. No production signing key, trust root or key-custody decision exists (owner decision); signatures are tested with throwaway identities only.
@@ -58,3 +63,21 @@ MCR 3.0 is an independently qualified **offline capability release candidate / b
 7. The scanner is a heuristic with documented unsupported patterns.
 8. R2.0 carry-overs that stay open: one live run, token rotation declined (owner-accepted risk), the leftover test CDS view `ZC_MCR20C_7A3F91D2`, the frozen R2.0 verifier's A13a-f suite never run to completion (the 3.0 verifier's equivalent suite is in section 6).
 9. External specification texts (CloudEvents, in-toto, MCP authorization, OWASP) were not re-read during this work; the pins record what the contract cites.
+
+## 9. Fixes made after independent review 8 (each has tests; all are in the final commit)
+| Review finding | Fix |
+|---|---|
+| 1 top-level `disposition`/`outcome_class` accepted on any type (layer separation hole; copied into the `pe-event` mapping) | allowed only on `mcr.mission.disposition`; the mapping reads them from the claim |
+| 2 schema `pattern` and date-time too loose | `$` means end of string only (ECMA); date-time must be a real calendar date and time |
+| 3 `parse_expiry` accepted `...+05:00Z` as UTC | any offset before the `Z` is refused |
+| 4 survivor "equivalent" was not (replay-cache pollution by a broken integrity block) | test added; the explanation removed from the harness |
+| 5, 6 supersession without a trust rule; store kept the caller's dict | an event may not supersede a more trusted one; the store keeps and returns copies |
+| 7 `mode()` ignored a recorded restriction | the mode of every version is capped by it; `rollback` simplified to `mode()` |
+| 8 `view()` without a scope reported an approval reference | no scope, no reference |
+| 9 default `Mission` ledger is volatile | documented as a deployment requirement (security contract section 3); `resume()` still enforces a durable ledger |
+| 10 times compared as strings; calendar-invalid times | compared by value; calendar validity enforced by the schema validator |
+| 11 readback identity was a substring match | whole-name match (`ZCL_FOO` is not found in `ZCL_FOOBAR`) |
+| 12 ids longer than the `pe-event/1` envelope; mock collector looser than the real one | ids limited to 96 characters; the mock uses the alphanumeric-first 96-character safe-string rule; consumers MUST re-run provenance assessment because a trust label in an event is self-asserted (security contract 3b) |
+| 13 recursion on absurdly deep events | a contract error |
+| scanner gaps and names | `passphrase`, `pwd`, `credential(s)`, `access_key` and the `:=` and `=>` operators covered; remaining gaps documented |
+| stale counts and a placeholder in the reports | corrected |
