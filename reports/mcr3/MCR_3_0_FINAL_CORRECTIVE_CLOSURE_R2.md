@@ -7,7 +7,7 @@ Supersedes the gate table in `MCR_3_0_FINAL_QUALIFICATION_GATE_R1.md` (written a
 ## Release gate: HOLD (single remaining blocker: external checksum anchor)
 | Gate | Result | Basis |
 |---|---|---|
-| Offline suites | PASS | 1,779 checks in 11 suites, 0 failed (local), reproduced by `mcr3-offline` CI on ubuntu and windows, push and pull_request |
+| Offline suites | PASS | 1,777 checks in 11 suites, 0 failed (local), reproduced by `mcr3-offline` CI on ubuntu and windows, push and pull_request |
 | Mutation, all 11 targets (incl. `mcr3_model.py`, `mcr3_scan.py`, `mcr3_authority.py`) | PASS | CI run 39767965983 on `311d566`; 1,743 mutants: 973 assertion detections, 725 validator-crash detections, 1 hang (a detection), 44 explained survivors (equivalent mutants with reasons), **0 unexplained, 0 inconclusive, 0 not applied** |
 | Verifier attacks | PASS | 25 scenarios, `all_passed` true, attacked `311d566`; A13a-A13f included; N1-N3 (verdict honesty) added |
 | External checksum anchor | **BLOCKED** | repository variable `MCR3_SUMS_ANCHOR` is not set; the gate's `anchor` job fails with `BLOCKED_EXTERNAL_ANCHOR`, so the `release gate` check is red. Not claimed as a pass. |
