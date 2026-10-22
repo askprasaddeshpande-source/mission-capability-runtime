@@ -1,0 +1,44 @@
+# MCR 3.0 offline quality gates. No enterprise secrets, no network calls to SAP or any provider, read-only token.
+# Heavy qualification (mutation, verifier attacks, external anchor) is the separate workflow mcr3-release-gate.yml,
+# dispatched on the exact candidate commit; this workflow alone is NOT release evidence.
+name: mcr3-offline
+on:
+  pull_request:
+  push:
+    branches: [main, "work/mcr3*"]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: mcr3-offline-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  offline:
+    name: offline gates (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+      - name: optional verification back-ends (pinned; the archived evidence was produced with them present)
+        run: python -m pip install --disable-pip-version-check "cryptography==46.0.4" "jsonschema==4.26.0"
+      - name: validators (all suites, sequential)
+        run: python tools/mcr3/run_mcr3_tests.py
+      - name: results reproduce the archived evidence
+        run: python tools/mcr3/run_mcr3_tests.py --check-dir evidence/mcr3
+      - name: hash integrity, frozen history, tree secret scan (self-attesting; reported as PASS_WITHOUT_EXTERNAL_ANCHOR, never as PASS)
+        run: python tools/mcr3/verify_mcr3.py --fast --allow-no-anchor
+      - name: hash integrity against an external anchor (only if the repository variable MCR3_SUMS_ANCHOR is set)
+        if: ${{ vars.MCR3_SUMS_ANCHOR != '' }}
+        run: python tools/mcr3/verify_mcr3.py --fast --expect-sums-sha256 "${{ vars.MCR3_SUMS_ANCHOR }}"
+      - name: Git history credential-shape scan
+        run: python tools/mcr3/scan_history_mcr3.py

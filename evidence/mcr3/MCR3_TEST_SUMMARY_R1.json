@@ -1,0 +1,22 @@
+{
+  "MCR3_TESTS": "PASS",
+  "SAP_WRITES": 0,
+  "by_suite": {
+    "adapters_interop": 99,
+    "corrective_closure": 67,
+    "evidence_chain": 54,
+    "evidence_contract": 207,
+    "hardening": 140,
+    "inherited_r2": 519,
+    "mutation_gap_tests": 296,
+    "phase1_authority": 29,
+    "provenance_authority": 153,
+    "readback": 34,
+    "scanner": 179
+  },
+  "failed": [],
+  "network_calls": 0,
+  "not_verified": [],
+  "suites": 11,
+  "tests": 1777
+}

@@ -1,0 +1,636 @@
+{
+  "adapter": {
+    "ADAPTER_ID": "mcr2-reference",
+    "APPROVAL_STATUS": "NOT_APPROVED",
+    "DEFAULT_AUTHORITY": "NONE",
+    "EVIDENCE_CLASSIFICATION": "HISTORICAL",
+    "LIMITATIONS": [
+      "one live observation",
+      "completion receipt (link 14) not emitted by the live run",
+      "expected-outcome and predicate digests absent from the archive",
+      "the readback's 'authoritative' label is the runner's own",
+      "activation and package membership not established",
+      "times are conversion times, not occurrence times"
+    ],
+    "MODE": "OBSERVATION_ONLY",
+    "QUALIFICATION_EVIDENCE": null,
+    "REVOCATION_STATUS": "NOT_REVOKED",
+    "SOURCE_RUNTIME_VERSION": "2.0.0",
+    "SUPPORTED_CAPABILITIES": [
+      "abap_creation-create_object"
+    ],
+    "TARGET_CONTRACT_VERSION": "1.0.0",
+    "TRUST_REQUIREMENTS": "unsigned frozen evidence; research use only"
+  },
+  "events": [
+    {
+      "authority_effect": "NONE",
+      "capability": {
+        "capability_id": "abap_creation-create_object",
+        "operation": "create_object",
+        "provider_id": null,
+        "qualification_status": "QUARANTINED",
+        "target_system": "TRL_EN"
+      },
+      "claim": {
+        "intent_digest": "8cd9e5b681efcd7124fc6b1180ddf343cd5fff04b0894020a6376e1149bd1df4",
+        "kind": "MISSION_STARTED",
+        "layer": "OCCURRENCE",
+        "target_system": "TRL_EN"
+      },
+      "contract": "mcr-evidence/1",
+      "contract_version": "1.0.0",
+      "correlation": {
+        "causation_id": null,
+        "correlation_id": "CORR-4fb36150e2921f0f",
+        "mission_id": "M-R2-0C-LIVE",
+        "transaction_id": "TX-R2-0C-LIVE"
+      },
+      "digests": {
+        "payload": "afcf79e38232761feb65b5f970d71a48d4b18ed1df93c9ea8efdffa507c6746b",
+        "policy": null,
+        "schema": "45e48d7db6a6e41d060e81fd624b7ba6eb08ce069afaf176625f7629b99cd8b3"
+      },
+      "evidence": {
+        "classification": "HISTORICAL",
+        "digest": "8cd9e5b681efcd7124fc6b1180ddf343cd5fff04b0894020a6376e1149bd1df4",
+        "provenance": {
+          "freshness": "UNKNOWN",
+          "hash_consistent": true,
+          "issuer_trust": "UNKNOWN",
+          "replay": "UNKNOWN",
+          "signature": "ABSENT",
+          "signer": null,
+          "verified_by": null
+        },
+        "ref": "evidence/r2.0/MCR_R2_0_C_LIVE_EXECUTION_RESULT_R1.json#chain[0]",
+        "trust": "UNTRUSTED_RESEARCH"
+      },
+      "extensions": {
+        "completion_receipt_link": "NOT_EMITTED_BY_THE_HISTORICAL_RUN",
+        "live": true,
+        "single_observation": true,
+        "source_file": "evidence/r2.0/MCR_R2_0_C_LIVE_EXECUTION_RESULT_R1.json",
+        "source_reported_final_state": "COMPLETE",
+        "source_runner_sha256": "A73F4647E0AC9B672284A4A4D4A87AE031CBC6AFB7707362C9050ED632C3DDC9",
+        "time_semantics": "CONVERSION_TIME_NOT_OCCURRENCE_TIME"
+      },
+      "id": "EVT-df7489523f3af0b2287e07fe",
+      "integrity": {
+        "event_digest": "069b95eb0518add1ad089a97a361ef622b5f8dc9e5befa991a722dd614686831"
+      },
+      "lineage": {
+        "source_digest": null,
+        "source_event_id": null,
+        "supersedes": null,
+        "transformations": [
+          {
+            "from": "mcr2.0/live-result",
+            "step": "convert",
+            "to": "mcr-evidence/1",
+            "tool": "mcr2-reference",
+            "tool_version": "1.0.0"
+          }
+        ]
+      },
+      "producer": {
+        "adapter_id": "mcr2-reference",
+        "adapter_version": "1.0.0",
+        "runtime": "mcr",
+        "runtime_version": "3.0.0",
+        "source_runtime_version": "2.0.0"
+      },
+      "source": "mcr://runtime/2.0/mission/started",
+      "time": "2027-01-15T00:00:00Z",
+      "type": "mcr.mission.started"
+    },
+    {
+      "authority_effect": "NONE",
+      "budget": {
+        "attempt_number": 1,
+        "attempts_remaining": 0,
+        "kind": "FORWARD",
+        "mutation_budget": 1
+      },
+      "capability": {
+        "capability_id": "abap_creation-create_object",
+        "operation": "create_object",
+        "provider_id": null,
+        "qualification_status": "QUARANTINED",
+        "target_system": "TRL_EN"
+      },
+      "claim": {
+        "attempt_id": "ATT-R2-0C-LIVE-1",
+        "attempt_number": 1,
+        "budget_kind": "FORWARD",
+        "budget_remaining_after": 0,
+        "kind": "MUTATION_ATTEMPTED",
+        "layer": "OCCURRENCE"
+      },
+      "contract": "mcr-evidence/1",
+      "contract_version": "1.0.0",
+      "correlation": {
+        "causation_id": "EVT-df7489523f3af0b2287e07fe",
+        "correlation_id": "CORR-4fb36150e2921f0f",
+        "mission_id": "M-R2-0C-LIVE",
+        "mutation_attempt_id": "ATT-R2-0C-LIVE-1",
+        "transaction_id": "TX-R2-0C-LIVE"
+      },
+      "digests": {
+        "payload": "02377415a715afdabbc4922d70b396cebfef40d9efc712df0c15e69916830f4d",
+        "policy": null,
+        "schema": "45e48d7db6a6e41d060e81fd624b7ba6eb08ce069afaf176625f7629b99cd8b3"
+      },
+      "evidence": {
+        "classification": "HISTORICAL",
+        "digest": "d4c3415f650957ecafebc315cf236de925c1f93247846cac6829f63ee9477e79",
+        "provenance": {
+          "freshness": "UNKNOWN",
+          "hash_consistent": true,
+          "issuer_trust": "UNKNOWN",
+          "replay": "UNKNOWN",
+          "signature": "ABSENT",
+          "signer": null,
+          "verified_by": null
+        },
+        "ref": "evidence/r2.0/MCR_R2_0_C_LIVE_EXECUTION_RESULT_R1.json#chain[8]",
+        "trust": "UNTRUSTED_RESEARCH"
+      },
+      "extensions": {
+        "completion_receipt_link": "NOT_EMITTED_BY_THE_HISTORICAL_RUN",
+        "live": true,
+        "single_observation": true,
+        "source_file": "evidence/r2.0/MCR_R2_0_C_LIVE_EXECUTION_RESULT_R1.json",
+        "source_reported_final_state": "COMPLETE",
+        "source_runner_sha256": "A73F4647E0AC9B672284A4A4D4A87AE031CBC6AFB7707362C9050ED632C3DDC9",
+        "time_semantics": "CONVERSION_TIME_NOT_OCCURRENCE_TIME"
+      },
+      "id": "EVT-a8dab0d02c7399c75628aff2",
+      "integrity": {
+        "event_digest": "3434cbf9a4987353ed1e635f1d35db71e24b1cc0518ce9887974be19975cfd98"
+      },
+      "lineage": {
+        "source_digest": null,
+        "source_event_id": null,
+        "supersedes": null,
+        "transformations": [
+          {
+            "from": "mcr2.0/live-result",
+            "step": "convert",
+            "to": "mcr-evidence/1",
+            "tool": "mcr2-reference",
+            "tool_version": "1.0.0"
+          }
+        ]
+      },
+      "producer": {
+        "adapter_id": "mcr2-reference",
+        "adapter_version": "1.0.0",
+        "runtime": "mcr",
+        "runtime_version": "3.0.0",
+        "source_runtime_version": "2.0.0"
+      },
+      "source": "mcr://runtime/2.0/mutation/attempted",
+      "time": "2027-01-15T00:00:00Z",
+      "type": "mcr.mutation.attempted"
+    },
+    {
+      "authority_effect": "NONE",
+      "capability": {
+        "capability_id": "abap_creation-create_object",
+        "operation": "create_object",
+        "provider_id": null,
+        "qualification_status": "QUARANTINED",
+        "target_system": "TRL_EN"
+      },
+      "claim": {
+        "call_class": "PROVIDER_RESPONSE_SUCCESS",
+        "implies_commit": false,
+        "kind": "EXECUTION_RECEIPT",
+        "layer": "RECEIPT",
+        "provider_acknowledged": true
+      },
+      "contract": "mcr-evidence/1",
+      "contract_version": "1.0.0",
+      "correlation": {
+        "causation_id": "EVT-a8dab0d02c7399c75628aff2",
+        "correlation_id": "CORR-4fb36150e2921f0f",
+        "mission_id": "M-R2-0C-LIVE",
+        "mutation_attempt_id": "ATT-R2-0C-LIVE-1",
+        "transaction_id": "TX-R2-0C-LIVE"
+      },
+      "digests": {
+        "payload": "24dd8b1c09e9be181842cac107dce4b315ba418638afb3c08d8693d63c1e88d3",
+        "policy": null,
+        "schema": "45e48d7db6a6e41d060e81fd624b7ba6eb08ce069afaf176625f7629b99cd8b3"
+      },
+      "evidence": {
+        "classification": "HISTORICAL",
+        "digest": "5b23cd8995c83e9a28c29f7e8fc7d1aeb479ed78724ebcb78a7797073707579c",
+        "provenance": {
+          "freshness": "UNKNOWN",
+          "hash_consistent": true,
+          "issuer_trust": "UNKNOWN",
+          "replay": "UNKNOWN",
+          "signature": "ABSENT",
+          "signer": null,
+          "verified_by": null
+        },
+        "ref": "evidence/r2.0/MCR_R2_0_C_LIVE_EXECUTION_RESULT_R1.json#chain[9]",
+        "trust": "UNTRUSTED_RESEARCH"
+      },
+      "extensions": {
+        "completion_receipt_link": "NOT_EMITTED_BY_THE_HISTORICAL_RUN",
+        "live": true,
+        "single_observation": true,
+        "source_file": "evidence/r2.0/MCR_R2_0_C_LIVE_EXECUTION_RESULT_R1.json",
+        "source_reported_final_state": "COMPLETE",
+        "source_runner_sha256": "A73F4647E0AC9B672284A4A4D4A87AE031CBC6AFB7707362C9050ED632C3DDC9",
+        "time_semantics": "CONVERSION_TIME_NOT_OCCURRENCE_TIME"
+      },
+      "id": "EVT-2ae8179d509784e31c5e6e1d",
+      "integrity": {
+        "event_digest": "4d974be7f24bb1ed48663670aba60c76676851e910793bbc4c4f37abaf9e71c3"
+      },
+      "lineage": {
+        "source_digest": null,
+        "source_event_id": null,
+        "supersedes": null,
+        "transformations": [
+          {
+            "from": "mcr2.0/live-result",
+            "step": "convert",
+            "to": "mcr-evidence/1",
+            "tool": "mcr2-reference",
+            "tool_version": "1.0.0"
+          }
+        ]
+      },
+      "producer": {
+        "adapter_id": "mcr2-reference",
+        "adapter_version": "1.0.0",
+        "runtime": "mcr",
+        "runtime_version": "3.0.0",
+        "source_runtime_version": "2.0.0"
+      },
+      "source": "mcr://runtime/2.0/execution/receipt",
+      "time": "2027-01-15T00:00:00Z",
+      "type": "mcr.execution.receipt"
+    },
+    {
+      "authority_effect": "NONE",
+      "capability": {
+        "capability_id": "abap_creation-create_object",
+        "operation": "create_object",
+        "provider_id": null,
+        "qualification_status": "QUARANTINED",
+        "target_system": "TRL_EN"
+      },
+      "claim": {
+        "activation": "UNKNOWN",
+        "checks_satisfied": true,
+        "claimed_authoritative": true,
+        "existence": "EXISTS",
+        "kind": "READBACK_CLAIM",
+        "layer": "RECEIPT",
+        "provenance_verified": false,
+        "source_level": "AUTHORITATIVE_REPOSITORY"
+      },
+      "contract": "mcr-evidence/1",
+      "contract_version": "1.0.0",
+      "correlation": {
+        "causation_id": "EVT-2ae8179d509784e31c5e6e1d",
+        "correlation_id": "CORR-4fb36150e2921f0f",
+        "mission_id": "M-R2-0C-LIVE",
+        "mutation_attempt_id": "ATT-R2-0C-LIVE-1",
+        "transaction_id": "TX-R2-0C-LIVE"
+      },
+      "digests": {
+        "payload": "d134ffd6a4490e18c6b7e4ac38b307b61d09021152b8da4507e47f69e28f34a7",
+        "policy": null,
+        "schema": "45e48d7db6a6e41d060e81fd624b7ba6eb08ce069afaf176625f7629b99cd8b3"
+      },
+      "evidence": {
+        "classification": "HISTORICAL",
+        "digest": "d6c7e9e6ecf0decaefa3e0cf4a9541ec7f033a12b1dde6f5360a3b6b96b9e704",
+        "provenance": {
+          "freshness": "UNKNOWN",
+          "hash_consistent": true,
+          "issuer_trust": "UNKNOWN",
+          "replay": "UNKNOWN",
+          "signature": "ABSENT",
+          "signer": null,
+          "verified_by": null
+        },
+        "ref": "evidence/r2.0/MCR_R2_0_C_LIVE_EXECUTION_RESULT_R1.json#chain[11]",
+        "trust": "UNTRUSTED_RESEARCH"
+      },
+      "extensions": {
+        "completion_receipt_link": "NOT_EMITTED_BY_THE_HISTORICAL_RUN",
+        "live": true,
+        "single_observation": true,
+        "source_file": "evidence/r2.0/MCR_R2_0_C_LIVE_EXECUTION_RESULT_R1.json",
+        "source_reported_final_state": "COMPLETE",
+        "source_runner_sha256": "A73F4647E0AC9B672284A4A4D4A87AE031CBC6AFB7707362C9050ED632C3DDC9",
+        "time_semantics": "CONVERSION_TIME_NOT_OCCURRENCE_TIME"
+      },
+      "id": "EVT-68cbeeda2e234905ed5908c5",
+      "integrity": {
+        "event_digest": "120631126a5cc49378bae60f40b3aab4eef586cdd733ffe2ecebf758c140246c"
+      },
+      "lineage": {
+        "source_digest": null,
+        "source_event_id": null,
+        "supersedes": null,
+        "transformations": [
+          {
+            "from": "mcr2.0/live-result",
+            "step": "convert",
+            "to": "mcr-evidence/1",
+            "tool": "mcr2-reference",
+            "tool_version": "1.0.0"
+          }
+        ]
+      },
+      "producer": {
+        "adapter_id": "mcr2-reference",
+        "adapter_version": "1.0.0",
+        "runtime": "mcr",
+        "runtime_version": "3.0.0",
+        "source_runtime_version": "2.0.0"
+      },
+      "source": "mcr://runtime/2.0/readback/claimed",
+      "time": "2027-01-15T00:00:00Z",
+      "type": "mcr.readback.claimed"
+    },
+    {
+      "authority_effect": "NONE",
+      "capability": {
+        "capability_id": "abap_creation-create_object",
+        "operation": "create_object",
+        "provider_id": null,
+        "qualification_status": "QUARANTINED",
+        "target_system": "TRL_EN"
+      },
+      "claim": {
+        "commit_state": "COMMITTED",
+        "implies_outcome": false,
+        "kind": "COMMIT_OBSERVATION",
+        "layer": "RECEIPT",
+        "readback_digest": "d6c7e9e6ecf0decaefa3e0cf4a9541ec7f033a12b1dde6f5360a3b6b96b9e704"
+      },
+      "contract": "mcr-evidence/1",
+      "contract_version": "1.0.0",
+      "correlation": {
+        "causation_id": "EVT-68cbeeda2e234905ed5908c5",
+        "correlation_id": "CORR-4fb36150e2921f0f",
+        "mission_id": "M-R2-0C-LIVE",
+        "mutation_attempt_id": "ATT-R2-0C-LIVE-1",
+        "transaction_id": "TX-R2-0C-LIVE"
+      },
+      "digests": {
+        "payload": "818459cc2e894df2418a2e40ac563a4bd6fe7a391a138a91372aad654294f53e",
+        "policy": null,
+        "schema": "45e48d7db6a6e41d060e81fd624b7ba6eb08ce069afaf176625f7629b99cd8b3"
+      },
+      "evidence": {
+        "classification": "HISTORICAL",
+        "digest": "285b5a6375f7ab5e5389b31801037ed6a95afc86b5011811609e264710a71ceb",
+        "provenance": {
+          "freshness": "UNKNOWN",
+          "hash_consistent": true,
+          "issuer_trust": "UNKNOWN",
+          "replay": "UNKNOWN",
+          "signature": "ABSENT",
+          "signer": null,
+          "verified_by": null
+        },
+        "ref": "evidence/r2.0/MCR_R2_0_C_LIVE_EXECUTION_RESULT_R1.json#chain[10]",
+        "trust": "UNTRUSTED_RESEARCH"
+      },
+      "extensions": {
+        "completion_receipt_link": "NOT_EMITTED_BY_THE_HISTORICAL_RUN",
+        "live": true,
+        "single_observation": true,
+        "source_file": "evidence/r2.0/MCR_R2_0_C_LIVE_EXECUTION_RESULT_R1.json",
+        "source_reported_final_state": "COMPLETE",
+        "source_runner_sha256": "A73F4647E0AC9B672284A4A4D4A87AE031CBC6AFB7707362C9050ED632C3DDC9",
+        "time_semantics": "CONVERSION_TIME_NOT_OCCURRENCE_TIME"
+      },
+      "id": "EVT-d1227396a42a53c35bf28503",
+      "integrity": {
+        "event_digest": "294aef7044d9349cceebb7be017b9042ff062ce541f0e62132f108dfd796d24e"
+      },
+      "lineage": {
+        "source_digest": null,
+        "source_event_id": null,
+        "supersedes": null,
+        "transformations": [
+          {
+            "from": "mcr2.0/live-result",
+            "step": "convert",
+            "to": "mcr-evidence/1",
+            "tool": "mcr2-reference",
+            "tool_version": "1.0.0"
+          }
+        ]
+      },
+      "producer": {
+        "adapter_id": "mcr2-reference",
+        "adapter_version": "1.0.0",
+        "runtime": "mcr",
+        "runtime_version": "3.0.0",
+        "source_runtime_version": "2.0.0"
+      },
+      "source": "mcr://runtime/2.0/commit/observed",
+      "time": "2027-01-15T00:00:00Z",
+      "type": "mcr.commit.observed"
+    },
+    {
+      "authority_effect": "NONE",
+      "capability": {
+        "capability_id": "abap_creation-create_object",
+        "operation": "create_object",
+        "provider_id": null,
+        "qualification_status": "QUARANTINED",
+        "target_system": "TRL_EN"
+      },
+      "claim": {
+        "expected_digest": null,
+        "kind": "OUTCOME_EVALUATION",
+        "layer": "BUSINESS_OUTCOME",
+        "observed_digest": "760fb5e7b6d26f195b6d512f200752a8a0e78e930188f7f8627b6d012862fe32",
+        "predicates_digest": null,
+        "readback_digest": "d6c7e9e6ecf0decaefa3e0cf4a9541ec7f033a12b1dde6f5360a3b6b96b9e704",
+        "result": "PASS"
+      },
+      "contract": "mcr-evidence/1",
+      "contract_version": "1.0.0",
+      "correlation": {
+        "causation_id": "EVT-d1227396a42a53c35bf28503",
+        "correlation_id": "CORR-4fb36150e2921f0f",
+        "mission_id": "M-R2-0C-LIVE",
+        "mutation_attempt_id": "ATT-R2-0C-LIVE-1",
+        "transaction_id": "TX-R2-0C-LIVE"
+      },
+      "digests": {
+        "payload": "fd54a642cfa54ed675be1b3e315ba8d9015bf4fca51d6a1a60e3457af8d82503",
+        "policy": null,
+        "schema": "45e48d7db6a6e41d060e81fd624b7ba6eb08ce069afaf176625f7629b99cd8b3"
+      },
+      "evidence": {
+        "classification": "HISTORICAL",
+        "digest": "9b450a253c28bfb7e87699f9fceefeb3f0a56225026e670795cc9f29963d4024",
+        "provenance": {
+          "freshness": "UNKNOWN",
+          "hash_consistent": true,
+          "issuer_trust": "UNKNOWN",
+          "replay": "UNKNOWN",
+          "signature": "ABSENT",
+          "signer": null,
+          "verified_by": null
+        },
+        "ref": "evidence/r2.0/MCR_R2_0_C_LIVE_EXECUTION_RESULT_R1.json#chain[12]",
+        "trust": "UNTRUSTED_RESEARCH"
+      },
+      "extensions": {
+        "completion_receipt_link": "NOT_EMITTED_BY_THE_HISTORICAL_RUN",
+        "live": true,
+        "single_observation": true,
+        "source_file": "evidence/r2.0/MCR_R2_0_C_LIVE_EXECUTION_RESULT_R1.json",
+        "source_reported_final_state": "COMPLETE",
+        "source_runner_sha256": "A73F4647E0AC9B672284A4A4D4A87AE031CBC6AFB7707362C9050ED632C3DDC9",
+        "time_semantics": "CONVERSION_TIME_NOT_OCCURRENCE_TIME"
+      },
+      "id": "EVT-0eaf23f012bff598d382c4cc",
+      "integrity": {
+        "event_digest": "e5fd27af084be8a8de8c5ca16a29c69c4d48348479b5ac5c2837527ba6f4aa03"
+      },
+      "lineage": {
+        "source_digest": null,
+        "source_event_id": null,
+        "supersedes": null,
+        "transformations": [
+          {
+            "from": "mcr2.0/live-result",
+            "step": "convert",
+            "to": "mcr-evidence/1",
+            "tool": "mcr2-reference",
+            "tool_version": "1.0.0"
+          }
+        ]
+      },
+      "producer": {
+        "adapter_id": "mcr2-reference",
+        "adapter_version": "1.0.0",
+        "runtime": "mcr",
+        "runtime_version": "3.0.0",
+        "source_runtime_version": "2.0.0"
+      },
+      "source": "mcr://runtime/2.0/outcome/evaluated",
+      "time": "2027-01-15T00:00:00Z",
+      "type": "mcr.outcome.evaluated"
+    },
+    {
+      "authority_effect": "NONE",
+      "capability": {
+        "capability_id": "abap_creation-create_object",
+        "operation": "create_object",
+        "provider_id": null,
+        "qualification_status": "QUARANTINED",
+        "target_system": "TRL_EN"
+      },
+      "claim": {
+        "chain_digests": [
+          "8cd9e5b681efcd7124fc6b1180ddf343cd5fff04b0894020a6376e1149bd1df4",
+          "04a7434a4d141cc0b5eb8a3d78ef3097103459bd4c9437cdf06ed62fa86397cb",
+          "f5ead2af0ba1b7709a372034ac823493aca9cffa72d6c6c06b8e92630070aa1c",
+          "a06f8ddf8079081a67b840a57c558b12d0a84ac260f55e520fc6b88df16d0042",
+          "1e88b4a393e4a693674f0b354c70b40bab7eee465d045582c5420722df9b83f6",
+          "3c18aee342167076b17de488cebb4e51437077d67e781fd1279449657b40c511",
+          "183c1554d2bf20038c2651352712ecc7f64d281de2ff7d12c0ae96dea2ea6a6e",
+          "46f1d16d8b9b2cda8ae4a576a4069c5b08f1e93e9bdc79a1359465e750ad624e",
+          "d4c3415f650957ecafebc315cf236de925c1f93247846cac6829f63ee9477e79",
+          "5b23cd8995c83e9a28c29f7e8fc7d1aeb479ed78724ebcb78a7797073707579c",
+          "285b5a6375f7ab5e5389b31801037ed6a95afc86b5011811609e264710a71ceb",
+          "d6c7e9e6ecf0decaefa3e0cf4a9541ec7f033a12b1dde6f5360a3b6b96b9e704",
+          "9b450a253c28bfb7e87699f9fceefeb3f0a56225026e670795cc9f29963d4024"
+        ],
+        "disposition": "INCOMPLETE",
+        "kind": "MISSION_DISPOSITION",
+        "layer": "BUSINESS_OUTCOME",
+        "outcome_class": "OUTCOME_VALIDATED"
+      },
+      "contract": "mcr-evidence/1",
+      "contract_version": "1.0.0",
+      "correlation": {
+        "causation_id": "EVT-0eaf23f012bff598d382c4cc",
+        "correlation_id": "CORR-4fb36150e2921f0f",
+        "mission_id": "M-R2-0C-LIVE",
+        "mutation_attempt_id": "ATT-R2-0C-LIVE-1",
+        "transaction_id": "TX-R2-0C-LIVE"
+      },
+      "digests": {
+        "payload": "861ec772ecee5ce08b68e684739a75c64b9b8487b25646d2b31043a01b9d5c76",
+        "policy": null,
+        "schema": "45e48d7db6a6e41d060e81fd624b7ba6eb08ce069afaf176625f7629b99cd8b3"
+      },
+      "disposition": "INCOMPLETE",
+      "evidence": {
+        "classification": "HISTORICAL",
+        "digest": "9b450a253c28bfb7e87699f9fceefeb3f0a56225026e670795cc9f29963d4024",
+        "provenance": {
+          "freshness": "UNKNOWN",
+          "hash_consistent": true,
+          "issuer_trust": "UNKNOWN",
+          "replay": "UNKNOWN",
+          "signature": "ABSENT",
+          "signer": null,
+          "verified_by": null
+        },
+        "ref": "evidence/r2.0/MCR_R2_0_C_LIVE_EXECUTION_RESULT_R1.json#chain",
+        "trust": "UNTRUSTED_RESEARCH"
+      },
+      "extensions": {
+        "completion_receipt_link": "NOT_EMITTED_BY_THE_HISTORICAL_RUN",
+        "live": true,
+        "single_observation": true,
+        "source_file": "evidence/r2.0/MCR_R2_0_C_LIVE_EXECUTION_RESULT_R1.json",
+        "source_reported_final_state": "COMPLETE",
+        "source_runner_sha256": "A73F4647E0AC9B672284A4A4D4A87AE031CBC6AFB7707362C9050ED632C3DDC9",
+        "time_semantics": "CONVERSION_TIME_NOT_OCCURRENCE_TIME"
+      },
+      "id": "EVT-61b84f6bc813ac681e19bae8",
+      "integrity": {
+        "event_digest": "1563bf06f4f7944a502dbdf3b8be3fd594e3a50bb9f352e239e0215510f696c6"
+      },
+      "lineage": {
+        "source_digest": null,
+        "source_event_id": null,
+        "supersedes": null,
+        "transformations": [
+          {
+            "from": "mcr2.0/live-result",
+            "step": "convert",
+            "to": "mcr-evidence/1",
+            "tool": "mcr2-reference",
+            "tool_version": "1.0.0"
+          }
+        ]
+      },
+      "outcome_class": "OUTCOME_VALIDATED",
+      "producer": {
+        "adapter_id": "mcr2-reference",
+        "adapter_version": "1.0.0",
+        "runtime": "mcr",
+        "runtime_version": "3.0.0",
+        "source_runtime_version": "2.0.0"
+      },
+      "source": "mcr://runtime/2.0/mission/disposition",
+      "time": "2027-01-15T00:00:00Z",
+      "type": "mcr.mission.disposition"
+    }
+  ],
+  "note": "conversion time is a fixed label, not the occurrence time",
+  "source": "evidence/r2.0/MCR_R2_0_C_LIVE_EXECUTION_RESULT_R1.json"
+}

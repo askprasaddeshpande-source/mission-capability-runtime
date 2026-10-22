@@ -1,0 +1,402 @@
+{
+  "MUTATION_CHECK": "PASS",
+  "by_kind": {
+    "ast": 56,
+    "guard": 0,
+    "relation": 0,
+    "special": 0
+  },
+  "by_module": {
+    "mcr3_adapters.py": {
+      "assertion": 32,
+      "crash": 16,
+      "detected": 48,
+      "hang": 0,
+      "mutants": 56,
+      "survivors": 8
+    }
+  },
+  "detected_by_assertion": 32,
+  "detected_by_hang": [],
+  "detected_by_validator_crash": {
+    "mcr3_adapters.py::ast@L102: flip authorization_ref is not None": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_adapters.py::ast@L104: flip \"mutation_id\" in ev": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_adapters.py::ast@L111: flip er[\"call_class\"] == \"PROVIDER_RESPONSE_SUCCESS\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_adapters.py::ast@L144: flip st == \"COMPLETE\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_adapters.py::ast@L180: flip [c[0] for c in chain if isinstance(c, list) and len(c) == 2]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_adapters.py::ast@L180: flip len(c) == 2": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_adapters.py::ast@L180: remove not in not isinstance(chain, list)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_adapters.py::ast@L183: remove not in not all(re.fullmatch(evc1.HASH_RE, v) for v in h.values())": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_adapters.py::ast@L202: flip cc == \"PROVIDER_RESPONSE_SUCCESS\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_adapters.py::ast@L213: flip res == \"PASS\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_adapters.py::ast@L214: swap +/- in source_ref + \"#chain\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_adapters.py::ast@L215: flip res == \"PASS\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_adapters.py::ast@L34: swap +/- in \"EVT-\" + hashlib.sha256(\"|\".join(str(p) for p in parts).enco": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_adapters.py::ast@L43: swap +/- in \"CORR-\" + hashlib.sha256((\"%s|%s\" % (mission_id, transaction": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_adapters.py::ast@L66: drop clause 2 of classification or self.classification": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_adapters.py::ast@L92: flip \"intent\" not in ev": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)"
+  },
+  "evidence_class": "SYNTHETIC/LOCAL",
+  "explained_survivors": {
+    "mcr3_adapters.py::ast@L106: drop clause 1 of mission.mutations_sent or 1": "equivalent: a mutation event exists only after a send, so mutations_sent is at least 1",
+    "mcr3_adapters.py::ast@L106: drop clause 2 of mission.mutations_sent or 1": "equivalent: a mutation event exists only after a send, so mutations_sent is at least 1",
+    "mcr3_adapters.py::ast@L107: drop clause 1 of mission.mutations_sent or 1": "equivalent: a mutation event exists only after a send, so mutations_sent is at least 1",
+    "mcr3_adapters.py::ast@L107: drop clause 2 of mission.mutations_sent or 1": "equivalent: a mutation event exists only after a send, so mutations_sent is at least 1",
+    "mcr3_adapters.py::ast@L131: drop clause 1 of mission.state == \"COMPENSATED\" and \"comp_receipt\" in ev": "equivalent: comp_receipt is persisted exactly when the state is COMPENSATED",
+    "mcr3_adapters.py::ast@L131: drop clause 2 of mission.state == \"COMPENSATED\" and \"comp_receipt\" in ev": "equivalent: comp_receipt is persisted exactly when the state is COMPENSATED",
+    "mcr3_adapters.py::ast@L180: drop clause 1 of not isinstance(chain, list) or [c[0] for c in chain if isins": "equivalent: a non-list chain yields no labelled rows and fails the label comparison with the same message",
+    "mcr3_adapters.py::ast@L62: drop clause 1 of attempt or self.attempt_id": "equivalent: attempt_id is always set before an attempt event is added"
+  },
+  "inconclusive": [],
+  "mutants": 56,
+  "not_applied": [],
+  "results": [
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_adapters.py::ast@L34: swap +/- in \"EVT-\" + hashlib.sha256(\"|\".join(str(p) for p in parts).enco"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_adapters.py::ast@L43: swap +/- in \"CORR-\" + hashlib.sha256((\"%s|%s\" % (mission_id, transaction"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_adapters.py::ast@L39: swap +/- in fallback_prefix + hashlib.sha256(v.encode(\"utf-8\")).hexdiges"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "mcr3_adapters.py::ast@L62: drop clause 1 of attempt or self.attempt_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_adapters.py::ast@L62: drop clause 2 of attempt or self.attempt_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_adapters.py::ast@L92: flip \"intent\" not in ev"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_adapters.py::ast@L102: flip authorization_ref is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_adapters.py::ast@L104: flip \"mutation_id\" in ev"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "mcr3_adapters.py::ast@L131: drop clause 1 of mission.state == \"COMPENSATED\" and \"comp_receipt\" in ev"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "mcr3_adapters.py::ast@L131: drop clause 2 of mission.state == \"COMPENSATED\" and \"comp_receipt\" in ev"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_adapters.py::ast@L144: flip st == \"COMPLETE\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_adapters.py::ast@L146: flip st == \"COMPENSATED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_adapters.py::ast@L148: flip st == \"UNRECOVERABLE\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_adapters.py::ast@L150: flip st == \"FAILED_BEFORE_MUTATION\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_adapters.py::ast@L152: flip st in (\"COMMIT_STATE_UNKNOWN\", \"FAILED_AFTER_POSSIBLE_MUTATI"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_adapters.py::ast@L154: flip st in (\"COMPENSATION_REQUIRED\", \"COMPENSATION_AUTHORIZED\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_adapters.py::ast@L156: drop clause 1 of st == \"OUTCOME_VALIDATION_PENDING\" and m.ev.get(\"outcome\", {"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_adapters.py::ast@L156: drop clause 2 of st == \"OUTCOME_VALIDATION_PENDING\" and m.ev.get(\"outcome\", {"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "mcr3_adapters.py::ast@L180: drop clause 1 of not isinstance(chain, list) or [c[0] for c in chain if isins"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_adapters.py::ast@L180: drop clause 2 of not isinstance(chain, list) or [c[0] for c in chain if isins"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_adapters.py::ast@L183: remove not in not all(re.fullmatch(evc1.HASH_RE, v) for v in h.values())"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_adapters.py::ast@L131: flip mission.state == \"COMPENSATED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_adapters.py::ast@L131: flip \"comp_receipt\" in ev"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_adapters.py::ast@L156: flip st == \"OUTCOME_VALIDATION_PENDING\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_adapters.py::ast@L156: flip m.ev.get(\"outcome\", {}).get(\"result\") == \"UNKNOWN\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_adapters.py::ast@L180: remove not in not isinstance(chain, list)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_adapters.py::ast@L180: flip [c[0] for c in chain if isinstance(c, list) and len(c) == 2]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_adapters.py::ast@L187: drop clause 1 of path.startswith(\"/\") and len(path.split(\"/\")) > 2"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_adapters.py::ast@L187: drop clause 2 of path.startswith(\"/\") and len(path.split(\"/\")) > 2"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_adapters.py::ast@L207: drop clause 1 of ex == \"EXISTS\" and result.get(\"RESULT\", \"\").startswith(\"COMM"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_adapters.py::ast@L207: drop clause 2 of ex == \"EXISTS\" and result.get(\"RESULT\", \"\").startswith(\"COMM"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_adapters.py::ast@L209: flip result.get(\"RESULT\") == \"COMMITTED_AND_OUTCOME_VALIDATED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_adapters.py::ast@L214: swap +/- in source_ref + \"#chain\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_adapters.py::ast@L66: drop clause 1 of classification or self.classification"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_adapters.py::ast@L66: drop clause 2 of classification or self.classification"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "mcr3_adapters.py::ast@L106: drop clause 1 of mission.mutations_sent or 1"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "mcr3_adapters.py::ast@L106: drop clause 2 of mission.mutations_sent or 1"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_adapters.py::ast@L187: flip len(path.split(\"/\")) > 2"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_adapters.py::ast@L197: drop clause 1 of target or \"UNKNOWN_IN_ARCHIVE\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_adapters.py::ast@L197: drop clause 2 of target or \"UNKNOWN_IN_ARCHIVE\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_adapters.py::ast@L202: flip cc == \"PROVIDER_RESPONSE_SUCCESS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_adapters.py::ast@L207: flip ex == \"EXISTS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_adapters.py::ast@L67: flip etype == \"mcr.authorization.referenced\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_adapters.py::ast@L97: flip \"delegation\" in ev"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "mcr3_adapters.py::ast@L107: drop clause 1 of mission.mutations_sent or 1"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "mcr3_adapters.py::ast@L107: drop clause 2 of mission.mutations_sent or 1"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_adapters.py::ast@L111: flip er[\"call_class\"] == \"PROVIDER_RESPONSE_SUCCESS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_adapters.py::ast@L116: flip rb[\"source_level\"] == \"AUTHORITATIVE_REPOSITORY\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_adapters.py::ast@L130: flip entry[\"call_class\"] not in M.COMP_UNKNOWN_CLASSES"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_adapters.py::ast@L205: flip ro.get(\"exists\") is True"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_adapters.py::ast@L213: flip res == \"PASS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_adapters.py::ast@L215: flip res == \"PASS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_adapters.py::ast@L119: flip classification != \"SYNTHETIC\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_adapters.py::ast@L180: drop clause 1 of isinstance(c, list) and len(c) == 2"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_adapters.py::ast@L180: drop clause 2 of isinstance(c, list) and len(c) == 2"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_adapters.py::ast@L180: flip len(c) == 2"
+    }
+  ],
+  "survivors": [
+    "mcr3_adapters.py::ast@L62: drop clause 1 of attempt or self.attempt_id",
+    "mcr3_adapters.py::ast@L131: drop clause 1 of mission.state == \"COMPENSATED\" and \"comp_receipt\" in ev",
+    "mcr3_adapters.py::ast@L131: drop clause 2 of mission.state == \"COMPENSATED\" and \"comp_receipt\" in ev",
+    "mcr3_adapters.py::ast@L180: drop clause 1 of not isinstance(chain, list) or [c[0] for c in chain if isins",
+    "mcr3_adapters.py::ast@L106: drop clause 1 of mission.mutations_sent or 1",
+    "mcr3_adapters.py::ast@L106: drop clause 2 of mission.mutations_sent or 1",
+    "mcr3_adapters.py::ast@L107: drop clause 1 of mission.mutations_sent or 1",
+    "mcr3_adapters.py::ast@L107: drop clause 2 of mission.mutations_sent or 1"
+  ],
+  "unexplained_survivors": []
+}

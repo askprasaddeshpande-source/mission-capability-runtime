@@ -1,0 +1,982 @@
+{
+  "MUTATION_CHECK": "PASS",
+  "by_kind": {
+    "ast": 147,
+    "guard": 0,
+    "relation": 0,
+    "special": 0
+  },
+  "by_module": {
+    "evc1.py": {
+      "assertion": 85,
+      "crash": 58,
+      "detected": 143,
+      "hang": 0,
+      "mutants": 147,
+      "survivors": 4
+    }
+  },
+  "detected_by_assertion": 85,
+  "detected_by_hang": [],
+  "detected_by_validator_crash": {
+    "evc1.py::ast@L105: swap +/- in list(OUTCOME_CLASSES) + [None]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L145: swap +/- in list(DISPOSITIONS) + [None]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L146: swap +/- in list(OUTCOME_CLASSES) + [None]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L162: drop clause 2 of isinstance(v, bool) or v is None or isinstance(v, (str, int)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L162: drop clause 3 of isinstance(v, bool) or v is None or isinstance(v, (str, int)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L172: remove not in not isinstance(k, str)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L239: drop clause 2 of provenance or unsigned_provenance()": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L249: drop clause 2 of lineage or {\"transformations\": [], \"source_event_id\": None, ": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L253: flip v is not None": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L273: flip e[\"claim\"][\"kind\"] != kind": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L273: flip e[\"claim\"][\"layer\"] != layer": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L275: flip e[\"type\"] != \"mcr.mission.disposition\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L277: flip e.get(k_) is not None": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L279: flip e[\"digests\"][\"payload\"] != digest_of(e[\"claim\"])": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L281: flip e[\"digests\"][\"schema\"] != SCHEMA_DIGEST": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L284: drop clause 1 of full or e": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L284: drop clause 2 of full or e": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L284: flip k != \"integrity\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L285: flip e[\"integrity\"][\"event_digest\"] != digest_of(body)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L288: flip ev[\"trust\"] != derive_trust(ev[\"provenance\"])": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L290: drop clause 1 of ev[\"trust\"] == \"SIGNED_TRUSTED\" and ev[\"classification\"] in ": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L290: flip ev[\"trust\"] == \"SIGNED_TRUSTED\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L293: drop clause 1 of pr and pr[\"assurance\"] == \"VERIFIED\" and ev[\"trust\"] != \"SIG": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L295: drop clause 2 of e[\"type\"] != \"mcr.mission.started\" and e[\"correlation\"][\"mis": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L295: flip e[\"correlation\"][\"mission_id\"] is None": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L303: drop clause 1 of cl[\"kind\"] == \"READBACK_CLAIM\" and cl[\"claimed_authoritative": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L303: flip cl[\"kind\"] == \"READBACK_CLAIM\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L305: drop clause 1 of cl[\"kind\"] == \"READBACK_CLAIM\" and cl[\"provenance_verified\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L305: flip cl[\"kind\"] == \"READBACK_CLAIM\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L307: drop clause 1 of cl[\"kind\"] == \"OUTCOME_EVALUATION\" and cl[\"result\"] == \"PASS": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L307: flip cl[\"kind\"] == \"OUTCOME_EVALUATION\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L309: drop clause 1 of cl[\"kind\"] == \"OUTCOME_EVALUATION\" and ev[\"classification\"] ": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L309: flip cl[\"kind\"] == \"OUTCOME_EVALUATION\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L311: flip cl[\"kind\"] == \"MISSION_DISPOSITION\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L316: drop clause 2 of \"disposition\" in e and e[\"disposition\"] != cl[\"disposition\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L318: drop clause 2 of \"outcome_class\" in e and e[\"outcome_class\"] != cl[\"outcome_c": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L318: flip e[\"outcome_class\"] != cl[\"outcome_class\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L320: drop clause 3 of cl[\"kind\"] == \"EXECUTION_RECEIPT\" and cl[\"call_class\"] == \"P": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L320: remove not in not cl[\"provider_acknowledged\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L322: drop clause 2 of cl[\"kind\"] == \"EXECUTION_RECEIPT\" and cl[\"call_class\"] in (\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L322: flip cl[\"call_class\"] in (\"CALL_NOT_SENT\", \"CALL_SENT_NO_RESPONSE": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L324: drop clause 1 of cl[\"kind\"] == \"COMMIT_OBSERVATION\" and cl[\"commit_state\"] ==": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L324: flip cl[\"kind\"] == \"COMMIT_OBSERVATION\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L334: remove not in not isinstance(event, dict)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L336: flip event.get(\"contract\") != CONTRACT": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L339: remove not in not isinstance(ver, str)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L339: remove not in not re.fullmatch(VERSION_RE, ver)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L342: flip major != supported_major": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L345: remove not in not all(isinstance(x, str) for x in crit)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L345: remove not in not isinstance(crit, list)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L348: flip k not in top_known": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L349: drop clause 1 of unknown and minor <= supported_minor": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L349: drop clause 2 of unknown and minor <= supported_minor": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L354: flip k in top_known": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L379: flip tmaj != smaj": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L388: swap +/- in known[\"id\"] + \".m\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L388: swap +/- in known[\"id\"] + \".m\" + target_version.replace(\".\", \"\")": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "evc1.py::ast@L76: flip required is None": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)"
+  },
+  "evidence_class": "SYNTHETIC/LOCAL",
+  "explained_survivors": {
+    "evc1.py::ast@L162: drop clause 1 of isinstance(v, bool) or v is None or isinstance(v, (str, int)": "equivalent: bool is a subclass of int",
+    "evc1.py::ast@L273: drop clause 2 of e[\"claim\"][\"kind\"] != kind or e[\"claim\"][\"layer\"] != layer": "equivalent: the schema pins the layer to a constant per claim kind, so a wrong layer fails the schema first",
+    "evc1.py::ast@L352: drop clause 2 of name in unknown or name not in KNOWN_CRITICAL": "equivalent: semantic_problems rejects the same case, so the event is rejected either way",
+    "evc1.py::ast@L387: drop clause 1 of known.get(\"integrity\", {}).get(\"event_digest\") or digest_of(": "equivalent: for any event that passed parse, integrity.event_digest equals digest_of(body)"
+  },
+  "inconclusive": [],
+  "mutants": 147,
+  "not_applied": [],
+  "results": [
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L195: flip prov[\"replay\"] == \"REPLAYED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L197: flip prov[\"issuer_trust\"] == \"REVOKED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L199: flip prov[\"signature\"] == \"ABSENT\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L201: drop clause 1 of prov[\"signature\"] == \"INVALID\" or not prov[\"hash_consistent\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L201: drop clause 2 of prov[\"signature\"] == \"INVALID\" or not prov[\"hash_consistent\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L203: flip prov[\"freshness\"] == \"EXPIRED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L205: drop clause 1 of prov[\"issuer_trust\"] == \"TRUSTED\" and prov[\"freshness\"] == \""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L205: drop clause 2 of prov[\"issuer_trust\"] == \"TRUSTED\" and prov[\"freshness\"] == \""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L205: drop clause 3 of prov[\"issuer_trust\"] == \"TRUSTED\" and prov[\"freshness\"] == \""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L239: drop clause 1 of provenance or unsigned_provenance()"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L239: drop clause 2 of provenance or unsigned_provenance()"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L273: drop clause 1 of e[\"claim\"][\"kind\"] != kind or e[\"claim\"][\"layer\"] != layer"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "evc1.py::ast@L273: drop clause 2 of e[\"claim\"][\"kind\"] != kind or e[\"claim\"][\"layer\"] != layer"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L275: flip e[\"type\"] != \"mcr.mission.disposition\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L279: flip e[\"digests\"][\"payload\"] != digest_of(e[\"claim\"])"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L281: flip e[\"digests\"][\"schema\"] != SCHEMA_DIGEST"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L283: flip \"integrity\" in e"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L288: flip ev[\"trust\"] != derive_trust(ev[\"provenance\"])"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L290: drop clause 1 of ev[\"trust\"] == \"SIGNED_TRUSTED\" and ev[\"classification\"] in "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L290: drop clause 2 of ev[\"trust\"] == \"SIGNED_TRUSTED\" and ev[\"classification\"] in "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L293: drop clause 1 of pr and pr[\"assurance\"] == \"VERIFIED\" and ev[\"trust\"] != \"SIG"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L293: drop clause 2 of pr and pr[\"assurance\"] == \"VERIFIED\" and ev[\"trust\"] != \"SIG"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L293: drop clause 3 of pr and pr[\"assurance\"] == \"VERIFIED\" and ev[\"trust\"] != \"SIG"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L295: drop clause 1 of e[\"type\"] != \"mcr.mission.started\" and e[\"correlation\"][\"mis"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L295: drop clause 2 of e[\"type\"] != \"mcr.mission.started\" and e[\"correlation\"][\"mis"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L297: drop clause 1 of e[\"type\"] in (\"mcr.mutation.attempted\", \"mcr.compensation.at"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L297: drop clause 2 of e[\"type\"] in (\"mcr.mutation.attempted\", \"mcr.compensation.at"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L303: drop clause 1 of cl[\"kind\"] == \"READBACK_CLAIM\" and cl[\"claimed_authoritative"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L303: drop clause 2 of cl[\"kind\"] == \"READBACK_CLAIM\" and cl[\"claimed_authoritative"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L303: drop clause 3 of cl[\"kind\"] == \"READBACK_CLAIM\" and cl[\"claimed_authoritative"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L305: drop clause 1 of cl[\"kind\"] == \"READBACK_CLAIM\" and cl[\"provenance_verified\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L305: drop clause 2 of cl[\"kind\"] == \"READBACK_CLAIM\" and cl[\"provenance_verified\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L305: drop clause 3 of cl[\"kind\"] == \"READBACK_CLAIM\" and cl[\"provenance_verified\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L307: drop clause 1 of cl[\"kind\"] == \"OUTCOME_EVALUATION\" and cl[\"result\"] == \"PASS"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L307: drop clause 2 of cl[\"kind\"] == \"OUTCOME_EVALUATION\" and cl[\"result\"] == \"PASS"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L307: drop clause 3 of cl[\"kind\"] == \"OUTCOME_EVALUATION\" and cl[\"result\"] == \"PASS"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L309: drop clause 1 of cl[\"kind\"] == \"OUTCOME_EVALUATION\" and ev[\"classification\"] "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L309: drop clause 2 of cl[\"kind\"] == \"OUTCOME_EVALUATION\" and ev[\"classification\"] "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L309: drop clause 3 of cl[\"kind\"] == \"OUTCOME_EVALUATION\" and ev[\"classification\"] "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L311: flip cl[\"kind\"] == \"MISSION_DISPOSITION\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L320: drop clause 1 of cl[\"kind\"] == \"EXECUTION_RECEIPT\" and cl[\"call_class\"] == \"P"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L320: drop clause 2 of cl[\"kind\"] == \"EXECUTION_RECEIPT\" and cl[\"call_class\"] == \"P"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L320: drop clause 3 of cl[\"kind\"] == \"EXECUTION_RECEIPT\" and cl[\"call_class\"] == \"P"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L322: drop clause 1 of cl[\"kind\"] == \"EXECUTION_RECEIPT\" and cl[\"call_class\"] in (\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L322: drop clause 2 of cl[\"kind\"] == \"EXECUTION_RECEIPT\" and cl[\"call_class\"] in (\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L322: drop clause 3 of cl[\"kind\"] == \"EXECUTION_RECEIPT\" and cl[\"call_class\"] in (\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L324: drop clause 1 of cl[\"kind\"] == \"COMMIT_OBSERVATION\" and cl[\"commit_state\"] =="
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L324: drop clause 2 of cl[\"kind\"] == \"COMMIT_OBSERVATION\" and cl[\"commit_state\"] =="
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L324: drop clause 3 of cl[\"kind\"] == \"COMMIT_OBSERVATION\" and cl[\"commit_state\"] =="
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L334: remove not in not isinstance(event, dict)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L336: flip event.get(\"contract\") != CONTRACT"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L339: drop clause 1 of not isinstance(ver, str) or not re.fullmatch(VERSION_RE, ver"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L339: drop clause 2 of not isinstance(ver, str) or not re.fullmatch(VERSION_RE, ver"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L342: flip major != supported_major"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L345: drop clause 1 of not isinstance(crit, list) or not all(isinstance(x, str) for"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L345: drop clause 2 of not isinstance(crit, list) or not all(isinstance(x, str) for"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L349: drop clause 1 of unknown and minor <= supported_minor"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L349: drop clause 2 of unknown and minor <= supported_minor"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L379: flip tmaj != smaj"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "evc1.py::ast@L387: drop clause 1 of known.get(\"integrity\", {}).get(\"event_digest\") or digest_of("
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L387: drop clause 2 of known.get(\"integrity\", {}).get(\"event_digest\") or digest_of("
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L388: swap +/- in known[\"id\"] + \".m\" + target_version.replace(\".\", \"\")"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "evc1.py::ast@L162: drop clause 1 of isinstance(v, bool) or v is None or isinstance(v, (str, int)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L162: drop clause 2 of isinstance(v, bool) or v is None or isinstance(v, (str, int)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L162: drop clause 3 of isinstance(v, bool) or v is None or isinstance(v, (str, int)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L201: flip prov[\"signature\"] == \"INVALID\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L201: remove not in not prov[\"hash_consistent\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L205: flip prov[\"issuer_trust\"] == \"TRUSTED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L205: flip prov[\"freshness\"] == \"FRESH\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L205: flip prov[\"replay\"] == \"NOT_SEEN\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L249: drop clause 1 of lineage or {\"transformations\": [], \"source_event_id\": None, "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L249: drop clause 2 of lineage or {\"transformations\": [], \"source_event_id\": None, "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L253: flip v is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L273: flip e[\"claim\"][\"kind\"] != kind"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L273: flip e[\"claim\"][\"layer\"] != layer"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L285: flip e[\"integrity\"][\"event_digest\"] != digest_of(body)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L290: flip ev[\"trust\"] == \"SIGNED_TRUSTED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L290: flip ev[\"classification\"] in (\"SYNTHETIC\",)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L293: flip pr[\"assurance\"] == \"VERIFIED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L293: flip ev[\"trust\"] != \"SIGNED_TRUSTED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L295: flip e[\"type\"] != \"mcr.mission.started\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L295: flip e[\"correlation\"][\"mission_id\"] is None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L297: flip e[\"type\"] in (\"mcr.mutation.attempted\", \"mcr.compensation.at"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L297: flip e[\"correlation\"].get(\"mutation_attempt_id\") is None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L300: flip name not in KNOWN_CRITICAL"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L303: flip cl[\"kind\"] == \"READBACK_CLAIM\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L303: flip cl[\"source_level\"] != \"AUTHORITATIVE_REPOSITORY\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L305: flip cl[\"kind\"] == \"READBACK_CLAIM\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L305: flip ev[\"trust\"] != \"SIGNED_TRUSTED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L307: flip cl[\"kind\"] == \"OUTCOME_EVALUATION\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L307: flip cl[\"result\"] == \"PASS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L307: flip ev[\"classification\"] not in (\"READBACK\", \"OBSERVED\", \"CORROB"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L309: flip cl[\"kind\"] == \"OUTCOME_EVALUATION\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L309: flip ev[\"classification\"] != \"HISTORICAL\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L309: drop clause 1 of cl[\"expected_digest\"] is None or cl[\"predicates_digest\"] is "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L309: drop clause 2 of cl[\"expected_digest\"] is None or cl[\"predicates_digest\"] is "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L312: drop clause 1 of cl[\"disposition\"] == \"COMPLETE\" and cl[\"outcome_class\"] != \""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L312: drop clause 2 of cl[\"disposition\"] == \"COMPLETE\" and cl[\"outcome_class\"] != \""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L314: drop clause 1 of cl[\"outcome_class\"] == \"COMPLETE\" and cl[\"disposition\"] != \""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L314: drop clause 2 of cl[\"outcome_class\"] == \"COMPLETE\" and cl[\"disposition\"] != \""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L316: drop clause 1 of \"disposition\" in e and e[\"disposition\"] != cl[\"disposition\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L316: drop clause 2 of \"disposition\" in e and e[\"disposition\"] != cl[\"disposition\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L318: drop clause 1 of \"outcome_class\" in e and e[\"outcome_class\"] != cl[\"outcome_c"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L318: drop clause 2 of \"outcome_class\" in e and e[\"outcome_class\"] != cl[\"outcome_c"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L320: flip cl[\"kind\"] == \"EXECUTION_RECEIPT\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L320: flip cl[\"call_class\"] == \"PROVIDER_RESPONSE_SUCCESS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L320: remove not in not cl[\"provider_acknowledged\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L322: flip cl[\"kind\"] == \"EXECUTION_RECEIPT\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L322: flip cl[\"call_class\"] in (\"CALL_NOT_SENT\", \"CALL_SENT_NO_RESPONSE"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L324: flip cl[\"kind\"] == \"COMMIT_OBSERVATION\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L324: flip cl[\"commit_state\"] == \"COMMITTED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L324: flip ev[\"classification\"] not in (\"READBACK\", \"OBSERVED\", \"CORROB"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L339: remove not in not isinstance(ver, str)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L339: remove not in not re.fullmatch(VERSION_RE, ver)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L345: remove not in not isinstance(crit, list)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L345: remove not in not all(isinstance(x, str) for x in crit)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L349: flip minor <= supported_minor"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L352: drop clause 1 of name in unknown or name not in KNOWN_CRITICAL"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "evc1.py::ast@L352: drop clause 2 of name in unknown or name not in KNOWN_CRITICAL"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L388: swap +/- in known[\"id\"] + \".m\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L76: flip required is None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L162: flip v is None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L277: flip e.get(k_) is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L309: flip cl[\"expected_digest\"] is None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L309: flip cl[\"predicates_digest\"] is None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L312: flip cl[\"disposition\"] == \"COMPLETE\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L312: flip cl[\"outcome_class\"] != \"COMPLETE\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L314: flip cl[\"outcome_class\"] == \"COMPLETE\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L314: flip cl[\"disposition\"] != \"COMPLETE\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L316: flip \"disposition\" in e"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L316: flip e[\"disposition\"] != cl[\"disposition\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L318: flip \"outcome_class\" in e"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L318: flip e[\"outcome_class\"] != cl[\"outcome_class\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L348: flip k not in top_known"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L352: flip name in unknown"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L352: flip name not in KNOWN_CRITICAL"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L354: flip k in top_known"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L361: swap +/- in \"schema violation: \" + \"; \".join(probs[:6])"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L369: swap +/- in \"semantic violation: \" + \"; \".join(sem[:6])"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L145: swap +/- in list(DISPOSITIONS) + [None]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L146: swap +/- in list(OUTCOME_CLASSES) + [None]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L172: remove not in not isinstance(k, str)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L284: flip k != \"integrity\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L105: swap +/- in list(OUTCOME_CLASSES) + [None]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "evc1.py::ast@L387: flip k != \"integrity\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L284: drop clause 1 of full or e"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "evc1.py::ast@L284: drop clause 2 of full or e"
+    }
+  ],
+  "survivors": [
+    "evc1.py::ast@L273: drop clause 2 of e[\"claim\"][\"kind\"] != kind or e[\"claim\"][\"layer\"] != layer",
+    "evc1.py::ast@L387: drop clause 1 of known.get(\"integrity\", {}).get(\"event_digest\") or digest_of(",
+    "evc1.py::ast@L162: drop clause 1 of isinstance(v, bool) or v is None or isinstance(v, (str, int)",
+    "evc1.py::ast@L352: drop clause 2 of name in unknown or name not in KNOWN_CRITICAL"
+  ],
+  "unexplained_survivors": []
+}

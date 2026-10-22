@@ -1,0 +1,61 @@
+{
+  "authority_effect": "NONE",
+  "claim": {
+    "claims_business_outcome": false,
+    "kind": "EVIDENCE_VERIFICATION",
+    "layer": "VERIFIED_FACT",
+    "result": "PASS",
+    "scope": "HASH",
+    "subject_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "verifier": "mcr3-test"
+  },
+  "contract": "mcr-evidence/1",
+  "contract_version": "1.0.0",
+  "correlation": {
+    "causation_id": null,
+    "correlation_id": "CORR-SYN-1",
+    "mission_id": "M-SYN-1",
+    "mutation_attempt_id": "ATT-SYN-1",
+    "transaction_id": "TX-SYN-1"
+  },
+  "digests": {
+    "payload": "74e809d524e4f9dcb149a66bf27980427fdf840195ff2fa1bb2b2592544fe948",
+    "policy": null,
+    "schema": "45e48d7db6a6e41d060e81fd624b7ba6eb08ce069afaf176625f7629b99cd8b3"
+  },
+  "evidence": {
+    "classification": "SYNTHETIC",
+    "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "provenance": {
+      "freshness": "UNKNOWN",
+      "hash_consistent": true,
+      "issuer_trust": "UNKNOWN",
+      "replay": "UNKNOWN",
+      "signature": "ABSENT",
+      "signer": null,
+      "verified_by": null
+    },
+    "ref": null,
+    "trust": "UNTRUSTED_RESEARCH"
+  },
+  "id": "EVT-4a852cfb21",
+  "integrity": {
+    "event_digest": "91ad943b47dd5a2271061d8e2ed83d3e54249c3d138ea71d986c1db766532d6c"
+  },
+  "lineage": {
+    "source_digest": null,
+    "source_event_id": null,
+    "supersedes": null,
+    "transformations": []
+  },
+  "producer": {
+    "adapter_id": "fixture-adapter",
+    "adapter_version": "1.0.0",
+    "runtime": "mcr",
+    "runtime_version": "3.0.0",
+    "source_runtime_version": "3.0.0"
+  },
+  "source": "mcr://conformance/fixture",
+  "time": "2026-10-21T12:00:00Z",
+  "type": "mcr.evidence.verified"
+}

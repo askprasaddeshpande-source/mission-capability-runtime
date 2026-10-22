@@ -1,0 +1,16 @@
+{
+  "evidence_class": "SYNTHETIC/LOCAL",
+  "failed": [],
+  "groups": {
+    "B1_RESUME_REVOCATION": "PASS",
+    "B2_COMPENSATION_GUARDS": "PASS",
+    "B3_CLOCK_AND_EXPIRY": "PASS",
+    "B4_APPROVAL_BINDING": "PASS",
+    "B8_LEDGER_ROLLBACK": "PASS",
+    "RELEASE_GATE_CHECKER": "PASS"
+  },
+  "network_calls": 0,
+  "stage": "MCR3_CORRECTIVE_CLOSURE",
+  "tests": 67,
+  "tests_digest": "14678366221CE0447DE3FEBB6466E71D89A463ABFAC62E95AEE6F50FBC935241"
+}

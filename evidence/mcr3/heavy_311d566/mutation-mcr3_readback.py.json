@@ -1,0 +1,292 @@
+{
+  "MUTATION_CHECK": "PASS",
+  "by_kind": {
+    "ast": 42,
+    "guard": 0,
+    "relation": 0,
+    "special": 0
+  },
+  "by_module": {
+    "mcr3_readback.py": {
+      "assertion": 37,
+      "crash": 4,
+      "detected": 41,
+      "hang": 0,
+      "mutants": 42,
+      "survivors": 1
+    }
+  },
+  "detected_by_assertion": 37,
+  "detected_by_hang": [],
+  "detected_by_validator_crash": {
+    "mcr3_readback.py::ast@L44: swap +/- in r\"(?<![A-Za-z0-9_])\" + re.escape(name)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_readback.py::ast@L44: swap +/- in r\"(?<![A-Za-z0-9_])\" + re.escape(name) + r\"(?![A-Za-z0-9_])\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_readback.py::ast@L67: flip existence == \"ABSENT\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_readback.py::ast@L67: flip existence == \"EXISTS\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)"
+  },
+  "evidence_class": "SYNTHETIC/LOCAL",
+  "explained_survivors": {
+    "mcr3_readback.py::ast@L41: drop clause 2 of not isinstance(src, str) or not src": "equivalent: an empty body contains no object name, so the read is UNKNOWN either way"
+  },
+  "inconclusive": [],
+  "mutants": 42,
+  "not_applied": [],
+  "results": [
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_readback.py::ast@L36: drop clause 1 of not isinstance(r, dict) or r.get(\"endpoint\") != otype"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_readback.py::ast@L36: drop clause 2 of not isinstance(r, dict) or r.get(\"endpoint\") != otype"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_readback.py::ast@L39: flip st == 200"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_readback.py::ast@L46: flip st == 404"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_readback.py::ast@L54: drop clause 1 of act[0] == \"EXISTS\" or ina[0] == \"EXISTS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_readback.py::ast@L54: drop clause 2 of act[0] == \"EXISTS\" or ina[0] == \"EXISTS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_readback.py::ast@L60: flip act[0] == \"EXISTS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_readback.py::ast@L97: drop clause 1 of first[\"existence\"] == second[\"existence\"] != \"UNKNOWN\" and f"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_readback.py::ast@L97: drop clause 2 of first[\"existence\"] == second[\"existence\"] != \"UNKNOWN\" and f"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_readback.py::ast@L36: remove not in not isinstance(r, dict)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_readback.py::ast@L36: flip r.get(\"endpoint\") != otype"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_readback.py::ast@L41: drop clause 1 of not isinstance(src, str) or not src"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "mcr3_readback.py::ast@L41: drop clause 2 of not isinstance(src, str) or not src"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_readback.py::ast@L43: flip r.get(\"source_sha256_reported\") == hashlib.sha256(src.encode"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_readback.py::ast@L44: flip re.search(r\"(?<![A-Za-z0-9_])\" + re.escape(name) + r\"(?![A-Z"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_readback.py::ast@L54: flip act[0] == \"EXISTS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_readback.py::ast@L54: flip ina[0] == \"EXISTS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_readback.py::ast@L56: drop clause 1 of act[0] == \"ABSENT\" and ina[0] == \"ABSENT\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_readback.py::ast@L56: drop clause 2 of act[0] == \"ABSENT\" and ina[0] == \"ABSENT\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_readback.py::ast@L62: drop clause 1 of ina[0] == \"EXISTS\" and act[0] == \"ABSENT\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_readback.py::ast@L62: drop clause 2 of ina[0] == \"EXISTS\" and act[0] == \"ABSENT\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_readback.py::ast@L97: flip first[\"activation\"] == second[\"activation\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_readback.py::ast@L41: remove not in not isinstance(src, str)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_readback.py::ast@L41: remove not in not src"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_readback.py::ast@L56: flip act[0] == \"ABSENT\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_readback.py::ast@L56: flip ina[0] == \"ABSENT\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_readback.py::ast@L62: flip ina[0] == \"EXISTS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_readback.py::ast@L62: flip act[0] == \"ABSENT\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_readback.py::ast@L66: flip x[0] in (\"EXISTS\", \"ABSENT\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_readback.py::ast@L67: flip existence == \"EXISTS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_readback.py::ast@L69: flip existence == \"EXISTS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_readback.py::ast@L69: drop clause 1 of act[1] or ina[1]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_readback.py::ast@L69: drop clause 2 of act[1] or ina[1]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_readback.py::ast@L70: flip existence == \"EXISTS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_readback.py::ast@L70: drop clause 1 of act[2] or ina[2]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_readback.py::ast@L70: drop clause 2 of act[2] or ina[2]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_readback.py::ast@L44: swap +/- in r\"(?<![A-Za-z0-9_])\" + re.escape(name) + r\"(?![A-Za-z0-9_])\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_readback.py::ast@L45: drop clause 1 of integrity and identity"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_readback.py::ast@L45: drop clause 2 of integrity and identity"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_readback.py::ast@L47: flip r.get(\"error_names_object\") == name"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_readback.py::ast@L67: flip existence == \"ABSENT\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_readback.py::ast@L44: swap +/- in r\"(?<![A-Za-z0-9_])\" + re.escape(name)"
+    }
+  ],
+  "survivors": [
+    "mcr3_readback.py::ast@L41: drop clause 2 of not isinstance(src, str) or not src"
+  ],
+  "unexplained_survivors": []
+}

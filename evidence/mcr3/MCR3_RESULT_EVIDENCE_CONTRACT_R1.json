@@ -1,0 +1,21 @@
+{
+  "evidence_class": "SYNTHETIC/LOCAL",
+  "failed": [],
+  "groups": {
+    "CANONICAL": "PASS",
+    "COMPATIBILITY": "PASS",
+    "EXAMPLES": "PASS",
+    "LIBRARY_CROSS_CHECK": "PASS",
+    "MIGRATION": "PASS",
+    "MINI_VALIDATOR": "PASS",
+    "NEGATIVE": "PASS",
+    "ROBUSTNESS": "PASS",
+    "SCHEMA": "PASS",
+    "TRUST_DERIVATION": "PASS"
+  },
+  "network_calls": 0,
+  "not_verified": [],
+  "stage": "MCR3_EVIDENCE_CONTRACT_V1",
+  "tests": 207,
+  "tests_digest": "16BCC868AD88524883D670DA4DC42EEF305586F447155A8B7CEDBA6666A53246"
+}

@@ -1,0 +1,17 @@
+{
+  "evidence_class": "SYNTHETIC/LOCAL",
+  "failed": [],
+  "groups": {
+    "ADAPTER_A_R2_REFERENCE": "PASS",
+    "ADAPTER_B_NATIVE": "PASS",
+    "ADAPTER_DECLARATIONS": "PASS",
+    "CLAUDE_MODS_SCENARIOS": "PASS",
+    "CROSS_VERSION_EQUIVALENCE": "PASS",
+    "LINEAGE": "PASS",
+    "PE_EVENT_MAPPING": "PASS"
+  },
+  "network_calls": 0,
+  "stage": "MCR3_ADAPTERS_INTEROP",
+  "tests": 99,
+  "tests_digest": "8BB9C2D554DBE026B6E63C5D1433502E338C343E1889DDFC30D16A9D620A7B8D"
+}

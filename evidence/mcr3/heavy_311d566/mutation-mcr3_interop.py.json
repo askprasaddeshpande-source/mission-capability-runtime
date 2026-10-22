@@ -1,0 +1,285 @@
+{
+  "MUTATION_CHECK": "PASS",
+  "by_kind": {
+    "ast": 39,
+    "guard": 0,
+    "relation": 0,
+    "special": 0
+  },
+  "by_module": {
+    "mcr3_interop.py": {
+      "assertion": 25,
+      "crash": 11,
+      "detected": 36,
+      "hang": 0,
+      "mutants": 39,
+      "survivors": 3
+    }
+  },
+  "detected_by_assertion": 25,
+  "detected_by_hang": [],
+  "detected_by_validator_crash": {
+    "mcr3_interop.py::ast@L104: drop clause 1 of pe.get(\"data\") or {}": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_interop.py::ast@L105: drop clause 1 of isinstance(v, str) and _SAFE.fullmatch(v) and not _SECRETISH": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_interop.py::ast@L105: drop clause 2 of v is None or (isinstance(v, str) and _SAFE.fullmatch(v) and ": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_interop.py::ast@L105: flip k in DATA_ALLOWED": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_interop.py::ast@L105: remove not in not _SECRETISH.search(v)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_interop.py::ast@L132: flip e[\"type\"] == \"mcr.mission.disposition\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_interop.py::ast@L135: remove not in not evs": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_interop.py::ast@L46: drop clause 2 of known.get(\"capability\") or {}": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_interop.py::ast@L56: flip claim.get(k) is not None": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_interop.py::ast@L59: flip k in claim": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_interop.py::ast@L63: drop clause 2 of val is not None and len(val) > 96": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)"
+  },
+  "evidence_class": "SYNTHETIC/LOCAL",
+  "explained_survivors": {
+    "mcr3_interop.py::ast@L63: drop clause 1 of val is not None and len(val) > 96": "equivalent (defence in depth): the event contract already limits these ids to 96 characters, so the check is unreachable",
+    "mcr3_interop.py::ast@L63: flip len(val) > 96": "equivalent (defence in depth): the event contract already limits these ids to 96 characters, so the check is unreachable",
+    "mcr3_interop.py::ast@L63: flip val is not None": "equivalent (defence in depth): the event contract already limits these ids to 96 characters, so the check is unreachable"
+  },
+  "inconclusive": [],
+  "mutants": 39,
+  "not_applied": [],
+  "results": [
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_interop.py::ast@L46: drop clause 1 of known.get(\"capability\") or {}"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_interop.py::ast@L46: drop clause 2 of known.get(\"capability\") or {}"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_interop.py::ast@L56: flip claim.get(k) is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_interop.py::ast@L59: flip k in claim"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "mcr3_interop.py::ast@L63: drop clause 1 of val is not None and len(val) > 96"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_interop.py::ast@L63: drop clause 2 of val is not None and len(val) > 96"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_interop.py::ast@L88: drop clause 1 of not isinstance(pe, dict) or pe.get(\"schema\") != PE_SCHEMA"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_interop.py::ast@L88: drop clause 2 of not isinstance(pe, dict) or pe.get(\"schema\") != PE_SCHEMA"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_interop.py::ast@L101: flip pe[\"event_id\"] in self.stored"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_interop.py::ast@L135: remove not in not evs"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_interop.py::ast@L145: flip out[\"disposition\"] != \"COMPLETE\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_interop.py::ast@L149: flip out[\"trust_floor\"] != \"SIGNED_TRUSTED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_interop.py::ast@L152: remove not in not out[\"reasons\"]"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "mcr3_interop.py::ast@L63: flip val is not None"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "mcr3_interop.py::ast@L63: flip len(val) > 96"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_interop.py::ast@L88: remove not in not isinstance(pe, dict)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_interop.py::ast@L88: flip pe.get(\"schema\") != PE_SCHEMA"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_interop.py::ast@L90: flip pe.get(\"source\") not in sources"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_interop.py::ast@L105: drop clause 1 of k in DATA_ALLOWED and (v is None or (isinstance(v, str) and "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_interop.py::ast@L105: drop clause 2 of k in DATA_ALLOWED and (v is None or (isinstance(v, str) and "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_interop.py::ast@L126: flip n is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_interop.py::ast@L92: flip pe.get(\"kind\") not in kinds"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_interop.py::ast@L104: drop clause 1 of pe.get(\"data\") or {}"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_interop.py::ast@L104: drop clause 2 of pe.get(\"data\") or {}"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_interop.py::ast@L105: flip k in DATA_ALLOWED"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_interop.py::ast@L105: drop clause 1 of v is None or (isinstance(v, str) and _SAFE.fullmatch(v) and "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_interop.py::ast@L105: drop clause 2 of v is None or (isinstance(v, str) and _SAFE.fullmatch(v) and "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_interop.py::ast@L131: flip e[\"correlation\"][\"mission_id\"] == mission_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_interop.py::ast@L132: flip e[\"type\"] == \"mcr.mission.disposition\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_interop.py::ast@L94: drop clause 1 of not isinstance(pe.get(\"event_id\"), str) or not re.fullmatch("
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_interop.py::ast@L94: drop clause 2 of not isinstance(pe.get(\"event_id\"), str) or not re.fullmatch("
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_interop.py::ast@L105: flip v is None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_interop.py::ast@L105: drop clause 1 of isinstance(v, str) and _SAFE.fullmatch(v) and not _SECRETISH"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_interop.py::ast@L105: drop clause 2 of isinstance(v, str) and _SAFE.fullmatch(v) and not _SECRETISH"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_interop.py::ast@L105: drop clause 3 of isinstance(v, str) and _SAFE.fullmatch(v) and not _SECRETISH"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_interop.py::ast@L94: remove not in not isinstance(pe.get(\"event_id\"), str)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_interop.py::ast@L94: remove not in not re.fullmatch(r\"[A-Za-z0-9][A-Za-z0-9_.:-]{7,95}\", pe[\"ev"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_interop.py::ast@L96: flip pe.get(\"evidence_class\") not in PE_EVIDENCE_CLASSES"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_interop.py::ast@L105: remove not in not _SECRETISH.search(v)"
+    }
+  ],
+  "survivors": [
+    "mcr3_interop.py::ast@L63: drop clause 1 of val is not None and len(val) > 96",
+    "mcr3_interop.py::ast@L63: flip val is not None",
+    "mcr3_interop.py::ast@L63: flip len(val) > 96"
+  ],
+  "unexplained_survivors": []
+}

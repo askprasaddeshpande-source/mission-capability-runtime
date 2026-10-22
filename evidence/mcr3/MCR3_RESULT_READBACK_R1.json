@@ -1,0 +1,15 @@
+{
+  "evidence_class": "SYNTHETIC/LOCAL",
+  "failed": [],
+  "groups": {
+    "ACTIVATION": "PASS",
+    "AUTHORITY_LABEL": "PASS",
+    "EXISTENCE": "PASS",
+    "PROVIDER": "PASS",
+    "RUNTIME_INTEGRATION": "PASS"
+  },
+  "network_calls": 0,
+  "stage": "MCR3_READBACK",
+  "tests": 34,
+  "tests_digest": "F1201320D8151054AF469B0D9FE1392BA796D43E2BD2B6D02AC7F0CE3B175C85"
+}

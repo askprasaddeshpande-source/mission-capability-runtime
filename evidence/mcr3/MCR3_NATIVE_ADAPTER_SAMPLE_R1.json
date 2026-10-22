@@ -1,0 +1,549 @@
+{
+  "adapter": {
+    "ADAPTER_ID": "mcr3-native",
+    "APPROVAL_STATUS": "NOT_APPROVED",
+    "DEFAULT_AUTHORITY": "NONE",
+    "EVIDENCE_CLASSIFICATION": "OBSERVED|READBACK|SYNTHETIC (per run)",
+    "LIMITATIONS": [
+      "Mission cannot verify provenance",
+      "identity assurance is SELF_REPORTED",
+      "no approval is known to the model"
+    ],
+    "MODE": "OBSERVATION_ONLY",
+    "QUALIFICATION_EVIDENCE": null,
+    "REVOCATION_STATUS": "NOT_REVOKED",
+    "SOURCE_RUNTIME_VERSION": "3.0.0",
+    "SUPPORTED_CAPABILITIES": [
+      "*"
+    ],
+    "TARGET_CONTRACT_VERSION": "1.0.0",
+    "TRUST_REQUIREMENTS": "unsigned unless a verifier attaches provenance; authority_effect NONE"
+  },
+  "events": [
+    {
+      "authority_effect": "NONE",
+      "capability": {
+        "capability_id": "create_object",
+        "operation": "create_object",
+        "provider_id": "SYN",
+        "qualification_status": "QUARANTINED",
+        "target_system": "SYN_SYS"
+      },
+      "claim": {
+        "intent_digest": "4fe29474110b7256ebb63aa4b237de23752354d3c03036c7f2580e84dc87d875",
+        "kind": "MISSION_STARTED",
+        "layer": "OCCURRENCE",
+        "target_system": "SYN_SYS"
+      },
+      "contract": "mcr-evidence/1",
+      "contract_version": "1.0.0",
+      "correlation": {
+        "causation_id": null,
+        "correlation_id": "CORR-a1daee3238edeb69",
+        "mission_id": "M-SYN-1",
+        "transaction_id": "TX-SYN-1"
+      },
+      "digests": {
+        "payload": "9dd9815318eda5c1b2331d195f38548b4297d155026221850e52ff62116bf7d5",
+        "policy": null,
+        "schema": "45e48d7db6a6e41d060e81fd624b7ba6eb08ce069afaf176625f7629b99cd8b3"
+      },
+      "evidence": {
+        "classification": "SYNTHETIC",
+        "digest": "4fe29474110b7256ebb63aa4b237de23752354d3c03036c7f2580e84dc87d875",
+        "provenance": {
+          "freshness": "UNKNOWN",
+          "hash_consistent": true,
+          "issuer_trust": "UNKNOWN",
+          "replay": "UNKNOWN",
+          "signature": "ABSENT",
+          "signer": null,
+          "verified_by": null
+        },
+        "ref": "mission:intent",
+        "trust": "UNTRUSTED_RESEARCH"
+      },
+      "id": "EVT-07b5b9d427a1b3758c129099",
+      "integrity": {
+        "event_digest": "4e2e659ba4bf27c3d2fb755c7dd1550af63b6943ca9a7208b8db4b231de5c30c"
+      },
+      "lineage": {
+        "source_digest": null,
+        "source_event_id": null,
+        "supersedes": null,
+        "transformations": []
+      },
+      "principal": {
+        "assurance": "SELF_REPORTED",
+        "delegation_ref": "a06bc78a0f50b3b437137aa2adc49c4a9e39b584368ea54138788e3a2074e5f6",
+        "principal_ref": "972336db051ed4e2e2a9af7461a5976be9ec78ab234dd745ea8cc75ddf2098d0"
+      },
+      "producer": {
+        "adapter_id": "mcr3-native",
+        "adapter_version": "1.0.0",
+        "runtime": "mcr",
+        "runtime_version": "3.0.0",
+        "source_runtime_version": "3.0.0"
+      },
+      "source": "mcr://runtime/3.0/mission/started",
+      "time": "2027-01-15T00:00:00Z",
+      "type": "mcr.mission.started"
+    },
+    {
+      "authority_effect": "NONE",
+      "budget": {
+        "attempt_number": 1,
+        "attempts_remaining": 0,
+        "kind": "FORWARD",
+        "mutation_budget": 1
+      },
+      "capability": {
+        "capability_id": "create_object",
+        "operation": "create_object",
+        "provider_id": "SYN",
+        "qualification_status": "QUARANTINED",
+        "target_system": "SYN_SYS"
+      },
+      "claim": {
+        "attempt_id": "MUT-1",
+        "attempt_number": 1,
+        "budget_kind": "FORWARD",
+        "budget_remaining_after": 0,
+        "kind": "MUTATION_ATTEMPTED",
+        "layer": "OCCURRENCE"
+      },
+      "contract": "mcr-evidence/1",
+      "contract_version": "1.0.0",
+      "correlation": {
+        "causation_id": "EVT-07b5b9d427a1b3758c129099",
+        "correlation_id": "CORR-a1daee3238edeb69",
+        "mission_id": "M-SYN-1",
+        "mutation_attempt_id": "MUT-1",
+        "transaction_id": "TX-SYN-1"
+      },
+      "digests": {
+        "payload": "eb2db634bc59a6d3c6f9ad69cd12c1cb75a8c1887b4ccf85cf5990d1d9c63c89",
+        "policy": null,
+        "schema": "45e48d7db6a6e41d060e81fd624b7ba6eb08ce069afaf176625f7629b99cd8b3"
+      },
+      "evidence": {
+        "classification": "SYNTHETIC",
+        "digest": "4dfc158a1b8a6b53adbba2a2abf3418493ed5de6ecf3c284069dc83c7e434631",
+        "provenance": {
+          "freshness": "UNKNOWN",
+          "hash_consistent": true,
+          "issuer_trust": "UNKNOWN",
+          "replay": "UNKNOWN",
+          "signature": "ABSENT",
+          "signer": null,
+          "verified_by": null
+        },
+        "ref": "mission:checkpoint",
+        "trust": "UNTRUSTED_RESEARCH"
+      },
+      "id": "EVT-73ad853db02910c31bf6aca4",
+      "integrity": {
+        "event_digest": "709ee74b53433cde207476e6d00f46b7338aa5d80db017f6db8ed1e6f935c9ac"
+      },
+      "lineage": {
+        "source_digest": null,
+        "source_event_id": null,
+        "supersedes": null,
+        "transformations": []
+      },
+      "principal": {
+        "assurance": "SELF_REPORTED",
+        "delegation_ref": "a06bc78a0f50b3b437137aa2adc49c4a9e39b584368ea54138788e3a2074e5f6",
+        "principal_ref": "972336db051ed4e2e2a9af7461a5976be9ec78ab234dd745ea8cc75ddf2098d0"
+      },
+      "producer": {
+        "adapter_id": "mcr3-native",
+        "adapter_version": "1.0.0",
+        "runtime": "mcr",
+        "runtime_version": "3.0.0",
+        "source_runtime_version": "3.0.0"
+      },
+      "source": "mcr://runtime/3.0/mutation/attempted",
+      "time": "2027-01-15T00:00:00Z",
+      "type": "mcr.mutation.attempted"
+    },
+    {
+      "authority_effect": "NONE",
+      "capability": {
+        "capability_id": "create_object",
+        "operation": "create_object",
+        "provider_id": "SYN",
+        "qualification_status": "QUARANTINED",
+        "target_system": "SYN_SYS"
+      },
+      "claim": {
+        "call_class": "PROVIDER_RESPONSE_SUCCESS",
+        "implies_commit": false,
+        "kind": "EXECUTION_RECEIPT",
+        "layer": "RECEIPT",
+        "provider_acknowledged": true
+      },
+      "contract": "mcr-evidence/1",
+      "contract_version": "1.0.0",
+      "correlation": {
+        "causation_id": "EVT-73ad853db02910c31bf6aca4",
+        "correlation_id": "CORR-a1daee3238edeb69",
+        "mission_id": "M-SYN-1",
+        "mutation_attempt_id": "MUT-1",
+        "transaction_id": "TX-SYN-1"
+      },
+      "digests": {
+        "payload": "24dd8b1c09e9be181842cac107dce4b315ba418638afb3c08d8693d63c1e88d3",
+        "policy": null,
+        "schema": "45e48d7db6a6e41d060e81fd624b7ba6eb08ce069afaf176625f7629b99cd8b3"
+      },
+      "evidence": {
+        "classification": "SYNTHETIC",
+        "digest": "1a1e68bc2b09e8ee0a4e2d13c28712e8a767d27b2e70957d2e30e6d4f9a7e28d",
+        "provenance": {
+          "freshness": "UNKNOWN",
+          "hash_consistent": true,
+          "issuer_trust": "UNKNOWN",
+          "replay": "UNKNOWN",
+          "signature": "ABSENT",
+          "signer": null,
+          "verified_by": null
+        },
+        "ref": "mission:execution_receipt",
+        "trust": "UNTRUSTED_RESEARCH"
+      },
+      "id": "EVT-1dee938bcfc54b8a6c413be5",
+      "integrity": {
+        "event_digest": "520c6e613647f40757cf96b782638a6b8efeafafb84831415cf0930ff910fc3a"
+      },
+      "lineage": {
+        "source_digest": null,
+        "source_event_id": null,
+        "supersedes": null,
+        "transformations": []
+      },
+      "principal": {
+        "assurance": "SELF_REPORTED",
+        "delegation_ref": "a06bc78a0f50b3b437137aa2adc49c4a9e39b584368ea54138788e3a2074e5f6",
+        "principal_ref": "972336db051ed4e2e2a9af7461a5976be9ec78ab234dd745ea8cc75ddf2098d0"
+      },
+      "producer": {
+        "adapter_id": "mcr3-native",
+        "adapter_version": "1.0.0",
+        "runtime": "mcr",
+        "runtime_version": "3.0.0",
+        "source_runtime_version": "3.0.0"
+      },
+      "source": "mcr://runtime/3.0/execution/receipt",
+      "time": "2027-01-15T00:00:00Z",
+      "type": "mcr.execution.receipt"
+    },
+    {
+      "authority_effect": "NONE",
+      "capability": {
+        "capability_id": "create_object",
+        "operation": "create_object",
+        "provider_id": "SYN",
+        "qualification_status": "QUARANTINED",
+        "target_system": "SYN_SYS"
+      },
+      "claim": {
+        "activation": "ACTIVE",
+        "checks_satisfied": true,
+        "claimed_authoritative": true,
+        "existence": "EXISTS",
+        "kind": "READBACK_CLAIM",
+        "layer": "RECEIPT",
+        "provenance_verified": false,
+        "source_level": "AUTHORITATIVE_REPOSITORY"
+      },
+      "contract": "mcr-evidence/1",
+      "contract_version": "1.0.0",
+      "correlation": {
+        "causation_id": "EVT-1dee938bcfc54b8a6c413be5",
+        "correlation_id": "CORR-a1daee3238edeb69",
+        "mission_id": "M-SYN-1",
+        "mutation_attempt_id": "MUT-1",
+        "transaction_id": "TX-SYN-1"
+      },
+      "digests": {
+        "payload": "62abf6bfcdf1b92ffb70e2556cb2c551ce0abb77666a8192cf5f857b34843d82",
+        "policy": null,
+        "schema": "45e48d7db6a6e41d060e81fd624b7ba6eb08ce069afaf176625f7629b99cd8b3"
+      },
+      "evidence": {
+        "classification": "SYNTHETIC",
+        "digest": "ffafbf287b072c44b2cbe674c8937c9a6cc320c4aec55e4927b72f30989fbf89",
+        "provenance": {
+          "freshness": "UNKNOWN",
+          "hash_consistent": true,
+          "issuer_trust": "UNKNOWN",
+          "replay": "UNKNOWN",
+          "signature": "ABSENT",
+          "signer": null,
+          "verified_by": null
+        },
+        "ref": "mission:readback",
+        "trust": "UNTRUSTED_RESEARCH"
+      },
+      "id": "EVT-ce81e014d381ca2f8bbf6c76",
+      "integrity": {
+        "event_digest": "dfe521b782e77687427189bab1594e8e91af00c512b91d305a909cb4a627fadb"
+      },
+      "lineage": {
+        "source_digest": null,
+        "source_event_id": null,
+        "supersedes": null,
+        "transformations": []
+      },
+      "principal": {
+        "assurance": "SELF_REPORTED",
+        "delegation_ref": "a06bc78a0f50b3b437137aa2adc49c4a9e39b584368ea54138788e3a2074e5f6",
+        "principal_ref": "972336db051ed4e2e2a9af7461a5976be9ec78ab234dd745ea8cc75ddf2098d0"
+      },
+      "producer": {
+        "adapter_id": "mcr3-native",
+        "adapter_version": "1.0.0",
+        "runtime": "mcr",
+        "runtime_version": "3.0.0",
+        "source_runtime_version": "3.0.0"
+      },
+      "source": "mcr://runtime/3.0/readback/claimed",
+      "time": "2027-01-15T00:00:00Z",
+      "type": "mcr.readback.claimed"
+    },
+    {
+      "authority_effect": "NONE",
+      "capability": {
+        "capability_id": "create_object",
+        "operation": "create_object",
+        "provider_id": "SYN",
+        "qualification_status": "QUARANTINED",
+        "target_system": "SYN_SYS"
+      },
+      "claim": {
+        "commit_state": "COMMITTED",
+        "implies_outcome": false,
+        "kind": "COMMIT_OBSERVATION",
+        "layer": "RECEIPT",
+        "readback_digest": "ffafbf287b072c44b2cbe674c8937c9a6cc320c4aec55e4927b72f30989fbf89"
+      },
+      "contract": "mcr-evidence/1",
+      "contract_version": "1.0.0",
+      "correlation": {
+        "causation_id": "EVT-ce81e014d381ca2f8bbf6c76",
+        "correlation_id": "CORR-a1daee3238edeb69",
+        "mission_id": "M-SYN-1",
+        "mutation_attempt_id": "MUT-1",
+        "transaction_id": "TX-SYN-1"
+      },
+      "digests": {
+        "payload": "13805366fc508d543a447b66b3a2f7b6be8d4d614808b073e7bc2d0b8acedfeb",
+        "policy": null,
+        "schema": "45e48d7db6a6e41d060e81fd624b7ba6eb08ce069afaf176625f7629b99cd8b3"
+      },
+      "evidence": {
+        "classification": "SYNTHETIC",
+        "digest": "583ac276687e41215398d54a4757894d77c1e36531283c1d02fbcf922bb0daf7",
+        "provenance": {
+          "freshness": "UNKNOWN",
+          "hash_consistent": true,
+          "issuer_trust": "UNKNOWN",
+          "replay": "UNKNOWN",
+          "signature": "ABSENT",
+          "signer": null,
+          "verified_by": null
+        },
+        "ref": "mission:commit",
+        "trust": "UNTRUSTED_RESEARCH"
+      },
+      "id": "EVT-c788d76e0d9bd5b4d9b674b2",
+      "integrity": {
+        "event_digest": "5f55a6def92f90b6bce03300581b04a5390c74dc7aaa15b7b24b3a64b1076c67"
+      },
+      "lineage": {
+        "source_digest": null,
+        "source_event_id": null,
+        "supersedes": null,
+        "transformations": []
+      },
+      "principal": {
+        "assurance": "SELF_REPORTED",
+        "delegation_ref": "a06bc78a0f50b3b437137aa2adc49c4a9e39b584368ea54138788e3a2074e5f6",
+        "principal_ref": "972336db051ed4e2e2a9af7461a5976be9ec78ab234dd745ea8cc75ddf2098d0"
+      },
+      "producer": {
+        "adapter_id": "mcr3-native",
+        "adapter_version": "1.0.0",
+        "runtime": "mcr",
+        "runtime_version": "3.0.0",
+        "source_runtime_version": "3.0.0"
+      },
+      "source": "mcr://runtime/3.0/commit/observed",
+      "time": "2027-01-15T00:00:00Z",
+      "type": "mcr.commit.observed"
+    },
+    {
+      "authority_effect": "NONE",
+      "capability": {
+        "capability_id": "create_object",
+        "operation": "create_object",
+        "provider_id": "SYN",
+        "qualification_status": "QUARANTINED",
+        "target_system": "SYN_SYS"
+      },
+      "claim": {
+        "expected_digest": "21a54c4272bea198e3e9e7e624a412135e435a90f166db8435281f4674a6b6c5",
+        "kind": "OUTCOME_EVALUATION",
+        "layer": "BUSINESS_OUTCOME",
+        "observed_digest": "522967d6eec279651e8cea23c4968d1de025055d456c04df6e73d8302041a8ca",
+        "predicates_digest": "fa79a3ea2fc875f43aa0c870c223821c1a67fa4b65ebd4bd9035d626dbf9ab7f",
+        "readback_digest": "ffafbf287b072c44b2cbe674c8937c9a6cc320c4aec55e4927b72f30989fbf89",
+        "result": "PASS"
+      },
+      "contract": "mcr-evidence/1",
+      "contract_version": "1.0.0",
+      "correlation": {
+        "causation_id": "EVT-c788d76e0d9bd5b4d9b674b2",
+        "correlation_id": "CORR-a1daee3238edeb69",
+        "mission_id": "M-SYN-1",
+        "mutation_attempt_id": "MUT-1",
+        "transaction_id": "TX-SYN-1"
+      },
+      "digests": {
+        "payload": "61d08dc70947711964c5c56af34b95443c693bf3458219b6e0a42ef721371282",
+        "policy": null,
+        "schema": "45e48d7db6a6e41d060e81fd624b7ba6eb08ce069afaf176625f7629b99cd8b3"
+      },
+      "evidence": {
+        "classification": "SYNTHETIC",
+        "digest": "88e060c69d483f1e112d357fbc2ceb3ba5ad42de95096c631df6fa6ea1c7f5cb",
+        "provenance": {
+          "freshness": "UNKNOWN",
+          "hash_consistent": true,
+          "issuer_trust": "UNKNOWN",
+          "replay": "UNKNOWN",
+          "signature": "ABSENT",
+          "signer": null,
+          "verified_by": null
+        },
+        "ref": "mission:outcome",
+        "trust": "UNTRUSTED_RESEARCH"
+      },
+      "id": "EVT-89feec15b7874395c593b613",
+      "integrity": {
+        "event_digest": "f68553abca8edcb25dc5d659a264f3402994c39f37aba48e95a3098dd8dede07"
+      },
+      "lineage": {
+        "source_digest": null,
+        "source_event_id": null,
+        "supersedes": null,
+        "transformations": []
+      },
+      "principal": {
+        "assurance": "SELF_REPORTED",
+        "delegation_ref": "a06bc78a0f50b3b437137aa2adc49c4a9e39b584368ea54138788e3a2074e5f6",
+        "principal_ref": "972336db051ed4e2e2a9af7461a5976be9ec78ab234dd745ea8cc75ddf2098d0"
+      },
+      "producer": {
+        "adapter_id": "mcr3-native",
+        "adapter_version": "1.0.0",
+        "runtime": "mcr",
+        "runtime_version": "3.0.0",
+        "source_runtime_version": "3.0.0"
+      },
+      "source": "mcr://runtime/3.0/outcome/evaluated",
+      "time": "2027-01-15T00:00:00Z",
+      "type": "mcr.outcome.evaluated"
+    },
+    {
+      "authority_effect": "NONE",
+      "capability": {
+        "capability_id": "create_object",
+        "operation": "create_object",
+        "provider_id": "SYN",
+        "qualification_status": "QUARANTINED",
+        "target_system": "SYN_SYS"
+      },
+      "claim": {
+        "chain_digests": [
+          "4fe29474110b7256ebb63aa4b237de23752354d3c03036c7f2580e84dc87d875",
+          "972336db051ed4e2e2a9af7461a5976be9ec78ab234dd745ea8cc75ddf2098d0",
+          "a06bc78a0f50b3b437137aa2adc49c4a9e39b584368ea54138788e3a2074e5f6",
+          "5db49589228a056a4352ada29542d0b90a824ac2de6a6f7a1fe966781e1f2ef5",
+          "98372e33b3e55c54e1e5593ea482ed08fb23ab6d6d5d90aaf7a3f22489c3cc96",
+          "c5da91a5df925580b7339b30749d98adabf2f309f6f6052bd74b9666d5426a03",
+          "09cf3780989b31971e37e591d7909af0ea28f9c772a430700b6977cfc55f731e",
+          "a0b69fa5e8708dab4e93c9e4082c941135fce6e0d1f2312a3cefdd40e7202b65",
+          "4dfc158a1b8a6b53adbba2a2abf3418493ed5de6ecf3c284069dc83c7e434631",
+          "1a1e68bc2b09e8ee0a4e2d13c28712e8a767d27b2e70957d2e30e6d4f9a7e28d",
+          "583ac276687e41215398d54a4757894d77c1e36531283c1d02fbcf922bb0daf7",
+          "ffafbf287b072c44b2cbe674c8937c9a6cc320c4aec55e4927b72f30989fbf89",
+          "88e060c69d483f1e112d357fbc2ceb3ba5ad42de95096c631df6fa6ea1c7f5cb",
+          "281c7d80edb39306a9155024d840f9607b9fe8b1190a7e047db893bb4218beb3"
+        ],
+        "disposition": "COMPLETE",
+        "kind": "MISSION_DISPOSITION",
+        "layer": "BUSINESS_OUTCOME",
+        "outcome_class": "COMPLETE"
+      },
+      "contract": "mcr-evidence/1",
+      "contract_version": "1.0.0",
+      "correlation": {
+        "causation_id": "EVT-89feec15b7874395c593b613",
+        "correlation_id": "CORR-a1daee3238edeb69",
+        "mission_id": "M-SYN-1",
+        "mutation_attempt_id": "MUT-1",
+        "transaction_id": "TX-SYN-1"
+      },
+      "digests": {
+        "payload": "d0c5e25d4aef7981586efaa4198a97ee5b3fef66a45be7bc08252c1c5174d5c3",
+        "policy": null,
+        "schema": "45e48d7db6a6e41d060e81fd624b7ba6eb08ce069afaf176625f7629b99cd8b3"
+      },
+      "disposition": "COMPLETE",
+      "evidence": {
+        "classification": "SYNTHETIC",
+        "digest": "281c7d80edb39306a9155024d840f9607b9fe8b1190a7e047db893bb4218beb3",
+        "provenance": {
+          "freshness": "UNKNOWN",
+          "hash_consistent": true,
+          "issuer_trust": "UNKNOWN",
+          "replay": "UNKNOWN",
+          "signature": "ABSENT",
+          "signer": null,
+          "verified_by": null
+        },
+        "ref": "mission:chain",
+        "trust": "UNTRUSTED_RESEARCH"
+      },
+      "id": "EVT-c032a506ccfbab53e988b914",
+      "integrity": {
+        "event_digest": "d7a8a7a63e6adbfff4b8f4fceb3b36085ab5f8e070f2c960901919977e27a596"
+      },
+      "lineage": {
+        "source_digest": null,
+        "source_event_id": null,
+        "supersedes": null,
+        "transformations": []
+      },
+      "outcome_class": "COMPLETE",
+      "principal": {
+        "assurance": "SELF_REPORTED",
+        "delegation_ref": "a06bc78a0f50b3b437137aa2adc49c4a9e39b584368ea54138788e3a2074e5f6",
+        "principal_ref": "972336db051ed4e2e2a9af7461a5976be9ec78ab234dd745ea8cc75ddf2098d0"
+      },
+      "producer": {
+        "adapter_id": "mcr3-native",
+        "adapter_version": "1.0.0",
+        "runtime": "mcr",
+        "runtime_version": "3.0.0",
+        "source_runtime_version": "3.0.0"
+      },
+      "source": "mcr://runtime/3.0/mission/disposition",
+      "time": "2027-01-15T00:00:00Z",
+      "type": "mcr.mission.disposition"
+    }
+  ],
+  "scenario": "synthetic complete mission (14 links)"
+}
