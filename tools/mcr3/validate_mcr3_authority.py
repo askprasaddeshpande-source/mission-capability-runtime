@@ -316,6 +316,21 @@ def run():
     t(g, "a_revoked_approval_cannot_promote_another_adapter", lambda: raises(lambda: ar3.promote("life2", "1.0.0", "SHADOW", H, aref("A9", "life2", "1.0.0", "SHADOW"), ascope), "not verified"))
     ar2.register(adapter(adapter_id="third"), "1.0.0")
     t(g, "a_used_approval_does_not_transfer_to_another_adapter", lambda: raises(lambda: ar2.promote("third", "1.0.0", "SHADOW", H, aref("A9", "clean", "1.1.0", "SHADOW"), ascope), "bound") and ar2.mode("third", "1.0.0") == "OBSERVATION_ONLY")
+    ar4 = A.AdapterRegistry(approval_verifier=gov, clock=lambda: aclock["now"])
+    ar4.register(adapter(adapter_id="edge"), "1.0.0")
+    t(g, "an_approval_expiring_exactly_now_is_refused", lambda: raises(lambda: ar4.promote("edge", "1.0.0", "SHADOW", H, aref("A9", "edge", "1.0.0", "SHADOW", expires_at="2027-01-15T08:00:00Z"), ascope), "expired") and ar4.mode("edge", "1.0.0") == "OBSERVATION_ONLY")
+    ar4.promote("edge", "1.0.0", "SHADOW", H, aref("A1", "edge", "1.0.0", "SHADOW", expires_at="2027-01-15T08:00:01Z"), ascope)
+    t(g, "an_approval_one_second_from_expiry_still_holds", lambda: ar4.mode("edge", "1.0.0") == "SHADOW")
+    aclock["now"] = NOW + 1
+    t(g, "an_approval_lapses_at_the_exact_expiry_instant", lambda: ar4.mode("edge", "1.0.0") == "OBSERVATION_ONLY")
+    aclock["now"] = NOW
+    ar4.register(adapter(adapter_id="tamper"), "1.0.0")
+    ar4._a[("tamper", "1.0.0")].declaration["MODE"] = "ACTIVE"
+    t(g, "a_declared_mode_without_a_stored_approval_is_not_honoured", lambda: ar4.mode("tamper", "1.0.0") == "OBSERVATION_ONLY")
+    t(g, "an_empty_or_non_string_expected_scope_field_is_refused", lambda: all(raises(lambda v=v: ar4.promote("edge", "1.0.0", "ACTIVE", H, aref("A1", "edge", "1.0.0", "ACTIVE"), dict(ascope, owner=v)), "expected approval scope") for v in ("", 5, None)))
+    t(g, "an_empty_scope_field_in_the_record_is_refused", lambda: raises(lambda: ar4.promote("edge", "1.0.0", "ACTIVE", H, aref("A1", "edge", "1.0.0", "ACTIVE", environment=""), ascope), "non-empty"))
+    ar4.register(A.Adapter("wild", "2.0.0", "1.0.0", ["*"], "HISTORICAL", "unsigned"), "1.0.0")
+    t(g, "a_wildcard_adapter_accepts_an_approval_for_any_capability", lambda: (ar4.promote("wild", "1.0.0", "SHADOW", H, aref("A1", "wild", "1.0.0", "SHADOW"), ascope), ar4.mode("wild", "1.0.0"))[1] == "SHADOW")
     t(g, "reregistering_an_adapter_drops_its_stored_approval", lambda: (ar3.register(adapter(adapter_id="life"), "1.0.0"), ar3._approval.get(("life", "1.0.0")) is None and ar3.mode("life", "1.0.0") == "OBSERVATION_ONLY")[1])
 
 
