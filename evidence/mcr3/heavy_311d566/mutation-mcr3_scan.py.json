@@ -1,0 +1,1102 @@
+{
+  "MUTATION_CHECK": "PASS",
+  "by_kind": {
+    "ast": 162,
+    "guard": 0,
+    "relation": 0,
+    "special": 0
+  },
+  "by_module": {
+    "mcr3_scan.py": {
+      "assertion": 68,
+      "crash": 92,
+      "detected": 160,
+      "hang": 0,
+      "mutants": 162,
+      "survivors": 2
+    }
+  },
+  "detected_by_assertion": 68,
+  "detected_by_hang": [],
+  "detected_by_validator_crash": {
+    "mcr3_scan.py::ast@L177: swap +/- in [\"git\"] + list(args)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L180: flip r.returncode != 0": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L190: flip os.path.normcase(os.path.realpath(top)) != os.path.normcase(": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L216: swap +/- in label + \"!\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L216: swap +/- in label + \"!\" + i.filename": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L219: swap +/- in label + \"!\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L219: swap +/- in label + \"!\" + i.filename": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L221: swap +/- in label + \"!\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L221: swap +/- in label + \"!\" + i.filename": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L256: flip _git(root, \"rev-parse\", \"--is-shallow-repository\", text=True": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L267: swap +/- in \"\\n\".join(paths) + \"\\n\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L275: flip c.returncode != 0": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L283: flip len(head) != 3": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L287: swap +/- in nl + 1": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L287: swap +/- in nl + 1 + size": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L287: swap +/- in nl + 1 + size + 1": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L302: swap +/- in \"sk\" + \"-ant-\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L302: swap +/- in \"sk\" + \"-ant-\" + \"api03-\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L302: swap +/- in \"sk\" + \"-ant-\" + \"api03-\" + _a(40, \"x\")": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L303: swap +/- in \"sk\" + \"-proj-\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L303: swap +/- in \"sk\" + \"-proj-\" + _a(40, \"x\")": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L304: swap +/- in \"sk\" + \"-\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L304: swap +/- in \"sk\" + \"-\" + _a(40)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L305: swap +/- in \"gh\" + \"p_\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L305: swap +/- in \"gh\" + \"p_\" + _a(36)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L306: swap +/- in \"github\" + \"_pat_\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L306: swap +/- in \"github\" + \"_pat_\" + _a(30)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L307: swap +/- in \"gl\" + \"pat-\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L307: swap +/- in \"gl\" + \"pat-\" + _a(24)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L308: swap +/- in \"AI\" + \"za\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L308: swap +/- in \"AI\" + \"za\" + _a(35)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L309: swap +/- in \"ya\" + \"29.\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L309: swap +/- in \"ya\" + \"29.\" + _a(30)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L310: swap +/- in '\"private' + '_key\": \"-----BEGIN '": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L310: swap +/- in '\"private' + '_key\": \"-----BEGIN ' + 'PRIVATE KEY-----\"'": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L311: swap +/- in \"SG\" + \".\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L311: swap +/- in \"SG\" + \".\" + _a(22)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L311: swap +/- in \"SG\" + \".\" + _a(22) + \".\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L311: swap +/- in \"SG\" + \".\" + _a(22) + \".\" + _a(43)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L312: swap +/- in \"sk\" + \"_live_\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L312: swap +/- in \"sk\" + \"_live_\" + _a(24)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L313: swap +/- in \"whsec\" + \"_\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L313: swap +/- in \"whsec\" + \"_\" + _a(32)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L314: swap +/- in \"AK\" + \"IA\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L314: swap +/- in \"AK\" + \"IA\" + \"ABCDEFGHIJKLMNOP\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L315: swap +/- in \"aws_secret\" + \"_access_key = \"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L315: swap +/- in \"aws_secret\" + \"_access_key = \" + _a(40, \"a\")": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L316: swap +/- in \"Account\" + \"Key=\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L316: swap +/- in \"Account\" + \"Key=\" + _a(44)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L316: swap +/- in \"Account\" + \"Key=\" + _a(44) + \"==\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L317: swap +/- in \"?sv=2020&\" + \"sig=\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L317: swap +/- in \"?sv=2020&\" + \"sig=\" + _a(40)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L318: swap +/- in \"xo\" + \"xb-\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L318: swap +/- in \"xo\" + \"xb-\" + \"1234567890-abcdefghij\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L319: swap +/- in \"S\" + \"K\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L319: swap +/- in \"S\" + \"K\" + \"0123456789abcdef\" * 2": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L320: swap +/- in \"np\" + \"m_\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L320: swap +/- in \"np\" + \"m_\" + _a(36)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L321: swap +/- in \"py\" + \"pi-\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L321: swap +/- in \"py\" + \"pi-\" + _a(60)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L322: swap +/- in \"h\" + \"f_\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L322: swap +/- in \"h\" + \"f_\" + _a(34)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L323: swap +/- in \"ey\" + \"J\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L323: swap +/- in \"ey\" + \"J\" + _a(20)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L324: swap +/- in \"-----BEGIN \" + \"RSA PRIVATE \"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L324: swap +/- in \"-----BEGIN \" + \"RSA PRIVATE \" + \"KEY-----\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L325: swap +/- in \"Bear\" + \"er \"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L325: swap +/- in \"Bear\" + \"er \" + _a(30)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L326: swap +/- in \"Bas\" + \"ic \"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L326: swap +/- in \"Bas\" + \"ic \" + _a(30)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L327: swap +/- in \"https://user:\" + \"hunter22\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L327: swap +/- in \"https://user:\" + \"hunter22\" + \"@example.org/x\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L328: swap +/- in \"hooks.slack\" + \".com/services/T\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L328: swap +/- in \"hooks.slack\" + \".com/services/T\" + \"ABCDEFGH\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L328: swap +/- in \"hooks.slack\" + \".com/services/T\" + \"ABCDEFGH\" + \"/B\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L328: swap +/- in \"hooks.slack\" + \".com/services/T\" + \"ABCDEFGH\" + \"/B\" + \"ABC": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L328: swap +/- in \"hooks.slack\" + \".com/services/T\" + \"ABCDEFGH\" + \"/B\" + \"ABC #2": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L328: swap +/- in \"hooks.slack\" + \".com/services/T\" + \"ABCDEFGH\" + \"/B\" + \"ABC #3": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L329: swap +/- in \"1234567\" + \"890:\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L329: swap +/- in \"1234567\" + \"890:\" + _a(35, \"x\")": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L330: swap +/- in \"--pass\" + \"word \"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L330: swap +/- in \"--pass\" + \"word \" + \"hunter2hunter2\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L331: swap +/- in \"curl \" + \"-u \"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L331: swap +/- in \"curl \" + \"-u \" + \"admin:\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L331: swap +/- in \"curl \" + \"-u \" + \"admin:\" + \"hunter22\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L332: swap +/- in \"pass\" + \"word = \"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L332: swap +/- in \"pass\" + \"word = \" + \"p@ss!w0rd\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L333: swap +/- in \"to\" + \"ken: \"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L333: swap +/- in \"to\" + \"ken: \" + _a(24, \"q\")": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L339: swap +/- in [n for n, _ in SHAPES] + [\"secret_named_assignment\", \"token_": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L85: drop clause 1 of hi < len(txt) and hi - b < _NAME_SPAN and txt[hi] in _NAMECH": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_scan.py::ast@L85: flip hi < len(txt)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)"
+  },
+  "evidence_class": "SYNTHETIC/LOCAL",
+  "explained_survivors": {
+    "mcr3_scan.py::ast@L278: flip pos < len(data)": "equivalent: one extra iteration at pos == len(data) finds no newline and breaks",
+    "mcr3_scan.py::ast@L280: flip nl < 0": "equivalent: nl is never 0 here (an object header cannot be empty), so <= 0 and < 0 agree"
+  },
+  "inconclusive": [],
+  "mutants": 162,
+  "not_applied": [],
+  "results": [
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L109: drop clause 1 of bool(seg) and (any(x in _HASHY for x in seg) or seg[-1] in _"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L109: drop clause 2 of bool(seg) and (any(x in _HASHY for x in seg) or seg[-1] in _"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L113: drop clause 1 of _PLACEHOLDER.match(v) or _LABEL.fullmatch(v)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L113: drop clause 2 of _PLACEHOLDER.match(v) or _LABEL.fullmatch(v)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L115: drop clause 1 of (any(c.isdigit() for c in v) and any(c.isalpha() for c in v)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L115: drop clause 2 of (any(c.isdigit() for c in v) and any(c.isalpha() for c in v)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L180: flip r.returncode != 0"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L190: flip os.path.normcase(os.path.realpath(top)) != os.path.normcase("
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L201: drop clause 1 of len(data) > MAX_SCAN and not data.startswith(b\"PK\\x03\\x04\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L201: drop clause 2 of len(data) > MAX_SCAN and not data.startswith(b\"PK\\x03\\x04\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L256: flip _git(root, \"rev-parse\", \"--is-shallow-repository\", text=True"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L275: flip c.returncode != 0"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "mcr3_scan.py::ast@L278: flip pos < len(data)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L339: swap +/- in [n for n, _ in SHAPES] + [\"secret_named_assignment\", \"token_"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L80: flip a < last_hi"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L83: drop clause 1 of lo > 0 and a - lo < _NAME_SPAN and txt[lo - 1] in _NAMECH"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L83: drop clause 2 of lo > 0 and a - lo < _NAME_SPAN and txt[lo - 1] in _NAMECH"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L83: drop clause 3 of lo > 0 and a - lo < _NAME_SPAN and txt[lo - 1] in _NAMECH"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L85: drop clause 1 of hi < len(txt) and hi - b < _NAME_SPAN and txt[hi] in _NAMECH"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L85: drop clause 2 of hi < len(txt) and hi - b < _NAME_SPAN and txt[hi] in _NAMECH"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L85: drop clause 3 of hi < len(txt) and hi - b < _NAME_SPAN and txt[hi] in _NAMECH"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L88: drop clause 1 of ends_with_keyword and not any(mm.end() == hi - lo for mm in "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L88: drop clause 2 of ends_with_keyword and not any(mm.end() == hi - lo for mm in "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L109: drop clause 1 of any(x in _HASHY for x in seg) or seg[-1] in _COUNTY"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L109: drop clause 2 of any(x in _HASHY for x in seg) or seg[-1] in _COUNTY"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L115: drop clause 1 of any(c.isdigit() for c in v) and any(c.isalpha() for c in v)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L115: drop clause 2 of any(c.isdigit() for c in v) and any(c.isalpha() for c in v)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L140: drop clause 1 of len(v) < 8 or _exempt_name(m.group(\"n\")) or _PLACEHOLDER.mat"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L140: drop clause 2 of len(v) < 8 or _exempt_name(m.group(\"n\")) or _PLACEHOLDER.mat"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L140: drop clause 3 of len(v) < 8 or _exempt_name(m.group(\"n\")) or _PLACEHOLDER.mat"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L140: drop clause 4 of len(v) < 8 or _exempt_name(m.group(\"n\")) or _PLACEHOLDER.mat"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L140: drop clause 5 of len(v) < 8 or _exempt_name(m.group(\"n\")) or _PLACEHOLDER.mat"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L144: drop clause 1 of len(v) >= 16 or _short_secret_like(v)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L144: drop clause 2 of len(v) >= 16 or _short_secret_like(v)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L148: remove not in not (_exempt_name(m.group(\"n\")) or _PLACEHOLDER.match(v) or "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L152: remove not in not (_exempt_name(m.group(\"n\")) or _LABEL.fullmatch(v) or _P"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L201: flip len(data) > MAX_SCAN"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L201: remove not in not data.startswith(b\"PK\\x03\\x04\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L238: remove not in not os.path.isfile(fp)"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "mcr3_scan.py::ast@L280: flip nl < 0"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L283: flip len(head) != 3"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L287: swap +/- in nl + 1 + size + 1"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L288: flip typ in (b\"blob\", b\"commit\", b\"tag\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L83: flip lo > 0"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L83: flip a - lo < _NAME_SPAN"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L83: flip txt[lo - 1] in _NAMECH"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L85: flip hi < len(txt)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L85: flip hi - b < _NAME_SPAN"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L85: flip txt[hi] in _NAMECH"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L88: remove not in not any(mm.end() == hi - lo for mm in kw.finditer(txt[lo:hi]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L109: flip seg[-1] in _COUNTY"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L140: flip len(v) < 8"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L144: flip len(v) >= 16"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L148: drop clause 1 of _exempt_name(m.group(\"n\")) or _PLACEHOLDER.match(v) or _ATTR"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L148: drop clause 2 of _exempt_name(m.group(\"n\")) or _PLACEHOLDER.match(v) or _ATTR"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L148: drop clause 3 of _exempt_name(m.group(\"n\")) or _PLACEHOLDER.match(v) or _ATTR"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L148: drop clause 4 of _exempt_name(m.group(\"n\")) or _PLACEHOLDER.match(v) or _ATTR"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L152: drop clause 1 of _exempt_name(m.group(\"n\")) or _LABEL.fullmatch(v) or _PLACEH"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L152: drop clause 2 of _exempt_name(m.group(\"n\")) or _LABEL.fullmatch(v) or _PLACEH"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L152: drop clause 3 of _exempt_name(m.group(\"n\")) or _LABEL.fullmatch(v) or _PLACEH"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L152: drop clause 4 of _exempt_name(m.group(\"n\")) or _LABEL.fullmatch(v) or _PLACEH"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L152: drop clause 5 of _exempt_name(m.group(\"n\")) or _LABEL.fullmatch(v) or _PLACEH"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L161: flip h not in seen"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L177: swap +/- in [\"git\"] + list(args)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L287: swap +/- in nl + 1 + size"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L302: swap +/- in \"sk\" + \"-ant-\" + \"api03-\" + _a(40, \"x\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L303: swap +/- in \"sk\" + \"-proj-\" + _a(40, \"x\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L304: swap +/- in \"sk\" + \"-\" + _a(40)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L305: swap +/- in \"gh\" + \"p_\" + _a(36)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L306: swap +/- in \"github\" + \"_pat_\" + _a(30)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L307: swap +/- in \"gl\" + \"pat-\" + _a(24)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L308: swap +/- in \"AI\" + \"za\" + _a(35)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L309: swap +/- in \"ya\" + \"29.\" + _a(30)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L310: swap +/- in '\"private' + '_key\": \"-----BEGIN ' + 'PRIVATE KEY-----\"'"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L311: swap +/- in \"SG\" + \".\" + _a(22) + \".\" + _a(43)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L312: swap +/- in \"sk\" + \"_live_\" + _a(24)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L313: swap +/- in \"whsec\" + \"_\" + _a(32)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L314: swap +/- in \"AK\" + \"IA\" + \"ABCDEFGHIJKLMNOP\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L315: swap +/- in \"aws_secret\" + \"_access_key = \" + _a(40, \"a\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L316: swap +/- in \"Account\" + \"Key=\" + _a(44) + \"==\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L317: swap +/- in \"?sv=2020&\" + \"sig=\" + _a(40)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L318: swap +/- in \"xo\" + \"xb-\" + \"1234567890-abcdefghij\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L319: swap +/- in \"S\" + \"K\" + \"0123456789abcdef\" * 2"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L320: swap +/- in \"np\" + \"m_\" + _a(36)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L321: swap +/- in \"py\" + \"pi-\" + _a(60)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L322: swap +/- in \"h\" + \"f_\" + _a(34)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L324: swap +/- in \"-----BEGIN \" + \"RSA PRIVATE \" + \"KEY-----\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L325: swap +/- in \"Bear\" + \"er \" + _a(30)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L326: swap +/- in \"Bas\" + \"ic \" + _a(30)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L327: swap +/- in \"https://user:\" + \"hunter22\" + \"@example.org/x\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L328: swap +/- in \"hooks.slack\" + \".com/services/T\" + \"ABCDEFGH\" + \"/B\" + \"ABC"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L329: swap +/- in \"1234567\" + \"890:\" + _a(35, \"x\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L330: swap +/- in \"--pass\" + \"word \" + \"hunter2hunter2\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L331: swap +/- in \"curl \" + \"-u \" + \"admin:\" + \"hunter22\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L332: swap +/- in \"pass\" + \"word = \" + \"p@ss!w0rd\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L333: swap +/- in \"to\" + \"ken: \" + _a(24, \"q\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L83: swap +/- in a - lo"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L85: swap +/- in hi - b"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L115: flip c in \"!@#$%^&*+=?~\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L152: flip v == m.group(\"n\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L207: flip sum(i.file_size for i in infos) > MAX_ZIP_TOTAL"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L267: swap +/- in \"\\n\".join(paths) + \"\\n\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L286: swap +/- in nl + 1"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L286: swap +/- in nl + 1 + size"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L287: swap +/- in nl + 1"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L289: flip typ == b\"blob\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L302: swap +/- in \"sk\" + \"-ant-\" + \"api03-\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L303: swap +/- in \"sk\" + \"-proj-\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L304: swap +/- in \"sk\" + \"-\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L305: swap +/- in \"gh\" + \"p_\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L306: swap +/- in \"github\" + \"_pat_\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L307: swap +/- in \"gl\" + \"pat-\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L308: swap +/- in \"AI\" + \"za\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L309: swap +/- in \"ya\" + \"29.\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L310: swap +/- in '\"private' + '_key\": \"-----BEGIN '"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L311: swap +/- in \"SG\" + \".\" + _a(22) + \".\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L312: swap +/- in \"sk\" + \"_live_\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L313: swap +/- in \"whsec\" + \"_\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L314: swap +/- in \"AK\" + \"IA\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L315: swap +/- in \"aws_secret\" + \"_access_key = \""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L316: swap +/- in \"Account\" + \"Key=\" + _a(44)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L317: swap +/- in \"?sv=2020&\" + \"sig=\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L318: swap +/- in \"xo\" + \"xb-\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L319: swap +/- in \"S\" + \"K\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L320: swap +/- in \"np\" + \"m_\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L321: swap +/- in \"py\" + \"pi-\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L322: swap +/- in \"h\" + \"f_\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L324: swap +/- in \"-----BEGIN \" + \"RSA PRIVATE \""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L325: swap +/- in \"Bear\" + \"er \""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L326: swap +/- in \"Bas\" + \"ic \""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L327: swap +/- in \"https://user:\" + \"hunter22\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L328: swap +/- in \"hooks.slack\" + \".com/services/T\" + \"ABCDEFGH\" + \"/B\" + \"ABC #2"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L329: swap +/- in \"1234567\" + \"890:\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L330: swap +/- in \"--pass\" + \"word \""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L331: swap +/- in \"curl \" + \"-u \" + \"admin:\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L332: swap +/- in \"pass\" + \"word = \""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L333: swap +/- in \"to\" + \"ken: \""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L83: swap +/- in lo - 1"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L109: flip x in _HASHY"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L218: flip len(member) > MAX_SCAN"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L242: remove not in not p.lower().endswith(\".zip\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L286: swap +/- in nl + 1 #2"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L302: swap +/- in \"sk\" + \"-ant-\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L311: swap +/- in \"SG\" + \".\" + _a(22)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L316: swap +/- in \"Account\" + \"Key=\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L323: swap +/- in \"ey\" + \"J\" + _a(20)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L328: swap +/- in \"hooks.slack\" + \".com/services/T\" + \"ABCDEFGH\" + \"/B\" + \"ABC #3"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L331: swap +/- in \"curl \" + \"-u \""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L88: flip mm.end() == hi - lo"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L242: swap +/- in MAX_SCAN + 1"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L311: swap +/- in \"SG\" + \".\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L323: swap +/- in \"ey\" + \"J\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L328: swap +/- in \"hooks.slack\" + \".com/services/T\" + \"ABCDEFGH\" + \"/B\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_scan.py::ast@L88: swap +/- in hi - lo"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L328: swap +/- in \"hooks.slack\" + \".com/services/T\" + \"ABCDEFGH\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L219: swap +/- in label + \"!\" + i.filename"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L221: swap +/- in label + \"!\" + i.filename"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L328: swap +/- in \"hooks.slack\" + \".com/services/T\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L216: swap +/- in label + \"!\" + i.filename"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L219: swap +/- in label + \"!\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L221: swap +/- in label + \"!\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_scan.py::ast@L216: swap +/- in label + \"!\""
+    }
+  ],
+  "survivors": [
+    "mcr3_scan.py::ast@L278: flip pos < len(data)",
+    "mcr3_scan.py::ast@L280: flip nl < 0"
+  ],
+  "unexplained_survivors": []
+}

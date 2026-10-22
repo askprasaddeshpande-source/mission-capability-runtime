@@ -47,3 +47,16 @@ Status vocabulary: IMPLEMENTED (code exists), TESTED (offline tests pass), EXTER
 | Evidence Contract v1 | IMPLEMENTED + TESTED; consumers only mocks | | |
 | SAP/ADT-style readback rules | TESTED against an offline provider | | live: NOT_ESTABLISHED |
 | Production correctness, exactly-once enterprise execution | | | NOT_ESTABLISHED |
+
+## 4. Corrective closure R2 (supersedes the status of the affected rows above)
+| Row | Change | Status |
+|---|---|---|
+| P1 revocation | now preserved across `resume` (lease flag), enforced for the compensation grant and before every compensating send | TESTED; mutation of `mcr3_model.py` 818 mutants, 0 unexplained (CI run 39767965983) |
+| P1 delegation expiry / clocks | one validated time reader for Mission, CapabilityRegistry and AdapterRegistry | TESTED; mutation 0 unexplained |
+| P1 capability approval | bound to version, digest, qualification digest and target state | TESTED; mutation of `mcr3_authority.py` 160 mutants, 0 unexplained |
+| P2 replay after ledger restore | `resume` needs `trusted_anchor` or an explicit unanchored opt-out | TESTED; prevention depends on an anchor held outside the ledger host |
+| P5 secret scanning | linear, bounded, wider formats, ZIP by content, commit/tag messages, fail-closed on non-Git, shallow or damaged history | TESTED; mutation of `mcr3_scan.py` 162 mutants, 0 unexplained; documented misses remain (see closure report) |
+| P5 external anchor | verifier reports `BLOCKED_EXTERNAL_ANCHOR` without one; CI `anchor` job fails until `MCR3_SUMS_ANCHOR` is set | **BLOCKED (owner action)** |
+| P5 heavy tier | `mcr3-release-gate.yml` on every push to `work/mcr3*`; skipped or failed prerequisite jobs fail the gate | IMPLEMENTED; branch protection NOT configured (owner action) |
+
+Claim ledger: no change to any hypothesis class; MCR 3.0 remains OFFLINE_QUALIFIED_BOUNDED_RESEARCH_RUNTIME with the release gate on HOLD.

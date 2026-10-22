@@ -1,0 +1,731 @@
+{
+  "MUTATION_CHECK": "PASS",
+  "by_kind": {
+    "ast": 107,
+    "guard": 0,
+    "relation": 0,
+    "special": 0
+  },
+  "by_module": {
+    "mini_jsonschema.py": {
+      "assertion": 50,
+      "crash": 57,
+      "detected": 107,
+      "hang": 0,
+      "mutants": 107,
+      "survivors": 0
+    }
+  },
+  "detected_by_assertion": 50,
+  "detected_by_hang": [],
+  "detected_by_validator_crash": {
+    "mini_jsonschema.py::ast@L100: drop clause 1 of schema.get(\"format\") == \"date-time\" and not _valid_date_time": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L100: drop clause 2 of schema.get(\"format\") == \"date-time\" and not _valid_date_time": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L100: flip schema.get(\"format\") == \"date-time\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L100: remove not in not _valid_date_time(v)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L108: drop clause 1 of \"minItems\" in schema and len(v) < schema[\"minItems\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L108: flip \"minItems\" in schema": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L110: drop clause 1 of \"maxItems\" in schema and len(v) > schema[\"maxItems\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L110: flip \"maxItems\" in schema": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L119: flip r not in v": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L125: flip k in props": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L132: drop clause 1 of not matched and \"additionalProperties\" in schema": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L132: drop clause 2 of not matched and \"additionalProperties\" in schema": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L132: flip \"additionalProperties\" in schema": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L132: remove not in not matched": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L138: flip \"allOf\" in schema": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L141: flip \"anyOf\" in schema": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L144: flip \"oneOf\" in schema": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L145: remove not in not _sub(s, root, v, path)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L146: flip n != 1": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L148: drop clause 1 of \"not\" in schema and not _sub(schema[\"not\"], root, v, path)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L148: flip \"not\" in schema": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L150: flip \"if\" in schema": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L20: remove not in not _DT.fullmatch(v)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L39: flip name == \"string\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L41: flip name == \"integer\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L43: flip name == \"number\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L45: flip name == \"boolean\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L47: flip name == \"null\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L48: flip v is None": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L49: flip name == \"array\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L51: flip name == \"object\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L57: flip a == b": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L57: flip type(a) is type(b)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L74: flip schema is False": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L77: remove not in not isinstance(schema, dict)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L79: swap +/- in set(schema) - KNOWN": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L82: flip \"$ref\" in schema": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L84: flip \"type\" in schema": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L86: remove not in not any(_type_ok(v, t) for t in types)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L89: drop clause 1 of \"const\" in schema and not _same(v, schema[\"const\"])": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L89: drop clause 2 of \"const\" in schema and not _same(v, schema[\"const\"])": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L89: flip \"const\" in schema": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L89: remove not in not _same(v, schema[\"const\"])": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L91: drop clause 1 of \"enum\" in schema and not any(_same(v, e) for e in schema[\"en": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L91: drop clause 2 of \"enum\" in schema and not any(_same(v, e) for e in schema[\"en": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L91: flip \"enum\" in schema": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L91: remove not in not any(_same(v, e) for e in schema[\"enum\"])": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L94: drop clause 1 of \"minLength\" in schema and len(v) < schema[\"minLength\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L94: drop clause 2 of \"minLength\" in schema and len(v) < schema[\"minLength\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L94: flip \"minLength\" in schema": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L96: drop clause 1 of \"maxLength\" in schema and len(v) > schema[\"maxLength\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L96: drop clause 2 of \"maxLength\" in schema and len(v) > schema[\"maxLength\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L96: flip \"maxLength\" in schema": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L98: drop clause 1 of \"pattern\" in schema and not re.search(_ecma_pattern(schema[\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L98: drop clause 2 of \"pattern\" in schema and not re.search(_ecma_pattern(schema[\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L98: flip \"pattern\" in schema": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mini_jsonschema.py::ast@L98: remove not in not re.search(_ecma_pattern(schema[\"pattern\"]), v)": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)"
+  },
+  "evidence_class": "SYNTHETIC/LOCAL",
+  "explained_survivors": {},
+  "inconclusive": [],
+  "mutants": 107,
+  "not_applied": [],
+  "results": [
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L20: remove not in not _DT.fullmatch(v)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L39: flip name == \"string\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L41: flip name == \"integer\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L43: flip name == \"number\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L45: flip name == \"boolean\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L47: flip name == \"null\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L49: flip name == \"array\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L51: flip name == \"object\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L57: drop clause 1 of type(a) is type(b) and a == b"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L57: drop clause 2 of type(a) is type(b) and a == b"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L61: remove not in not ref.startswith(\"#/\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L72: flip schema is True"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L74: flip schema is False"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L77: remove not in not isinstance(schema, dict)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L79: swap +/- in set(schema) - KNOWN"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L82: flip \"$ref\" in schema"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L84: flip \"type\" in schema"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L89: drop clause 1 of \"const\" in schema and not _same(v, schema[\"const\"])"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L89: drop clause 2 of \"const\" in schema and not _same(v, schema[\"const\"])"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L91: drop clause 1 of \"enum\" in schema and not any(_same(v, e) for e in schema[\"en"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L91: drop clause 2 of \"enum\" in schema and not any(_same(v, e) for e in schema[\"en"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L102: drop clause 1 of isinstance(v, (int, float)) and not isinstance(v, bool)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L102: drop clause 2 of isinstance(v, (int, float)) and not isinstance(v, bool)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L138: flip \"allOf\" in schema"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L141: flip \"anyOf\" in schema"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L144: flip \"oneOf\" in schema"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L148: drop clause 1 of \"not\" in schema and not _sub(schema[\"not\"], root, v, path)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L148: drop clause 2 of \"not\" in schema and not _sub(schema[\"not\"], root, v, path)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L150: flip \"if\" in schema"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L42: drop clause 1 of isinstance(v, int) and not isinstance(v, bool)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L42: drop clause 2 of isinstance(v, int) and not isinstance(v, bool)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L44: drop clause 1 of isinstance(v, (int, float)) and not isinstance(v, bool)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L44: drop clause 2 of isinstance(v, (int, float)) and not isinstance(v, bool)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L48: flip v is None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L57: flip type(a) is type(b)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L57: flip a == b"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L65: drop clause 1 of not isinstance(node, dict) or part not in node"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L65: drop clause 2 of not isinstance(node, dict) or part not in node"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L86: remove not in not any(_type_ok(v, t) for t in types)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L89: flip \"const\" in schema"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L89: remove not in not _same(v, schema[\"const\"])"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L91: flip \"enum\" in schema"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L91: remove not in not any(_same(v, e) for e in schema[\"enum\"])"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L94: drop clause 1 of \"minLength\" in schema and len(v) < schema[\"minLength\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L94: drop clause 2 of \"minLength\" in schema and len(v) < schema[\"minLength\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L96: drop clause 1 of \"maxLength\" in schema and len(v) > schema[\"maxLength\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L96: drop clause 2 of \"maxLength\" in schema and len(v) > schema[\"maxLength\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L98: drop clause 1 of \"pattern\" in schema and not re.search(_ecma_pattern(schema[\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L98: drop clause 2 of \"pattern\" in schema and not re.search(_ecma_pattern(schema[\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L100: drop clause 1 of schema.get(\"format\") == \"date-time\" and not _valid_date_time"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L100: drop clause 2 of schema.get(\"format\") == \"date-time\" and not _valid_date_time"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L102: remove not in not isinstance(v, bool)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L103: drop clause 1 of \"minimum\" in schema and v < schema[\"minimum\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L103: drop clause 2 of \"minimum\" in schema and v < schema[\"minimum\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L105: drop clause 1 of \"maximum\" in schema and v > schema[\"maximum\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L105: drop clause 2 of \"maximum\" in schema and v > schema[\"maximum\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L108: drop clause 1 of \"minItems\" in schema and len(v) < schema[\"minItems\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L108: drop clause 2 of \"minItems\" in schema and len(v) < schema[\"minItems\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L110: drop clause 1 of \"maxItems\" in schema and len(v) > schema[\"maxItems\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L110: drop clause 2 of \"maxItems\" in schema and len(v) > schema[\"maxItems\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L112: drop clause 1 of schema.get(\"uniqueItems\") and len({repr(x) for x in v}) != l"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L112: drop clause 2 of schema.get(\"uniqueItems\") and len({repr(x) for x in v}) != l"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L114: flip \"items\" in schema"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L142: remove not in not any(not _sub(s, root, v, path) for s in schema[\"anyOf\"])"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L146: flip n != 1"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L148: flip \"not\" in schema"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L148: remove not in not _sub(schema[\"not\"], root, v, path)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L151: remove not in not _sub(schema[\"if\"], root, v, path)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L42: remove not in not isinstance(v, bool)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L44: remove not in not isinstance(v, bool)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L65: remove not in not isinstance(node, dict)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L65: flip part not in node"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L94: flip \"minLength\" in schema"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L94: flip len(v) < schema[\"minLength\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L96: flip \"maxLength\" in schema"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L96: flip len(v) > schema[\"maxLength\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L98: flip \"pattern\" in schema"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L98: remove not in not re.search(_ecma_pattern(schema[\"pattern\"]), v)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L100: flip schema.get(\"format\") == \"date-time\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L100: remove not in not _valid_date_time(v)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L103: flip \"minimum\" in schema"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L103: flip v < schema[\"minimum\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L105: flip \"maximum\" in schema"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L105: flip v > schema[\"maximum\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L108: flip \"minItems\" in schema"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L108: flip len(v) < schema[\"minItems\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L110: flip \"maxItems\" in schema"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L110: flip len(v) > schema[\"maxItems\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L112: flip len({repr(x) for x in v}) != len(v)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L119: flip r not in v"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L125: flip k in props"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L132: drop clause 1 of not matched and \"additionalProperties\" in schema"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L132: drop clause 2 of not matched and \"additionalProperties\" in schema"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L152: flip \"then\" in schema"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L154: flip \"else\" in schema"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L174: flip k in (\"properties\", \"patternProperties\", \"$defs\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L178: flip k not in KNOWN"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L180: flip k in (\"items\", \"additionalProperties\", \"not\", \"if\", \"then\", "
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L182: flip k in (\"allOf\", \"anyOf\", \"oneOf\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L132: remove not in not matched"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L132: flip \"additionalProperties\" in schema"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L134: flip ap is False"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L136: flip ap is not True"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L142: remove not in not _sub(s, root, v, path)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mini_jsonschema.py::ast@L145: remove not in not _sub(s, root, v, path)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L181: swap +/- in path + \".\" + k"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mini_jsonschema.py::ast@L181: swap +/- in path + \".\""
+    }
+  ],
+  "survivors": [],
+  "unexplained_survivors": []
+}
