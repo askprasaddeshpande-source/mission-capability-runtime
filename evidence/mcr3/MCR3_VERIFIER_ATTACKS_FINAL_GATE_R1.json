@@ -1,0 +1,187 @@
+{
+  "all_passed": true,
+  "evidence_class": "SYNTHETIC/LOCAL",
+  "head_attacked": "297a51f86035f1d3e1c266cd80a018cd483f8c87",
+  "max_peak_bytes": 30810112,
+  "profile": "--fast",
+  "results": {
+    "A13a_nul_prefixed_utf16_secret": {
+      "intended_check": "no_credential_shaped_content",
+      "intended_check_failed": true,
+      "passed": true,
+      "peak_bytes": 30789632,
+      "verifier": "FAIL",
+      "wall_seconds": 30.83
+    },
+    "A13b_utf32_secret": {
+      "intended_check": "no_credential_shaped_content",
+      "intended_check_failed": true,
+      "passed": true,
+      "peak_bytes": 30810112,
+      "verifier": "FAIL",
+      "wall_seconds": 32.81
+    },
+    "A13c_secret_key_assignment": {
+      "intended_check": "no_credential_shaped_content",
+      "intended_check_failed": true,
+      "passed": true,
+      "peak_bytes": 30769152,
+      "verifier": "FAIL",
+      "wall_seconds": 33.65
+    },
+    "A13d_secret_outside_the_3_0_folders": {
+      "intended_check": "no_credential_shaped_content",
+      "intended_check_failed": true,
+      "passed": true,
+      "peak_bytes": 30621696,
+      "verifier": "FAIL",
+      "wall_seconds": 27.53
+    },
+    "A13e_hex_value_under_a_secret_name": {
+      "intended_check": "no_credential_shaped_content",
+      "intended_check_failed": true,
+      "passed": true,
+      "peak_bytes": 30769152,
+      "verifier": "FAIL",
+      "wall_seconds": 24.02
+    },
+    "A13f_secret_inside_a_zip_member": {
+      "intended_check": "no_credential_shaped_content",
+      "intended_check_failed": true,
+      "passed": true,
+      "peak_bytes": 30748672,
+      "verifier": "FAIL",
+      "wall_seconds": 27.49
+    },
+    "S01_edit_a_tracked_file_without_updating_sums": {
+      "intended_check": "sums_hashes_match",
+      "intended_check_failed": true,
+      "passed": true,
+      "peak_bytes": 30527488,
+      "verifier": "FAIL",
+      "wall_seconds": 31.09
+    },
+    "S02_add_an_unlisted_file_in_a_3_0_folder": {
+      "intended_check": "sums_cover_every_tracked_file",
+      "intended_check_failed": true,
+      "passed": true,
+      "peak_bytes": 30609408,
+      "verifier": "FAIL",
+      "wall_seconds": 31.81
+    },
+    "S03_edit_a_frozen_r2_0_file_and_commit": {
+      "intended_check": "frozen_history_untouched",
+      "intended_check_failed": true,
+      "passed": true,
+      "peak_bytes": 30670848,
+      "verifier": "FAIL",
+      "wall_seconds": 34.89
+    },
+    "S04_delete_the_frozen_live_result_and_commit": {
+      "intended_check": "frozen_history_untouched",
+      "intended_check_failed": true,
+      "passed": true,
+      "peak_bytes": 30543872,
+      "verifier": "FAIL",
+      "wall_seconds": 32.37
+    },
+    "S05_add_a_file_outside_the_3_0_folders_and_commit": {
+      "intended_check": "frozen_history_untouched",
+      "intended_check_failed": true,
+      "passed": true,
+      "peak_bytes": 30486528,
+      "verifier": "FAIL",
+      "wall_seconds": 34.57
+    },
+    "S06_move_the_r1_9_tag": {
+      "intended_check": "r1_9_tag_is_unchanged",
+      "intended_check_failed": true,
+      "passed": true,
+      "peak_bytes": 30703616,
+      "verifier": "FAIL",
+      "wall_seconds": 30.86
+    },
+    "S07_documented_limit_new_file_with_regenerated_sums_passes_without_an_anchor": {
+      "note": "must PASS without --expect-sums-sha256 and FAIL with it (self-attesting limit)",
+      "passed": true,
+      "peak_bytes": 30765056,
+      "wall_seconds": 31.17,
+      "with_anchor": "FAIL",
+      "without_anchor": "PASS"
+    },
+    "S08_machine_specific_absolute_path_in_code": {
+      "intended_check": "no_machine_specific_paths_in_code",
+      "intended_check_failed": true,
+      "passed": true,
+      "peak_bytes": 30683136,
+      "verifier": "FAIL",
+      "wall_seconds": 28.54
+    },
+    "S09_tracked_bytecode": {
+      "intended_check": "no_tracked_bytecode",
+      "intended_check_failed": true,
+      "passed": true,
+      "peak_bytes": 30691328,
+      "verifier": "FAIL",
+      "wall_seconds": 30.25
+    },
+    "T_anthropic_api_key_in_a_tracked_file": {
+      "intended_check": "no_credential_shaped_content",
+      "intended_check_failed": true,
+      "passed": true,
+      "peak_bytes": 30728192,
+      "verifier": "FAIL",
+      "wall_seconds": 30.28
+    },
+    "T_aws_access_key_id_in_a_tracked_file": {
+      "intended_check": "no_credential_shaped_content",
+      "intended_check_failed": true,
+      "passed": true,
+      "peak_bytes": 30646272,
+      "verifier": "FAIL",
+      "wall_seconds": 31.72
+    },
+    "T_github_fine_grained_pat_in_a_tracked_file": {
+      "intended_check": "no_credential_shaped_content",
+      "intended_check_failed": true,
+      "passed": true,
+      "peak_bytes": 30715904,
+      "verifier": "FAIL",
+      "wall_seconds": 30.21
+    },
+    "T_gitlab_token_in_a_tracked_file": {
+      "intended_check": "no_credential_shaped_content",
+      "intended_check_failed": true,
+      "passed": true,
+      "peak_bytes": 30724096,
+      "verifier": "FAIL",
+      "wall_seconds": 32.21
+    },
+    "T_google_api_key_in_a_tracked_file": {
+      "intended_check": "no_credential_shaped_content",
+      "intended_check_failed": true,
+      "passed": true,
+      "peak_bytes": 30720000,
+      "verifier": "FAIL",
+      "wall_seconds": 33.63
+    },
+    "T_sendgrid_api_key_in_a_tracked_file": {
+      "intended_check": "no_credential_shaped_content",
+      "intended_check_failed": true,
+      "passed": true,
+      "peak_bytes": 30703616,
+      "verifier": "FAIL",
+      "wall_seconds": 35.02
+    },
+    "T_stripe_key_in_a_tracked_file": {
+      "intended_check": "no_credential_shaped_content",
+      "intended_check_failed": true,
+      "passed": true,
+      "peak_bytes": 30789632,
+      "verifier": "FAIL",
+      "wall_seconds": 35.59
+    }
+  },
+  "scenarios": 22,
+  "sequential": true
+}
