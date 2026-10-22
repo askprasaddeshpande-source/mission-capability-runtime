@@ -336,6 +336,11 @@ def run():
     ar5.promote("cap", "1.0.0", "SHADOW", H, aref("A1", "cap", "1.0.0", "SHADOW"), ascope)
     ar5._a[("cap", "1.0.0")].declaration["MODE"] = "ACTIVE"
     t(g, "a_declared_mode_above_the_approved_mode_is_capped_to_the_approved_mode", lambda: ar5.mode("cap", "1.0.0") == "SHADOW")
+    ar7 = A.AdapterRegistry(approval_verifier=gov, clock=lambda: aclock["now"])
+    ar7.register(adapter(adapter_id="down"), "1.0.0")
+    ar7.promote("down", "1.0.0", "ACTIVE", H, aref("A1", "down", "1.0.0", "ACTIVE"), ascope)
+    ar7._a[("down", "1.0.0")].declaration["MODE"] = "SHADOW"
+    t(g, "a_declared_mode_below_the_approved_mode_stays_at_the_declared_mode", lambda: ar7.mode("down", "1.0.0") == "SHADOW")
     ar5._a[("cap", "1.0.0")].declaration["MODE"] = "TURBO"
     t(g, "an_unknown_declared_mode_is_observation_only", lambda: ar5.mode("cap", "1.0.0") == "OBSERVATION_ONLY")
     class Sub(dict):
