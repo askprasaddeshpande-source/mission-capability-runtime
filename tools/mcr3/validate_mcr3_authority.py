@@ -331,6 +331,27 @@ def run():
     t(g, "an_empty_scope_field_in_the_record_is_refused", lambda: raises(lambda: ar4.promote("edge", "1.0.0", "ACTIVE", H, aref("A1", "edge", "1.0.0", "ACTIVE", environment=""), ascope), "non-empty"))
     ar4.register(A.Adapter("wild", "2.0.0", "1.0.0", ["*"], "HISTORICAL", "unsigned"), "1.0.0")
     t(g, "a_wildcard_adapter_accepts_an_approval_for_any_capability", lambda: (ar4.promote("wild", "1.0.0", "SHADOW", H, aref("A1", "wild", "1.0.0", "SHADOW"), ascope), ar4.mode("wild", "1.0.0"))[1] == "SHADOW")
+    ar5 = A.AdapterRegistry(approval_verifier=gov, clock=lambda: aclock["now"])
+    ar5.register(adapter(adapter_id="cap"), "1.0.0")
+    ar5.promote("cap", "1.0.0", "SHADOW", H, aref("A1", "cap", "1.0.0", "SHADOW"), ascope)
+    ar5._a[("cap", "1.0.0")].declaration["MODE"] = "ACTIVE"
+    t(g, "a_declared_mode_above_the_approved_mode_is_capped_to_the_approved_mode", lambda: ar5.mode("cap", "1.0.0") == "SHADOW")
+    ar5._a[("cap", "1.0.0")].declaration["MODE"] = "TURBO"
+    t(g, "an_unknown_declared_mode_is_observation_only", lambda: ar5.mode("cap", "1.0.0") == "OBSERVATION_ONLY")
+    class Sub(dict):
+        pass
+    ar5.register(adapter(adapter_id="sub"), "1.0.0")
+    t(g, "a_dict_subclass_is_not_accepted_as_an_approval_record", lambda: raises(lambda: ar5.promote("sub", "1.0.0", "SHADOW", H, Sub(aref("A1", "sub", "1.0.0", "SHADOW")), ascope), "external approval"))
+    ar6 = A.AdapterRegistry(approval_verifier=gov, clock=lambda: aclock["now"])
+    ar6.register(adapter(adapter_id="clk"), "1.0.0")
+    ar6.promote("clk", "1.0.0", "SHADOW", H, aref("A1", "clk", "1.0.0", "SHADOW"), ascope)
+    for bad in (float("nan"), None, "now"):
+        ar6.clock = lambda b=bad: b
+        t(g, "an_unusable_clock_reading_%s_lapses_the_mode" % type(bad).__name__, lambda: ar6.mode("clk", "1.0.0") == "OBSERVATION_ONLY")
+    def boom():
+        raise RuntimeError("clock")
+    ar6.clock = boom
+    t(g, "a_raising_clock_lapses_the_mode", lambda: ar6.mode("clk", "1.0.0") == "OBSERVATION_ONLY")
     t(g, "reregistering_an_adapter_drops_its_stored_approval", lambda: (ar3.register(adapter(adapter_id="life"), "1.0.0"), ar3._approval.get(("life", "1.0.0")) is None and ar3.mode("life", "1.0.0") == "OBSERVATION_ONLY")[1])
 
 

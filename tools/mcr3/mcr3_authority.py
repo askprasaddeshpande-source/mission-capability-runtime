@@ -31,7 +31,9 @@ class AuthorityError(ValueError):
 
 
 class ApprovalVerifier:
-    """Interface to the EXTERNAL approver. verify(record) -> True only if the approval is genuine."""
+    """Interface to the EXTERNAL approver. verify(record) -> True (exactly True) only if the approval is genuine.
+    A real verifier must authenticate the WHOLE record - approval id, scope, binding fields and expires_at - not just the id:
+    the registry checks scope, binding and expiry itself but cannot tell whether the issuer really stated them."""
     def verify(self, record):             # pragma: no cover (interface)
         raise NotImplementedError
 
@@ -240,10 +242,10 @@ class AdapterRegistry:
 
     def _approval_current(self, key, record):
         """True only if the record is unexpired now and the external approver still verifies it (fail closed on any error)."""
-        exp = _expiry(record.get("expires_at"))
-        if exp is None or self.clock() >= exp:
-            return False
         try:
+            exp = _expiry(record.get("expires_at"))
+            if exp is None or not (self.clock() < exp):          # a clock that is NaN or not a number is never "before expiry"
+                return False
             return self.approval_verifier.verify(copy.deepcopy(record)) is True
         except Exception:
             return False
@@ -255,16 +257,20 @@ class AdapterRegistry:
         if a.declaration["REVOCATION_STATUS"] != "NOT_REVOKED":
             return "OBSERVATION_ONLY"
         declared = a.declaration["MODE"]
+        order = {m: i for i, m in enumerate(ADAPTER_MODES)}
+        if declared not in order:
+            return "OBSERVATION_ONLY"
         if declared != "OBSERVATION_ONLY":
             rec = self._approval.get((adapter_id, version))
             if rec is None or not self._approval_current((adapter_id, version), rec):
                 return "OBSERVATION_ONLY"                # no current verified approval behind the mode: it lapses
-        order = {m: i for i, m in enumerate(ADAPTER_MODES)}
+            if rec.get("to_mode") not in order or order[declared] > order[rec["to_mode"]]:
+                declared = rec["to_mode"] if rec.get("to_mode") in order else "OBSERVATION_ONLY"   # never above what the approval was issued for
         cap = self.floor.get(adapter_id)                 # review 8: a recorded restriction caps every version of the adapter
         return declared if cap is None or order[declared] <= order[cap] else cap
 
     def _check_promotion_approval(self, a, adapter_id, version, to_mode, qualification_digest, record, expected_scope):
-        if not isinstance(record, dict) or not record.get("approval_id") or record.get("source") != "EXTERNAL_GOVERNOR":
+        if type(record) is not dict or not record.get("approval_id") or record.get("source") != "EXTERNAL_GOVERNOR":
             raise AuthorityError("promotion needs an external approval reference")
         if not isinstance(expected_scope, dict) or not all(isinstance(expected_scope.get(k), str) and expected_scope.get(k) for k in SCOPE_FIELDS):
             raise AuthorityError("promotion needs the expected approval scope (%s)" % ", ".join(SCOPE_FIELDS))
@@ -284,7 +290,7 @@ class AdapterRegistry:
         exp = _expiry(record["expires_at"])
         if exp is None:
             raise AuthorityError("approval expires_at is not a valid UTC time")
-        if self.clock() >= exp:
+        if not (self.clock() < exp):
             raise AuthorityError("approval already expired")
         try:
             ok = self.approval_verifier.verify(copy.deepcopy(record)) is True
