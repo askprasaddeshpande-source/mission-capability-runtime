@@ -112,6 +112,33 @@ def run():
         t(g, "tracked_tree_has_no_secret_shaped_content", lambda: (not hits))
     t(g, "scanner_source_is_clean", lambda: (not S.scan_bytes(open(os.path.join(HERE, "mcr3_scan.py"), "rb").read())))
     t(g, "validator_source_is_clean", lambda: (not S.scan_bytes(open(os.path.join(HERE, "validate_mcr3_scan.py"), "rb").read())))
+    # ---- git history scan (a secret deleted from the tree is still in history)
+    import shutil
+    import subprocess
+    import tempfile
+
+    def git(cwd, *a):
+        subprocess.run(["git", "-c", "user.name=t", "-c", "user.email=t@example.invalid", "-c", "commit.gpgsign=false"] + list(a), cwd=cwd, capture_output=True, check=True)
+    hd = tempfile.mkdtemp(prefix="m3hist_")
+    try:
+        git(hd, "init", "-q")
+        open(os.path.join(hd, "a.txt"), "w").write("nothing here\n")
+        git(hd, "add", "a.txt")
+        git(hd, "commit", "-q", "-m", "clean")
+        clean = S.scan_history(hd)
+        open(os.path.join(hd, "b.txt"), "w").write(S.fixture("github_classic_token") + "\n")
+        git(hd, "add", "b.txt")
+        git(hd, "commit", "-q", "-m", "oops")
+        git(hd, "rm", "-q", "b.txt")
+        git(hd, "commit", "-q", "-m", "remove it")
+        hist = S.scan_history(hd)
+        tree = S.scan_tracked_tree(hd)
+    finally:
+        shutil.rmtree(hd, ignore_errors=True)
+    t("HISTORY", "a_clean_history_has_no_findings", lambda: clean == [])
+    t("HISTORY", "a_secret_deleted_from_the_tree_is_found_in_history", lambda: [x for x in hist if x[2] == "github_classic_token" and x[1] == "b.txt"] and tree == [])
+    t("HISTORY", "history_findings_carry_no_matched_text", lambda: hist and all(len(x) == 4 and S.fixture("github_classic_token") not in " ".join(map(str, x)) for x in hist))
+    t("HISTORY", "history_scan_of_a_missing_folder_or_non_repository_is_empty", lambda: S.scan_history(os.path.join(HERE, "no_such_dir_xyz")) == [] and S.scan_history(tempfile.gettempdir() + os.sep + "m3_not_a_repo_xyz") == [])
 
 
 def main(argv):

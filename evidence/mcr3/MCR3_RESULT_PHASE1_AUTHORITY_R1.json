@@ -1,0 +1,12 @@
+{
+  "evidence_class": "SYNTHETIC/LOCAL",
+  "failed": [],
+  "groups": {
+    "PRINCIPAL_TYPING": "PASS",
+    "REVOCATION": "PASS"
+  },
+  "network_calls": 0,
+  "stage": "MCR3_PHASE1_AUTHORITY",
+  "tests": 29,
+  "tests_digest": "DEF0C26D0AE621E0675AEEDB0CE948099EACE563C1E1572B160DC8564515189D"
+}

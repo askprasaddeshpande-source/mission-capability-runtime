@@ -29,7 +29,7 @@ GUARD_RE = re.compile(r"^( +)if ((?:[^\n]*\\\n)*[^\n]*):\n( +)raise GuardError\(
 REL_RE = re.compile(r'^( +self\._rel\("(R\d+)", )(.+)(\))$', re.M)
 
 TARGETS = [
-    ("mcr3_model.py", ["validate_mcr3_inherited.py", "validate_mcr3_hardening.py", "validate_mcr3_gaps.py"]),
+    ("mcr3_model.py", ["validate_mcr3_inherited.py", "validate_mcr3_hardening.py", "validate_mcr3_gaps.py", "validate_mcr3_phase1.py"]),
     ("evc1.py", ["validate_mcr3_evc1.py", "validate_mcr3_gaps.py"]),
     ("mini_jsonschema.py", ["validate_mcr3_evc1.py", "validate_mcr3_gaps.py"]),
     ("mcr3_provenance.py", ["validate_mcr3_authority.py", "validate_mcr3_gaps.py"]),

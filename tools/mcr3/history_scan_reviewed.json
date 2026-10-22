@@ -1,0 +1,7 @@
+{
+  "note": "Findings of scan_history() reviewed by a person/agent and judged false positives. Keyed by path, shape and fingerprint; the matched text is never stored.",
+  "reviewed_false_positives": [
+    {"path": "tools/mcr3/validate_mcr3_gaps.py", "shape": "secret_named_assignment", "fingerprint": "817e1d16", "why": "superseded test literal 'password = abcdefgh' asserting that a letters-only short value is NOT flagged"},
+    {"path": "evidence/mcr3/MCR3_CONTRACT_DIGESTS_R1.json", "shape": "token_named_assignment", "fingerprint": "ade8d31d", "why": "superseded digest table: a SHA-256 value stored under an event-type name containing 'authorization'"}
+  ]
+}

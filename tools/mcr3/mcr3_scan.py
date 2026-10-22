@@ -151,6 +151,51 @@ def scan_tracked_tree(root):
     return found
 
 
+def scan_history(root):
+    """Scan every distinct blob reachable from any ref (all of Git history, including deleted files).
+    Returns [(oid, path, shape, fingerprint)] (never the matched text). A blob removed from the tree but still
+    reachable from history IS scanned. Unreachable objects and anything outside Git are not."""
+    import os
+    import tempfile
+    try:
+        r = subprocess.run(["git", "rev-list", "--objects", "--all"], cwd=root, capture_output=True, text=True)
+    except OSError:
+        return []
+    if r.returncode != 0:
+        return []
+    paths = {}
+    for line in r.stdout.split("\n"):
+        if line:
+            oid, _, name = line.partition(" ")
+            paths.setdefault(oid, name)
+    fd, lst = tempfile.mkstemp(prefix="m3hist_")
+    try:
+        with os.fdopen(fd, "w", newline="\n") as fh:
+            fh.write("\n".join(paths) + "\n")
+        with open(lst, "rb") as fin:
+            c = subprocess.run(["git", "cat-file", "--batch"], cwd=root, stdin=fin, capture_output=True)
+    finally:
+        os.remove(lst)
+    if c.returncode != 0:
+        return []
+    data, pos, found = c.stdout, 0, []
+    while pos < len(data):
+        nl = data.find(b"\n", pos)
+        if nl < 0:
+            break
+        head = data[pos:nl].split()
+        if len(head) != 3:                                   # "<oid> missing"
+            pos = nl + 1
+            continue
+        oid, typ, size = head[0].decode(), head[1], int(head[2])
+        body = data[nl + 1:nl + 1 + size]
+        pos = nl + 1 + size + 1
+        name = paths.get(oid, "")
+        if typ == b"blob" and not name.lower().endswith(BINARY_EXT):
+            found += [(oid, name, n, f) for n, f in scan_bytes(body[:MAX_SCAN])]
+    return found
+
+
 # ---------------------------------------------------------------- synthetic fixtures (assembled at run time)
 def _a(n, ch="A"):
     return ch * n

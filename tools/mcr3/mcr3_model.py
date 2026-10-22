@@ -672,13 +672,28 @@ def atomic(fn):
     return wrapper
 
 
+class RevocationList:
+    """Offline revocation source for tests and simple deployments: revoked object hashes. Callable as (kind, object_hash)."""
+    def __init__(self, revoked=()):
+        self.revoked = set(revoked)
+
+    def revoke(self, object_hash):
+        self.revoked.add(object_hash)
+
+    def __call__(self, kind, object_hash):
+        return object_hash in self.revoked
+
+
 class Mission:
     """Evidence-gated state machine. Every object a guard method accepts is verified (kind and hash) and
     deep-copied first, so later changes by the caller cannot alter recorded evidence."""
 
-    def __init__(self, mission_id, transaction_id, max_mutations, ledger=None, clock=None):
+    def __init__(self, mission_id, transaction_id, max_mutations, ledger=None, clock=None, revocation_check=None):
         if clock is not None and not callable(clock):
             raise GuardError("clock must be callable")
+        if revocation_check is not None and not callable(revocation_check):
+            raise GuardError("revocation_check must be callable")
+        self._revoked = revocation_check          # (kind, object_hash) -> exactly False when NOT revoked; anything else denies
         self._clock = clock or time.time
         if not isinstance(max_mutations, int) or isinstance(max_mutations, bool) or max_mutations < 0:
             raise GuardError("max_mutations must be a non-negative integer")
@@ -723,6 +738,23 @@ class Mission:
         if self._clock() >= exp:
             raise GuardError("delegation expired (%s)" % what)
 
+    def _revocation_guard(self, what):
+        """If a revocation source is connected, principal, delegation and authority must each be reported NOT revoked
+        (exactly False). A raising source, or any other answer, is treated as revoked (fail closed). With no source
+        connected nothing is checked: the model cannot know about revocations it is not told about."""
+        if self._revoked is None:
+            return
+        for kind in ("principal", "delegation", "authority"):
+            obj = self.ev.get(kind)
+            if obj is None:
+                continue
+            try:
+                ok = self._revoked(kind, obj["object_hash"]) is False
+            except Exception:
+                ok = False
+            if not ok:
+                raise GuardError("%s revoked or revocation status unknown (%s)" % (kind, what))
+
     def _rel(self, rid, ok):
         if not ok:
             raise GuardError("evidence chain inconsistent [%s]: %s" % (rid, RELATIONS[rid]))
@@ -731,6 +763,10 @@ class Mission:
     @atomic
     def context_ready(self, intent, principal):
         intent, principal = self._accept("intent", intent), self._accept("principal", principal)
+        roles = principal["roles"]
+        if not (isinstance(principal["principal_id"], str) and principal["principal_id"] and isinstance(principal["tenant"], str) and principal["tenant"]
+                and isinstance(roles, list) and all(isinstance(r, str) and r for r in roles) and len(set(roles)) == len(roles)):
+            raise GuardError("principal needs a non-empty principal_id and tenant and a list of unique non-empty role names")
         if intent["mission_id"] != self.mission_id:
             raise GuardError("intent mission mismatch")
         self.ev["intent"], self.ev["principal"] = intent, principal
@@ -766,6 +802,12 @@ class Mission:
                 or (not self._resuming and self.ledger.for_authority(authority["object_hash"])):
             raise GuardError("authority already consumed")
         self.ev.update(delegation=delegation, authority=authority, budget=budget)
+        try:
+            self._revocation_guard("at authorization")
+        except GuardError:
+            for k in ("delegation", "authority", "budget"):
+                self.ev.pop(k, None)
+            raise
         self._go("AUTHORIZED", authority["object_hash"], _tok=_TOKEN)
 
     @atomic
@@ -831,6 +873,7 @@ class Mission:
         if mutation_id not in self._need("tx")["mutation_ids"]:
             raise GuardError("mutation not in transaction")
         self._expiry_guard(self._need("delegation"), "at the point of sending")
+        self._revocation_guard("at the point of sending")
         key = (self.ev["authority"]["object_hash"], mutation_id)
         if key in self.consumed or self.ledger.has(key):
             raise GuardError("replay: mutation authority already consumed")
@@ -1069,6 +1112,7 @@ class Mission:
         grant = self._need("comp_grant")
         if self.state != "COMPENSATION_AUTHORIZED":
             raise GuardError("illegal transition %s -> compensation start" % self.state)
+        self._revocation_guard("at the point of a compensating send")
         if self.ev.get("comp_open") is not None:
             raise GuardError("a compensation attempt is already open: record its result first")
         used = max(self.ev.get("comp_attempts", 0), len(self.ledger.for_authority(grant["object_hash"])))
@@ -1178,7 +1222,7 @@ class Mission:
             raise GuardError("malformed argument: %s" % type(exc).__name__) from exc
 
     @classmethod
-    def _resume(cls, lease, checkpoint, original_budget, mission_id, evidence, ledger, allow_volatile_ledger=False, clock=None):
+    def _resume(cls, lease, checkpoint, original_budget, mission_id, evidence, ledger, allow_volatile_ledger=False, clock=None, revocation_check=None):
         """Rebuild a mission by re-running the REAL guard methods on re-presented evidence (so a resumed mission is
         held to exactly the checks a fresh one gets), then applying consumption. Lease, checkpoint and original budget
         must be hash-valid and agree with each other; consumption is the UNION of the lease and the external
@@ -1224,7 +1268,7 @@ class Mission:
         total = original_budget["max_mutations"]
         if lease_rem + len(lease_consumed) > min(checkpoint["remaining_budget"], total):
             raise GuardError("continuation may not enlarge budget")
-        m = cls(mission_id, lease["transaction_id"], total, ledger=ledger, clock=clock)
+        m = cls(mission_id, lease["transaction_id"], total, ledger=ledger, clock=clock, revocation_check=revocation_check)
         m._resuming = True
         try:
             m.context_ready(ev["intent"], ev["principal"])
