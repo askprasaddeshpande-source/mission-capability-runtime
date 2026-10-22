@@ -116,6 +116,21 @@ def run():
     st["now"] = nan
     t(g, "an_approval_lapses_when_the_clock_becomes_unusable", lambda: reg.effective_state(cap) == "QUALIFIED")
 
+    huge = 10 ** 400
+    m, f = governed(None, clock=lambda: huge)
+    m.context_ready(f["intent"], f["pr"])
+    t(g, "a_huge_integer_clock_is_refused_with_a_guard_error_not_an_overflow", lambda: raises(lambda: m.authorize(f["dl"], f["au"], f["bu"]), "clock") and m.state == "CONTEXT_READY")
+    reg, cap, rec = _approvable(lambda: huge)
+    t(g, "a_huge_integer_clock_refuses_a_capability_approval_with_the_right_error", lambda: raises(lambda: reg.record_approval(cap, rec), "clock", (A.AuthorityError,)))
+    st2 = {"now": 1.0}
+    reg, cap, rec = _approvable(lambda: st2["now"])
+    reg.record_approval(cap, rec)
+    st2["now"] = huge
+    t(g, "view_lapses_instead_of_crashing_when_the_clock_becomes_a_huge_integer", lambda: reg.effective_state(cap) == "QUALIFIED" and reg.view(cap, _scope())["may_request_execution_review"] is False)
+    AR = A.AdapterRegistry
+    for label, clk in (("minus_infinity", lambda: -inf), ("negative", lambda: -1.0), ("bool", lambda: True), ("string", lambda: "x"), ("huge", lambda: huge), ("nan", lambda: nan), ("raising", boom)):
+        t(g, "adapter_promotion_with_a_%s_clock_is_refused" % label, lambda clk=clk: _adapter_promotion_refused(clk))
+
     # ------------------------------------------------------------------ B4 capability approval binding
     g = "B4_APPROVAL_BINDING"
     reg, cap, rec = _approvable(lambda: 1.0)
@@ -165,8 +180,62 @@ def run():
         ev2 = {k: m2.ev[k] for k in UP}
         t(g, "an_honest_resume_with_the_current_anchor_works", lambda: Mission.resume(lease2, f2["cp"], f2["bu"], "M-SYN-1", ev2, M.ReplayLedger(os.path.join(d, "honest.txt")), trusted_anchor=anchor2).state == "COMMIT_STATE_UNKNOWN")
         t(g, "an_anchor_from_a_different_ledger_is_refused", lambda: raises(lambda: Mission.resume(lease2, f2["cp"], f2["bu"], "M-SYN-1", ev2, M.ReplayLedger(os.path.join(d, "honest.txt")), trusted_anchor=anchor_after), "differs"))
+        t(g, "a_truthy_string_is_not_an_explicit_acceptance_of_the_replay_risk", lambda: raises(lambda: rs(pre_lease, allow_unanchored_ledger="no"), "trusted_anchor"))
         t(g, "a_volatile_ledger_resume_needs_no_anchor", lambda: Mission.resume(pre_lease_volatile(), *_vol_args(), allow_volatile_ledger=True).state == "PREWRITE_VALIDATED")
         t(g, "post_send_lease_is_unaffected_by_the_policy_when_anchored", lambda: post_lease.get("ledger_anchor") is not None)
+    finally:
+        shutil.rmtree(d, ignore_errors=True)
+
+
+def _adapter_promotion_refused(clk):
+    ar = A.AdapterRegistry(approval_verifier=A.RecordedApprovalVerifier({"A1"}), clock=clk)
+    ad = A.Adapter(adapter_id="e", source_runtime_version="2.0.0", target_contract_version="1.0.0", supported_capabilities=["create_object"],
+                   evidence_classification="HISTORICAL", trust_requirements="unsigned; research only")
+    ar.register(ad, "1.0.0")
+    rec = A.adapter_approval_record("A1", _scope(), "e", "1.0.0", "SHADOW", HX, expires_at="2020-01-01")
+    try:
+        ar.promote("e", "1.0.0", "SHADOW", HX, rec, _scope())
+        return False
+    except A.AuthorityError:
+        pass
+    return ar.mode("e", "1.0.0") == "OBSERVATION_ONLY"
+
+
+def _gate_dirs():
+    import check_release_gate as C
+    d = tempfile.mkdtemp(prefix="m3gate_")
+    good = {"MUTATION_CHECK": "PASS", "mutants": 50, "by_module": {}, "inconclusive": [], "unexplained_survivors": [], "not_applied": [], "detected_by_hang": [], "explained_survivors": {}}
+    for mod in C.targets():
+        j = dict(good, by_module={mod: {"mutants": 50, "assertion": 20, "crash": 29, "hang": 0, "survivors": 1}})
+        open(os.path.join(d, "mutation-%s.json" % mod), "w").write(json.dumps(j))
+    att = {"all_passed": True, "scenarios": 31, "head_attacked": "S" * 40, "results": {k: {} for k in ("A13a", "A13b", "A13c", "A13d", "A13e", "A13f", "N1_x", "N2_x", "N3_x")}}
+    open(os.path.join(d, "attacks.json"), "w").write(json.dumps(att))
+    return C, d
+
+
+def gate_checks():
+    g = "RELEASE_GATE_CHECKER"
+    C, d = _gate_dirs()
+    try:
+        t(g, "complete_artifacts_for_the_candidate_sha_pass", lambda: C.decide(d, "S" * 40)["RELEASE_GATE_HEAVY"] == "PASS")
+        t(g, "artifacts_for_another_sha_fail", lambda: C.decide(d, "T" * 40)["RELEASE_GATE_HEAVY"] == "FAIL")
+        first = C.targets()[0]
+        path = os.path.join(d, "mutation-%s.json" % first)
+        saved = open(path).read()
+        os.remove(path)
+        t(g, "a_missing_module_result_fails", lambda: C.decide(d, "S" * 40)["RELEASE_GATE_HEAVY"] == "FAIL")
+        tiny = json.loads(saved)
+        tiny["by_module"][first] = {"mutants": 1, "assertion": 0, "crash": 1, "hang": 0, "survivors": 0}
+        tiny["mutants"] = 1
+        open(path, "w").write(json.dumps(tiny))
+        t(g, "a_one_mutant_crash_only_result_fails", lambda: C.decide(d, "S" * 40)["RELEASE_GATE_HEAVY"] == "FAIL")
+        bad = json.loads(saved)
+        bad["unexplained_survivors"] = ["x"]
+        open(path, "w").write(json.dumps(bad))
+        t(g, "an_unexplained_survivor_fails", lambda: C.decide(d, "S" * 40)["RELEASE_GATE_HEAVY"] == "FAIL")
+        open(path, "w").write(saved)
+        os.remove(os.path.join(d, "attacks.json"))
+        t(g, "missing_attack_results_fail", lambda: C.decide(d, "S" * 40)["RELEASE_GATE_HEAVY"] == "FAIL")
     finally:
         shutil.rmtree(d, ignore_errors=True)
 
@@ -213,6 +282,7 @@ def _vol_args():
 
 def main(argv):
     run()
+    gate_checks()
     failed = sorted(n for n, ok in T.items() if not ok)
     groups = {gk: "PASS" if all(T[n] for n in names) else "FAIL" for gk, names in G.items()}
     digest = hashlib.sha256(json.dumps(sorted(T), separators=(",", ":")).encode()).hexdigest().upper()

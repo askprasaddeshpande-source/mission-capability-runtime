@@ -78,14 +78,7 @@ class CapabilityRegistry:
         self.policy_epoch = 0
 
     def _now(self):
-        import math
-        try:
-            t = self.clock()
-        except Exception as exc:
-            raise AuthorityError("clock failed") from exc
-        if isinstance(t, bool) or not isinstance(t, (int, float)) or not math.isfinite(t) or t < 0:
-            raise AuthorityError("clock returned an invalid time")
-        return float(t)
+        return _valid_now(self.clock)
 
     # ---- discovery: anything unknown is quarantined, never trusted
     def discover(self, capability_id, version, digest):
@@ -263,7 +256,7 @@ class AdapterRegistry:
         """True only if the record is unexpired now and the external approver still verifies it (fail closed on any error)."""
         try:
             exp = _expiry(record.get("expires_at"))
-            if exp is None or not (self.clock() < exp):          # a clock that is NaN or not a number is never "before expiry"
+            if exp is None or not (_valid_now(self.clock) < exp):          # an unusable clock is never "before expiry"
                 return False
             return self.approval_verifier.verify(copy.deepcopy(record)) is True
         except Exception:
@@ -309,7 +302,7 @@ class AdapterRegistry:
         exp = _expiry(record["expires_at"])
         if exp is None:
             raise AuthorityError("approval expires_at is not a valid UTC time")
-        if not (self.clock() < exp):
+        if not (_valid_now(self.clock) < exp):
             raise AuthorityError("approval already expired")
         try:
             ok = self.approval_verifier.verify(copy.deepcopy(record)) is True
@@ -368,6 +361,18 @@ def capability_approval_record(cap, scope, approval_id, expires_at="2099-01-01")
     q = (cap.qualification or {}).get("digest")
     return dict(scope, approval_id=approval_id, expires_at=expires_at, capability_version=cap.version,
                 capability_digest=cap.digest, qualification_digest=q, to_state="APPROVED")
+
+
+def _valid_now(clock):
+    """The clock's reading as a finite non-negative float; anything else (including a clock that raises) is an AuthorityError."""
+    import mcr3_model
+    try:
+        t = mcr3_model.valid_time(clock())
+    except Exception as exc:
+        raise AuthorityError("clock failed") from exc
+    if t is None:
+        raise AuthorityError("clock returned an invalid time")
+    return t
 
 
 def _hex64(s):

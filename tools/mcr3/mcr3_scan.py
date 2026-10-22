@@ -59,8 +59,8 @@ _NAMECH = frozenset("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456
 _KW_STRONG = re.compile(r"(?i)password|passwd|passphrase|pwd|credentials?|secret|api[_-]?key|access[_-]?key|private[_-]?key|auth[_-]?key|(?<=[_.-])pass(?![A-Za-z0-9_.-])")
 _KW_WEAK = re.compile(r"(?i)token|authorization")
 _KW_QUOTED = re.compile(r"(?i)password|passwd|passphrase|pwd|secret|api[_-]?key|private[_-]?key")
-_TAIL_STRONG = re.compile(r"[\"']?\s*(?::=|=>|[:=])\s*[\"']?(?P<v>[^\s\"']{8,})")
-_TAIL_WEAK = re.compile(r"[\"']?\s*[:=]\s*[\"']?(?P<v>[A-Za-z0-9+/=_.-]{16,}+)(?!\()")
+_TAIL_STRONG = re.compile(r"[\"']?\s*(?::=|=>|[:=])\s*[\"']?(?P<v>[^\s\"']{8,256})")
+_TAIL_WEAK = re.compile(r"[\"']?\s*[:=]\s*[\"']?(?P<v>[A-Za-z0-9+/=_.-]{16,256}+)(?!\()")
 _TAIL_QUOTED = re.compile(r"[\"']?\s*[:=]\s*(?P<q>[\"'])(?P<v>[^\"'\r\n]{12,200})(?P=q)")
 
 
@@ -197,6 +197,7 @@ def scan_blob(label, data):
     Returns [(label, shape, fingerprint)]."""
     import io
     import zipfile
+    import zlib
     if len(data) > MAX_SCAN and not data.startswith(b"PK\x03\x04"):
         return [(label, "unscanned_oversize", "%08x" % (len(data) & 0xFFFFFFFF))]
     if data.startswith(b"PK\x03\x04"):
@@ -209,7 +210,11 @@ def scan_blob(label, data):
                 for i in infos:
                     if i.is_dir():
                         continue
-                    member = z.read(i)
+                    try:
+                        member = z.read(i)
+                    except (RuntimeError, NotImplementedError, zipfile.BadZipFile, zlib.error, OSError, EOFError):
+                        out.append((label + "!" + i.filename, "unreadable_zip_member", "%08x" % (i.file_size & 0xFFFFFFFF)))   # encrypted, unsupported method or corrupt: never silently skipped
+                        continue
                     if len(member) > MAX_SCAN:
                         out.append((label + "!" + i.filename, "unscanned_oversize", "%08x" % (len(member) & 0xFFFFFFFF)))
                     else:
@@ -248,6 +253,8 @@ def scan_history(root):
     import os
     import tempfile
     _require_toplevel(root)
+    if _git(root, "rev-parse", "--is-shallow-repository", text=True).stdout.strip() != "false":
+        raise ScanError("%r is a shallow clone: its history is incomplete, so a history scan would be partial" % (root,))
     r = _git(root, "rev-list", "--objects", "--all", text=True)
     paths = {}
     for line in r.stdout.split("\n"):

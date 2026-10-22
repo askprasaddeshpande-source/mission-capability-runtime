@@ -170,6 +170,14 @@ def main(argv):
 
 
 
+def refuses2(fn):
+    try:
+        fn()
+    except S.ScanError:
+        return True
+    return False
+
+
 def run_bounded_and_coverage():
     import shutil
     import subprocess
@@ -182,6 +190,11 @@ def run_bounded_and_coverage():
         t0 = time.time()
         S.scan_bytes(blob)
         t(g, "scan_of_200kb_%s_finishes_in_bounded_time" % label, time.time() - t0 < 8)
+    for label, pat in (("password_assignments", "password="), ("api_key_assignments", "api_key="), ("token_assignments", "token:"), ("glued_assignments", "pw=pw=")):
+        blob = (pat * (262144 // len(pat))).encode()
+        t0 = time.time()
+        S.scan_bytes(blob)
+        t(g, "scan_of_256kb_of_repeated_%s_finishes_in_bounded_time" % label, time.time() - t0 < 10)
     g = "CREDENTIAL_FORMATS"
     cases = {
         "lowercase_basic_header": "Authorization: basic " + "dXNlcjpwYXNzd29yZDEyMzQ1Ng==",
@@ -222,6 +235,32 @@ def run_bounded_and_coverage():
     t(g, "a_zip_without_a_zip_name_is_opened_in_the_tree", any(x[0].startswith("z.bin!") for x in tree))
     t(g, "a_credential_in_a_commit_message_is_found", any(x[1] == "<commit message>" for x in hist))
     t(g, "a_credential_in_a_tag_message_is_found", any(x[1] == "<tag message>" for x in hist))
+    # an unreadable ZIP member is reported, and the readable members are still scanned
+    import io
+    zb = io.BytesIO()
+    with zipfile.ZipFile(zb, "w") as z:
+        z.writestr("first.txt", "pass" + "word = " + "p@ss!w0rd-" + "x" * 8)
+        z.writestr("second.txt", "harmless text here")
+    raw = bytearray(zb.getvalue())
+    second = raw.rindex(b"PK\x01\x02")
+    raw[second + 10:second + 12] = (99).to_bytes(2, "little")             # compression method 99: unsupported
+    zres = S.scan_blob("z.zip", bytes(raw))
+    t(g, "an_unreadable_zip_member_is_reported", any(x[1] == "unreadable_zip_member" and x[0].endswith("second.txt") for x in zres))
+    t(g, "readable_zip_members_are_still_scanned_when_another_is_unreadable", any(x[0].endswith("first.txt") and x[1] == "secret_named_assignment" for x in zres))
+    sd = tempfile.mkdtemp(prefix="m3shallow_")
+    try:
+        src = os.path.join(sd, "src")
+        os.makedirs(src)
+        subprocess.run(["git", "init", "-q"], cwd=src, check=True, capture_output=True)
+        for n_ in (1, 2):
+            open(os.path.join(src, "f%d.txt" % n_), "w").write("x%d\n" % n_)
+            subprocess.run(["git", "add", "-A"], cwd=src, check=True, capture_output=True)
+            subprocess.run(["git", "-c", "user.name=t", "-c", "user.email=t@example.invalid", "-c", "commit.gpgsign=false", "commit", "-q", "-m", "c%d" % n_], cwd=src, check=True, capture_output=True)
+        shallow = os.path.join(sd, "shallow")
+        subprocess.run(["git", "clone", "-q", "--depth", "1", "file://" + src.replace(os.sep, "/"), shallow], check=True, capture_output=True)
+        t(g, "a_shallow_clone_cannot_produce_a_history_scan_result", lambda: refuses2(lambda: S.scan_history(shallow)))
+    finally:
+        shutil.rmtree(sd, ignore_errors=True)
     big = b"x" * (S.MAX_SCAN + 1)
     t(g, "content_beyond_the_scan_limit_is_reported_not_skipped", any(h[1] == "unscanned_oversize" for h in S.scan_blob("big.txt", big)))
 

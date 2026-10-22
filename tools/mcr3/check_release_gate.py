@@ -13,6 +13,9 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
 
+MIN_MUTANTS = 5
+
+
 def targets():
     import run_mcr3_mutation_check as R
     return [t for t, _ in R.TARGETS]
@@ -37,6 +40,8 @@ def decide(directory, sha, required=None):
         bm = (d.get("by_module") or {}).get(mod)
         if d.get("MUTATION_CHECK") != "PASS" or not bm or not d.get("mutants"):
             problems.append("%s: mutation check is not PASS" % mod)
+        elif bm["mutants"] < MIN_MUTANTS or (bm.get("assertion") or 0) < 1 or (bm.get("assertion") or 0) + (bm.get("crash") or 0) + (bm.get("hang") or 0) > bm["mutants"]:
+            problems.append("%s: implausibly small or inconsistent mutation result (%s mutants)" % (mod, bm.get("mutants")))
         if d.get("inconclusive") or d.get("unexplained_survivors") or d.get("not_applied") or d.get("detected_by_hang"):
             problems.append("%s: inconclusive, unexplained, hanging or unapplied mutants" % mod)
         modules[mod] = {"mutants": d.get("mutants"), "assertion": (bm or {}).get("assertion"), "validator_crash": (bm or {}).get("crash"),

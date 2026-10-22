@@ -230,6 +230,18 @@ def parse_expiry(value):
         return None
 
 
+def valid_time(t):
+    """A clock reading as a float, or None if it is not a finite, non-negative real number (bool, NaN, infinity, huge
+    integers, strings and everything else are refused)."""
+    import math
+    if isinstance(t, bool) or not isinstance(t, (int, float)):
+        return None
+    try:
+        return float(t) if math.isfinite(t) and t >= 0 else None
+    except OverflowError:
+        return None
+
+
 def observed_view(rb):
     """Fields a predicate may test: the readback's observed state plus the receipt-level activation as '$activation'."""
     return dict(rb["observed"], **{"$activation": rb["activation"]})
@@ -737,14 +749,13 @@ class Mission:
     def _now(self):
         """The injected clock, validated: a clock that raises or returns a non-finite, negative or non-numeric value
         is refused (a NaN would otherwise make every expiry comparison False, i.e. 'not expired')."""
-        import math
         try:
-            t = self._clock()
+            t = valid_time(self._clock())
         except Exception as exc:
             raise GuardError("clock failed") from exc
-        if isinstance(t, bool) or not isinstance(t, (int, float)) or not math.isfinite(t) or t < 0:
+        if t is None:
             raise GuardError("clock returned an invalid time")
-        return float(t)
+        return t
 
     def _expiry_guard(self, delegation, what):
         exp = parse_expiry(delegation.get("expires_at"))
@@ -1262,7 +1273,7 @@ class Mission:
             raise GuardError("resume requires re-presented evidence")
         if trusted_anchor is not None:
             ledger.check_anchor(trusted_anchor)               # a restored older copy or rewritten history fails here
-        elif ledger.is_durable and not allow_unanchored_ledger:
+        elif ledger.is_durable and allow_unanchored_ledger is not True:
             raise GuardError("resume cannot prove the ledger was not restored to an older copy: pass trusted_anchor (held outside the ledger host) or accept the replay risk with allow_unanchored_ledger=True")
         for o, kind in ((lease, "ContinuationLease"), (checkpoint, "PreMutationCheckpoint"), (original_budget, "MutationBudget")):
             if not isinstance(o, dict) or o.get("kind") != kind or not _hash_ok(o):
