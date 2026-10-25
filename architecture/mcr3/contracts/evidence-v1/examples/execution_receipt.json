@@ -1,0 +1,59 @@
+{
+  "authority_effect": "NONE",
+  "claim": {
+    "call_class": "PROVIDER_RESPONSE_SUCCESS",
+    "implies_commit": false,
+    "kind": "EXECUTION_RECEIPT",
+    "layer": "RECEIPT",
+    "provider_acknowledged": true
+  },
+  "contract": "mcr-evidence/1",
+  "contract_version": "1.0.0",
+  "correlation": {
+    "causation_id": null,
+    "correlation_id": "CORR-SYN-1",
+    "mission_id": "M-SYN-1",
+    "mutation_attempt_id": "ATT-SYN-1",
+    "transaction_id": "TX-SYN-1"
+  },
+  "digests": {
+    "payload": "24dd8b1c09e9be181842cac107dce4b315ba418638afb3c08d8693d63c1e88d3",
+    "policy": null,
+    "schema": "45e48d7db6a6e41d060e81fd624b7ba6eb08ce069afaf176625f7629b99cd8b3"
+  },
+  "evidence": {
+    "classification": "SYNTHETIC",
+    "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "provenance": {
+      "freshness": "UNKNOWN",
+      "hash_consistent": true,
+      "issuer_trust": "UNKNOWN",
+      "replay": "UNKNOWN",
+      "signature": "ABSENT",
+      "signer": null,
+      "verified_by": null
+    },
+    "ref": null,
+    "trust": "UNTRUSTED_RESEARCH"
+  },
+  "id": "EVT-127ef2f6eb",
+  "integrity": {
+    "event_digest": "c451df7b1810b43375549ca087a7ac27893d92a69005f1ef92026f27f32ae779"
+  },
+  "lineage": {
+    "source_digest": null,
+    "source_event_id": null,
+    "supersedes": null,
+    "transformations": []
+  },
+  "producer": {
+    "adapter_id": "fixture-adapter",
+    "adapter_version": "1.0.0",
+    "runtime": "mcr",
+    "runtime_version": "3.0.0",
+    "source_runtime_version": "3.0.0"
+  },
+  "source": "mcr://conformance/fixture",
+  "time": "2026-10-21T12:00:00Z",
+  "type": "mcr.execution.receipt"
+}

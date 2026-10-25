@@ -1,0 +1,15 @@
+{
+  "evidence_class": "SYNTHETIC/LOCAL",
+  "failed": [],
+  "groups": {
+    "ADAPTERS": "PASS",
+    "BACKENDS": "PASS",
+    "CAPABILITY_STATES": "PASS",
+    "PROVENANCE": "PASS"
+  },
+  "network_calls": 0,
+  "not_verified": [],
+  "stage": "MCR3_PROVENANCE_AUTHORITY",
+  "tests": 153,
+  "tests_digest": "C44A5D782671A4B7450FBEFE7E8DB1F96D3DDBC8AB97F7D59A27136FB2D7F606"
+}

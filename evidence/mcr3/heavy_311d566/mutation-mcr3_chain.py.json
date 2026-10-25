@@ -1,0 +1,780 @@
+{
+  "MUTATION_CHECK": "PASS",
+  "by_kind": {
+    "ast": 119,
+    "guard": 0,
+    "relation": 0,
+    "special": 0
+  },
+  "by_module": {
+    "mcr3_chain.py": {
+      "assertion": 89,
+      "crash": 28,
+      "detected": 117,
+      "hang": 0,
+      "mutants": 119,
+      "survivors": 2
+    }
+  },
+  "detected_by_assertion": 89,
+  "detected_by_hang": [],
+  "detected_by_validator_crash": {
+    "mcr3_chain.py::ast@L102: drop clause 1 of oc and oc[\"claim\"][\"result\"] == \"PASS\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L106: drop clause 1 of er and er[\"claim\"][\"provider_acknowledged\"]": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L24: drop clause 2 of not isinstance(events, list) or not events": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L24: remove not in not events": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L48: flip e[\"type\"] == \"mcr.mission.disposition\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L49: drop clause 1 of disp and disp[0] != len(parsed) - 1": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L52: swap +/- in i - 1": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L60: flip e[\"type\"] == \"mcr.mutation.attempted\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L63: flip e[\"type\"] == \"mcr.compensation.attempted\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L71: flip t in pos": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L76: drop clause 1 of co and (not rb or co[\"claim\"][\"readback_digest\"] != rb[\"evid": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L76: drop clause 1 of not rb or co[\"claim\"][\"readback_digest\"] != rb[\"evidence\"][\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L76: remove not in not rb": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L78: drop clause 1 of not rb or oc[\"claim\"][\"readback_digest\"] != rb[\"evidence\"][\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L78: drop clause 1 of oc and (not rb or oc[\"claim\"][\"readback_digest\"] != rb[\"evid": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L78: remove not in not rb": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L81: drop clause 1 of co and co[\"claim\"][\"commit_state\"] == \"COMMITTED\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L82: drop clause 1 of not rb or rb[\"claim\"][\"existence\"] != \"EXISTS\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L82: remove not in not rb": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L84: drop clause 1 of not er or er[\"claim\"][\"call_class\"] not in (\"PROVIDER_RESPON": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L84: remove not in not er": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L86: drop clause 1 of co and co[\"claim\"][\"commit_state\"] == \"COMMITTED\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L86: drop clause 1 of oc and oc[\"claim\"][\"result\"] == \"PASS\" and not (co and co[\"c": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L88: drop clause 1 of rb and rb[\"claim\"][\"claimed_authoritative\"] and rb[\"claim\"][": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L95: drop clause 1 of t in by and by[t][\"evidence\"][\"digest\"] not in digs": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L95: flip t in by": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L98: drop clause 1 of oc and oc[\"claim\"][\"result\"] == \"PASS\" and co and co[\"claim\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_chain.py::ast@L98: drop clause 3 of oc and oc[\"claim\"][\"result\"] == \"PASS\" and co and co[\"claim\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)"
+  },
+  "evidence_class": "SYNTHETIC/LOCAL",
+  "explained_survivors": {
+    "mcr3_chain.py::ast@L49: drop clause 1 of len(disp) > 1 or (disp and disp[0] != len(parsed) - 1)": "equivalent: with two dispositions the first can never be the last event",
+    "mcr3_chain.py::ast@L88: drop clause 2 of rb and rb[\"claim\"][\"claimed_authoritative\"] and rb[\"claim\"][": "equivalent: the event contract rejects an authoritative claim from a weak level before this check runs"
+  },
+  "inconclusive": [],
+  "mutants": 119,
+  "not_applied": [],
+  "results": [
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L16: swap +/- in datetime.datetime.strptime(ts[:19], \"%Y-%m-%dT%H:%M:%S\") + d"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L24: drop clause 1 of not isinstance(events, list) or not events"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L24: drop clause 2 of not isinstance(events, list) or not events"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L37: flip len(set(ids)) != len(ids)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L40: drop clause 1 of len(missions) != 1 or None in missions"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L40: drop clause 2 of len(missions) != 1 or None in missions"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L43: drop clause 1 of len(txs) > 1 or None in txs"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L43: drop clause 2 of len(txs) > 1 or None in txs"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L46: drop clause 1 of len(starts) != 1 or starts[0] != 0"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L46: drop clause 2 of len(starts) != 1 or starts[0] != 0"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "mcr3_chain.py::ast@L49: drop clause 1 of len(disp) > 1 or (disp and disp[0] != len(parsed) - 1)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L49: drop clause 2 of len(disp) > 1 or (disp and disp[0] != len(parsed) - 1)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L54: flip parsed[0][\"correlation\"][\"causation_id\"] is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L57: flip times != sorted(times)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L61: flip att != list(range(1, len(att) + 1))"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L64: flip comp != list(range(1, len(comp) + 1))"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L72: flip seen != sorted(seen)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L76: drop clause 1 of co and (not rb or co[\"claim\"][\"readback_digest\"] != rb[\"evid"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L76: drop clause 2 of co and (not rb or co[\"claim\"][\"readback_digest\"] != rb[\"evid"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L78: drop clause 1 of oc and (not rb or oc[\"claim\"][\"readback_digest\"] != rb[\"evid"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L78: drop clause 2 of oc and (not rb or oc[\"claim\"][\"readback_digest\"] != rb[\"evid"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L81: drop clause 1 of co and co[\"claim\"][\"commit_state\"] == \"COMMITTED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L81: drop clause 2 of co and co[\"claim\"][\"commit_state\"] == \"COMMITTED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L86: drop clause 1 of oc and oc[\"claim\"][\"result\"] == \"PASS\" and not (co and co[\"c"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L86: drop clause 2 of oc and oc[\"claim\"][\"result\"] == \"PASS\" and not (co and co[\"c"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L86: drop clause 3 of oc and oc[\"claim\"][\"result\"] == \"PASS\" and not (co and co[\"c"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L88: drop clause 1 of rb and rb[\"claim\"][\"claimed_authoritative\"] and rb[\"claim\"]["
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "mcr3_chain.py::ast@L88: drop clause 2 of rb and rb[\"claim\"][\"claimed_authoritative\"] and rb[\"claim\"]["
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L88: drop clause 3 of rb and rb[\"claim\"][\"claimed_authoritative\"] and rb[\"claim\"]["
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L24: remove not in not isinstance(events, list)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L24: remove not in not events"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L40: flip len(missions) != 1"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L40: flip None in missions"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L43: flip len(txs) > 1"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L43: flip None in txs"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L46: flip len(starts) != 1"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L46: flip starts[0] != 0"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L49: flip len(disp) > 1"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L49: drop clause 1 of disp and disp[0] != len(parsed) - 1"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L49: drop clause 2 of disp and disp[0] != len(parsed) - 1"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L52: flip parsed[i][\"correlation\"][\"causation_id\"] != parsed[i - 1][\"i"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L76: drop clause 1 of not rb or co[\"claim\"][\"readback_digest\"] != rb[\"evidence\"][\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L76: drop clause 2 of not rb or co[\"claim\"][\"readback_digest\"] != rb[\"evidence\"][\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L78: drop clause 1 of not rb or oc[\"claim\"][\"readback_digest\"] != rb[\"evidence\"][\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L78: drop clause 2 of not rb or oc[\"claim\"][\"readback_digest\"] != rb[\"evidence\"][\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L81: flip co[\"claim\"][\"commit_state\"] == \"COMMITTED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L82: drop clause 1 of not rb or rb[\"claim\"][\"existence\"] != \"EXISTS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L82: drop clause 2 of not rb or rb[\"claim\"][\"existence\"] != \"EXISTS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L84: drop clause 1 of not er or er[\"claim\"][\"call_class\"] not in (\"PROVIDER_RESPON"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L84: drop clause 2 of not er or er[\"claim\"][\"call_class\"] not in (\"PROVIDER_RESPON"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L86: flip oc[\"claim\"][\"result\"] == \"PASS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L86: remove not in not (co and co[\"claim\"][\"commit_state\"] == \"COMMITTED\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L88: flip rb[\"claim\"][\"source_level\"] != \"AUTHORITATIVE_REPOSITORY\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L97: flip c[\"disposition\"] == \"COMPLETE\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L102: drop clause 1 of c[\"outcome_class\"] == \"OUTCOME_VALIDATED\" and not (oc and oc"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L102: drop clause 2 of c[\"outcome_class\"] == \"OUTCOME_VALIDATED\" and not (oc and oc"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L104: drop clause 1 of c[\"outcome_class\"] in (\"COMMIT_OBSERVED\", \"OUTCOME_OBSERVED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L104: drop clause 2 of c[\"outcome_class\"] in (\"COMMIT_OBSERVED\", \"OUTCOME_OBSERVED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L106: drop clause 1 of c[\"outcome_class\"] == \"PROVIDER_ACKNOWLEDGED\" and not (er an"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L106: drop clause 2 of c[\"outcome_class\"] == \"PROVIDER_ACKNOWLEDGED\" and not (er an"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L108: drop clause 1 of c[\"disposition\"] == \"COMPENSATED\" and not comp"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L108: drop clause 2 of c[\"disposition\"] == \"COMPENSATED\" and not comp"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L110: drop clause 1 of c[\"disposition\"] == \"UNRECOVERABLE\" and c[\"outcome_class\"] !"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L110: drop clause 2 of c[\"disposition\"] == \"UNRECOVERABLE\" and c[\"outcome_class\"] !"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L42: flip e[\"type\"] != \"mcr.mission.started\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L45: flip e[\"type\"] == \"mcr.mission.started\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L48: flip e[\"type\"] == \"mcr.mission.disposition\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L49: flip disp[0] != len(parsed) - 1"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L60: flip e[\"type\"] == \"mcr.mutation.attempted\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L63: flip e[\"type\"] == \"mcr.compensation.attempted\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L69: flip e[\"type\"] not in (\"mcr.compensation.attempted\",)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L71: flip t in pos"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L76: remove not in not rb"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L76: flip co[\"claim\"][\"readback_digest\"] != rb[\"evidence\"][\"digest\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L78: remove not in not rb"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L78: flip oc[\"claim\"][\"readback_digest\"] != rb[\"evidence\"][\"digest\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L82: remove not in not rb"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L82: flip rb[\"claim\"][\"existence\"] != \"EXISTS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L84: remove not in not er"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L84: flip er[\"claim\"][\"call_class\"] not in (\"PROVIDER_RESPONSE_SUCCESS"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L86: drop clause 1 of co and co[\"claim\"][\"commit_state\"] == \"COMMITTED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L86: drop clause 2 of co and co[\"claim\"][\"commit_state\"] == \"COMMITTED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L95: drop clause 1 of t in by and by[t][\"evidence\"][\"digest\"] not in digs"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L95: drop clause 2 of t in by and by[t][\"evidence\"][\"digest\"] not in digs"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L98: remove not in not (oc and oc[\"claim\"][\"result\"] == \"PASS\" and co and co[\"c"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L100: drop clause 1 of len(digs) != 14 or len(c[\"chain_digests\"]) != 14"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L100: drop clause 2 of len(digs) != 14 or len(c[\"chain_digests\"]) != 14"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L102: flip c[\"outcome_class\"] == \"OUTCOME_VALIDATED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L102: remove not in not (oc and oc[\"claim\"][\"result\"] == \"PASS\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L104: flip c[\"outcome_class\"] in (\"COMMIT_OBSERVED\", \"OUTCOME_OBSERVED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L104: remove not in not co"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L106: flip c[\"outcome_class\"] == \"PROVIDER_ACKNOWLEDGED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L106: remove not in not (er and er[\"claim\"][\"provider_acknowledged\"])"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L108: flip c[\"disposition\"] == \"COMPENSATED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L108: remove not in not comp"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L110: flip c[\"disposition\"] == \"UNRECOVERABLE\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L110: flip c[\"outcome_class\"] != \"UNRECOVERABLE\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L49: swap +/- in len(parsed) - 1"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L61: swap +/- in len(att) + 1"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L64: swap +/- in len(comp) + 1"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L86: flip co[\"claim\"][\"commit_state\"] == \"COMMITTED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L95: flip t in by"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L95: flip by[t][\"evidence\"][\"digest\"] not in digs"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L98: drop clause 1 of oc and oc[\"claim\"][\"result\"] == \"PASS\" and co and co[\"claim\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L98: drop clause 2 of oc and oc[\"claim\"][\"result\"] == \"PASS\" and co and co[\"claim\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L98: drop clause 3 of oc and oc[\"claim\"][\"result\"] == \"PASS\" and co and co[\"claim\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L98: drop clause 4 of oc and oc[\"claim\"][\"result\"] == \"PASS\" and co and co[\"claim\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L100: flip len(digs) != 14"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L100: flip len(c[\"chain_digests\"]) != 14"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L102: drop clause 1 of oc and oc[\"claim\"][\"result\"] == \"PASS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L102: drop clause 2 of oc and oc[\"claim\"][\"result\"] == \"PASS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L106: drop clause 1 of er and er[\"claim\"][\"provider_acknowledged\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L106: drop clause 2 of er and er[\"claim\"][\"provider_acknowledged\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L16: flip ts[19:20] == \".\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_chain.py::ast@L52: swap +/- in i - 1"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L98: flip oc[\"claim\"][\"result\"] == \"PASS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L98: flip co[\"claim\"][\"commit_state\"] == \"COMMITTED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L102: flip oc[\"claim\"][\"result\"] == \"PASS\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_chain.py::ast@L16: swap +/- in ts[19:-1] + \"000000\""
+    }
+  ],
+  "survivors": [
+    "mcr3_chain.py::ast@L49: drop clause 1 of len(disp) > 1 or (disp and disp[0] != len(parsed) - 1)",
+    "mcr3_chain.py::ast@L88: drop clause 2 of rb and rb[\"claim\"][\"claimed_authoritative\"] and rb[\"claim\"]["
+  ],
+  "unexplained_survivors": []
+}

@@ -1,0 +1,12 @@
+{
+  "evidence_class": "SYNTHETIC/LOCAL",
+  "failed": [],
+  "groups": {
+    "CONSISTENT_CHAINS": "PASS",
+    "INCONSISTENT_CHAINS": "PASS"
+  },
+  "network_calls": 0,
+  "stage": "MCR3_EVIDENCE_CHAIN",
+  "tests": 54,
+  "tests_digest": "D53AFFBE78BDD12C36A76A40AC475A9D2FCFFE2BD5FC9912690EB10880461689"
+}

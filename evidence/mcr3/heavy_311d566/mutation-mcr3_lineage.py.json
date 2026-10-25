@@ -1,0 +1,151 @@
+{
+  "MUTATION_CHECK": "PASS",
+  "by_kind": {
+    "ast": 20,
+    "guard": 0,
+    "relation": 0,
+    "special": 0
+  },
+  "by_module": {
+    "mcr3_lineage.py": {
+      "assertion": 20,
+      "crash": 0,
+      "detected": 20,
+      "hang": 0,
+      "mutants": 20,
+      "survivors": 0
+    }
+  },
+  "detected_by_assertion": 20,
+  "detected_by_hang": [],
+  "detected_by_validator_crash": {},
+  "evidence_class": "SYNTHETIC/LOCAL",
+  "explained_survivors": {},
+  "inconclusive": [],
+  "mutants": 20,
+  "not_applied": [],
+  "results": [
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_lineage.py::ast@L28: flip eid in self._events"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_lineage.py::ast@L34: flip cause is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_lineage.py::ast@L41: flip sup is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_lineage.py::ast@L55: flip sup is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_lineage.py::ast@L69: flip eid in self._superseded_by"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_lineage.py::ast@L29: flip evc1.canonical_bytes(self._events[eid]) == evc1.canonical_by"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_lineage.py::ast@L36: flip c is None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_lineage.py::ast@L38: flip c[\"correlation\"][\"mission_id\"] != mission"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_lineage.py::ast@L43: flip old is None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_lineage.py::ast@L45: drop clause 1 of old[\"correlation\"][\"mission_id\"] != mission or old[\"type\"] !"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_lineage.py::ast@L45: drop clause 2 of old[\"correlation\"][\"mission_id\"] != mission or old[\"type\"] !"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_lineage.py::ast@L47: flip sup in self._superseded_by"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_lineage.py::ast@L49: flip TRUST_RANK[known[\"evidence\"][\"trust\"]] < TRUST_RANK[old[\"evi"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_lineage.py::ast@L51: flip sup == eid"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_lineage.py::ast@L74: swap +/- in len(self._events) + 1"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_lineage.py::ast@L76: flip prev is None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_lineage.py::ast@L45: flip old[\"correlation\"][\"mission_id\"] != mission"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_lineage.py::ast@L45: flip old[\"type\"] != known[\"type\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_lineage.py::ast@L63: flip self._events[i][\"correlation\"][\"mission_id\"] == mission_id"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_lineage.py::ast@L66: flip e[\"id\"] not in self._superseded_by"
+    }
+  ],
+  "survivors": [],
+  "unexplained_survivors": []
+}

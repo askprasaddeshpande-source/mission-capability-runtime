@@ -1,0 +1,480 @@
+{
+  "MUTATION_CHECK": "PASS",
+  "by_kind": {
+    "ast": 73,
+    "guard": 0,
+    "relation": 0,
+    "special": 0
+  },
+  "by_module": {
+    "mcr3_provenance.py": {
+      "assertion": 66,
+      "crash": 6,
+      "detected": 72,
+      "hang": 0,
+      "mutants": 73,
+      "survivors": 1
+    }
+  },
+  "detected_by_assertion": 66,
+  "detected_by_hang": [],
+  "detected_by_validator_crash": {
+    "mcr3_provenance.py::ast@L114: drop clause 2 of ssh_keygen or shutil.which(\"ssh-keygen\")": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_provenance.py::ast@L115: remove not in not self.tool": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_provenance.py::ast@L138: drop clause 2 of ssh_keygen or shutil.which(\"ssh-keygen\")": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_provenance.py::ast@L145: flip r.returncode != 0": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_provenance.py::ast@L147: swap +/- in mp + \".sig\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)",
+    "mcr3_provenance.py::ast@L263: flip k != \"integrity\"": "the validator raised a Python exception: a legitimate flow its own fixtures need was broken by the mutant (detected, but not by a targeted assertion)"
+  },
+  "evidence_class": "SYNTHETIC/LOCAL",
+  "explained_survivors": {
+    "mcr3_provenance.py::ast@L232: drop clause 2 of prov[\"hash_consistent\"] and content is not None and attestat": "equivalent: content is None only when digesting failed, and an attestation digest can never equal None"
+  },
+  "inconclusive": [],
+  "mutants": 73,
+  "not_applied": [],
+  "results": [
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L36: drop clause 1 of not isinstance(ts, str) or not ts.endswith(\"Z\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L36: drop clause 2 of not isinstance(ts, str) or not ts.endswith(\"Z\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L138: drop clause 1 of ssh_keygen or shutil.which(\"ssh-keygen\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_provenance.py::ast@L138: drop clause 2 of ssh_keygen or shutil.which(\"ssh-keygen\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L222: remove not in not isinstance(attestation, dict)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L232: drop clause 1 of prov[\"hash_consistent\"] and content is not None and attestat"
+    },
+    {
+      "applied": true,
+      "detected": false,
+      "detected_by": null,
+      "mutant": "mcr3_provenance.py::ast@L232: drop clause 2 of prov[\"hash_consistent\"] and content is not None and attestat"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L232: drop clause 3 of prov[\"hash_consistent\"] and content is not None and attestat"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L232: drop clause 4 of prov[\"hash_consistent\"] and content is not None and attestat"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L240: remove not in not msg_ok"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L245: remove not in not res.valid"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L250: flip replay_cache is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L36: remove not in not isinstance(ts, str)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L36: remove not in not ts.endswith(\"Z\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L77: drop clause 1 of attestation.get(\"alg\") != self.alg or signer not in self.key"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L77: drop clause 2 of attestation.get(\"alg\") != self.alg or signer not in self.key"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L98: drop clause 1 of attestation.get(\"alg\") != self.alg or signer not in self._ke"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L98: drop clause 2 of attestation.get(\"alg\") != self.alg or signer not in self._ke"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L114: drop clause 1 of ssh_keygen or shutil.which(\"ssh-keygen\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_provenance.py::ast@L114: drop clause 2 of ssh_keygen or shutil.which(\"ssh-keygen\")"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_provenance.py::ast@L115: remove not in not self.tool"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L120: drop clause 1 of attestation.get(\"alg\") != self.alg or not isinstance(attesta"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L120: drop clause 2 of attestation.get(\"alg\") != self.alg or not isinstance(attesta"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_provenance.py::ast@L145: flip r.returncode != 0"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L159: flip key in self._seen"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L173: drop clause 1 of clock or _time.time"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L173: drop clause 2 of clock or _time.time"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L178: flip signer in self.revoked"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L181: flip rec is None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L183: flip rec.get(\"status\") != \"TRUSTED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L185: drop clause 1 of (rec.get(\"not_before\") is not None and at < rec[\"not_before\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L185: drop clause 2 of (rec.get(\"not_before\") is not None and at < rec[\"not_before\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L195: drop clause 1 of alg or signer_backend.alg"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L195: drop clause 2 of alg or signer_backend.alg"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L219: flip event.get(\"integrity\", {}).get(\"event_digest\") == evc1.diges"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L232: flip content is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L232: flip attestation.get(\"event_digest\") == content"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L232: flip at is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L236: drop clause 1 of policy.expected_policy_digest is not None and pd != policy.e"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L236: drop clause 2 of policy.expected_policy_digest is not None and pd != policy.e"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L238: drop clause 1 of policy.expected_authority_digest is not None and ad != polic"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L238: drop clause 2 of policy.expected_authority_digest is not None and ad != polic"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L77: flip attestation.get(\"alg\") != self.alg"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L77: flip signer not in self.keys"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L98: flip attestation.get(\"alg\") != self.alg"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L98: flip signer not in self._keys"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L120: flip attestation.get(\"alg\") != self.alg"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L120: remove not in not isinstance(attestation.get(\"sig\"), str)"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L170: drop clause 1 of issuers or {}"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L170: drop clause 2 of issuers or {}"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L185: drop clause 1 of rec.get(\"not_before\") is not None and at < rec[\"not_before\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L185: drop clause 2 of rec.get(\"not_before\") is not None and at < rec[\"not_before\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L185: drop clause 1 of rec.get(\"not_after\") is not None and at > rec[\"not_after\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L185: drop clause 2 of rec.get(\"not_after\") is not None and at > rec[\"not_after\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L217: flip k != \"integrity\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L236: flip policy.expected_policy_digest is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L236: flip pd != policy.expected_policy_digest"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L238: flip policy.expected_authority_digest is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L238: flip ad != policy.expected_authority_digest"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L249: swap +/- in now - at"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L256: drop clause 1 of record_replay and prov[\"issuer_trust\"] == \"TRUSTED\" and prov"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L256: drop clause 2 of record_replay and prov[\"issuer_trust\"] == \"TRUSTED\" and prov"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L256: drop clause 3 of record_replay and prov[\"issuer_trust\"] == \"TRUSTED\" and prov"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_provenance.py::ast@L263: flip k != \"integrity\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L129: flip r.returncode == 0"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L185: flip rec.get(\"not_before\") is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L185: flip at < rec[\"not_before\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L185: flip rec.get(\"not_after\") is not None"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L185: flip at > rec[\"not_after\"]"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L256: flip prov[\"issuer_trust\"] == \"TRUSTED\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L256: flip prov[\"freshness\"] == \"FRESH\""
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "assertion",
+      "mutant": "mcr3_provenance.py::ast@L129: flip r.returncode == 0 #2"
+    },
+    {
+      "applied": true,
+      "detected": true,
+      "detected_by": "crash",
+      "mutant": "mcr3_provenance.py::ast@L147: swap +/- in mp + \".sig\""
+    }
+  ],
+  "survivors": [
+    "mcr3_provenance.py::ast@L232: drop clause 2 of prov[\"hash_consistent\"] and content is not None and attestat"
+  ],
+  "unexplained_survivors": []
+}

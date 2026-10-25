@@ -1,0 +1,16 @@
+{
+  "evidence_class": "SYNTHETIC/LOCAL",
+  "failed": [],
+  "groups": {
+    "BINDING_FIELDS": "PASS",
+    "COMPENSATION_ATTEMPTS": "PASS",
+    "EXPIRY": "PASS",
+    "LEDGER_ANCHOR": "PASS",
+    "LEDGER_PATH_FORMS": "PASS",
+    "OUTCOME_CLASSIFICATION": "PASS"
+  },
+  "network_calls": 0,
+  "stage": "MCR3_HARDENING",
+  "tests": 140,
+  "tests_digest": "A329CD6C20806B5D581C16669479A94B92D133A4F188CA410289A4DEF612E6C0"
+}
