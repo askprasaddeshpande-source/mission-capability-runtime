@@ -1,0 +1,53 @@
+{
+  "status": "DRAFT_NOT_SUBMITTED",
+  "resource_type": "publication / preprint",
+  "title": "From Agent Intent to Verifiable Mission Outcomes: Mission Capability Runtime 4.0",
+  "creators": [
+    {
+      "name": "Prasad Deshpande",
+      "orcid": "0009-0008-1344-6585",
+      "affiliation": "Independent Researcher — Agentic AI Systems and Enterprise Architecture"
+    }
+  ],
+  "version": "v1.0.2 public-review candidate",
+  "publication_date": "PENDING_ACTUAL_PUBLICATION",
+  "doi": "NOT_ASSIGNED",
+  "license_proposal": "Creative Commons Attribution 4.0 International (CC BY 4.0) — subject to owner approval",
+  "keywords": [
+    "agentic AI",
+    "mission capability runtime",
+    "execution assurance",
+    "enterprise AI",
+    "authority",
+    "outcome assurance",
+    "reproducibility",
+    "synthetic validation"
+  ],
+  "description": "Research preprint examining deterministic mission execution, authorization, bounded retries, outcome observation and evidence-backed disposition in a bounded Class A synthetic environment. Owner-accepted MCR 4.0 P1 closure is not live SAP, production or integrated enterprise qualification. The private R6 archive remains withheld. A separate owner-local read-only audit verified archive/receipt integrity without rerunning tests.",
+  "related_publications": [
+    {
+      "label": "Enterprise Agent Framework v1.1.0",
+      "doi": "10.5281/zenodo.22193673"
+    },
+    {
+      "label": "Agentic Context Lifecycle Architecture v1.1.0",
+      "doi": "10.5281/zenodo.22155728"
+    }
+  ],
+  "research_repository": "https://github.com/askprasaddeshpande-source/mission-capability-runtime",
+  "scope": "Class A bounded synthetic research only",
+  "files_to_deposit_proposal": [
+    "MCR4_Preprint_PublicReview_v1.0.2.pdf",
+    "MCR4_Preprint_PublicReview_v1.0.2.tex",
+    "MCR4_PUBLIC_SAFE_EVIDENCE_SUMMARY_R3.md"
+  ],
+  "excluded": [
+    "Original private R6 ZIP",
+    "raw logs",
+    "reviewer transcripts",
+    "frozen schema bytes",
+    "scripts",
+    "secrets"
+  ],
+  "authorization": "REQUIRES_SEPARATE_EXPLICIT_OWNER_APPROVAL"
+}
