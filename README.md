@@ -1,7 +1,15 @@
-# Mission Capability Runtime 4.0 — Publication Lineage
+# MCR 4.0 — Independent Research Publication Lineage
 
-This standalone publication line is restricted to owner-approved MCR 4.0 P1 bounded synthetic research manuscript v1.0.2 and fact-only evidence. It is not a development branch of the frozen MCR 3.0 baseline and must never merge into that protected branch.
+Prasad Deshpande · ORCID 0009-0008-1344-6585
 
-**Status:** PUBLICATION_GATE_INCOMPLETE. No tag, GitHub release, or Zenodo DOI exists for this version until independently verified.
+**Status: HOLD — owner-approved public PDF/TeX bytes and independent CI qualification pending.**
 
-Required independent controls: exact SHA-256 verification of public manuscript PDF/TeX/evidence, no excluded R6 archive or private source, bounded-claim checks, allowed file inventory, published release asset readback. Do not weaken historical MCR 3.0 verification or change main.
+This orphan branch starts at a separately created root commit, and does not include or inherit the frozen MCR 3.0 research tree. It is not to be merged into protected main.
+
+Approved for publication staging: manuscript v1.0.2 (PDF + LaTeX), R3 fact-only evidence summary, citation, original authored documentation/license metadata and bounded release notes.
+
+**Research scope:** `MCR_R4_0_P1_CLOSED_BOUNDED_SYNTHETIC_RESEARCH`. No live SAP, enterprise adapter Class B, end-to-end ACLA/EAF production integration, or peer-reviewed certification is claimed.
+
+**Prohibited:** private R6 ZIP, frozen Class A schemas, private logs, reviewer transcripts, executable enterprise adapters, secrets and production materials.
+
+All release candidates must pass standalone publication CI on Ubuntu and Windows, byte-for-byte readback of the three approved artifacts, and a separate manual release audit before a GitHub tag or release is created. Zenodo follows only after verified GitHub publication. No DOI has yet been assigned.
