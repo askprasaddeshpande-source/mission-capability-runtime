@@ -14,9 +14,14 @@ HASHES = {
     "paper/MCR4_Preprint_PublicReview_v1.0.2.tex": "5a045f1edca33533a5ec4ff56fc6b807e75b27b9b085dd350325078783bf434b",
     "evidence/MCR4_PUBLIC_SAFE_EVIDENCE_SUMMARY_R3.md": "593024e598313bb92667904233a51d4292be0398832ddb7ca721720fb06dc00d",
 }
+METADATA_HASHES = {
+    "metadata/MCR4_LICENSE_AND_ATTRIBUTION_PROPOSAL_R4.md": "d47ac52b0149d721630dc0a804ba602960b5ff64b4d211e73aa74c2881e0d803",
+    "metadata/MCR4_PREPRINT_CITATION_PROPOSAL_R4.cff": "17e95669dfb5f1e2602a9f806e8aaf268c5a7a4ecb1fc81be8717af1bee5e1a1",
+    "metadata/ZENODO_DRAFT_METADATA_R4.json": "a7029140ce605915171cefbdfc95b59ee2f64b79500dfccce86932a1dc9dad49",
+}
 ALLOWED = {
     ".gitattributes", ".github/workflows/mcr4-publication.yml",
-    "README.md", "RELEASE_NOTES.md", "SHA256SUMS.txt", "tools/verify_publication.py",
+    "README.md", "RELEASE_NOTES.md", "SHA256SUMS.txt", "tools/verify_publication.py", "LICENSE_POLICY.md",
     *HASHES.keys(),
     "metadata/MCR4_PREPRINT_CITATION_PROPOSAL_R4.cff",
     "metadata/MCR4_LICENSE_AND_ATTRIBUTION_PROPOSAL_R4.md",
@@ -45,6 +50,9 @@ try:
     for name, expected in HASHES.items():
         p = ROOT / name
         require(p.is_file() and digest(p) == expected, "approved SHA256 mismatch or missing: " + name)
+    for name, expected in METADATA_HASHES.items():
+        p = ROOT / name
+        require(p.is_file() and digest(p) == expected, "approved metadata digest mismatch: " + name)
     manifest = {}
     for line in (ROOT / "SHA256SUMS.txt").read_text(encoding="utf-8").splitlines():
         parts = line.split(maxsplit=1)
